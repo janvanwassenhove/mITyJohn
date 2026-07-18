@@ -107,7 +107,16 @@ for (const e of urlMap) {
     </div>
   </section>
 
-  <ScrumFeature />
+  <ArcadeStrip variant="scrum" />
+
+  <!-- ===== SCRUM (LEVEL 02 — THE LAB) =====
+       Deliberate scope addition beyond the original Claude Design export (Jan's
+       request, post-launch): promotes SPL from a plain feature banner into a full
+       numbered level with its own kart-racing arcade strip. -->
+  <section id="scrum" class="lab">
+    <SectionHeader level="02" section="THE LAB" accentVar="var(--level-scrum)" inkVar="var(--ink-on-level-scrum)" title="Ship it, one ceremony at a time" />
+    <ScrumFeature />
+  </section>
 
   <ArcadeStrip variant="artist" />
 
@@ -116,7 +125,7 @@ for (const e of urlMap) {
     <div class="wrap">
       <div data-reveal class="panel">
         <div>
-          <SectionHeader level="02" section="THE ARTIST" accentVar="var(--level-artist)" inkVar="var(--ink-on-accent-2)" title="mITy.John, but make it sound" />
+          <SectionHeader level="03" section="THE ARTIST" accentVar="var(--level-artist)" inkVar="var(--ink-on-accent-2)" title="mITy.John, but make it sound" />
           <p class="artist-lead">
             Songs composed with a suspicious amount of AI and a Raspberry Pi that never asked
             for any of this. Press play, judge gently.
@@ -137,7 +146,7 @@ for (const e of urlMap) {
   <!-- ===== BOOKSTORE ===== -->
   <section id="books" class="bookstore">
     <div class="wrap">
-      <SectionHeader level="03" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
+      <SectionHeader level="04" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
       <p class="books-note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
       <div class="grid">
         {books.map((b) => <BookCard book={b} />)}
@@ -150,7 +159,7 @@ for (const e of urlMap) {
   <!-- ===== BLOG ===== -->
   <section id="blog" class="blog">
     <div class="blog-head">
-      <SectionHeader level="04" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
+      <SectionHeader level="05" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
       <a class="all" href="/blog/">All posts →</a>
     </div>
     <div class="grid">
@@ -258,6 +267,9 @@ for (const e of urlMap) {
   .filters button:hover { border-color: var(--border3); }
   .filters button.active { background: var(--accent); color: var(--ink-on-accent); border-color: transparent; }
   .store .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--gap-cards); }
+
+  /* SCRUM / THE LAB (level 02) */
+  .lab { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); scroll-margin-top: 80px; }
 
   /* ARTIST */
   .artist { border-top: 1px solid var(--line); background: linear-gradient(180deg, var(--s0), var(--bg)); scroll-margin-top: 70px; }

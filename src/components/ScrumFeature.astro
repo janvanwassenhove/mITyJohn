@@ -1,22 +1,20 @@
 ---
-// SPL feature banner — "the lab's flagship experiment" (design verbatim, internal link).
+// SPL feature card — "the lab's flagship experiment". Rendered inside the Scrum
+// level section (src/pages/index.astro), which owns the id/container/padding.
 ---
 
-<section id="scrum" class="scrum">
-  <a data-reveal href="/apps/scrum-programming/">
-    <div class="badge">SPL</div>
-    <div class="text">
-      <div class="kicker">the lab's flagship experiment</div>
-      <div class="title">Scrum Programming Language</div>
-      <div class="sub">A real language where you code entirely in ceremonies. Yes, really. Sprint zero compiles.</div>
-    </div>
-    <span class="cta">Explore →</span>
-  </a>
-</section>
+<a class="scrum-card" data-reveal href="/apps/scrum-programming/">
+  <div class="badge">SPL</div>
+  <div class="text">
+    <div class="kicker">the lab's flagship experiment</div>
+    <div class="title">Scrum Programming Language</div>
+    <div class="sub">A real language where you code entirely in ceremonies. Yes, really. Sprint zero compiles.</div>
+  </div>
+  <span class="cta">Explore →</span>
+</a>
 
 <style>
-  .scrum { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--section-pad-x) clamp(24px, 3vw, 36px); scroll-margin-top: 80px; }
-  a {
+  .scrum-card {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -26,13 +24,14 @@
     border-radius: var(--radius-card-lg);
     padding: 20px clamp(18px, 3vw, 28px);
     color: var(--text);
+    margin-top: 8px;
   }
-  a:hover { border-color: var(--accent); color: var(--text); }
+  .scrum-card:hover { border-color: var(--level-scrum); color: var(--text); }
   .badge {
     font-family: var(--font-mono);
     font-weight: 600;
     font-size: var(--text-body);
-    color: var(--accent);
+    color: var(--level-scrum);
     border: 1px solid var(--border2);
     padding: 10px 14px;
     border-radius: 10px;
@@ -48,5 +47,5 @@
   }
   .title { font-family: var(--font-display); font-size: var(--text-feature); font-weight: 700; letter-spacing: -0.01em; }
   .sub { font-size: var(--text-small); color: var(--muted); margin-top: 4px; text-wrap: pretty; }
-  .cta { font-family: var(--font-mono); font-size: var(--text-small); color: var(--accent); white-space: nowrap; }
+  .cta { font-family: var(--font-mono); font-size: var(--text-small); color: var(--level-scrum); white-space: nowrap; }
 </style>

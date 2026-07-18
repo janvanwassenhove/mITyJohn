@@ -45,7 +45,6 @@ const ARTIST_ID = '4lRudVkciTQ8j2bEySXqPz';
   }
   .line1 { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
   .line2 { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
-  iframe { border-radius: var(--radius-embed); width: 100%; height: 352px; border: 0; }
 </style>
 
 <script>
@@ -57,6 +56,16 @@ const ARTIST_ID = '4lRudVkciTQ8j2bEySXqPz';
     f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
     f.loading = 'lazy';
     f.title = 'Spotify artist player';
+    // Set sizing inline: this element is created client-side, so it never gets
+    // Astro's scoped-style attribute and the component's <style> rules don't
+    // match it — without this it fell back to the browser's default iframe box
+    // (300×150) instead of filling the same width as the poster it replaces.
+    f.style.display = 'block';
+    f.style.width = '100%';
+    f.style.height = '352px';
+    f.style.border = '0';
+    f.style.borderRadius = 'var(--radius-embed)';
+    f.style.flex = '1';
     box.replaceChildren(f);
   });
 </script>

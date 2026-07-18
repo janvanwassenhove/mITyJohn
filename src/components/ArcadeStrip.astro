@@ -4,22 +4,27 @@
 // the visual motion is preserved via the design's own keyframes).
 // aria-hidden + .mj-anim so prefers-reduced-motion disables all movement.
 interface Props {
-  variant: 'store' | 'artist' | 'books' | 'notes';
+  variant: 'store' | 'scrum' | 'artist' | 'books' | 'notes';
 }
 const { variant } = Astro.props;
 
 const LABELS = {
   store: 'LVL 1 · THE STORE — PLATFORMER · BOSS: LEGACY CODE',
-  artist: 'LVL 2 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
-  books: 'LVL 3 · THE BOOKSTORE — RACING · RIVAL: THE DEADLINE',
-  notes: 'LVL 4 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
+  scrum: 'LVL 2 · THE LAB — KART RACING · RIVAL: THE BACKLOG',
+  artist: 'LVL 3 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
+  books: 'LVL 4 · THE BOOKSTORE — RACING · RIVAL: THE DEADLINE',
+  notes: 'LVL 5 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
 };
 
 // Pixel sprite (the design's runner), verbatim box-shadow art.
 const RUNNER =
   '18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent), 18px 24px 0 var(--accent-2), 24px 24px 0 var(--accent), 30px 24px 0 var(--accent), 36px 24px 0 var(--accent), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent), 18px 30px 0 var(--accent), 24px 30px 0 var(--accent-2), 30px 30px 0 var(--accent), 36px 30px 0 var(--accent), 42px 30px 0 var(--accent-2), 12px 36px 0 var(--accent), 18px 36px 0 var(--accent), 24px 36px 0 var(--accent), 30px 36px 0 var(--accent), 36px 36px 0 var(--accent), 42px 36px 0 var(--accent-2), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b';
 
-const coins = { store: ['28%', '54%', '79%'], books: ['22%', '44%', '66%', '86%'], artist: [], notes: [] }[variant];
+// Rival kart — same sprite mesh, reskinned (grey chassis, red trim) so it reads
+// as a second racer rather than a recolour glitch of mITyJohn.
+const RIVAL = RUNNER.replaceAll('var(--accent-2)', '#e05a48').replaceAll('var(--accent)', '#6b7280');
+
+const coins = { store: ['28%', '54%', '79%'], scrum: [], books: ['22%', '44%', '66%', '86%'], artist: [], notes: [] }[variant];
 const coinGlyph = variant === 'books' ? '❏' : '◉';
 const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
 ---
@@ -40,13 +45,23 @@ const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
   {coins.map((left, i) => (
     <div class="coin" style={`left:${left};bottom:${70 + (i % 2) * 8}px;color:${coinColor};animation-delay:${i * 0.5}s;`}>{coinGlyph}</div>
   ))}
+  {variant === 'scrum' && (
+    <>
+      <div class="kart-streak" style="top:64px;animation-duration:2.6s;"></div>
+      <div class="kart-streak" style="top:96px;animation-duration:2.1s;animation-delay:0.4s;"></div>
+      <div class="kart-streak" style="top:124px;animation-duration:2.9s;animation-delay:0.9s;"></div>
+      <div class="runner rival">
+        <div class="sprite" style={`box-shadow:${RIVAL};`}></div>
+      </div>
+    </>
+  )}
   {variant === 'notes' && (
     <>
       <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
       <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger"></div></div></div>
     </>
   )}
-  <div class={`runner ${variant === 'notes' ? 'fixed' : ''}`}>
+  <div class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''}`}>
     <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
   </div>
 </div>
@@ -104,5 +119,18 @@ const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
   .fill.danger { background: var(--danger); }
   .runner { position: absolute; top: 58px; left: 0; animation: mj-run 15s linear infinite; }
   .runner.fixed { animation: none; left: 28%; }
+  .runner.kart { animation-duration: 9s; }
+  /* Second racer, own lane, different loop length than .kart so the two drift in
+     and out of sync — reads as overtaking rather than a fixed formation. */
+  .runner.rival { top: 90px; animation: mj-run 12.5s linear infinite; animation-delay: -4s; }
   .sprite { width: 6px; height: 6px; background: transparent; }
+  .kart-streak {
+    position: absolute;
+    left: 0;
+    width: 46px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--muted2));
+    opacity: 0.4;
+    animation: mj-streak linear infinite;
+  }
 </style>

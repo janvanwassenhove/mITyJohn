@@ -48,10 +48,12 @@
 
   /* Per-section "level" accents (the four home levels + their badge ink) */
   --level-store: #e0a44a;               /* LEVEL 01 · THE STORE  (= --accent) */
-  --level-artist: #6fb3c9;              /* LEVEL 02 · THE ARTIST (= --accent-2) */
-  --level-books: #c98b6a;               /* LEVEL 03 · THE BOOKSTORE */
+  --level-scrum: #a78bd9;               /* LEVEL 02 · THE LAB (SPL) — added post-launch, not in the original export */
+  --ink-on-level-scrum: #1c1530;
+  --level-artist: #6fb3c9;              /* LEVEL 03 · THE ARTIST (= --accent-2) */
+  --level-books: #c98b6a;               /* LEVEL 04 · THE BOOKSTORE */
   --ink-on-level-books: #241812;
-  --level-notes: #7fc99a;               /* LEVEL 04 · FIELD NOTES (blog) */
+  --level-notes: #7fc99a;               /* LEVEL 05 · FIELD NOTES (blog) */
   --ink-on-level-notes: #12201a;
 
   /* Status / semantic */
