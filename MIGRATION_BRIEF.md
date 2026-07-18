@@ -204,7 +204,7 @@ mityjohn-site/
 | ~~Category~~ | *removed — flattened into tags per D7* |
 | App | `/apps/{slug}/` |
 | Books index | `/books/` |
-| Book | `/books/{slug}/` |
+| ~~Book~~ | *`/books/{slug}/` dropped in v1 — books link out (Amazon); no legacy URL maps here. See gap-list.md G2.* |
 | Static page | `/{slug}/` |
 | RSS | `/feed/` **and** `/rss.xml` (identical content) |
 | Sitemap | `/sitemap-index.xml` |

@@ -1,0 +1,658 @@
+[
+  {
+    "type": "post",
+    "wpId": 941,
+    "old": "/?p=941",
+    "new": "/blog/ghosts-in-the-machine-i-built-a-haunted-it-sim-by-inviting-a-ghost-in/"
+  },
+  {
+    "type": "post",
+    "wpId": 931,
+    "old": "/?p=931",
+    "new": "/blog/mitystudio-i-cant-or-hardly-play-music-so-i-built-something-that-can/"
+  },
+  {
+    "type": "post",
+    "wpId": 921,
+    "old": "/?p=921",
+    "new": "/blog/when-a-cat-makes-you-publish-youre-first-picture-book/"
+  },
+  {
+    "type": "post",
+    "wpId": 891,
+    "old": "/?p=891",
+    "new": "/blog/the-workflow-is-the-new-unit-of-software-delivery/"
+  },
+  {
+    "type": "post",
+    "wpId": 852,
+    "old": "/?p=852",
+    "new": "/blog/pibeat-from-sonic-pi-and-musicagent-to-a-new-live-coding-ide/"
+  },
+  {
+    "type": "post",
+    "wpId": 801,
+    "old": "/?p=801",
+    "new": "/blog/loveflix-2-0-or-how-i-turned-explosions-into-romance-again/"
+  },
+  {
+    "type": "post",
+    "wpId": 711,
+    "old": "/?p=711",
+    "new": "/blog/a-guitar-hero-controller-is-still-a-guitar-if-you-treat-it-like-one/"
+  },
+  {
+    "type": "post",
+    "wpId": 688,
+    "old": "/?p=688",
+    "new": "/blog/scrum-2-0-0-programming-by-intent-and-a-little-faith/"
+  },
+  {
+    "type": "post",
+    "wpId": 681,
+    "old": "/?p=681",
+    "new": "/blog/scrum-programming-language-release-v1-3-0/"
+  },
+  {
+    "type": "post",
+    "wpId": 667,
+    "old": "/?p=667",
+    "new": "/blog/meet-scrummy-because-even-a-programming-language-needs-a-hug/"
+  },
+  {
+    "type": "post",
+    "wpId": 603,
+    "old": "/?p=603",
+    "new": "/blog/code-chaos-copilots-the-tech-magic-behind-hockey-madness/"
+  },
+  {
+    "type": "post",
+    "wpId": 602,
+    "old": "/?p=602",
+    "new": "/blog/hockey-madness-celebrating-ten-years-with-chaos-and-charm/"
+  },
+  {
+    "type": "post",
+    "wpId": 572,
+    "old": "/?p=572",
+    "new": "/blog/outcoded-by-our-kids-it-took-us-20-years-they-used-20-prompts/"
+  },
+  {
+    "type": "post",
+    "wpId": 553,
+    "old": "/?p=553",
+    "new": "/blog/soundfonts-the-unsung-heroes-of-virtual-instruments/"
+  },
+  {
+    "type": "post",
+    "wpId": 520,
+    "old": "/?p=520",
+    "new": "/blog/from-hitster-to-hipster-building-a-music-game-with-agentic-ai-in-just-2-evenings/"
+  },
+  {
+    "type": "post",
+    "wpId": 483,
+    "old": "/?p=483",
+    "new": "/blog/typix-personality-assessments-meet-vibe-coding/"
+  },
+  {
+    "type": "post",
+    "wpId": 464,
+    "old": "/?p=464",
+    "new": "/blog/tdd-is-dead-long-live-the-test/"
+  },
+  {
+    "type": "post",
+    "wpId": 454,
+    "old": "/?p=454",
+    "new": "/blog/musicagent-v1-5-0-creative-mode-is-here/"
+  },
+  {
+    "type": "post",
+    "wpId": 441,
+    "old": "/?p=441",
+    "new": "/blog/music-agent-v1-4-0-smarter-faster-and-ready-to-groove/"
+  },
+  {
+    "type": "post",
+    "wpId": 435,
+    "old": "/?p=435",
+    "new": "/blog/local-embedding-the-secret-sauce-for-smarter-ai-in-musicagent/"
+  },
+  {
+    "type": "post",
+    "wpId": 428,
+    "old": "/?p=428",
+    "new": "/blog/ai-grooves-finding-the-funk-with-sentencetransformers/"
+  },
+  {
+    "type": "post",
+    "wpId": 398,
+    "old": "/?p=398",
+    "new": "/blog/loveflix-where-every-movie-finds-its-heart/"
+  },
+  {
+    "type": "post",
+    "wpId": 390,
+    "old": "/?p=390",
+    "new": "/blog/musicagent-yamnet-integration-for-enhanced-music-creation/"
+  },
+  {
+    "type": "post",
+    "wpId": 379,
+    "old": "/?p=379",
+    "new": "/blog/music-agent-v1-3-0-now-supporting-samples/"
+  },
+  {
+    "type": "post",
+    "wpId": 367,
+    "old": "/?p=367",
+    "new": "/blog/testing-the-obvious-my-music-is-out-and-its-ready-to-rock-your-ears/"
+  },
+  {
+    "type": "post",
+    "wpId": 360,
+    "old": "/?p=360",
+    "new": "/blog/token-tuning-mastering-character-token-limits-for-anthropic-and-openai-models/"
+  },
+  {
+    "type": "post",
+    "wpId": 342,
+    "old": "/?p=342",
+    "new": "/blog/scrum-becomes-2/"
+  },
+  {
+    "type": "post",
+    "wpId": 353,
+    "old": "/?p=353",
+    "new": "/blog/unveiling-music-agent-1-2-0-a-revolutionary-web-experience-for-music-creation/"
+  },
+  {
+    "type": "post",
+    "wpId": 349,
+    "old": "/?p=349",
+    "new": "/blog/introducing-music-agent-1-1-0-enhancing-creativity-with-new-features/"
+  },
+  {
+    "type": "post",
+    "wpId": 311,
+    "old": "/?p=311",
+    "new": "/blog/musicagent-1-0-0-now-with-100-more-musical-magic/"
+  },
+  {
+    "type": "post",
+    "wpId": 207,
+    "old": "/?p=207",
+    "new": "/blog/rise-of-the-gpt-music-agent/"
+  },
+  {
+    "type": "post",
+    "wpId": 138,
+    "old": "/?p=138",
+    "new": "/blog/code-crafters-and-ai-wizards/"
+  },
+  {
+    "type": "post",
+    "wpId": 142,
+    "old": "/?p=142",
+    "new": "/blog/meet-your-new-chat-buddy-gpt-chatbot-fun-and-fully-yours/"
+  },
+  {
+    "type": "post",
+    "wpId": 180,
+    "old": "/?p=180",
+    "new": "/blog/how-to-outsmart-google-forms/"
+  },
+  {
+    "type": "post",
+    "wpId": 60,
+    "old": "/?p=60",
+    "new": "/blog/modern-java-development-the-fast-and-the-furious/"
+  },
+  {
+    "type": "post",
+    "wpId": 96,
+    "old": "/?p=96",
+    "new": "/blog/the-race-for-qa/"
+  },
+  {
+    "type": "post",
+    "wpId": 1,
+    "old": "/?p=1",
+    "new": "/blog/the-battle-of-low-code-solutions/"
+  },
+  {
+    "type": "page",
+    "wpId": 960,
+    "old": "/?page_id=960",
+    "new": "/#apps"
+  },
+  {
+    "type": "page",
+    "wpId": 951,
+    "old": "/?page_id=951",
+    "new": "/apps/ghosts-in-the-machine/"
+  },
+  {
+    "type": "page",
+    "wpId": 902,
+    "old": "/?page_id=902",
+    "new": "/books/"
+  },
+  {
+    "type": "page",
+    "wpId": 901,
+    "old": "/?page_id=901",
+    "new": "/books/"
+  },
+  {
+    "type": "page",
+    "wpId": 899,
+    "old": "/?page_id=899",
+    "new": "/books/"
+  },
+  {
+    "type": "page",
+    "wpId": 883,
+    "old": "/?page_id=883",
+    "new": "/apps/mitygarden/"
+  },
+  {
+    "type": "page",
+    "wpId": 853,
+    "old": "/?page_id=853",
+    "new": "/apps/pibeat/"
+  },
+  {
+    "type": "page",
+    "wpId": 841,
+    "old": "/?page_id=841",
+    "new": "/apps/mitylex/"
+  },
+  {
+    "type": "page",
+    "wpId": 830,
+    "old": "/?page_id=830",
+    "new": "/apps/mitylaundry/"
+  },
+  {
+    "type": "page",
+    "wpId": 790,
+    "old": "/?page_id=790",
+    "new": "/apps/mityfighter/"
+  },
+  {
+    "type": "page",
+    "wpId": 771,
+    "old": "/?page_id=771",
+    "new": "/apps/mitystories/"
+  },
+  {
+    "type": "page",
+    "wpId": 760,
+    "old": "/?page_id=760",
+    "new": "/apps/loveflix/"
+  },
+  {
+    "type": "page",
+    "wpId": 706,
+    "old": "/?page_id=706",
+    "new": "/apps/mityguitar/"
+  },
+  {
+    "type": "page",
+    "wpId": 640,
+    "old": "/?page_id=640",
+    "new": "/apps/sportsmadness/"
+  },
+  {
+    "type": "page",
+    "wpId": 591,
+    "old": "/?page_id=591",
+    "new": "/artist/"
+  },
+  {
+    "type": "page",
+    "wpId": 546,
+    "old": "/?page_id=546",
+    "new": "/apps/hipster/"
+  },
+  {
+    "type": "page",
+    "wpId": 514,
+    "old": "/?page_id=514",
+    "new": "/apps/mitystudio/"
+  },
+  {
+    "type": "page",
+    "wpId": 481,
+    "old": "/?page_id=481",
+    "new": "/apps/typix/"
+  },
+  {
+    "type": "page",
+    "wpId": 219,
+    "old": "/?page_id=219",
+    "new": "/apps/music-agent/"
+  },
+  {
+    "type": "page",
+    "wpId": 184,
+    "old": "/?page_id=184",
+    "new": "/blog/"
+  },
+  {
+    "type": "page",
+    "wpId": 100,
+    "old": "/?page_id=100",
+    "new": "/apps/scrum-programming/"
+  },
+  {
+    "type": "page",
+    "wpId": 2,
+    "old": "/?page_id=2",
+    "new": "/about/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "ai",
+    "old": "/?tag=ai",
+    "new": "/tags/ai/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "anthropic",
+    "old": "/?tag=anthropic",
+    "new": "/tags/anthropic/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "architecture",
+    "old": "/?tag=architecture",
+    "new": "/tags/architecture/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "delivery",
+    "old": "/?tag=delivery",
+    "new": "/tags/delivery/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "development",
+    "old": "/?tag=development",
+    "new": "/tags/development/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "electron",
+    "old": "/?tag=electron",
+    "new": "/tags/electron/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "engineering",
+    "old": "/?tag=engineering",
+    "new": "/tags/engineering/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "fun",
+    "old": "/?tag=fun",
+    "new": "/tags/fun/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "generative-ai",
+    "old": "/?tag=generative-ai",
+    "new": "/tags/generative-ai/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "gpt",
+    "old": "/?tag=gpt",
+    "new": "/tags/gpt/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "hockey",
+    "old": "/?tag=hockey",
+    "new": "/tags/hockey/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "java",
+    "old": "/?tag=java",
+    "new": "/tags/java/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "leadership",
+    "old": "/?tag=leadership",
+    "new": "/tags/leadership/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "llm",
+    "old": "/?tag=llm",
+    "new": "/tags/llm/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "lowcode",
+    "old": "/?tag=lowcode",
+    "new": "/tags/lowcode/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "monitoring",
+    "old": "/?tag=monitoring",
+    "new": "/tags/monitoring/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "music",
+    "old": "/?tag=music",
+    "new": "/tags/music/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "musicagent",
+    "old": "/?tag=musicagent",
+    "new": "/tags/musicagent/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "observability",
+    "old": "/?tag=observability",
+    "new": "/tags/observability/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "openai",
+    "old": "/?tag=openai",
+    "new": "/tags/openai/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "personality",
+    "old": "/?tag=personality",
+    "new": "/tags/personality/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "programming",
+    "old": "/?tag=programming",
+    "new": "/tags/programming/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "python",
+    "old": "/?tag=python",
+    "new": "/tags/python/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "quarkus",
+    "old": "/?tag=quarkus",
+    "new": "/tags/quarkus/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "react",
+    "old": "/?tag=react",
+    "new": "/tags/react/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "rust",
+    "old": "/?tag=rust",
+    "new": "/tags/rust/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "scrum",
+    "old": "/?tag=scrum",
+    "new": "/tags/scrum/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "sdlc",
+    "old": "/?tag=sdlc",
+    "new": "/tags/sdlc/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "software-delivery",
+    "old": "/?tag=software-delivery",
+    "new": "/tags/software-delivery/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "sonicpi",
+    "old": "/?tag=sonicpi",
+    "new": "/tags/sonicpi/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "tmdb",
+    "old": "/?tag=tmdb",
+    "new": "/tags/tmdb/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "valentine",
+    "old": "/?tag=valentine",
+    "new": "/tags/valentine/"
+  },
+  {
+    "type": "tag",
+    "wpTag": "vuejs",
+    "old": "/?tag=vuejs",
+    "new": "/tags/vuejs/"
+  },
+  {
+    "type": "category",
+    "wpId": 13,
+    "old": "/?cat=13",
+    "new": "/tags/ai/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "ai",
+    "old": "/?category_name=ai",
+    "new": "/tags/ai/"
+  },
+  {
+    "type": "category",
+    "wpId": 7,
+    "old": "/?cat=7",
+    "new": "/tags/development/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "development",
+    "old": "/?category_name=development",
+    "new": "/tags/development/"
+  },
+  {
+    "type": "category",
+    "wpId": 25,
+    "old": "/?cat=25",
+    "new": "/tags/fun/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "fun",
+    "old": "/?category_name=fun",
+    "new": "/tags/fun/"
+  },
+  {
+    "type": "category",
+    "wpId": 31,
+    "old": "/?cat=31",
+    "new": "/tags/hockey/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "hockey",
+    "old": "/?category_name=hockey",
+    "new": "/tags/hockey/"
+  },
+  {
+    "type": "category",
+    "wpId": 6,
+    "old": "/?cat=6",
+    "new": "/tags/lowcode/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "low-code",
+    "old": "/?category_name=low-code",
+    "new": "/tags/lowcode/"
+  },
+  {
+    "type": "category",
+    "wpId": 37,
+    "old": "/?cat=37",
+    "new": "/tags/music/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "music",
+    "old": "/?category_name=music",
+    "new": "/tags/music/"
+  },
+  {
+    "type": "category",
+    "wpId": 1,
+    "old": "/?cat=1",
+    "new": "/blog/"
+  },
+  {
+    "type": "category",
+    "wpSlug": "uncategorized",
+    "old": "/?category_name=uncategorized",
+    "new": "/blog/"
+  },
+  {
+    "type": "feed",
+    "old": "/?feed=rss2",
+    "new": "/feed/"
+  },
+  {
+    "type": "feed",
+    "old": "/?feed=rss",
+    "new": "/feed/"
+  },
+  {
+    "type": "feed",
+    "old": "/?feed=atom",
+    "new": "/feed/"
+  },
+  {
+    "type": "author",
+    "old": "/?author=1",
+    "new": "/about/"
+  }
+]
