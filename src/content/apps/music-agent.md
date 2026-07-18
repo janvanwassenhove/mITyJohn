@@ -38,22 +38,22 @@ Music Agent @ Techorama 2025
 
 Music Agent in action @ Devoxx Fr 2025 (Lunch Talk)
 
-<iframe loading="lazy" title="15 Minutes de Jam: Programmer l'Harmonie - jan van wassenhove (Belgium / Sopra Steria)" width="500" height="281" src="https://www.youtube.com/embed/3ROt1C6GTcQ?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/3ROt1C6GTcQ?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 Music Agent in action @ Devoxx Be 2024 (Tools In Action Talk)
 
-<iframe loading="lazy" title="Harmonizing Code and Melody: making electronical music in a matter of speaking! by Jan Van Wassenhov" width="500" height="281" src="https://www.youtube.com/embed/rcfCjKbLkK0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/rcfCjKbLkK0?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 Music Agent @ Devoxx Be 2024 (Conference Talk)
 
-<iframe loading="lazy" title="Harmonizing Code and Melody: making electronical music in a matter of speaking! by Jan Van Wassenhov" width="500" height="281" src="https://www.youtube.com/embed/1Cy8pGknPpg?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/1Cy8pGknPpg?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 Music Agent @ Conf 42 Python 2025 (Conference talk)
 
-<iframe loading="lazy" title="Code and Melody: Making Electronic Music Creatively | Jan Van Wassenhove | Conf42 Python 2025" width="500" height="281" src="https://www.youtube.com/embed/z81O_iZQBQs?start=1418&amp;feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/z81O_iZQBQs?start=1418&amp;feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 ---
 
-<iframe title="Spotify Embed: mITy.John" style="border-radius: 12px" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=oembed"></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=oembed" data-embed-h="352" data-embed-provider="spotify"><span class="ef-glyph">▶</span><span class="ef-title">Play on Spotify</span><span class="ef-note">Loads spotify.com — nothing is requested until you click.</span></button>
 
-<iframe loading="lazy" title="mITy.John" width="500" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?visual=true&amp;url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F1339132032&amp;show_artwork=true&amp;maxheight=750&amp;maxwidth=500"></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://w.soundcloud.com/player/?visual=true&amp;url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F1339132032&amp;show_artwork=true&amp;maxheight=750&amp;maxwidth=500" data-embed-h="450" data-embed-provider="soundcloud"><span class="ef-glyph">▶</span><span class="ef-title">Play on SoundCloud</span><span class="ef-note">Loads soundcloud.com — nothing is requested until you click.</span></button>

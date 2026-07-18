@@ -162,4 +162,4 @@ Important links
 
 Results on SoundCloud
 
-<iframe loading="lazy" title="mITy.John" width="500" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?visual=true&amp;url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F1339132032&amp;show_artwork=true&amp;maxheight=750&amp;maxwidth=500"></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://w.soundcloud.com/player/?visual=true&amp;url=https%3A%2F%2Fapi.soundcloud.com%2Fusers%2F1339132032&amp;show_artwork=true&amp;maxheight=750&amp;maxwidth=500" data-embed-h="450" data-embed-provider="soundcloud"><span class="ef-glyph">▶</span><span class="ef-title">Play on SoundCloud</span><span class="ef-note">Loads soundcloud.com — nothing is requested until you click.</span></button>

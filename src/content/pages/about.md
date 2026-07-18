@@ -46,7 +46,7 @@ The “John” part? That’s the English translation of my Dutch name _Jan_ —
 
 ---
 
-<iframe title="Spotify Embed: mITy.John" style="border-radius: 12px" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=oembed"></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=oembed" data-embed-h="352" data-embed-provider="spotify"><span class="ef-glyph">▶</span><span class="ef-title">Play on Spotify</span><span class="ef-note">Loads spotify.com — nothing is requested until you click.</span></button>
 
 ---
 
@@ -59,14 +59,14 @@ Conference talks
 **Devoxx FR 2026 – Conference** – (Paris – France)  
 [https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove](https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove)
 
-<iframe loading="lazy" title="Outcoded by Our Kids : Il nous a fallu 20 ans… ils ont eu besoin de 20 prompts !" width="500" height="281" src="https://www.youtube.com/embed/e2KKcrqeWsU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/e2KKcrqeWsU?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 **Roundtable Event – The art of staying ahead** (2026 – Leuven Belgium) – the future of DXP
 
 **Devoxx 2025 – Conference** – (Antwerp – Belgium)  
 [https://m.devoxx.com/events/dvbe25/speaker/12053/jan-van-wassenhove](https://m.devoxx.com/events/dvbe25/speaker/12053/jan-van-wassenhove)
 
-<iframe loading="lazy" title="Outcoded by Our Kids: It Took Us 20 Years, They Used 20 Prompts!  by  Jan Van Wassenhove, Bart Wulle" width="500" height="281" src="https://www.youtube.com/embed/ZO-619lqjK0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/ZO-619lqjK0?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 **EU Lisa Roundtable 2025** (Warshaw – Poland)  
 [https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers](https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers)

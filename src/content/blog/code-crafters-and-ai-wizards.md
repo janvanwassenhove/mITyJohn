@@ -23,7 +23,7 @@ This blog post, delves deep into this transformative journey. We explore how dev
 
 If you don’t wanna read through it, you might as well watch my video on Youtube.
 
-<iframe loading="lazy" title="Tobania Technical MeetUp | Code Crafters and AI wizards, Navigating the evolution of Software Devel" width="500" height="281" src="https://www.youtube.com/embed/-VbWfRj8N9A?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/-VbWfRj8N9A?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 **Historical Overview**
 

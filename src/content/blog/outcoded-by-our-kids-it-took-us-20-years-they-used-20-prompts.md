@@ -55,7 +55,7 @@ Watch the Talk
 The full session is now live on YouTube:  
 [Outcoded by Our Kids – Devoxx Belgium 2025](https://youtu.be/ZO-619lqjK0?si=asVj66GOpE8SvB_0)
 
-<iframe loading="lazy" title="Outcoded by Our Kids: It Took Us 20 Years, They Used 20 Prompts!  by  Jan Van Wassenhove, Bart Wulle" width="500" height="281" src="https://www.youtube.com/embed/ZO-619lqjK0?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube.com/embed/ZO-619lqjK0?feature=oembed" data-embed-h="281" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">Play on YouTube</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 
 If you’re a parent, developer, or architect wondering what the next decade of software creation looks like — this one’s for you.  
 It’ll make you laugh, question your IDE, and maybe… hand the keyboard to your kid.

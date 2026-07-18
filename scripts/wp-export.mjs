@@ -94,6 +94,14 @@ function rewriteUrls(html) {
   return out;
 }
 
+// Known third-party embed hosts -> facade copy. Anything not listed is left as-is.
+function embedProvider(src) {
+  if (/open\.spotify\.com/.test(src)) return { id: 'spotify', label: 'Play on Spotify', host: 'spotify.com', height: 352 };
+  if (/youtube(-nocookie)?\.com|youtu\.be/.test(src)) return { id: 'youtube', label: 'Play on YouTube', host: 'youtube.com', height: 400 };
+  if (/soundcloud\.com/.test(src)) return { id: 'soundcloud', label: 'Play on SoundCloud', host: 'soundcloud.com', height: 166 };
+  return null;
+}
+
 function stripPluginMarkup(html) {
   let out = html;
   // Smart Slider 3 (D3: superseded) — rendered containers and raw shortcodes
@@ -106,6 +114,21 @@ function stripPluginMarkup(html) {
   // accompanying blockquote link (rewritten by F3) carries the reference.
   out = out.replace(/<iframe[^>]*wp-embedded-content[^>]*><\/iframe>/g, '');
   out = out.replace(/<iframe[^>]*embed=true[^>]*><\/iframe>/g, '');
+  // Third-party embeds (Spotify / YouTube / SoundCloud) -> click-to-load facades.
+  // Mandated by §8.1 for Spotify and by D5 generally: the site is deliberately
+  // cookieless so no consent banner is needed, and an eager embed silently breaks
+  // that. Also fixes an observed frame-bust: the eager Spotify iframe navigated
+  // the parent page to the site root.
+  out = out.replace(/<iframe\b[^>]*\bsrc="([^"]+)"[^>]*><\/iframe>/g, (full, src) => {
+    const p = embedProvider(src);
+    if (!p) return full; // leave first-party / unknown iframes alone
+    const h = (full.match(/height="(\d+)"/) || [])[1] || p.height;
+    return `<button type="button" class="embed-facade" data-embed-src="${src}" data-embed-h="${h}" data-embed-provider="${p.id}">`
+      + `<span class="ef-glyph">▶</span>`
+      + `<span class="ef-title">${p.label}</span>`
+      + `<span class="ef-note">Loads ${p.host} — nothing is requested until you click.</span>`
+      + `</button>`;
+  });
   // Leftover generic shortcodes
   out = out.replace(/\[\/?(?:embed|caption|gallery|et_pb_[a-z_]+)[^\]]*\]/g, '');
   return out;
@@ -113,7 +136,9 @@ function stripPluginMarkup(html) {
 
 const td = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', hr: '---', bulletListMarker: '-' });
 turndownPluginGfm.gfm(td);
-td.keep(['iframe']);
+// Keep raw: first-party iframes, and the click-to-load facades that replace
+// third-party embeds (turndown would otherwise flatten them to their text).
+td.keep(['iframe', 'button']);
 // WP puts <code> inside <pre>; keep language classes when present
 td.addRule('preCode', {
   filter: (node) => node.nodeName === 'PRE',

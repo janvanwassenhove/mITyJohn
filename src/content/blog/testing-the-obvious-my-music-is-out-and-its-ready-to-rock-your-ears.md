@@ -24,4 +24,4 @@ P.S. Testing the obvious is fun… but testing your speakers at full volume is e
 
 ---
 
-<iframe title="Spotify Embed: Testing The Obvious" style="border-radius: 12px" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" src="https://open.spotify.com/embed/album/5blye0aePcmfEpJXbHHMMP?utm_source=oembed"></iframe>
+<button type="button" class="embed-facade" data-embed-src="https://open.spotify.com/embed/album/5blye0aePcmfEpJXbHHMMP?utm_source=oembed" data-embed-h="352" data-embed-provider="spotify"><span class="ef-glyph">▶</span><span class="ef-title">Play on Spotify</span><span class="ef-note">Loads spotify.com — nothing is requested until you click.</span></button>

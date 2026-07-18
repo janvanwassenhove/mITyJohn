@@ -1,8 +1,8 @@
 ---
-title: "More books, incoming"
+title: "Reimagining Series"
 series: "Coming soon"
 badge: "In the oven"
-desc: "The lab is printing faster than the shelves fill. Check back — or don’t, they’ll find you."
-buy: "https://www.amazon.com.be/s?k=jan+van+wassenhove"
-order: 4
+desc: "Iconic covers, respectfully reinterpreted and gently roasted. The lab is printing faster than the shelves fill."
+buy: "https://www.amazon.com/s?k=Jan+Van+Wassenhove"
+order: 5
 ---

@@ -58,6 +58,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <slot />
     <Footer />
     <script>
+      // Click-to-load third-party embeds in converted content (§8.1, D5). The
+      // provider is contacted only after the visitor clicks; sandboxed so an
+      // embed cannot navigate this page (the eager Spotify iframe used to).
+      document.addEventListener('click', (e) => {
+        const btn = (e.target as HTMLElement).closest('.embed-facade') as HTMLElement | null;
+        if (!btn) return;
+        const f = document.createElement('iframe');
+        f.src = btn.dataset.embedSrc!;
+        f.title = btn.querySelector('.ef-title')?.textContent ?? 'Embedded player';
+        f.loading = 'lazy';
+        f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+        f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups');
+        f.style.cssText = `display:block;width:100%;height:${btn.dataset.embedH || 352}px;border:0;border-radius:var(--radius-embed);margin:1.6em 0;`;
+        btn.replaceWith(f);
+      });
+    </script>
+    <script>
       // Scroll reveal — design behaviour, respects prefers-reduced-motion via CSS.
       const els = document.querySelectorAll('[data-reveal]');
       if (els.length && 'IntersectionObserver' in window) {

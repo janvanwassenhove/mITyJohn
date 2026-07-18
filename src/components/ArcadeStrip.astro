@@ -1,8 +1,8 @@
 ---
-// Decorative arcade divider strips — design's pixel-art runner scenes, rebuilt
-// CSS-only (the export's rAF scoring loop is dropped for the N5 mobile budget;
-// the visual motion is preserved via the design's own keyframes).
-// aria-hidden + .mj-anim so prefers-reduced-motion disables all movement.
+// Decorative arcade divider strips — pixel-art scenes between sections.
+// Motion is CSS keyframes; a small shared script (below) runs only while a strip
+// is on screen and handles score + collectible pickups. aria-hidden throughout,
+// and prefers-reduced-motion disables both the animation and the script.
 interface Props {
   variant: 'store' | 'scrum' | 'artist' | 'books' | 'notes';
 }
@@ -12,58 +12,117 @@ const LABELS = {
   store: 'LVL 1 · THE STORE — PLATFORMER · BOSS: LEGACY CODE',
   scrum: 'LVL 2 · THE LAB — KART RACING · RIVAL: THE BACKLOG',
   artist: 'LVL 3 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
-  books: 'LVL 4 · THE BOOKSTORE — RACING · RIVAL: THE DEADLINE',
+  books: 'LVL 4 · THE BOOKSTORE — RACING · COLLECT: THE BACKLIST',
   notes: 'LVL 5 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
 };
 
-// Pixel sprite (the design's runner), verbatim box-shadow art.
+// --- pixel sprites (box-shadow art on a single element) ---------------------
 const RUNNER =
   '18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent), 18px 24px 0 var(--accent-2), 24px 24px 0 var(--accent), 30px 24px 0 var(--accent), 36px 24px 0 var(--accent), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent), 18px 30px 0 var(--accent), 24px 30px 0 var(--accent-2), 30px 30px 0 var(--accent), 36px 30px 0 var(--accent), 42px 30px 0 var(--accent-2), 12px 36px 0 var(--accent), 18px 36px 0 var(--accent), 24px 36px 0 var(--accent), 30px 36px 0 var(--accent), 36px 36px 0 var(--accent), 42px 36px 0 var(--accent-2), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b';
 
-// Rival kart — same sprite mesh, reskinned (grey chassis, red trim) so it reads
-// as a second racer rather than a recolour glitch of mITyJohn.
+// Rival kart — same mesh, grey chassis / red trim so it reads as a second racer.
 const RIVAL = RUNNER.replaceAll('var(--accent-2)', '#e05a48').replaceAll('var(--accent)', '#6b7280');
 
-const coins = { store: ['28%', '54%', '79%'], scrum: [], books: ['22%', '44%', '66%', '86%'], artist: [], notes: [] }[variant];
-const coinGlyph = variant === 'books' ? '❏' : '◉';
-const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
+// Side-view car for the bookstore level, 6px cells. `body` colours the chassis.
+const car = (body: string) => {
+  const A = body, B = 'var(--accent-2)', D = '#33302b';
+  const cells: string[] = [];
+  const put = (x: number, y: number, c: string) => cells.push(`${x * 6}px ${y * 6}px 0 ${c}`);
+  [3, 4, 5].forEach((x) => put(x, 0, A)); // roof
+  put(2, 1, A); [3, 4, 5].forEach((x) => put(x, 1, B)); put(6, 1, A); // windows
+  for (let x = 0; x <= 9; x++) { put(x, 2, A); put(x, 3, A); } // body
+  [1, 2, 7, 8].forEach((x) => put(x, 4, D)); // wheels
+  return cells.join(', ');
+};
+
+// Guitar held by the level-3 character: wooden body, dark neck angled up-right.
+const GUITAR = [
+  ...[[0, 4], [1, 4], [2, 4], [0, 5], [1, 5], [2, 5], [0, 6], [1, 6], [2, 6]].map(([x, y]) => `${x * 5}px ${y * 5}px 0 #c98b6a`),
+  ...[[3, 3], [4, 2], [5, 1], [6, 0]].map(([x, y]) => `${x * 5}px ${y * 5}px 0 #4a3620`),
+].join(', ');
+
+// Guitar Hero fret colours, top lane to bottom lane.
+const FRETS = ['#7fc99a', '#e05a48', '#e0c04a', '#6fb3c9', '#e08a4a'];
+const LANE_Y = [52, 70, 88, 106, 124];
+// note gems: [lane, delay] — staggered so they arrive as a playable pattern
+const GEMS: [number, number][] = [
+  [0, 0], [2, 0.55], [4, 1.1], [1, 1.65], [3, 2.2], [0, 2.75], [2, 3.3], [4, 3.85], [1, 4.4], [3, 4.95],
+];
+
+const coins = { store: ['28%', '54%', '79%'], scrum: [], books: [], artist: [], notes: [] }[variant];
+// Books the car drives through and collects
+const backlist = ['24%', '42%', '60%', '78%', '92%'];
 ---
 
-<div class="strip mj-anim" aria-hidden="true">
+<div class="strip mj-anim" data-mj-strip={variant} aria-hidden="true">
   <div class="label">{LABELS[variant]}</div>
-  <div class="score">SCORE 000000</div>
-  <div class="ground"></div>
-  {variant === 'artist' && (
-    <>
-      <div class="hitline"></div>
-      <div class="hitlabel">HIT</div>
-      {[0, 1, 2, 3, 4].map((i) => (
-        <div class="note" style={`animation-delay:${i * 1.8}s;`}>♪</div>
-      ))}
-    </>
-  )}
-  {coins.map((left, i) => (
-    <div class="coin" style={`left:${left};bottom:${70 + (i % 2) * 8}px;color:${coinColor};animation-delay:${i * 0.5}s;`}>{coinGlyph}</div>
+  <div class="score" data-mj-score>SCORE 000000</div>
+  <div class="pop" data-mj-pop>+100</div>
+  {variant !== 'artist' && <div class="ground"></div>}
+
+  {variant === 'store' && coins.map((left, i) => (
+    <div class="coin" data-mj-collect style={`left:${left};bottom:${70 + (i % 2) * 8}px;animation-delay:${i * 0.5}s;`}>◉</div>
   ))}
+
   {variant === 'scrum' && (
     <>
-      <div class="kart-streak" style="top:64px;animation-duration:2.6s;"></div>
-      <div class="kart-streak" style="top:96px;animation-duration:2.1s;animation-delay:0.4s;"></div>
-      <div class="kart-streak" style="top:124px;animation-duration:2.9s;animation-delay:0.9s;"></div>
+      <div class="streak" style="top:64px;animation-duration:2.6s;"></div>
+      <div class="streak" style="top:96px;animation-duration:2.1s;animation-delay:0.4s;"></div>
+      <div class="streak" style="top:124px;animation-duration:2.9s;animation-delay:0.9s;"></div>
       <div class="runner rival">
         <div class="sprite" style={`box-shadow:${RIVAL};`}></div>
       </div>
     </>
   )}
+
+  {variant === 'artist' && (
+    <>
+      {/* Guitar Hero highway: five colour-coded lanes running into a strike bar */}
+      {LANE_Y.map((y, i) => (
+        <div class="lane" style={`top:${y}px;--fret:${FRETS[i]};`}></div>
+      ))}
+      <div class="strike"></div>
+      <div class="strike-label">STRIKE</div>
+      {LANE_Y.map((y, i) => (
+        <div class="fret" style={`top:${y - 5}px;--fret:${FRETS[i]};`}></div>
+      ))}
+      {GEMS.map(([lane, delay]) => (
+        <div
+          class="gem"
+          data-mj-gem
+          style={`top:${LANE_Y[lane] - 6}px;--fret:${FRETS[lane]};animation-delay:${delay}s;`}
+        ></div>
+      ))}
+      <div class="guitarist">
+        <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
+        <div class="guitar" style={`box-shadow:${GUITAR};`}></div>
+      </div>
+    </>
+  )}
+
+  {variant === 'books' && backlist.map((left, i) => (
+    <div class="book-pickup" data-mj-collect style={`left:${left};animation-delay:${i * 0.4}s;`}>❏</div>
+  ))}
+
   {variant === 'notes' && (
     <>
       <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
       <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger"></div></div></div>
     </>
   )}
-  <div class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''}`}>
-    <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
-  </div>
+
+  {variant === 'books' ? (
+    <div class="car" data-mj-vehicle>
+      <div class="sprite" style={`box-shadow:${car('var(--level-books)')};`}></div>
+    </div>
+  ) : variant === 'artist' ? null : (
+    <div
+      class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''}`}
+      data-mj-vehicle
+    >
+      <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
+    </div>
+  )}
 </div>
 
 <style>
@@ -83,48 +142,53 @@ const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
     letter-spacing: 0.24em;
   }
   .label { left: var(--section-pad-x); color: var(--muted2); max-width: 70%; }
-  .score { right: var(--section-pad-x); color: var(--accent); }
+  .score { right: var(--section-pad-x); color: var(--accent); font-variant-numeric: tabular-nums; }
+  .pop {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    opacity: 0;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: var(--text-small);
+    color: var(--accent);
+    pointer-events: none;
+    white-space: nowrap;
+  }
   .ground {
     position: absolute;
     left: 0; right: 0; bottom: 40px;
     height: 2px;
     background: repeating-linear-gradient(90deg, var(--border2) 0 12px, transparent 12px 24px);
   }
-  .coin {
+
+  /* collectibles ---------------------------------------------------------- */
+  .coin, .book-pickup {
     position: absolute;
     font-family: var(--font-display);
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
     animation: mj-coin 1.7s ease-in-out infinite;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .hitline { position: absolute; left: 14%; top: 54px; bottom: 50px; width: 2px; background: var(--accent-2); opacity: 0.55; box-shadow: 0 0 10px var(--accent-2); }
-  .hitlabel { position: absolute; left: 14%; top: 34px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--accent-2); }
-  .note {
-    position: absolute;
-    bottom: 74px;
-    right: -30px;
-    font-family: var(--font-display);
-    font-size: 23px;
-    font-weight: 700;
-    color: var(--accent-2);
-    animation: mj-streak 9s linear infinite;
-  }
-  .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
-  .hp.you { left: var(--section-pad-x); }
-  .hp.boss-hp { right: var(--section-pad-x); }
-  .bar { margin-top: 4px; width: 100%; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .fill { width: 100%; height: 100%; }
-  .fill.ok { background: var(--ok); }
-  .fill.danger { background: var(--danger); }
-  .runner { position: absolute; top: 58px; left: 0; animation: mj-run 15s linear infinite; }
+  .coin { color: var(--accent); }
+  .book-pickup { color: var(--level-books); bottom: 74px; font-size: 23px; }
+  .collected { opacity: 0; transform: scale(2.2); }
+
+  /* vehicles -------------------------------------------------------------- */
+  /* Explicit size: box-shadow pixel art contributes nothing to the layout box,
+     so without this the element measures 6x6 and collision would fire at the
+     sprite's origin instead of where the vehicle visually is. */
+  .runner, .car { position: absolute; top: 58px; left: 0; animation: mj-run 15s linear infinite; }
+  .runner { width: 48px; height: 60px; }
+  .car { width: 60px; height: 30px; }
   .runner.fixed { animation: none; left: 28%; }
   .runner.kart { animation-duration: 9s; }
-  /* Second racer, own lane, different loop length than .kart so the two drift in
-     and out of sync — reads as overtaking rather than a fixed formation. */
   .runner.rival { top: 90px; animation: mj-run 12.5s linear infinite; animation-delay: -4s; }
+  .car { top: 84px; animation-duration: 7s; }
   .sprite { width: 6px; height: 6px; background: transparent; }
-  .kart-streak {
+  .streak {
     position: absolute;
     left: 0;
     width: 46px;
@@ -133,4 +197,169 @@ const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
     opacity: 0.4;
     animation: mj-streak linear infinite;
   }
+
+  /* level 3 — Guitar Hero highway ----------------------------------------- */
+  .lane {
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--fret), transparent 78%);
+    opacity: 0.22;
+  }
+  .strike {
+    position: absolute;
+    left: 16%;
+    top: 44px;
+    height: 92px;
+    width: 3px;
+    background: var(--text);
+    opacity: 0.5;
+    box-shadow: 0 0 12px var(--accent-2);
+  }
+  .strike-label {
+    position: absolute;
+    left: 16%;
+    top: 30px;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--muted2);
+  }
+  .fret {
+    position: absolute;
+    left: 16%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--fret);
+    opacity: 0.75;
+  }
+  .gem {
+    position: absolute;
+    right: -24px;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background: var(--fret);
+    box-shadow: 0 0 10px var(--fret);
+    animation: mj-gem 5.5s linear infinite;
+  }
+  .gem.hit { animation-play-state: running; }
+  .guitarist { position: absolute; left: 4%; top: 58px; animation: mj-bob 1.9s ease-in-out infinite; }
+  .guitar { position: absolute; left: 34px; top: 22px; width: 5px; height: 5px; background: transparent; }
+
+  /* level 5 — fight ------------------------------------------------------- */
+  .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
+  .hp.you { left: var(--section-pad-x); }
+  .hp.boss-hp { right: var(--section-pad-x); }
+  .bar { margin-top: 4px; width: 100%; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .fill { width: 100%; height: 100%; }
+  .fill.ok { background: var(--ok); }
+  .fill.danger { background: var(--danger); }
+
+  @keyframes mj-gem { from { transform: translateX(0); } to { transform: translateX(calc(-100vw - 40px)); } }
+  @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 </style>
+
+<script>
+  // Score + pickups. One observer for all strips; per-strip polling only while
+  // visible, and never at all when the visitor prefers reduced motion.
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced) {
+    const strips = document.querySelectorAll<HTMLElement>('[data-mj-strip]');
+
+    const start = (strip: HTMLElement) => {
+      if (strip.dataset.mjRunning) return;
+      strip.dataset.mjRunning = '1';
+
+      const scoreEl = strip.querySelector<HTMLElement>('[data-mj-score]');
+      const popEl = strip.querySelector<HTMLElement>('[data-mj-pop]');
+      const vehicle = strip.querySelector<HTMLElement>('[data-mj-vehicle]');
+      const pickups = [...strip.querySelectorAll<HTMLElement>('[data-mj-collect]')];
+      const gems = [...strip.querySelectorAll<HTMLElement>('[data-mj-gem]')];
+      let score = 0;
+      let lastX = -1e9;
+
+      const render = () => {
+        if (scoreEl) scoreEl.textContent = 'SCORE ' + String(Math.min(score, 999999)).padStart(6, '0');
+      };
+      const pop = (x: number, text: string, color: string) => {
+        if (!popEl) return;
+        popEl.textContent = text;
+        popEl.style.color = color;
+        popEl.style.left = x + 'px';
+        popEl.style.transition = 'none';
+        popEl.style.opacity = '1';
+        popEl.style.transform = 'translateY(0)';
+        requestAnimationFrame(() => {
+          popEl.style.transition = 'opacity .7s ease, transform .7s ease';
+          popEl.style.opacity = '0';
+          popEl.style.transform = 'translateY(-26px)';
+        });
+      };
+
+      const tick = () => {
+        const box = strip.getBoundingClientRect();
+
+        // Vehicle levels: collect anything the sprite drives through.
+        if (vehicle) {
+          const v = vehicle.getBoundingClientRect();
+          const vx = v.left - box.left;
+          if (vx < lastX) {
+            // looped back to the start — respawn the collectibles
+            pickups.forEach((p) => p.classList.remove('collected'));
+          }
+          lastX = vx;
+          for (const p of pickups) {
+            if (p.classList.contains('collected')) continue;
+            const r = p.getBoundingClientRect();
+            if (v.right > r.left && v.left < r.right) {
+              p.classList.add('collected');
+              score += 100;
+              render();
+              pop(r.left - box.left - 12, '+100', getComputedStyle(p).color);
+            }
+          }
+        }
+
+        // Rhythm level: a gem crossing the strike bar is a hit.
+        if (gems.length) {
+          const strike = strip.querySelector('.strike')?.getBoundingClientRect();
+          if (strike) {
+            for (const g of gems) {
+              const r = g.getBoundingClientRect();
+              const crossing = r.left < strike.left + 6 && r.right > strike.left - 6;
+              if (crossing && !g.dataset.hit) {
+                g.dataset.hit = '1';
+                score += 100;
+                render();
+                pop(strike.left - box.left - 20, 'PERFECT +100', getComputedStyle(g).backgroundColor);
+              } else if (!crossing && g.dataset.hit && r.left > strike.left) {
+                delete g.dataset.hit; // wrapped around, arm it again
+              }
+            }
+          }
+        }
+      };
+
+      render();
+      const id = window.setInterval(tick, 110);
+      strip.dataset.mjTimer = String(id);
+    };
+
+    const stop = (strip: HTMLElement) => {
+      const id = strip.dataset.mjTimer;
+      if (id) window.clearInterval(Number(id));
+      delete strip.dataset.mjTimer;
+      delete strip.dataset.mjRunning;
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => (e.isIntersecting ? start(e.target as HTMLElement) : stop(e.target as HTMLElement))),
+      { rootMargin: '80px 0px' },
+    );
+    strips.forEach((s) => io.observe(s));
+  }
+</script>

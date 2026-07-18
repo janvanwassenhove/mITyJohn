@@ -4,18 +4,22 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props { book: CollectionEntry<'books'> }
 const { book } = Astro.props;
-const { title, series, badge, desc, buy, preview } = book.data;
+const { title, series, badge, desc, buy, preview, cover } = book.data;
 ---
 
 <div class="book" data-reveal>
-  <a class="cover" href={buy} target="_blank" rel="noopener">
-    <div class="inner">
-      <div class="series">{series}</div>
-      <div>
-        <div class="title">{title}</div>
-        <div class="badge">{badge}</div>
+  <a class={`cover${cover ? ' has-art' : ''}`} href={buy} target="_blank" rel="noopener">
+    {cover ? (
+      <img src={cover} alt={`Cover of ${title}`} loading="lazy" decoding="async" width="600" height="948" />
+    ) : (
+      <div class="inner">
+        <div class="series">{series}</div>
+        <div>
+          <div class="title">{title}</div>
+          <div class="badge">{badge}</div>
+        </div>
       </div>
-    </div>
+    )}
   </a>
   <div class="meta">
     <div class="name">{title}</div>
@@ -48,6 +52,9 @@ const { title, series, badge, desc, buy, preview } = book.data;
   }
   :root[data-theme='light'] .cover { background: repeating-linear-gradient(160deg, #e9e3d4 0 14px, #efeadd 14px 28px); }
   .cover:hover { border-color: var(--accent-2); transform: scale(1.025); }
+  /* Real cover art: fill the 2/3 card, no typographic overlay */
+  .cover.has-art { background: none; }
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .inner { position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
   .series {
     font-family: var(--font-mono);
