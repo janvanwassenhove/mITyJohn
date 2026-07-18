@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg,#0d0c0b); color: var(--text,#ece7dd); font-family: 'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent, #e0a44a); text-decoration: none; }
+  a:hover { color: var(--text,#ece7dd); }
+  ::selection { background: rgba(224,164,74,0.3); color: #fff; }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(600%); } }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes mj-run { from { transform: translateX(-60px); } to { transform: translateX(102vw); } }
+  @keyframes mj-hop { 0%,100% { transform: translateY(0) scaleY(1); } 12% { transform: translateY(0) scaleY(0.85); } 50% { transform: translateY(-28px) scaleY(1.06); } 88% { transform: translateY(0) scaleY(0.9); } }
+  @keyframes mj-coin { 0%,100% { transform: translateY(0) scaleX(1); } 25% { transform: translateY(-7px) scaleX(0.25); } 50% { transform: translateY(0) scaleX(1); } 75% { transform: translateY(-7px) scaleX(0.25); } }
+  @keyframes mj-boss { 0%,100% { transform: translateY(0) scaleX(1); } 50% { transform: translateY(-7px) scaleX(1.06); } }
+  @keyframes mj-streak { from { transform: translateX(90px); } to { transform: translateX(-112vw); } }
+  @keyframes mj-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @keyframes mj-eye { 0%,92%,100% { opacity: 1; } 95% { opacity: 0.15; } }
+  @keyframes mj-level {
+    0% { transform: translateX(calc((102vw + 60px) * 0 - 60px)) translateY(0); }
+    28% { transform: translateX(calc((102vw + 60px) * 0.28 - 60px)) translateY(0); }
+    32% { transform: translateX(calc((102vw + 60px) * 0.32 - 60px)) translateY(-30px); }
+    36% { transform: translateX(calc((102vw + 60px) * 0.36 - 60px)) translateY(0); }
+    40% { transform: translateX(calc((102vw + 60px) * 0.40 - 60px)) translateY(0); }
+    44% { transform: translateX(calc((102vw + 60px) * 0.44 - 60px)) translateY(-32px); }
+    48% { transform: translateX(calc((102vw + 60px) * 0.48 - 60px)) translateY(0); }
+    63% { transform: translateX(calc((102vw + 60px) * 0.63 - 60px)) translateY(0); }
+    67% { transform: translateX(calc((102vw + 60px) * 0.67 - 60px)) translateY(-30px); }
+    71% { transform: translateX(calc((102vw + 60px) * 0.71 - 60px)) translateY(0); }
+    86% { transform: translateX(calc((102vw + 60px) * 0.86 - 60px)) translateY(0); }
+    90% { transform: translateX(calc((102vw + 60px) * 0.90 - 60px)) translateY(-34px); }
+    94% { transform: translateX(calc((102vw + 60px) * 0.94 - 60px)) translateY(0); }
+    100% { transform: translateX(calc((102vw + 60px) * 1 - 60px)) translateY(0); }
+  }
+  @keyframes mj-pip { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.65); } }
+</style>
+</helmet>
+<div style="--accent: {{accent}}; --accent-2: {{accent2}}; {{themeVars}} min-height: 100vh; color: var(--text,#ece7dd); background:
+     radial-gradient(1200px 600px at 80% -10%, rgba(224,164,74,0.06), transparent 60%),
+     radial-gradient(900px 500px at -10% 20%, rgba(111,179,201,0.05), transparent 55%),
+     var(--bg,#0d0c0b);">
+
+  <!-- ===== NAV ===== -->
+  <nav style="position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 14px clamp(16px,4vw,56px); background: var(--navbg,rgba(13,12,11,0.82)); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border,#26231f);">
+    <a href="#top" style="display: flex; align-items: baseline; gap: 10px; color: var(--text,#ece7dd);">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent, #e0a44a);">&gt;_</span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.02em;">mITy<span style="color: var(--accent, #e0a44a);">.</span>John</span>
+    </a>
+    <div style="display: flex; align-items: center; gap: 4px; font-family: 'IBM Plex Mono', monospace; font-size: 13px;">
+      <sc-for list="{{ nav }}" as="item" hint-placeholder-count="5">
+        <a href="{{ item.href }}" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 8px; color: var(--muted,#b8b0a4);" style-hover="background:var(--line,#1a1815);color:var(--text,#ece7dd);"><sc-if value="{{ item.lvl }}" hint-placeholder-val="{{ true }}"><span style="font-size: 10px; font-weight: 700; color: var(--accent,#e0a44a);">{{ item.lvl }}</span></sc-if>{{ item.label }}</a>
+      </sc-for>
+      <button onClick="{{ toggleTheme }}" style="margin-left: 6px; cursor: pointer; padding: 8px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border2,#322e28); color: var(--muted,#b8b0a4); font-family: 'IBM Plex Mono', monospace; font-size: 13px;" style-hover="border-color:var(--border3,#4a443b);color:var(--text,#ece7dd);">{{ themeLabel }}</button>
+    </div>
+  </nav>
+
+  <div id="top"></div>
+
+  <!-- ===== HERO ===== -->
+  <header style="position: relative; overflow: hidden; max-width: 1180px; margin: 0 auto; padding: clamp(48px,9vw,120px) clamp(16px,4vw,56px) clamp(40px,6vw,72px);">
+    <div data-reveal style="position: relative; display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border: 1px solid var(--border2,#2f2b26); border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted2,#9a9186); margin-bottom: 28px;">
+      <span style="width: 7px; height: 7px; border-radius: 50%; background: #7fc99a; box-shadow: 0 0 8px #7fc99a;"></span>
+      the software archeologist&rsquo;s lab
+    </div>
+    <h1 data-reveal style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(38px,7vw,86px); line-height: 0.98; letter-spacing: -0.03em; margin: 0 0 26px; text-wrap: balance;">
+      Knowing our past<br>helps us build <span style="color: var(--accent, #e0a44a); position: relative;">what&rsquo;s next<span style="display:inline-block;width:0.5ch;height:0.9em;background:var(--accent,#e0a44a);margin-left:6px;vertical-align:-0.06em;animation:blink 1.1s step-end infinite;"></span></span>
+    </h1>
+    <p data-reveal style="max-width: 620px; font-size: clamp(16px,2vw,20px); line-height: 1.55; color: var(--muted,#b8b0a4); margin: 0 0 36px; text-wrap: pretty;">
+      A one-person lab exploring where software has been, where it is going, and what happens when curiosity gets root access — through essays, experiments, music tools, daft little games, picture books and one <em>gloriously</em> unnecessary programming language.<br><br><span style="color: var(--accent, #e0a44a);">Now with 100% more &ldquo;why did he build that?&rdquo;</span>
+    </p>
+    <div data-reveal style="display: flex; flex-wrap: wrap; gap: 12px;">
+      <a href="#apps" style="display: inline-flex; align-items: center; gap: 9px; padding: 13px 22px; background: var(--accent, #e0a44a); color: #17140f; border-radius: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 14px;" style-hover="filter:brightness(1.08);"><span style="opacity: 0.55; font-weight: 700;">01</span> Browse the apps <span>→</span></a>
+      <a href="#artist" style="display: inline-flex; align-items: center; gap: 9px; padding: 13px 22px; background: var(--chip,#17140f); color: var(--text,#ece7dd); border: 1px solid var(--border2,#322e28); border-radius: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 14px;" style-hover="border-color:var(--border3,#4a443b);"><span style="opacity: 0.55; font-weight: 700; color: var(--accent-2,#6fb3c9);">02</span> Hear the artist</a>
+      <a href="#books" style="display: inline-flex; align-items: center; gap: 9px; padding: 13px 22px; background: var(--chip,#17140f); color: var(--text,#ece7dd); border: 1px solid var(--border2,#322e28); border-radius: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 14px;" style-hover="border-color:var(--border3,#4a443b);"><span style="opacity: 0.55; font-weight: 700;">03</span> Enter the bookstore</a>
+      <a href="#blog" style="display: inline-flex; align-items: center; gap: 9px; padding: 13px 22px; background: var(--chip,#17140f); color: var(--text,#ece7dd); border: 1px solid var(--border2,#322e28); border-radius: 10px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; font-size: 14px;" style-hover="border-color:var(--border3,#4a443b);"><span style="opacity: 0.55; font-weight: 700;">04</span> Read the blog</a>
+    </div>
+    <div data-reveal style="display: grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap: 1px; margin-top: 56px; background: var(--border,#26231f); border: 1px solid var(--border,#26231f); border-radius: 14px; overflow: hidden;">
+      <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+        <div style="background: var(--s1,#121110); padding: 20px 22px;">
+          <div style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent, #e0a44a);">{{ s.n }}</div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted2,#8f867b); margin-top: 4px;">{{ s.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </header>
+
+  <!-- ===== ARCADE: STORE ===== -->
+  <div aria-hidden="true" data-mj-arcade data-mj-genre="platform" data-mj-speed="15000" data-mj-start="-60" style="position: relative; overflow: hidden; height: 160px; border-top: 1px solid var(--line,#201d19); border-bottom: 1px solid var(--line,#201d19); background: linear-gradient(180deg, var(--s0,#100f0d), var(--bg,#0d0c0b));">
+    <div data-mj-label style="position: absolute; top: 14px; left: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--muted2,#8f867b);">LVL 1 · THE STORE — PLATFORMER · BOSS: LEGACY CODE</div>
+    <div data-mj-score style="position: absolute; top: 14px; right: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--accent,#e0a44a);">SCORE 000000</div>
+    <div data-mj-pop style="position: absolute; left: 0; top: 72px; opacity: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px; color: var(--accent,#e0a44a); pointer-events: none; white-space: nowrap;">+100</div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--border2,#322e28) 0 12px, transparent 12px 24px);"></div>
+    <div data-mj-coin style="position: absolute; bottom: 70px; left: 28%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: var(--accent,#e0a44a); animation: mj-coin 1.7s ease-in-out infinite;">◉</div>
+    <div data-mj-coin style="position: absolute; bottom: 78px; left: 54%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: var(--accent,#e0a44a); animation: mj-coin 1.7s ease-in-out infinite 0.55s;">◉</div>
+    <div data-mj-coin style="position: absolute; bottom: 70px; left: 79%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: var(--accent,#e0a44a); animation: mj-coin 1.7s ease-in-out infinite 0.95s;">◉</div>
+    <div data-mj-crate style="position: absolute; bottom: 42px; left: 33%; width: 16px; height: 16px; background: var(--s2,#161310); border: 2px solid var(--border3,#413b32);"></div>
+    <div data-mj-crate style="position: absolute; bottom: 42px; left: 44%; width: 16px; height: 24px; background: var(--s2,#161310); border: 2px solid var(--border3,#413b32);"></div>
+    <div data-mj-crate style="position: absolute; bottom: 42px; left: 67%; width: 16px; height: 16px; background: var(--s2,#161310); border: 2px solid var(--border3,#413b32);"></div>
+    <div data-mj-boss style="position: absolute; top: 58px; right: 6%; transform-origin: bottom center; animation: mj-boss 1.4s ease-in-out infinite;">
+      <div style="width: 8px; height: 8px; background: transparent; box-shadow: 8px 0px 0 #545a66, 16px 0px 0 #545a66, 24px 0px 0 #545a66, 32px 0px 0 #545a66, 40px 0px 0 #545a66, 0px 8px 0 #545a66, 8px 8px 0 var(--accent-2,#6fb3c9), 16px 8px 0 var(--accent-2,#6fb3c9), 24px 8px 0 var(--accent-2,#6fb3c9), 32px 8px 0 var(--accent-2,#6fb3c9), 40px 8px 0 var(--accent-2,#6fb3c9), 48px 8px 0 #545a66, 0px 16px 0 #545a66, 8px 16px 0 var(--accent-2,#6fb3c9), 16px 16px 0 #e05a48, 24px 16px 0 var(--accent-2,#6fb3c9), 32px 16px 0 #e05a48, 40px 16px 0 var(--accent-2,#6fb3c9), 48px 16px 0 #545a66, 0px 24px 0 #545a66, 8px 24px 0 var(--accent-2,#6fb3c9), 16px 24px 0 var(--accent-2,#6fb3c9), 24px 24px 0 var(--accent-2,#6fb3c9), 32px 24px 0 var(--accent-2,#6fb3c9), 40px 24px 0 var(--accent-2,#6fb3c9), 48px 24px 0 #545a66, 0px 32px 0 #545a66, 8px 32px 0 #17140f, 16px 32px 0 var(--accent-2,#6fb3c9), 24px 32px 0 #17140f, 32px 32px 0 var(--accent-2,#6fb3c9), 40px 32px 0 #17140f, 48px 32px 0 #545a66, 8px 40px 0 #545a66, 16px 40px 0 #545a66, 32px 40px 0 #545a66, 40px 40px 0 #545a66;"></div>
+    </div>
+    <div data-mj-runner style="position: absolute; top: 58px; left: 0; transform-origin: bottom center;">
+      <div style="width: 6px; height: 6px; background: transparent; box-shadow: 18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent,#e0a44a), 18px 24px 0 var(--accent-2,#6fb3c9), 24px 24px 0 var(--accent,#e0a44a), 30px 24px 0 var(--accent,#e0a44a), 36px 24px 0 var(--accent,#e0a44a), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent,#e0a44a), 18px 30px 0 var(--accent,#e0a44a), 24px 30px 0 var(--accent-2,#6fb3c9), 30px 30px 0 var(--accent,#e0a44a), 36px 30px 0 var(--accent,#e0a44a), 42px 30px 0 var(--accent-2,#6fb3c9), 12px 36px 0 var(--accent,#e0a44a), 18px 36px 0 var(--accent,#e0a44a), 24px 36px 0 var(--accent,#e0a44a), 30px 36px 0 var(--accent,#e0a44a), 36px 36px 0 var(--accent,#e0a44a), 42px 36px 0 var(--accent-2,#6fb3c9), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b;"></div>
+    </div>
+  </div>
+
+  <!-- ===== APPS STORE ===== -->
+  <section id="apps" style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(16px,4vw,56px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 8px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><span style="display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.06em;color:#17140f;background:var(--accent,#e0a44a);padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -8px var(--accent,#e0a44a);"><span style="width:8px;height:8px;border-radius:2px;background:#17140f;animation:mj-pip 1.3s ease-in-out infinite;"></span>LEVEL 01</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted2,#8f867b);">THE STORE</span></div>
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px,4vw,46px); font-weight: 700; letter-spacing: -0.02em; margin: 0;">Apps from the lab</h2>
+      </div>
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted2,#8f867b); max-width: 320px; margin: 0;">All free. Download a release, launch the web build, or read the source. No cookies, no upsell, no regrets.</p>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 30px;">
+      <sc-for list="{{ appFilters }}" as="f" hint-placeholder-count="5">
+        <button onClick="{{ f.onClick }}" style="{{ f.style }}" style-hover="border-color:var(--border3,#4a443b);">{{ f.label }}</button>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 16px;">
+      <sc-for list="{{ visibleApps }}" as="app" hint-placeholder-count="6">
+        <div data-reveal style="display: flex; flex-direction: column; background: linear-gradient(180deg,var(--s2,#161310),var(--s1,#121110)); border: 1px solid var(--border,#2a2621); border-radius: 16px; overflow: hidden; transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;" style-hover="border-color:var(--border3,#413b32);transform:translateY(-6px);box-shadow:0 20px 44px -24px rgba(0,0,0,0.7);">
+          <div style="position: relative; height: 152px; background:
+               repeating-linear-gradient(135deg,#1b1815 0 12px,#171410 12px 24px);
+               border-bottom: 1px solid var(--border,#2a2621); display: flex; align-items: center; justify-content: center; overflow: hidden;">
+            <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.03),transparent);height:24px;animation:scan 4.5s linear infinite;"></div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 15px; color: var(--accent, #e0a44a); border: 1px solid var(--border2,#35302a); padding: 8px 14px; border-radius: 8px; background: rgba(13,12,11,0.6);">{{ app.code }}</div>
+            <div style="position: absolute; top: 12px; left: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted2,#8f867b); text-transform: uppercase; letter-spacing: 0.1em;">{{ app.tag }}</div>
+          </div>
+          <div style="padding: 18px 18px 20px; display: flex; flex-direction: column; flex: 1;">
+            <h3 style="font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin: 0 0 7px; letter-spacing: -0.01em;">{{ app.name }}</h3>
+            <p style="font-size: 14px; line-height: 1.5; color: var(--muted,#a9a094); margin: 0 0 16px; flex: 1; text-wrap: pretty;">{{ app.blurb }}</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+              <sc-for list="{{ app.actions }}" as="a" hint-placeholder-count="3">
+                <a href="{{ a.href }}" target="_blank" style="{{ a.style }}" style-hover="border-color:var(--border3,#4a443b);background:#211d18;">{{ a.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== SCRUM FEATURE ===== -->
+  <section id="scrum" style="max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px,4vw,56px) clamp(24px,3vw,36px); scroll-margin-top: 80px;">
+    <a data-reveal href="https://mityjohn.com/?page_id=100" target="_blank" style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap; background: linear-gradient(120deg,var(--s2,#1a1611),var(--s1,#121110)); border: 1px solid var(--border2,#34302a); border-radius: 16px; padding: 20px clamp(18px,3vw,28px); color: var(--text,#ece7dd);" style-hover="border-color:var(--accent,#e0a44a);">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14px; color: var(--accent,#e0a44a); border: 1px solid var(--border2,#35302a); padding: 10px 14px; border-radius: 10px;">SPL</div>
+      <div style="flex: 1; min-width: 220px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted2,#8f867b); margin-bottom: 6px;">the lab's flagship experiment</div>
+        <div style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(18px,2.2vw,24px); font-weight: 700; letter-spacing: -0.01em;">Scrum Programming Language</div>
+        <div style="font-size: 13px; color: var(--muted,#a9a094); margin-top: 4px; text-wrap: pretty;">A real language where you code entirely in ceremonies. Yes, really. Sprint zero compiles.</div>
+      </div>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent,#e0a44a); white-space: nowrap;">Explore →</span>
+    </a>
+  </section>
+
+  <!-- ===== ARCADE: ARTIST ===== -->
+  <div aria-hidden="true" data-mj-arcade data-mj-genre="rhythm" style="position: relative; overflow: hidden; height: 160px; border-top: 1px solid var(--line,#201d19); border-bottom: 1px solid var(--line,#201d19); background: linear-gradient(180deg, var(--s0,#100f0d), var(--bg,#0d0c0b));">
+    <div data-mj-label style="position: absolute; top: 14px; left: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--muted2,#8f867b);">LVL 2 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT</div>
+    <div data-mj-score style="position: absolute; top: 14px; right: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--accent,#e0a44a);">SCORE 000000</div>
+    <div data-mj-pop style="position: absolute; left: 0; top: 72px; opacity: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px; color: var(--accent,#e0a44a); pointer-events: none; white-space: nowrap;">+100</div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--border2,#322e28) 0 12px, transparent 12px 24px);"></div>
+    <div style="position: absolute; left: 14%; top: 54px; bottom: 50px; width: 2px; background: #6fb3c9; opacity: 0.55; box-shadow: 0 0 10px #6fb3c9;"></div>
+    <div style="position: absolute; left: 14%; top: 34px; transform: translateX(-50%); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: #6fb3c9;">HIT</div>
+    <div data-mj-item style="position: absolute; bottom: 74px; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1; color: #6fb3c9;">♪</div>
+    <div data-mj-item style="position: absolute; bottom: 74px; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1; color: #6fb3c9;">♪</div>
+    <div data-mj-item style="position: absolute; bottom: 74px; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1; color: #6fb3c9;">♪</div>
+    <div data-mj-item style="position: absolute; bottom: 74px; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1; color: #6fb3c9;">♪</div>
+    <div data-mj-item style="position: absolute; bottom: 74px; left: 0; font-family: 'Space Grotesk', sans-serif; font-size: 23px; font-weight: 700; line-height: 1; color: #6fb3c9;">♪</div>
+    <div data-mj-boss style="position: absolute; top: 58px; right: 6%; transform-origin: bottom center; animation: mj-boss 1.4s ease-in-out infinite;">
+      <div style="width: 8px; height: 8px; background: transparent; box-shadow: 16px 0px 0 #6fb3c9, 24px 0px 0 #6fb3c9, 32px 0px 0 #6fb3c9, 8px 8px 0 #6fb3c9, 16px 8px 0 #6fb3c9, 24px 8px 0 #6fb3c9, 32px 8px 0 #6fb3c9, 40px 8px 0 #6fb3c9, 8px 16px 0 #6fb3c9, 16px 16px 0 #17140f, 24px 16px 0 #6fb3c9, 32px 16px 0 #17140f, 40px 16px 0 #6fb3c9, 8px 24px 0 #6fb3c9, 16px 24px 0 #6fb3c9, 24px 24px 0 #6fb3c9, 32px 24px 0 #6fb3c9, 40px 24px 0 #6fb3c9, 24px 32px 0 #545a66, 16px 40px 0 #545a66, 24px 40px 0 #545a66, 32px 40px 0 #545a66;"></div>
+    </div>
+    <div data-mj-runner style="position: absolute; top: 58px; left: 12%; transform-origin: bottom center;">
+      <div style="width: 6px; height: 6px; background: transparent; box-shadow: 18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent,#e0a44a), 18px 24px 0 var(--accent-2,#6fb3c9), 24px 24px 0 var(--accent,#e0a44a), 30px 24px 0 var(--accent,#e0a44a), 36px 24px 0 var(--accent,#e0a44a), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent,#e0a44a), 18px 30px 0 var(--accent,#e0a44a), 24px 30px 0 var(--accent-2,#6fb3c9), 30px 30px 0 var(--accent,#e0a44a), 36px 30px 0 var(--accent,#e0a44a), 42px 30px 0 var(--accent-2,#6fb3c9), 12px 36px 0 var(--accent,#e0a44a), 18px 36px 0 var(--accent,#e0a44a), 24px 36px 0 var(--accent,#e0a44a), 30px 36px 0 var(--accent,#e0a44a), 36px 36px 0 var(--accent,#e0a44a), 42px 36px 0 var(--accent-2,#6fb3c9), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b;"></div>
+    </div>
+  </div>
+
+  <!-- ===== ARTIST ===== -->
+  <section id="artist" style="border-top: 1px solid var(--line,#201d19); background: linear-gradient(180deg,var(--s0,#100f0d),var(--bg,#0d0c0b)); scroll-margin-top: 70px;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(16px,4vw,56px);">
+      <div data-reveal style="display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 32px; align-items: center; background: linear-gradient(120deg,var(--s2,#161310),var(--s0,#100f0d)); border: 1px solid var(--border,#26231f); border-radius: 20px; padding: clamp(22px,3vw,40px);">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><span style="display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.06em;color:#0e2025;background:#6fb3c9;padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -8px #6fb3c9;"><span style="width:8px;height:8px;border-radius:2px;background:#0e2025;animation:mj-pip 1.3s ease-in-out infinite;"></span>LEVEL 02</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted2,#8f867b);">THE ARTIST</span></div>
+          <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px,3.4vw,42px); font-weight: 700; margin: 0 0 14px; letter-spacing: -0.02em;">mITy.John, but make it sound</h2>
+          <p style="font-size: clamp(15px,1.6vw,17px); line-height: 1.6; color: var(--muted,#a9a094); margin: 0 0 22px; text-wrap: pretty;">Songs composed with a suspicious amount of AI and a Raspberry Pi that never asked for any of this. Press play, judge gently.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <a href="https://open.spotify.com/artist/4lRudVkciTQ8j2bEySXqPz" target="_blank" style="padding: 11px 18px; background: var(--accent, #e0a44a); color: #17140f; border-radius: 9px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600;" style-hover="filter:brightness(1.08);">Spotify ↗</a>
+            <a href="https://soundcloud.com/mityjohn" target="_blank" style="padding: 11px 18px; border: 1px solid var(--border2,#322e28); border-radius: 9px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text,#ece7dd);" style-hover="border-color:var(--border3,#4a443b);">SoundCloud ↗</a>
+            <a href="https://mityjohn.com/?page_id=591" target="_blank" style="padding: 11px 18px; border: 1px solid var(--border2,#322e28); border-radius: 9px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--text,#ece7dd);" style-hover="border-color:var(--border3,#4a443b);">About the artist</a>
+          </div>
+        </div>
+        <iframe style="border-radius: 12px; width: 100%; height: 352px; border: 0;" src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=generator&theme=0" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ARCADE: BOOKSTORE ===== -->
+  <div aria-hidden="true" data-mj-arcade data-mj-genre="race" data-mj-speed="9000" data-mj-start="-40" style="position: relative; overflow: hidden; height: 160px; border-top: 1px solid var(--line,#201d19); border-bottom: 1px solid var(--line,#201d19); background: linear-gradient(180deg, var(--s0,#100f0d), var(--bg,#0d0c0b));">
+    <div data-mj-label style="position: absolute; top: 14px; left: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--muted2,#8f867b);">LVL 3 · THE BOOKSTORE — RACING · RIVAL: THE DEADLINE</div>
+    <div data-mj-score style="position: absolute; top: 14px; right: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--accent,#e0a44a);">SCORE 000000</div>
+    <div data-mj-pop style="position: absolute; left: 0; top: 72px; opacity: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px; color: var(--accent,#e0a44a); pointer-events: none; white-space: nowrap;">+100</div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--border2,#322e28) 0 12px, transparent 12px 24px);"></div>
+    <div style="position: absolute; left: 0; top: 64px; width: 46px; height: 2px; background: linear-gradient(90deg, transparent, var(--muted2,#8f867b)); opacity: 0.4; animation: mj-streak 4.5s linear infinite 0s;"></div>
+    <div style="position: absolute; left: 0; top: 92px; width: 46px; height: 2px; background: linear-gradient(90deg, transparent, var(--muted2,#8f867b)); opacity: 0.4; animation: mj-streak 3.6s linear infinite 0.4s;"></div>
+    <div style="position: absolute; left: 0; top: 120px; width: 46px; height: 2px; background: linear-gradient(90deg, transparent, var(--muted2,#8f867b)); opacity: 0.4; animation: mj-streak 5.2s linear infinite 0.9s;"></div>
+    <div style="position: absolute; left: 0; top: 150px; width: 46px; height: 2px; background: linear-gradient(90deg, transparent, var(--muted2,#8f867b)); opacity: 0.4; animation: mj-streak 4s linear infinite 0.2s;"></div>
+    <div data-mj-coin style="position: absolute; bottom: 70px; left: 22%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: #c98b6a; animation: mj-coin 1.7s ease-in-out infinite;">❏</div>
+    <div data-mj-coin style="position: absolute; bottom: 78px; left: 44%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: #c98b6a; animation: mj-coin 1.7s ease-in-out infinite 0.5s;">❏</div>
+    <div data-mj-coin style="position: absolute; bottom: 72px; left: 66%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: #c98b6a; animation: mj-coin 1.7s ease-in-out infinite 0.9s;">❏</div>
+    <div data-mj-coin style="position: absolute; bottom: 70px; left: 86%; font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1; color: #c98b6a; animation: mj-coin 1.7s ease-in-out infinite 1.2s;">❏</div>
+    <div data-mj-boss style="position: absolute; top: 58px; right: 6%; transform-origin: bottom center; animation: mj-boss 1.4s ease-in-out infinite;">
+      <div style="width: 8px; height: 8px; background: transparent; box-shadow: 0px 0px 0 #c98b6a, 8px 0px 0 #c98b6a, 16px 0px 0 #c98b6a, 24px 0px 0 #c98b6a, 32px 0px 0 #c98b6a, 40px 0px 0 #c98b6a, 48px 0px 0 #c98b6a, 0px 8px 0 #c98b6a, 8px 8px 0 #efe6d6, 16px 8px 0 #efe6d6, 24px 8px 0 #efe6d6, 32px 8px 0 #efe6d6, 40px 8px 0 #efe6d6, 48px 8px 0 #c98b6a, 0px 16px 0 #c98b6a, 8px 16px 0 #efe6d6, 16px 16px 0 #17140f, 24px 16px 0 #efe6d6, 32px 16px 0 #17140f, 40px 16px 0 #efe6d6, 48px 16px 0 #c98b6a, 0px 24px 0 #c98b6a, 8px 24px 0 #efe6d6, 16px 24px 0 #efe6d6, 24px 24px 0 #efe6d6, 32px 24px 0 #efe6d6, 40px 24px 0 #efe6d6, 48px 24px 0 #c98b6a, 0px 32px 0 #c98b6a, 8px 32px 0 #efe6d6, 16px 32px 0 #efe6d6, 24px 32px 0 #efe6d6, 32px 32px 0 #efe6d6, 40px 32px 0 #efe6d6, 48px 32px 0 #c98b6a, 0px 40px 0 #c98b6a, 8px 40px 0 #c98b6a, 16px 40px 0 #c98b6a, 24px 40px 0 #c98b6a, 32px 40px 0 #c98b6a, 40px 40px 0 #c98b6a, 48px 40px 0 #c98b6a;"></div>
+    </div>
+    <div data-mj-runner style="position: absolute; top: 58px; left: 0; transform-origin: bottom center;">
+      <div style="width: 6px; height: 6px; background: transparent; box-shadow: 18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent,#e0a44a), 18px 24px 0 var(--accent-2,#6fb3c9), 24px 24px 0 var(--accent,#e0a44a), 30px 24px 0 var(--accent,#e0a44a), 36px 24px 0 var(--accent,#e0a44a), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent,#e0a44a), 18px 30px 0 var(--accent,#e0a44a), 24px 30px 0 var(--accent-2,#6fb3c9), 30px 30px 0 var(--accent,#e0a44a), 36px 30px 0 var(--accent,#e0a44a), 42px 30px 0 var(--accent-2,#6fb3c9), 12px 36px 0 var(--accent,#e0a44a), 18px 36px 0 var(--accent,#e0a44a), 24px 36px 0 var(--accent,#e0a44a), 30px 36px 0 var(--accent,#e0a44a), 36px 36px 0 var(--accent,#e0a44a), 42px 36px 0 var(--accent-2,#6fb3c9), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b;"></div>
+    </div>
+  </div>
+
+  <!-- ===== BOOKSTORE ===== -->
+  <section id="books" style="border-top: 1px solid var(--line,#201d19); border-bottom: 1px solid var(--line,#201d19); background: linear-gradient(180deg,var(--s0,#100f0d),var(--bg,#0d0c0b));">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(16px,4vw,56px);">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><span style="display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.06em;color:#241812;background:#c98b6a;padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -8px #c98b6a;"><span style="width:8px;height:8px;border-radius:2px;background:#241812;animation:mj-pip 1.3s ease-in-out infinite;"></span>LEVEL 03</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted2,#8f867b);">THE BOOKSTORE</span></div>
+      <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px,4vw,46px); font-weight: 700; letter-spacing: -0.02em; margin: 0 0 10px;">Books, printed &amp; kindled</h2>
+      <p style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--muted2,#8f867b); max-width: 460px; margin: 0 0 36px;">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 22px;">
+        <sc-for list="{{ books }}" as="b" hint-placeholder-count="4">
+          <div data-reveal style="display: flex; flex-direction: column;">
+            <a href="{{ b.buy }}" target="_blank" style="display: block; aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; border: 1px solid var(--border,#2a2621); background:
+                 repeating-linear-gradient(160deg,#1b1815 0 14px,#171410 14px 28px); position: relative; transition: transform .3s ease, border-color .3s ease;" style-hover="border-color:var(--accent-2,#6fb3c9);transform:scale(1.025);">
+              <div style="position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted2,#8f867b);">{{ b.series }}</div>
+                <div>
+                  <div style="font-family: 'Space Grotesk', sans-serif; font-size: 21px; font-weight: 700; line-height: 1.08; color: var(--text,#ece7dd); margin-bottom: 8px; text-wrap: balance;">{{ b.title }}</div>
+                  <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent-2,#6fb3c9);">{{ b.badge }}</div>
+                </div>
+              </div>
+            </a>
+            <div style="margin-top: 14px;">
+              <div style="font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 5px;">{{ b.title }}</div>
+              <p style="font-size: 13px; line-height: 1.5; color: var(--muted2,#9a9186); margin: 0 0 12px; text-wrap: pretty;">{{ b.desc }}</p>
+              <div style="display: flex; gap: 8px;">
+                <a href="{{ b.buy }}" target="_blank" style="flex: 1; text-align: center; padding: 9px 12px; background: var(--accent-2,#6fb3c9); color: #10201f; border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;" style-hover="filter:brightness(1.08);">Buy on Amazon</a>
+                <a href="{{ b.preview }}" target="_blank" style="padding: 9px 12px; border: 1px solid var(--border2,#322e28); border-radius: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text,#ece7dd);" style-hover="border-color:var(--border3,#4a443b);">Preview</a>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ARCADE: FIELD NOTES ===== -->
+  <div aria-hidden="true" data-mj-arcade data-mj-genre="fight" style="position: relative; overflow: hidden; height: 160px; border-top: 1px solid var(--line,#201d19); border-bottom: 1px solid var(--line,#201d19); background: linear-gradient(180deg, var(--s0,#100f0d), var(--bg,#0d0c0b));">
+    <div data-mj-label style="position: absolute; top: 14px; left: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--muted2,#8f867b);">LVL 4 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE</div>
+    <div data-mj-score style="position: absolute; top: 14px; right: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.24em; color: var(--accent,#e0a44a);">SCORE 000000</div>
+    <div data-mj-pop style="position: absolute; left: 0; top: 72px; opacity: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px; color: var(--accent,#e0a44a); pointer-events: none; white-space: nowrap;">+100</div>
+    <div style="position: absolute; left: 0; right: 0; bottom: 40px; height: 2px; background: repeating-linear-gradient(90deg, var(--border2,#322e28) 0 12px, transparent 12px 24px);"></div>
+    <div style="position: absolute; top: 40px; right: 6%; width: 140px; font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted2,#8f867b);">THE BLANK PAGE
+      <div style="margin-top: 4px; width: 100%; height: 7px; background: var(--border,#2a2621); border-radius: 4px; overflow: hidden;"><div data-mj-hp-fill style="width: 100%; height: 100%; background: #e05a48; transition: width .25s ease;"></div></div>
+    </div>
+    <div style="position: absolute; top: 40px; left: clamp(16px,4vw,56px); font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.18em; color: var(--muted2,#8f867b);">mITy JOHN
+      <div style="margin-top: 4px; width: 140px; height: 7px; background: var(--border,#2a2621); border-radius: 4px; overflow: hidden;"><div style="width: 100%; height: 100%; background: #7fc99a;"></div></div>
+    </div>
+    <div data-mj-spark style="position: absolute; left: 50%; top: 78px; transform: translate(-50%,0) scale(0.6); opacity: 0; font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700; color: #e05a48; transition: opacity .12s ease, transform .12s ease; pointer-events: none;">✹</div>
+    <div data-mj-boss style="position: absolute; top: 58px; right: 34%; transform-origin: bottom center; animation: mj-boss 1.4s ease-in-out infinite;">
+      <div style="width: 8px; height: 8px; background: transparent; box-shadow: 16px 0px 0 #7fc99a, 24px 0px 0 #7fc99a, 32px 0px 0 #7fc99a, 8px 8px 0 #7fc99a, 16px 8px 0 #7fc99a, 24px 8px 0 #7fc99a, 32px 8px 0 #7fc99a, 40px 8px 0 #7fc99a, 0px 16px 0 #7fc99a, 8px 16px 0 #17140f, 16px 16px 0 #7fc99a, 24px 16px 0 #7fc99a, 32px 16px 0 #17140f, 40px 16px 0 #7fc99a, 48px 16px 0 #7fc99a, 0px 24px 0 #7fc99a, 8px 24px 0 #7fc99a, 16px 24px 0 #7fc99a, 24px 24px 0 #7fc99a, 32px 24px 0 #7fc99a, 40px 24px 0 #7fc99a, 48px 24px 0 #7fc99a, 0px 32px 0 #7fc99a, 8px 32px 0 #7fc99a, 16px 32px 0 #7fc99a, 24px 32px 0 #7fc99a, 32px 32px 0 #7fc99a, 40px 32px 0 #7fc99a, 48px 32px 0 #7fc99a, 0px 40px 0 #7fc99a, 16px 40px 0 #7fc99a, 32px 40px 0 #7fc99a, 48px 40px 0 #7fc99a;"></div>
+    </div>
+    <div data-mj-runner style="position: absolute; top: 58px; left: 28%; transform-origin: bottom center;">
+      <div style="width: 6px; height: 6px; background: transparent; box-shadow: 18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent,#e0a44a), 18px 24px 0 var(--accent-2,#6fb3c9), 24px 24px 0 var(--accent,#e0a44a), 30px 24px 0 var(--accent,#e0a44a), 36px 24px 0 var(--accent,#e0a44a), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent,#e0a44a), 18px 30px 0 var(--accent,#e0a44a), 24px 30px 0 var(--accent-2,#6fb3c9), 30px 30px 0 var(--accent,#e0a44a), 36px 30px 0 var(--accent,#e0a44a), 42px 30px 0 var(--accent-2,#6fb3c9), 12px 36px 0 var(--accent,#e0a44a), 18px 36px 0 var(--accent,#e0a44a), 24px 36px 0 var(--accent,#e0a44a), 30px 36px 0 var(--accent,#e0a44a), 36px 36px 0 var(--accent,#e0a44a), 42px 36px 0 var(--accent-2,#6fb3c9), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b;"></div>
+    </div>
+  </div>
+
+  <!-- ===== BLOG ===== -->
+  <section id="blog" style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(16px,4vw,56px);">
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 30px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;"><span style="display:inline-flex;align-items:center;gap:9px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.06em;color:#12201a;background:#7fc99a;padding:7px 14px;border-radius:999px;box-shadow:0 8px 20px -8px #7fc99a;"><span style="width:8px;height:8px;border-radius:2px;background:#12201a;animation:mj-pip 1.3s ease-in-out infinite;"></span>LEVEL 04</span><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted2,#8f867b);">FIELD NOTES</span></div>
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px,4vw,46px); font-weight: 700; letter-spacing: -0.02em; margin: 0;">Latest from the blog</h2>
+      </div>
+      <a href="https://mityjohn.com/?page_id=184" target="_blank" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 10px 16px; border: 1px solid var(--border2,#322e28); border-radius: 8px;" style-hover="border-color:var(--border3,#4a443b);">All posts →</a>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 16px;">
+      <sc-for list="{{ posts }}" as="p" hint-placeholder-count="4">
+        <a data-reveal href="{{ p.href }}" target="_blank" style="display: flex; flex-direction: column; background: var(--s1,#131110); border: 1px solid var(--border,#2a2621); border-radius: 14px; overflow: hidden; color: var(--text,#ece7dd); transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;" style-hover="border-color:var(--border3,#413b32);transform:translateY(-6px);box-shadow:0 20px 44px -24px rgba(0,0,0,0.7);">
+          <div style="aspect-ratio: 16/10; background: repeating-linear-gradient(135deg,#1b1815 0 12px,#171410 12px 24px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--faint,#6f665c);">img: {{ p.slug }}</span>
+          </div>
+          <div style="padding: 18px;">
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent,#e0a44a); margin-bottom: 10px;">{{ p.tag }}</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; line-height: 1.25; text-wrap: pretty;">{{ p.title }}</div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== INSTAGRAM ===== -->
+  <sc-if value="{{ showInstagram }}" hint-placeholder-val="{{ true }}">
+  <section style="border-top: 1px solid var(--line,#201d19); background: var(--s0,#100f0d);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(36px,5vw,64px) clamp(16px,4vw,56px);">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+        <h2 style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(22px,3vw,32px); font-weight: 700; margin: 0;">Retro-IT, one square at a time</h2>
+        <a href="https://www.instagram.com/mity.john/" target="_blank" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px;">@mity.john →</a>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 10px;">
+        <sc-for list="{{ insta }}" as="g" hint-placeholder-count="6">
+          <a data-reveal href="{{ g.href }}" target="_blank" style="aspect-ratio: 1; border-radius: 10px; border: 1px solid var(--border,#2a2621); background: repeating-linear-gradient(135deg,#1b1815 0 10px,#171410 10px 20px); display: flex; align-items: flex-end; padding: 12px; color: var(--text,#ece7dd); transition: transform .28s ease, border-color .28s ease;" style-hover="border-color:var(--accent,#e0a44a);transform:translateY(-4px) scale(1.02);">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;">{{ g.tag }}</span>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ===== QUOTES ===== -->
+  <section style="border-top: 1px solid var(--line,#201d19); background: var(--s0,#100f0d);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(40px,5vw,68px) clamp(16px,4vw,56px);">
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent, #e0a44a); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 28px; text-align: center;">// words to build by</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: clamp(18px,2vw,26px);">
+        <sc-for list="{{ quotes }}" as="q" hint-placeholder-count="3">
+          <figure data-reveal style="margin: 0; position: relative; color: var(--text,#ece7dd); background: var(--s1,#121110); border: 1px solid var(--border,#2a2621); border-radius: 18px; padding: clamp(30px,3vw,42px) clamp(24px,2.5vw,34px); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; transition: background .35s ease, border-color .35s ease, transform .35s ease, box-shadow .35s ease;" style-hover="background:{{ q.tint }};border-color:{{ q.accent }};transform:translateY(-5px);box-shadow:0 22px 46px -26px rgba(0,0,0,0.6);">
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: 64px; line-height: 0.42; font-weight: 700; color: {{ q.accent }};">&ldquo;</div>
+            <div style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(16px,1.6vw,21px); font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: {{ q.accent }};">{{ q.kicker }}</div>
+            <blockquote style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-style: italic; font-size: clamp(15px,1.4vw,18px); line-height: 1.62; max-width: 34ch; flex: 1; text-wrap: pretty;">{{ q.text }}</blockquote>
+            <div style="width: 46px; height: 3px; border-radius: 2px; background: {{ q.accent }};"></div>
+            <figcaption style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted2,#8f867b);">{{ q.who }}</figcaption>
+          </figure>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT / FOOTER ===== -->
+  <footer id="about" style="border-top: 1px solid var(--line,#201d19); background: var(--bg2,#0b0a09);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: clamp(44px,6vw,80px) clamp(16px,4vw,56px) 40px; display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 40px;">
+      <div style="grid-column: 1 / -1; max-width: 640px;">
+        <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--accent, #e0a44a); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;">// about mITy.John</div>
+        <p style="font-family: 'Space Grotesk', sans-serif; font-size: clamp(20px,2.6vw,30px); font-weight: 500; line-height: 1.35; margin: 0; letter-spacing: -0.01em; text-wrap: pretty;">
+          Jan Van Wassenhove — architect, tinkerer, and self-appointed <span style="color: var(--accent, #e0a44a);">IT archeologist</span>. He digs up how we used to build software, then uses it as an excuse to build far too many things. <span style="color:var(--muted2,#8f867b);">And now you know.</span>
+        </p>
+        <a href="https://mityjohn.com/?page_id=2" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 11px 18px; border: 1px solid var(--border2,#322e28); border-radius: 9px;" style-hover="border-color:var(--border3,#4a443b);">Read the full story →</a>
+      </div>
+      <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="3">
+        <div>
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--muted2,#8f867b); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px;">{{ col.title }}</div>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <sc-for list="{{ col.links }}" as="l" hint-placeholder-count="4">
+              <a href="{{ l.href }}" target="_blank" style="font-size: 14px; color: var(--muted,#b8b0a4);" style-hover="color:var(--text,#ece7dd);">{{ l.label }}</a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="max-width: 1180px; margin: 0 auto; padding: 20px clamp(16px,4vw,56px) 44px; border-top: 1px solid var(--line,#1a1815); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--faint,#6f665c);">© {{ year }} miTy John — the IT archeologist</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--faint,#6f665c);">Enforce innovation by learning from our development history.</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#e0a44a&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;accent2&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#6fb3c9&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;showInstagram&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Sections&quot;}}">
+class Component extends DCLogic {
+  state = { filter: 'all', theme: 'dark' };
+
+  componentDidMount() {
+    try { const t = localStorage.getItem('mityTheme'); if (t === 'light' || t === 'dark') this.setState({ theme: t }); } catch (e) {}
+    this.initReveal();
+    this.initArcade();
+  }
+
+  componentWillUnmount() {
+    (this._mjCancels || []).forEach((f) => f());
+  }
+
+  initReveal() {
+    if (typeof IntersectionObserver === 'undefined') return;
+    requestAnimationFrame(() => {
+      const els = document.querySelectorAll('[data-reveal]');
+      if (!els.length) return;
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          const el = e.target;
+          const sibs = Array.prototype.filter.call(el.parentNode.children, (c) => c.hasAttribute && c.hasAttribute('data-reveal'));
+          const d = Math.min(Math.max(0, sibs.indexOf(el)), 7) * 65;
+          el.style.transition = 'opacity .7s ease ' + d + 'ms, transform .7s cubic-bezier(.2,.75,.25,1) ' + d + 'ms';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+          io.unobserve(el);
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+      els.forEach((el) => { el.style.opacity = '0'; el.style.transform = 'translateY(26px)'; io.observe(el); });
+    });
+  }
+
+  initArcade() {
+    if (typeof requestAnimationFrame === 'undefined') return;
+    this._mjCancels = [];
+    setTimeout(() => {
+      document.querySelectorAll('[data-mj-arcade]').forEach((root) => this.setupStrip(root));
+    }, 60);
+  }
+
+  setupStrip(root) {
+    const genre = root.getAttribute('data-mj-genre') || 'platform';
+    if (genre === 'rhythm') return this.stripRhythm(root);
+    if (genre === 'fight') return this.stripFight(root);
+    this.stripPlatform(root, genre === 'race');
+  }
+
+  _cancel(fn) { (this._mjCancels = this._mjCancels || []).push(fn); }
+
+  stripPlatform(root, nojump) {
+    const runner = root.querySelector('[data-mj-runner]');
+    const scoreEl = root.querySelector('[data-mj-score]');
+    const boss = root.querySelector('[data-mj-boss]');
+    const pop = root.querySelector('[data-mj-pop]');
+    const coins = [].slice.call(root.querySelectorAll('[data-mj-coin]'));
+    const crates = [].slice.call(root.querySelectorAll('[data-mj-crate]'));
+    if (!runner) return;
+    let score = 0;
+    const T = parseInt(root.getAttribute('data-mj-speed'), 10) || 15000;
+    const runnerW = 48;
+    let started = null, prevX = -9999, bossHit = false;
+    const collected = new Array(coins.length).fill(false);
+    const cx = (el) => { const r = el.getBoundingClientRect(), rr = root.getBoundingClientRect(); return (r.left - rr.left) + r.width / 2; };
+    let g = {};
+    const measure = () => { g.rw = root.clientWidth; g.coinX = coins.map(cx); g.crateX = crates.map(cx); g.bossX = boss ? cx(boss) : g.rw * 0.94; };
+    measure(); window.addEventListener('resize', measure);
+    const setScore = () => { if (scoreEl) scoreEl.textContent = 'SCORE ' + String(Math.min(score, 999999)).padStart(6, '0'); };
+    setScore();
+    const showPop = (x, txt, color) => { if (!pop) return; pop.textContent = txt; pop.style.color = color; pop.style.left = (x - 12) + 'px'; pop.style.transition = 'none'; pop.style.opacity = '1'; pop.style.transform = 'translateY(0)'; requestAnimationFrame(() => { pop.style.transition = 'opacity .7s ease, transform .7s ease'; pop.style.opacity = '0'; pop.style.transform = 'translateY(-28px)'; }); };
+    const yAt = (x) => { if (nojump) return 0; let y = 0; const arc = (ax, H, W) => { const d = x + runnerW / 2 - ax; if (Math.abs(d) < W) { const yy = -H * (1 - (d / W) * (d / W)); if (yy < y) y = yy; } }; g.crateX.forEach((ax) => arc(ax, 34, 66)); arc(g.bossX - 14, 48, 76); return y; };
+    const startX = parseInt(root.getAttribute('data-mj-start'), 10) || -60;
+    let rafId = 0;
+    const step = (ts) => {
+      if (started == null) started = ts;
+      const p = ((ts - started) % T) / T;
+      const x = startX + p * ((g.rw + 60) - startX);
+      if (x < prevX) { collected.fill(false); bossHit = false; coins.forEach((c) => { c.style.transition = 'opacity .3s, transform .3s'; c.style.opacity = '1'; c.style.transform = 'scale(1)'; }); }
+      runner.style.transform = 'translateX(' + x + 'px) translateY(' + yAt(x).toFixed(1) + 'px)';
+      g.coinX.forEach((cxp, i) => { if (!collected[i] && prevX < cxp && x >= cxp) { collected[i] = true; score += 100; setScore(); const c = coins[i]; const col = getComputedStyle(c).color || '#e0a44a'; c.style.transition = 'opacity .25s, transform .25s'; c.style.opacity = '0'; c.style.transform = 'scale(2)'; showPop(cxp, '+100', col); } });
+      if (!bossHit && prevX < g.bossX && x >= g.bossX) { bossHit = true; score += 500; setScore(); showPop(g.bossX, nojump ? 'PASS! +500' : '+500', '#e05a48'); if (boss && !nojump) { boss.style.animation = 'none'; boss.style.transition = 'transform .1s'; boss.style.transform = 'translateY(12px) scaleY(0.3)'; setTimeout(() => { boss.style.transition = 'transform .35s'; boss.style.transform = 'translateY(0) scaleY(1)'; setTimeout(() => { boss.style.animation = 'mj-boss 1.4s ease-in-out infinite'; }, 360); }, 300); } }
+      prevX = x; setScore();
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+    this._cancel(() => cancelAnimationFrame(rafId));
+  }
+
+  stripRhythm(root) {
+    const runner = root.querySelector('[data-mj-runner]');
+    const scoreEl = root.querySelector('[data-mj-score]');
+    const pop = root.querySelector('[data-mj-pop]');
+    const items = [].slice.call(root.querySelectorAll('[data-mj-item]'));
+    if (!runner || !items.length) return;
+    let score = 0;
+    const setScore = () => { if (scoreEl) scoreEl.textContent = 'SCORE ' + String(Math.min(score, 999999)).padStart(6, '0'); };
+    setScore();
+    const showPop = (x, txt, color) => { if (!pop) return; pop.textContent = txt; pop.style.color = color; pop.style.left = (x - 12) + 'px'; pop.style.transition = 'none'; pop.style.opacity = '1'; pop.style.transform = 'translateY(0)'; requestAnimationFrame(() => { pop.style.transition = 'opacity .6s ease, transform .6s ease'; pop.style.opacity = '0'; pop.style.transform = 'translateY(-24px)'; }); };
+    let rw = root.clientWidth;
+    window.addEventListener('resize', () => { rw = root.clientWidth; });
+    const n = items.length, prev = new Array(n).fill(1e9), rate = 0.11;
+    let started = null, rafId = 0;
+    const step = (ts) => {
+      if (started == null) started = ts;
+      const t = (ts - started) / 1000, range = rw + 140, hitX = rw * 0.14;
+      items.forEach((it, i) => {
+        let ph = ((i / n) - t * rate) % 1; if (ph < 0) ph += 1;
+        const x = ph * range - 70;
+        it.style.transform = 'translateX(' + x + 'px)';
+        if (prev[i] > hitX && x <= hitX) { score += 100; setScore(); showPop(hitX, 'PERFECT +100', getComputedStyle(it).color || '#6fb3c9'); const spr = runner.firstElementChild; if (spr) { spr.style.transition = 'transform .12s'; spr.style.transform = 'translateY(-9px)'; setTimeout(() => { spr.style.transform = 'translateY(0)'; }, 140); } }
+        prev[i] = x;
+      });
+      rafId = requestAnimationFrame(step);
+    };
+    rafId = requestAnimationFrame(step);
+    this._cancel(() => cancelAnimationFrame(rafId));
+  }
+
+  stripFight(root) {
+    const runner = root.querySelector('[data-mj-runner]');
+    const boss = root.querySelector('[data-mj-boss]');
+    const scoreEl = root.querySelector('[data-mj-score]');
+    const pop = root.querySelector('[data-mj-pop]');
+    const hp = root.querySelector('[data-mj-hp-fill]');
+    const spark = root.querySelector('[data-mj-spark]');
+    if (!runner || !boss) return;
+    let score = 0, hpv = 100;
+    const setScore = () => { if (scoreEl) scoreEl.textContent = 'SCORE ' + String(Math.min(score, 999999)).padStart(6, '0'); };
+    setScore();
+    const showPop = (x, txt, color) => { if (!pop) return; pop.textContent = txt; pop.style.color = color; pop.style.left = x + 'px'; pop.style.transition = 'none'; pop.style.opacity = '1'; pop.style.transform = 'translateY(0)'; requestAnimationFrame(() => { pop.style.transition = 'opacity .7s ease, transform .7s ease'; pop.style.opacity = '0'; pop.style.transform = 'translateY(-24px)'; }); };
+    runner.style.transition = 'transform .22s ease';
+    boss.style.animation = 'none';
+    boss.style.transition = 'transform .22s ease';
+    const clash = () => {
+      runner.style.transform = 'translateX(26px)';
+      boss.style.transform = 'translateX(-26px)';
+      setTimeout(() => {
+        if (spark) { spark.style.opacity = '1'; spark.style.transform = 'translate(-50%,0) scale(1.4) rotate(12deg)'; }
+        const cxp = root.clientWidth * 0.5;
+        score += 120; hpv = Math.max(0, hpv - 20); if (hp) hp.style.width = hpv + '%';
+        setScore(); showPop(cxp, hpv <= 0 ? 'K.O.! +500' : 'HIT +120', '#e05a48');
+        setTimeout(() => { if (spark) { spark.style.opacity = '0'; spark.style.transform = 'translate(-50%,0) scale(0.6)'; } runner.style.transform = 'translateX(0)'; boss.style.transform = 'translateX(0)'; }, 140);
+        if (hpv <= 0) { score += 500; setScore(); boss.style.transition = 'transform .3s, opacity .3s'; boss.style.transform = 'translateY(8px) scaleY(0.3)'; boss.style.opacity = '0.25'; setTimeout(() => { hpv = 100; if (hp) hp.style.width = '100%'; boss.style.transition = 'transform .22s ease'; boss.style.transform = 'translateX(0)'; boss.style.opacity = '1'; }, 1000); }
+      }, 220);
+    };
+    const id = setInterval(clash, 1700);
+    const kick = setTimeout(clash, 600);
+    this._cancel(() => { clearInterval(id); clearTimeout(kick); });
+  }
+
+    WP(id) { return 'https://mityjohn.com/?page_id=' + id; }
+  GH(repo) { return 'https://github.com/janvanwassenhove/' + repo; }
+
+  allApps() {
+    const btn = (label, href, primary) => ({
+      label, href,
+      style: 'padding:8px 12px;border-radius:8px;font-family:\'IBM Plex Mono\',monospace;font-size:12px;font-weight:600;'
+        + (primary
+          ? 'background:var(--accent,#e0a44a);color:#17140f;border:1px solid transparent;'
+          : 'background:var(--chip,#17140f);color:var(--text,#ece7dd);border:1px solid var(--border2,#322e28);')
+    });
+    return [
+      { name: 'mITyStudio', code: 'STUDIO', tag: 'music', blurb: 'Your vibe-composing DAW. Hum an idea, it does the rest — allegedly.',
+        cat: 'music', actions: [btn('Get ↓', this.GH('mITyStudio') + '/releases', true), btn('Web ↗', 'https://janvanwassenhove.github.io/mITyStudio'), btn('Code', this.GH('mITyStudio')), btn('Info', this.WP(514))] },
+      { name: 'Music Agent', code: 'AGENT', tag: 'music', blurb: 'A multi-agent system that writes electronic songs with Sonic Pi. Bring snacks.',
+        cat: 'music', actions: [btn('Get ↓', this.GH('MusicAgent') + '/releases', true), btn('Code', this.GH('MusicAgent')), btn('Info', this.WP(219))] },
+      { name: 'mITyGuitar', code: 'GUITAR', tag: 'music', blurb: 'Turns a game controller into an actual guitar. Your neighbours: thrilled.',
+        cat: 'music', actions: [btn('Get ↓', this.GH('mITyGuitar') + '/releases', true), btn('Code', this.GH('mITyGuitar')), btn('Info', this.WP(706))] },
+      { name: 'PiBeat', code: 'PIBEAT', tag: 'music', blurb: 'The ultimate music timeline challenge, running on a Raspberry Pi.',
+        cat: 'music', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/PiBeat', true), btn('Code', this.GH('PiBeat')), btn('Info', this.WP(853))] },
+      { name: 'Ghosts in the Machine', code: 'GHOSTS', tag: 'game', blurb: 'A haunted IT sim built by inviting a ghost in. It went about as well as you\u2019d expect.',
+        cat: 'games', actions: [btn('Play ↗', 'https://janvanwassenhove.github.io/ghosts', true), btn('Code', this.GH('ghosts')), btn('Post', 'https://mityjohn.com/?p=941')] },
+      { name: 'mITyFighter', code: 'FIGHT', tag: 'game', blurb: 'A retro fighter where the real boss is legacy code. Flawless victory.',
+        cat: 'games', actions: [btn('Play ↗', 'https://janvanwassenhove.github.io/mITyFighter', true), btn('Code', this.GH('mITyFighter')), btn('Info', this.WP(790))] },
+      { name: 'Hipster', code: 'HIPSTER', tag: 'game', blurb: 'You probably haven\u2019t played it yet. That\u2019s kind of the point.',
+        cat: 'games', actions: [btn('Play ↗', 'https://janvanwassenhove.github.io/Hipster', true), btn('Code', this.GH('Hipster')), btn('Info', this.WP(546))] },
+      { name: 'LoveFlix', code: 'LOVE', tag: 'fun', blurb: 'Where every movie finds its heart. A matchmaker for your watchlist.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/LoveFlix', true), btn('Code', this.GH('LoveFlix')), btn('Info', this.WP(760))] },
+      { name: 'Sports Madness', code: 'SPORT', tag: 'fun', blurb: 'Gamification, creativity & real-time control for literally any sport.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/SportsMadness', true), btn('Code', this.GH('SportsMadness')), btn('Info', this.WP(640))] },
+      { name: 'mITyStories', code: 'STORY', tag: 'fun', blurb: 'Tiny generative stories for when the meeting runs long.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/mITyStories', true), btn('Info', this.WP(771))] },
+      { name: 'Typix', code: 'TYPIX', tag: 'fun', blurb: 'Type pixels into being. Oddly meditative, mildly pointless.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/Typix', true), btn('Info', this.WP(481))] },
+      { name: 'mITyLaundry', code: 'WASH', tag: 'fun', blurb: 'Because someone had to gamify the laundry. Reluctantly, that someone was Jan.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/mITyLaundry', true), btn('Info', this.WP(830))] },
+      { name: 'mITyLex', code: 'LEX', tag: 'fun', blurb: 'A word game with the vocabulary of a very confident intern.',
+        cat: 'fun', actions: [btn('Web ↗', 'https://janvanwassenhove.github.io/mITyLex', true), btn('Info', this.WP(841))] },
+      { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', blurb: 'A real programming language where you code entirely in ceremonies. Yes, really.',
+        cat: 'lab', actions: [btn('Get ↓', this.GH('scrum-lang') + '/releases', true), btn('Code', this.GH('scrum-lang')), btn('Info', this.WP(100))] },
+    ];
+  }
+
+  renderVals() {
+    const apps = this.allApps();
+    const cats = [
+      { id: 'all', label: 'All' }, { id: 'music', label: 'Music' },
+      { id: 'games', label: 'Games' }, { id: 'fun', label: 'Fun' }, { id: 'lab', label: 'Lab' },
+    ];
+    const active = this.state.filter;
+    const appFilters = cats.map(c => ({
+      label: c.label,
+      onClick: () => this.setState({ filter: c.id }),
+      style: 'cursor:pointer;padding:9px 15px;border-radius:999px;font-family:\'IBM Plex Mono\',monospace;font-size:12px;font-weight:600;'
+        + (active === c.id
+          ? 'background:var(--accent,#e0a44a);color:#17140f;border:1px solid transparent;'
+          : 'background:var(--s2,#141210);color:var(--muted,#b8b0a4);border:1px solid var(--border,#2a2621);'),
+    }));
+    const visibleApps = active === 'all' ? apps : apps.filter(a => a.cat === active);
+
+    const books = [
+      { title: 'The Cat Who Curated', series: "Children \u00b7 Picture book", badge: 'Paperback \u00b7 Kindle', desc: 'A cat drags a small human through famous paintings. Everyone learns something; the cat learns nothing.', buy: 'https://www.amazon.com.be/s?k=jan+van+wassenhove', preview: 'https://mityjohn.com/?page_id=901' },
+      { title: 'Reimagining the Classics', series: 'Reimagining series', badge: 'Art book', desc: 'Iconic covers, respectfully reinterpreted and gently roasted. One per spread.', buy: 'https://www.amazon.com.be/s?k=jan+van+wassenhove', preview: 'https://mityjohn.com/?page_id=902' },
+      { title: 'Bedtime for Legacy Code', series: "Children \u00b7 Picture book", badge: 'Paperback \u00b7 Kindle', desc: 'A gentle tale about tucking in systems nobody dares to touch. Sweet dreams, mainframe.', buy: 'https://www.amazon.com.be/s?k=jan+van+wassenhove', preview: 'https://mityjohn.com/?page_id=901' },
+      { title: 'More books, incoming', series: 'Coming soon', badge: 'In the oven', desc: 'The lab is printing faster than the shelves fill. Check back — or don\u2019t, they\u2019ll find you.', buy: 'https://www.amazon.com.be/s?k=jan+van+wassenhove', preview: 'https://mityjohn.com/?page_id=899' },
+    ];
+
+    const posts = [
+      { title: 'Ghosts in the Machine: I built a haunted IT sim by inviting a ghost in', tag: 'Games \u00b7 AI', slug: 'ghosts', href: 'https://mityjohn.com/?p=941' },
+      { title: 'mITyStudio \u2014 I can\u2019t (or hardly) play music. So I built something that can.', tag: 'Music \u00b7 AI', slug: 'studio', href: 'https://mityjohn.com/?p=931' },
+      { title: 'When a cat makes you publish your first picture book', tag: 'Books', slug: 'cat-book', href: 'https://mityjohn.com/?p=921' },
+      { title: 'The Workflow Is the New Unit of Software Delivery', tag: 'Delivery \u00b7 SDLC', slug: 'workflow', href: 'https://mityjohn.com/?p=891' },
+    ];
+
+    const insta = [
+      { tag: '#Flash', href: 'https://www.instagram.com/p/Daq-zcojIzB/' },
+      { tag: '#RubberDuck', href: 'https://www.instagram.com/p/DabT7Y3jMK4/' },
+      { tag: '#BCPL', href: 'https://www.instagram.com/p/DaWKovEDKWO/' },
+      { tag: '#Simula', href: 'https://www.instagram.com/p/DaQxORKDGeF/' },
+      { tag: '#Xamarin', href: 'https://www.instagram.com/p/DaOC9l2jBoL/' },
+      { tag: '#COBOL', href: 'https://www.instagram.com/p/DaJE6SZDOxd/' },
+    ];
+
+    const quotes = [
+      { kicker: 'Creative', text: 'A true architect is not an artist but an optimistic realist. He takes a diverse number of stakeholders, extracts needs, concerns and dreams, then creates a beautiful yet tangible solution loved by the users and the community at large. He creates vessels in which life happens.', who: 'Cameron Sinclair', accent: '#e0a44a', tint: 'rgba(224,164,74,0.08)' },
+      { kicker: 'Practice', text: 'If it\u2019s a good idea, go ahead and do it. It is much easier to apologize than it is to get a permission.', who: 'Grace Hopper', accent: '#c98b6a', tint: 'rgba(201,139,106,0.09)' },
+      { kicker: 'Engaging', text: 'Invest in your professional development. Specialize\u2026 and team up with colleagues who have different strengths.', who: 'Melissa Milloway', accent: '#6fb3c9', tint: 'rgba(111,179,201,0.08)' },
+    ];
+
+    const theme = this.state.theme;
+    const LIGHT = '--bg:#f4f1e9;--bg2:#ece7d9;--s0:#efeadd;--s1:#ffffff;--s2:#f7f3ea;--line:#e6e0d3;--border:#e2dccd;--border2:#d3cbba;--border3:#c2b8a5;--text:#221f1a;--muted:#544c42;--muted2:#726a5e;--faint:#948b7f;--navbg:rgba(244,241,233,0.86);--chip:#ffffff;';
+
+    return {
+      accent: this.props.accent ?? '#e0a44a',
+      quotes,
+      themeVars: theme === 'light' ? LIGHT : '',
+      themeLabel: theme === 'dark' ? '\u25D0 Light' : '\u25D1 Dark',
+      toggleTheme: () => {
+        const nt = this.state.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('mityTheme', nt); } catch (e) {}
+        this.setState({ theme: nt });
+      },
+      accent2: this.props.accent2 ?? '#6fb3c9',
+      showInstagram: this.props.showInstagram ?? true,
+      year: 2026,
+      nav: [
+        { lvl: '01', label: 'Apps', href: '#apps' }, { lvl: '02', label: 'Artist', href: '#artist' },
+        { lvl: '03', label: 'Books', href: '#books' }, { lvl: '04', label: 'Blog', href: '#blog' },
+        { lvl: '', label: 'Scrum', href: '#scrum' }, { lvl: '', label: 'About', href: '#about' },
+      ],
+      stats: [
+        { n: '14', label: 'apps in the lab' }, { n: '4+', label: 'books in print' },
+        { n: '60+', label: 'years of IT dug up' }, { n: '1', label: 'very tired Pi' },
+      ],
+      appFilters, visibleApps, books, posts, insta,
+      footerCols: [
+        { title: 'Explore', links: [
+          { label: 'Apps store', href: '#apps' }, { label: 'Bookstore', href: '#books' },
+          { label: 'Blog', href: 'https://mityjohn.com/?page_id=184' }, { label: 'Scrum Programming', href: 'https://mityjohn.com/?page_id=100' },
+        ]},
+        { title: 'Music', links: [
+          { label: 'The Artist', href: 'https://mityjohn.com/?page_id=591' }, { label: 'mITyStudio', href: 'https://mityjohn.com/?page_id=514' },
+          { label: 'SoundCloud', href: 'https://soundcloud.com/mityjohn' }, { label: 'Spotify', href: 'https://open.spotify.com/artist/4lRudVkciTQ8j2bEySXqPz' },
+        ]},
+        { title: 'Connect', links: [
+          { label: 'Instagram', href: 'https://www.instagram.com/mity.john/' }, { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jan-van-wassenhove-9b49893/' },
+          { label: 'Twitter', href: 'https://twitter.com/mity_john' }, { label: 'About', href: 'https://mityjohn.com/?page_id=2' },
+        ]},
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

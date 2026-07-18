@@ -1,0 +1,163 @@
+/*
+ * design/tokens.css — extracted from design/handoff/mITyJohn.dc.html (Claude Design export, 2026-07-18)
+ *
+ * The ONLY file src/ is permitted to import from design/ (MIGRATION_BRIEF.md §15 rule 4).
+ * Values are taken verbatim from the export. Where the export uses slightly different
+ * hard-coded fallbacks for the same variable at different call sites, the dominant value
+ * is the token and the variants are noted in a comment.
+ *
+ * Theme model (as designed): dark is the default; light is applied by setting
+ * data-theme="light" on <html>. The design persists the choice in
+ * localStorage key "mityTheme".
+ */
+
+/* ---------------------------------------------------------------- fonts */
+/* Loaded in the export from Google Fonts:
+ *   Space Grotesk  400 500 600 700  — display / headings / stat numbers
+ *   IBM Plex Mono  400 500 600      — UI labels, buttons, captions, kickers
+ *   IBM Plex Sans  400 500 600      — body copy (default body font)
+ */
+
+:root {
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+
+  /* ------------------------------------------------------------ color: dark (default) */
+  --bg: #0d0c0b;                        /* page background */
+  --bg2: #0b0a09;                       /* footer background */
+  --s0: #100f0d;                        /* section wash (gradient start) */
+  --s1: #121110;                        /* card surface (variant seen: #131110 on blog cards) */
+  --s2: #161310;                        /* raised surface / gradient top (variants: #141210 filter chips, #1a1611 feature banner) */
+  --line: #201d19;                      /* section divider (variant: #1a1815 footer rule) */
+  --border: #26231f;                    /* base border — nav, stat grid (variant: #2a2621 on cards) */
+  --border2: #322e28;                   /* control border — buttons, chips (variants: #2f2b26, #34302a, #35302a) */
+  --border3: #4a443b;                   /* hover border (variant: #413b32 card hover) */
+  --text: #ece7dd;
+  --muted: #b8b0a4;                     /* secondary text (variant: #a9a094 in card bodies) */
+  --muted2: #8f867b;                    /* tertiary text / labels (variant: #9a9186) */
+  --faint: #6f665c;                     /* faintest text — copyright, placeholders */
+  --navbg: rgba(13, 12, 11, 0.82);      /* sticky nav, pairs with backdrop-filter: blur(12px) */
+  --chip: #17140f;                      /* chip / secondary button fill */
+
+  /* ------------------------------------------------------------ accents */
+  --accent: #e0a44a;                    /* primary accent (design prop, editable) */
+  --accent-2: #6fb3c9;                  /* secondary accent (design prop, editable) */
+  --ink-on-accent: #17140f;             /* text on --accent fills */
+  --ink-on-accent-2: #0e2025;           /* text on --accent-2 fills */
+
+  /* Per-section "level" accents (the four home levels + their badge ink) */
+  --level-store: #e0a44a;               /* LEVEL 01 · THE STORE  (= --accent) */
+  --level-artist: #6fb3c9;              /* LEVEL 02 · THE ARTIST (= --accent-2) */
+  --level-books: #c98b6a;               /* LEVEL 03 · THE BOOKSTORE */
+  --ink-on-level-books: #241812;
+  --level-notes: #7fc99a;               /* LEVEL 04 · FIELD NOTES (blog) */
+  --ink-on-level-notes: #12201a;
+
+  /* Status / semantic */
+  --ok: #7fc99a;                        /* status dot, health bar */
+  --danger: #e05a48;                    /* boss HP, hit flashes */
+  --selection: rgba(224, 164, 74, 0.3); /* ::selection background */
+
+  /* ------------------------------------------------------------ type scale */
+  --text-hero: clamp(38px, 7vw, 86px);        /* h1; lh 0.98; ls -0.03em; display 700 */
+  --text-h2: clamp(28px, 4vw, 46px);          /* section h2; ls -0.02em; display 700 */
+  --text-h2-sub: clamp(26px, 3.4vw, 42px);    /* artist h2 */
+  --text-h2-minor: clamp(22px, 3vw, 32px);    /* instagram h2 */
+  --text-statement: clamp(20px, 2.6vw, 30px); /* about/footer statement; display 500; lh 1.35 */
+  --text-feature: clamp(18px, 2.2vw, 24px);   /* feature banner title (SPL) */
+  --text-card-title: 20px;                    /* app card h3; display 600 */
+  --text-card-title-sm: 17px;                 /* blog card title; lh 1.25 */
+  --text-card-title-xs: 16px;                 /* book list title */
+  --text-lead: clamp(16px, 2vw, 20px);        /* hero lead; lh 1.55 */
+  --text-body-lg: clamp(15px, 1.6vw, 17px);   /* section intro; lh 1.6 */
+  --text-body: 14px;                          /* card body; lh 1.5 */
+  --text-small: 13px;                         /* nav links, buttons, small copy; lh 1.5 */
+  --text-caption: 12px;                       /* kickers, captions (mono) */
+  --text-caption-xs: 11px;                    /* arcade labels, tiny tags (mono) */
+  --text-stat: 30px;                          /* stat number; display 700 */
+
+  --leading-hero: 0.98;
+  --leading-tight: 1.25;
+  --leading-body: 1.5;
+  --leading-relaxed: 1.6;
+
+  --tracking-display: -0.02em;                /* headings (hero: -0.03em) */
+  --tracking-caps: 0.14em;                    /* uppercase kickers (range used: 0.1em–0.24em) */
+
+  /* ------------------------------------------------------------ layout & spacing */
+  --container-max: 1180px;
+  --section-pad-y: clamp(40px, 6vw, 80px);
+  --section-pad-x: clamp(16px, 4vw, 56px);
+  --hero-pad-top: clamp(48px, 9vw, 120px);
+  --panel-pad: clamp(22px, 3vw, 40px);
+  --card-pad: 18px;
+  --gap-cards: 16px;                          /* app/blog card grids */
+  --gap-books: 22px;                          /* book grid */
+  --gap-tiles: 10px;                          /* instagram grid */
+  --gap-chips: 8px;                           /* filter chip row */
+  --arcade-strip-h: 160px;                    /* decorative arcade divider strips */
+
+  /* Card grid minimums (repeat(auto-fill, minmax(X, 1fr))) */
+  --card-min-app: 300px;
+  --card-min-post: 260px;
+  --card-min-book: 220px;
+  --card-min-tile: 150px;
+  --card-min-quote: 260px;
+  --card-min-stat: 120px;
+
+  /* ------------------------------------------------------------ radii */
+  --radius-pill: 999px;
+  --radius-btn-sm: 8px;                       /* small action buttons, chips */
+  --radius-btn: 9px;                          /* standard buttons (also 10px on hero CTAs) */
+  --radius-card: 14px;                        /* blog cards */
+  --radius-card-lg: 16px;                     /* app cards, feature banner */
+  --radius-panel: 18px;                       /* quote cards */
+  --radius-panel-lg: 20px;                    /* artist panel */
+  --radius-embed: 12px;                       /* spotify iframe */
+  --radius-cover: 10px;                       /* book covers, insta tiles */
+
+  /* ------------------------------------------------------------ shadows & glows */
+  --shadow-card-hover: 0 20px 44px -24px rgba(0, 0, 0, 0.7);
+  --shadow-panel-hover: 0 22px 46px -26px rgba(0, 0, 0, 0.6);
+  /* Level badge glow: 0 8px 20px -8px <level accent> (same color as the badge fill) */
+  --glow-badge-store: 0 8px 20px -8px var(--level-store);
+  --glow-badge-artist: 0 8px 20px -8px var(--level-artist);
+  --glow-badge-books: 0 8px 20px -8px var(--level-books);
+  --glow-badge-notes: 0 8px 20px -8px var(--level-notes);
+  --glow-dot-ok: 0 0 8px var(--ok);
+
+  /* ------------------------------------------------------------ motion */
+  --reveal-duration: 0.7s;                    /* scroll-reveal: opacity + translateY(26px) -> 0 */
+  --reveal-ease: cubic-bezier(0.2, 0.75, 0.25, 1);
+  --reveal-stagger: 65ms;                     /* per sibling, capped at 7 */
+  --hover-duration: 0.28s;                    /* card lift: translateY(-6px) */
+  --hover-ease: ease;
+  --blink-duration: 1.1s;                     /* hero cursor blink, step-end */
+
+  /* ------------------------------------------------------------ page background wash */
+  /* Applied on the page root over var(--bg):
+   *   radial-gradient(1200px 600px at 80% -10%, rgba(224,164,74,0.06), transparent 60%),
+   *   radial-gradient(900px 500px at -10% 20%, rgba(111,179,201,0.05), transparent 55%)
+   */
+}
+
+/* ---------------------------------------------------------------- color: light theme */
+/* Values verbatim from the export's LIGHT variable set. Accents are unchanged. */
+:root[data-theme='light'] {
+  --bg: #f4f1e9;
+  --bg2: #ece7d9;
+  --s0: #efeadd;
+  --s1: #ffffff;
+  --s2: #f7f3ea;
+  --line: #e6e0d3;
+  --border: #e2dccd;
+  --border2: #d3cbba;
+  --border3: #c2b8a5;
+  --text: #221f1a;
+  --muted: #544c42;
+  --muted2: #726a5e;
+  --faint: #948b7f;
+  --navbg: rgba(244, 241, 233, 0.86);
+  --chip: #ffffff;
+}

@@ -1,0 +1,13 @@
+# local secrets (MIGRATION_BRIEF.md §11.5)
+.env
+.env.*
+.dev.vars
+*.pem
+
+# machine-local tooling
+.claude/settings.local.json
+
+# build output & dependencies (Astro, from Phase 3 on)
+node_modules/
+dist/
+.astro/
