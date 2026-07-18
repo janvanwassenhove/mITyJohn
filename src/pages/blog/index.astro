@@ -1,0 +1,26 @@
+---
+// Blog index — the designed card grid, all posts, newest first. No pagination in
+// v1 (37 posts; revisit when the grid gets unwieldy — noted in design/README.md).
+import Base from '../../layouts/Base.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Blog — mITy.John" description="Field notes from the lab: essays and experiments on AI, software delivery, music tech and retro IT.">
+  <section class="blog">
+    <SectionHeader level="04" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="All field notes" />
+    <p class="note">{posts.length} posts, newest first. Also available as <a href="/rss.xml">RSS</a>.</p>
+    <div class="grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .blog { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); }
+  .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); margin: 10px 0 36px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--gap-cards); }
+</style>

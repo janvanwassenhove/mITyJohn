@@ -1,0 +1,108 @@
+---
+// Decorative arcade divider strips — design's pixel-art runner scenes, rebuilt
+// CSS-only (the export's rAF scoring loop is dropped for the N5 mobile budget;
+// the visual motion is preserved via the design's own keyframes).
+// aria-hidden + .mj-anim so prefers-reduced-motion disables all movement.
+interface Props {
+  variant: 'store' | 'artist' | 'books' | 'notes';
+}
+const { variant } = Astro.props;
+
+const LABELS = {
+  store: 'LVL 1 · THE STORE — PLATFORMER · BOSS: LEGACY CODE',
+  artist: 'LVL 2 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
+  books: 'LVL 3 · THE BOOKSTORE — RACING · RIVAL: THE DEADLINE',
+  notes: 'LVL 4 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
+};
+
+// Pixel sprite (the design's runner), verbatim box-shadow art.
+const RUNNER =
+  '18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent), 18px 24px 0 var(--accent-2), 24px 24px 0 var(--accent), 30px 24px 0 var(--accent), 36px 24px 0 var(--accent), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent), 18px 30px 0 var(--accent), 24px 30px 0 var(--accent-2), 30px 30px 0 var(--accent), 36px 30px 0 var(--accent), 42px 30px 0 var(--accent-2), 12px 36px 0 var(--accent), 18px 36px 0 var(--accent), 24px 36px 0 var(--accent), 30px 36px 0 var(--accent), 36px 36px 0 var(--accent), 42px 36px 0 var(--accent-2), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b';
+
+const coins = { store: ['28%', '54%', '79%'], books: ['22%', '44%', '66%', '86%'], artist: [], notes: [] }[variant];
+const coinGlyph = variant === 'books' ? '❏' : '◉';
+const coinColor = variant === 'books' ? 'var(--level-books)' : 'var(--accent)';
+---
+
+<div class="strip mj-anim" aria-hidden="true">
+  <div class="label">{LABELS[variant]}</div>
+  <div class="score">SCORE 000000</div>
+  <div class="ground"></div>
+  {variant === 'artist' && (
+    <>
+      <div class="hitline"></div>
+      <div class="hitlabel">HIT</div>
+      {[0, 1, 2, 3, 4].map((i) => (
+        <div class="note" style={`animation-delay:${i * 1.8}s;`}>♪</div>
+      ))}
+    </>
+  )}
+  {coins.map((left, i) => (
+    <div class="coin" style={`left:${left};bottom:${70 + (i % 2) * 8}px;color:${coinColor};animation-delay:${i * 0.5}s;`}>{coinGlyph}</div>
+  ))}
+  {variant === 'notes' && (
+    <>
+      <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
+      <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger"></div></div></div>
+    </>
+  )}
+  <div class={`runner ${variant === 'notes' ? 'fixed' : ''}`}>
+    <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
+  </div>
+</div>
+
+<style>
+  .strip {
+    position: relative;
+    overflow: hidden;
+    height: var(--arcade-strip-h);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--s0), var(--bg));
+  }
+  .label, .score {
+    position: absolute;
+    top: 14px;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    letter-spacing: 0.24em;
+  }
+  .label { left: var(--section-pad-x); color: var(--muted2); max-width: 70%; }
+  .score { right: var(--section-pad-x); color: var(--accent); }
+  .ground {
+    position: absolute;
+    left: 0; right: 0; bottom: 40px;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--border2) 0 12px, transparent 12px 24px);
+  }
+  .coin {
+    position: absolute;
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    animation: mj-coin 1.7s ease-in-out infinite;
+  }
+  .hitline { position: absolute; left: 14%; top: 54px; bottom: 50px; width: 2px; background: var(--accent-2); opacity: 0.55; box-shadow: 0 0 10px var(--accent-2); }
+  .hitlabel { position: absolute; left: 14%; top: 34px; transform: translateX(-50%); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--accent-2); }
+  .note {
+    position: absolute;
+    bottom: 74px;
+    right: -30px;
+    font-family: var(--font-display);
+    font-size: 23px;
+    font-weight: 700;
+    color: var(--accent-2);
+    animation: mj-streak 9s linear infinite;
+  }
+  .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
+  .hp.you { left: var(--section-pad-x); }
+  .hp.boss-hp { right: var(--section-pad-x); }
+  .bar { margin-top: 4px; width: 100%; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .fill { width: 100%; height: 100%; }
+  .fill.ok { background: var(--ok); }
+  .fill.danger { background: var(--danger); }
+  .runner { position: absolute; top: 58px; left: 0; animation: mj-run 15s linear infinite; }
+  .runner.fixed { animation: none; left: 28%; }
+  .sprite { width: 6px; height: 6px; background: transparent; }
+</style>

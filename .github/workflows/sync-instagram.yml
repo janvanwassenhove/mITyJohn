@@ -1,0 +1,26 @@
+# §10.2 / §7.3 — daily Instagram sync. Holds NO credentials: reads the public
+# Worker endpoint (D10). On worker failure the script exits 0 and nothing changes.
+name: Sync Instagram
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22, cache: npm }
+      - run: node scripts/fetch-instagram.mjs
+        env:
+          IG_WORKER_URL: https://ig.mityjohn.workers.dev/instagram # public, not a secret
+      - name: Commit if changed
+        run: |
+          git config user.name  "mITy.Bot"
+          git config user.email "bot@mityjohn.com"
+          git add src/data/instagram.json public/instagram
+          git diff --staged --quiet || git commit -m "chore: sync instagram"
+          git push

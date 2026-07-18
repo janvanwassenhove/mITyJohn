@@ -1,0 +1,101 @@
+---
+// "Words to build by" — three tinted quote cards, design content verbatim.
+const quotes = [
+  {
+    kicker: 'Creative',
+    text: 'A true architect is not an artist but an optimistic realist. He takes a diverse number of stakeholders, extracts needs, concerns and dreams, then creates a beautiful yet tangible solution loved by the users and the community at large. He creates vessels in which life happens.',
+    who: 'Cameron Sinclair',
+    accent: '#e0a44a',
+    tint: 'rgba(224,164,74,0.08)',
+  },
+  {
+    kicker: 'Practice',
+    text: 'If it’s a good idea, go ahead and do it. It is much easier to apologize than it is to get a permission.',
+    who: 'Grace Hopper',
+    accent: '#c98b6a',
+    tint: 'rgba(201,139,106,0.09)',
+  },
+  {
+    kicker: 'Engaging',
+    text: 'Invest in your professional development. Specialize… and team up with colleagues who have different strengths.',
+    who: 'Melissa Milloway',
+    accent: '#6fb3c9',
+    tint: 'rgba(111,179,201,0.08)',
+  },
+];
+---
+
+<section class="quotes">
+  <div class="wrap">
+    <div class="kicker">// words to build by</div>
+    <div class="grid">
+      {quotes.map((q) => (
+        <figure data-reveal style={`--q-accent:${q.accent};--q-tint:${q.tint};`}>
+          <div class="mark">&ldquo;</div>
+          <div class="label">{q.kicker}</div>
+          <blockquote>{q.text}</blockquote>
+          <div class="rule"></div>
+          <figcaption>{q.who}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .quotes { border-top: 1px solid var(--line); background: var(--s0); }
+  .wrap { max-width: var(--container-max); margin: 0 auto; padding: clamp(40px, 5vw, 68px) var(--section-pad-x); }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--accent);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(18px, 2vw, 26px); }
+  figure {
+    margin: 0;
+    position: relative;
+    color: var(--text);
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-panel);
+    padding: clamp(30px, 3vw, 42px) clamp(24px, 2.5vw, 34px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+    transition: background 0.35s ease, border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  figure:hover { background: var(--q-tint); border-color: var(--q-accent); transform: translateY(-5px); box-shadow: var(--shadow-panel-hover); }
+  .mark { font-family: var(--font-display); font-size: 64px; line-height: 0.42; font-weight: 700; color: var(--q-accent); }
+  .label {
+    font-family: var(--font-display);
+    font-size: clamp(16px, 1.6vw, 21px);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--q-accent);
+  }
+  blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(15px, 1.4vw, 18px);
+    line-height: 1.62;
+    max-width: 34ch;
+    flex: 1;
+    text-wrap: pretty;
+  }
+  .rule { width: 46px; height: 3px; border-radius: 2px; background: var(--q-accent); }
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+</style>

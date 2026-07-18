@@ -1,0 +1,22 @@
+# Instagram token broker — §7.2 / §11.4 (D10).
+# Secrets are set with `wrangler secret put IG_APP_ID` / `IG_APP_SECRET` / `IG_TOKEN`
+# and live in Cloudflare only — NEVER in this file, never in git.
+#
+# One-off setup (Jan):
+#   wrangler login
+#   wrangler kv namespace create IG        # paste the id below
+#   wrangler secret put IG_APP_ID
+#   wrangler secret put IG_APP_SECRET
+#   wrangler secret put IG_TOKEN           # bootstrap long-lived token (§7.1)
+#   wrangler deploy
+
+name = "ig"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+
+[triggers]
+crons = ["0 3 * * *"] # daily: refresh token + fetch media
+
+[[kv_namespaces]]
+binding = "IG"
+id = "TODO_AFTER_wrangler_kv_namespace_create"

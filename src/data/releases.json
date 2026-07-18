@@ -1,0 +1,133 @@
+{
+  "LoveFlix": {
+    "tag": "v1.0.0",
+    "date": "2026-02-08T22:18:16Z",
+    "changelog": "## 🎬 LoveFlix Desktop 1.0.0\r\n\r\nTransform any movie into a hyper-romantic masterpiece with AI!\r\n<img width=\"1024\" height=\"557\" alt=\"image\" src=\"https://github.com/user-attachments/assets/dee76659-5c61-44de-9169-fad005fbb010\" />\r\n<img width=\"768\" height=\"715\" alt=\"image\" src=\"https://github.com/user-attachments/assets/7619ecf2-cb73-43fe-ab9f-c6a10190c7a6\" />\r\n\r\n### 📥 Downloads\r\n\r\n| Platform | File | Notes |\r\n|----------|------|-------|\r\n| 🪟 Windows | `LoveFlix Setup 1.0.0.exe` | NSIS installer with auto-update |\r\n| 🍎 macOS (Intel) | `LoveFlix-1.0.0.dmg` | For Intel Macs |\r\n| 🍎 macOS (Apple Silicon) | `LoveFlix-1.0.0-arm64.dmg` | For M1/M2/M3/M4 Macs |\r\n\r\n### 🔄 Auto-Update\r\nExisting installations will be notified automatically. All user data (API keys, collections, settings) is preserved.\r\n\r\n### 🚀 First-time Setup\r\n1. Download and install for your platform\r\n2. Open Settings (⚙️) and enter your OpenAI API key\r\n3. *(Optional)* Enter your TMDB API key for the Top 10 feature\r\n\r\n\r\n**Full Changelog**: https://github.com/janvanwassenhove/LoveFlix/commits/v1.0.0",
+    "assets": [
+      {
+        "name": "LoveFlix-Setup-1.0.0.exe",
+        "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
+        "size": 77399924,
+        "downloads": 18,
+        "platform": "Windows"
+      },
+      {
+        "name": "LoveFlix-1.0.0.dmg",
+        "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
+        "size": 101216735,
+        "downloads": 11,
+        "platform": "macOS"
+      },
+      {
+        "name": "LoveFlix-1.0.0-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
+        "size": 96163331,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "LoveFlix.Setup.1.0.0.exe",
+        "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix.Setup.1.0.0.exe",
+        "size": 77399924,
+        "downloads": 0,
+        "platform": "Windows"
+      }
+    ]
+  },
+  "mITyGuitar": {
+    "tag": "v0.0.1",
+    "date": "2026-01-04T22:19:03Z",
+    "changelog": "# mITyGuitar Desktop 0.0.1\r\n\r\n## What's New\r\n- Desktop application release for Windows\r\n- Full featured guitar learning and practice application\r\n- Chord mapping and song chart support\r\n- Controller integration for interactive practice\r\n\r\n## Downloads\r\n\r\n### Windows Installers\r\n- **MSI Package**: `mITyGuitar_0.0.1_x64_en-US.msi` - Windows Installer Package (recommended for most users)\r\n- **NSIS Setup**: `mITyGuitar_0.0.1_x64-setup.exe` - Nullsoft Installer (alternative option)\r\n\r\nBoth installers include the complete application with all dependencies.\r\n\r\n## System Requirements\r\n- Windows 10/11 (64-bit)\r\n- Audio device (headphones/speakers recommended)\r\n- Optional: MIDI controller for enhanced interaction\r\n\r\n## Installation\r\n1. Download your preferred installer\r\n2. Run the installer as administrator\r\n3. Follow the setup wizard\r\n4. Launch mITyGuitar from Start Menu or Desktop\r\n\r\n## Issues & Support\r\nIf you encounter any issues, please report them on our [GitHub Issues](https://github.com/janvanwassenhove/mITyGuitar/issues) page.\r\n\r\n---\r\nGenerated on 2026-01-04 23:17:33 UTC",
+    "assets": [
+      {
+        "name": "mITyGuitar_0.0.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
+        "size": 113233473,
+        "downloads": 2,
+        "platform": "Windows"
+      },
+      {
+        "name": "mITyGuitar_0.0.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
+        "size": 184893440,
+        "downloads": 1,
+        "platform": "Windows"
+      }
+    ]
+  },
+  "mITyStudio": {
+    "tag": "v1.1.3",
+    "date": "2026-07-18T15:46:57Z",
+    "changelog": "## mITyStudio v1.1.3\n\nAutomated Windows build of `master` @ ceb4dba.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ceb4dbaf10f1b86a551ef304421e8156bec4252c/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ceb4dbaf10f1b86a551ef304421e8156bec4252c/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ceb4dbaf10f1b86a551ef304421e8156bec4252c/docs/screenshots/voices.png)\n\n### Changes\nPoint the README clone URL at the public repo; keep site content out of git\n\nThe README still named the private mITyStudio2, which 404s for anyone\nreading the public README. Also ignore docs/website/ — blog and website\ncopy for mityjohn.com is content, not part of this codebase.\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>\n",
+    "assets": [
+      {
+        "name": "mITyStudio.Setup.1.1.3.exe",
+        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.3/mITyStudio.Setup.1.1.3.exe",
+        "size": 153006918,
+        "downloads": 0,
+        "platform": "Windows"
+      }
+    ]
+  },
+  "MusicAgent": {
+    "tag": "v1.5.1",
+    "date": "2025-05-10T20:41:21Z",
+    "changelog": "\r\n![image](https://github.com/user-attachments/assets/89d1d0ee-8a6b-4b4d-81c8-eab136ed7c70)\r\n\r\n✨ Features\r\n- Modular Routing: Application routes have been split for improved readability and maintainability\r\n- Azure Provider Integration: Initial support for Azure-based models has been added (temporarily disabled in current build)\r\n- Creative Mode Playback: Added sample playback capability in the Creative Mode selection interface\r\n\r\n![image](https://github.com/user-attachments/assets/8b0caefa-4c0d-433a-9233-584d69392668)\r\n\r\n\r\n🧠 Logic & Architecture\r\n- Service Refactoring: Core logic has been extracted and moved to dedicated service modules, paving the way for cleaner code and easier testing\r\n- Centralized Configuration: API and Sonic Pi configurations are now centrally managed in config.json\r\n\r\n🔧 Fixes & Improvements\r\n- Path Handling: Corrected file path logic when creating new song files\r\n- Import Cleanup: Removed unused imports and streamlined dependencies\r\n- Metadata Handling: Ensured full sample metadata is available during song construction\r\n- Config Corrections: Fixed typos and project root configuration issues\r\n\r\n🧪 Known Limitations\r\n- Azure model temporarily disabled while integration is being validated",
+    "assets": []
+  },
+  "PiBeat": {
+    "tag": "v0.2.1",
+    "date": "2026-03-20T22:10:07Z",
+    "changelog": "## 🎵 PiBeat\n\nDesktop music live-coding — write Sonic Pi code and hear it instantly.\n\n### Screenshots\n\n| Editor & Waveform | Agent Chat |\n|:-:|:-:|\n| ![Editor](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/editor.png) | ![Agent Chat](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/agent-chat.png) |\n\n| Timeline View | Band Visualizer |\n|:-:|:-:|\n| ![Timeline](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/timeline.png) | ![Band Visualizer](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/band-visualizer.png) |\n\n### 📥 Downloads\n\n| Platform | File | Notes |\n|----------|------|-------|\n| 🪟 Windows | `.msi` / `.exe` | Windows 10+ |\n| 🍎 macOS | `.dmg` (Universal) | Intel + Apple Silicon |\n| 🐧 Linux | `.deb` / `.AppImage` | Ubuntu 22.04+ |\n\n### ✨ Highlights\n- Sonic Pi-compatible live coding editor with Monaco\n- Real-time waveform visualization (wave, bars, lissajous)\n- 42 synth types, 13 effects, built-in sample library\n- AI assistant (OpenAI / Anthropic / Gemini) for code generation\n- Detachable panels, timeline view, band visualizer\n- SuperCollider integration for professional sound quality\n\n### 🚀 First-time Setup\n1. Download and install for your platform\n2. Open the editor and start writing Sonic Pi code\n3. *(Optional)* Open Settings in Agent Chat to configure an AI provider",
+    "assets": [
+      {
+        "name": "pibeat-0.2.1-1.x86_64.rpm",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat-0.2.1-1.x86_64.rpm",
+        "size": 5175700,
+        "downloads": 0,
+        "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.2.1_amd64.AppImage",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.AppImage",
+        "size": 82516472,
+        "downloads": 0,
+        "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.2.1_amd64.deb",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.deb",
+        "size": 5175636,
+        "downloads": 0,
+        "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.2.1_universal.dmg",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_universal.dmg",
+        "size": 8024119,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "pibeat_0.2.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64-setup.exe",
+        "size": 2676977,
+        "downloads": 0,
+        "platform": "Windows"
+      },
+      {
+        "name": "pibeat_0.2.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64_en-US.msi",
+        "size": 3981312,
+        "downloads": 0,
+        "platform": "Windows"
+      },
+      {
+        "name": "pibeat_universal.app.tar.gz",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_universal.app.tar.gz",
+        "size": 7949711,
+        "downloads": 0
+      }
+    ]
+  }
+}

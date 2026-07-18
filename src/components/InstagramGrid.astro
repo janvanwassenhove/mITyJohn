@@ -1,0 +1,53 @@
+---
+// Instagram grid — reads build-time src/data/instagram.json (§7.3). Renders
+// nothing when the feed is empty (N4: no runtime dependency on Instagram).
+import feed from '../data/instagram.json';
+
+type Item = { tag?: string; href: string; image?: string; alt?: string };
+const items = (feed as Item[]).slice(0, 6);
+---
+
+{items.length > 0 && (
+  <section class="ig">
+    <div class="wrap">
+      <div class="head">
+        <h2>Retro-IT, one square at a time</h2>
+        <a href="https://www.instagram.com/mity.john/" target="_blank" rel="noopener">@mity.john →</a>
+      </div>
+      <div class="grid">
+        {items.map((g) => (
+          <a class="tile" data-reveal href={g.href} target="_blank" rel="noopener">
+            {g.image && <img src={g.image} alt={g.alt ?? ''} loading="lazy" decoding="async" />}
+            {g.tag && <span>{g.tag}</span>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .ig { border-top: 1px solid var(--line); background: var(--s0); }
+  .wrap { max-width: var(--container-max); margin: 0 auto; padding: clamp(36px, 5vw, 64px) var(--section-pad-x); }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
+  h2 { font-family: var(--font-display); font-size: var(--text-h2-minor); font-weight: 700; margin: 0; }
+  .head a { font-family: var(--font-mono); font-size: var(--text-small); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--gap-tiles); }
+  .tile {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: var(--radius-cover);
+    border: 1px solid var(--border);
+    background: repeating-linear-gradient(135deg, #1b1815 0 10px, #171410 10px 20px);
+    display: flex;
+    align-items: flex-end;
+    padding: 12px;
+    color: var(--text);
+    overflow: hidden;
+    transition: transform var(--hover-duration) var(--hover-ease), border-color var(--hover-duration) var(--hover-ease);
+  }
+  :root[data-theme='light'] .tile { background: repeating-linear-gradient(135deg, #e9e3d4 0 10px, #efeadd 10px 20px); }
+  .tile:hover { border-color: var(--accent); transform: translateY(-4px) scale(1.02); color: var(--text); }
+  .tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .tile span { position: relative; font-family: var(--font-mono); font-size: var(--text-caption); font-weight: 600; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6); }
+</style>

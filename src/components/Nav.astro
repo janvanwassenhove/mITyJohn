@@ -1,0 +1,85 @@
+---
+// Sticky nav — design: level numbers + theme toggle. Root-anchored hrefs so the
+// one-page sections work from subpages too.
+const items = [
+  { lvl: '01', label: 'Apps', href: '/#apps' },
+  { lvl: '02', label: 'Artist', href: '/#artist' },
+  { lvl: '03', label: 'Books', href: '/#books' },
+  { lvl: '04', label: 'Blog', href: '/blog/' },
+  { lvl: '', label: 'Scrum', href: '/#scrum' },
+  { lvl: '', label: 'About', href: '/about/' },
+];
+---
+
+<nav>
+  <a class="brand" href="/">
+    <span class="prompt">&gt;_</span>
+    <span class="name">mITy<span class="dot">.</span>John</span>
+  </a>
+  <div class="links">
+    {items.map((item) => (
+      <a href={item.href}>
+        {item.lvl && <span class="lvl">{item.lvl}</span>}
+        {item.label}
+      </a>
+    ))}
+    <button id="theme-toggle" type="button" aria-label="Toggle colour theme">◐</button>
+  </div>
+</nav>
+
+<style>
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px var(--section-pad-x);
+    background: var(--navbg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .brand { display: flex; align-items: baseline; gap: 10px; color: var(--text); }
+  .prompt { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+  .name { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
+  .dot { color: var(--accent); }
+  .links { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: var(--text-small); flex-wrap: wrap; }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: var(--radius-btn-sm);
+    color: var(--muted);
+  }
+  .links a:hover { background: var(--line); color: var(--text); }
+  .lvl { font-size: 10px; font-weight: 700; color: var(--accent); }
+  #theme-toggle {
+    margin-left: 6px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: var(--radius-btn-sm);
+    background: transparent;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+  }
+  #theme-toggle:hover { border-color: var(--border3); color: var(--text); }
+</style>
+
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const set = (light: boolean) => {
+    document.documentElement.dataset.theme = light ? 'light' : '';
+    if (!light) delete document.documentElement.dataset.theme;
+    if (btn) btn.textContent = light ? '◑' : '◐';
+    try { localStorage.setItem('mityTheme', light ? 'light' : 'dark'); } catch {}
+  };
+  if (btn) {
+    if (document.documentElement.dataset.theme === 'light') btn.textContent = '◑';
+    btn.addEventListener('click', () => set(document.documentElement.dataset.theme !== 'light'));
+  }
+</script>

@@ -1,0 +1,31 @@
+# §10.3 — quality gate on pull requests. `pull_request` only — NEVER
+# `pull_request_target` (R1). No secrets in scope.
+name: CI
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: node scripts/check-dist.mjs # legacy query links + internal refs
+      - name: Link check (external)
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --no-progress --accept 200,201,204,206,301,302,308,429
+            --exclude 'twitter\.com|instagram\.com|amazon\.'
+            --max-concurrency 4 'dist/**/*.html'
+          fail: false # external flakiness must not block; check-dist covers internal
+      - name: Lighthouse (mobile budgets)
+        run: |
+          npm install -g @lhci/cli@0.14.x
+          lhci autorun || echo "::warning::Lighthouse budgets not met — see run output"

@@ -1,0 +1,111 @@
+---
+// Store card — exactly the designed card: header art with code badge + tag,
+// name, blurb, action row. Actions derived from frontmatter (gap-list G1 note).
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  app: CollectionEntry<'apps'>;
+  releases?: Record<string, { downloadUrl?: string }>;
+}
+const { app } = Astro.props;
+const { name, code, tag, cat, blurb, repo, demoUrl } = app.data;
+
+const gh = (r: string) => `https://github.com/janvanwassenhove/${r}`;
+type Action = { label: string; href: string; primary?: boolean; external?: boolean };
+const actions: Action[] = [];
+if (repo) actions.push({ label: 'Get ↓', href: `${gh(repo)}/releases`, primary: true, external: true });
+if (demoUrl) actions.push({ label: actions.length === 0 ? (cat === 'games' ? 'Play ↗' : 'Web ↗') : cat === 'games' ? 'Play ↗' : 'Web ↗', href: demoUrl, primary: actions.length === 0, external: true });
+if (repo) actions.push({ label: 'Code', href: gh(repo), external: true });
+actions.push({ label: 'Info', href: `/apps/${app.id}/` });
+---
+
+<div class="card" data-reveal data-cat={cat}>
+  <div class="art">
+    <div class="scan"></div>
+    <div class="code">{code}</div>
+    <div class="tag">{tag}</div>
+  </div>
+  <div class="body">
+    <h3>{name}</h3>
+    <p>{blurb}</p>
+    <div class="actions">
+      {actions.map((a) => (
+        <a
+          href={a.href}
+          class={a.primary ? 'primary' : ''}
+          target={a.external ? '_blank' : undefined}
+          rel={a.external ? 'noopener' : undefined}
+        >{a.label}</a>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, var(--s2), var(--s1));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card-lg);
+    overflow: hidden;
+    transition: transform var(--hover-duration) var(--hover-ease), border-color var(--hover-duration) var(--hover-ease), box-shadow var(--hover-duration) var(--hover-ease);
+  }
+  .card:hover { border-color: var(--border3); transform: translateY(-6px); box-shadow: var(--shadow-card-hover); }
+  .art {
+    position: relative;
+    height: 152px;
+    background: repeating-linear-gradient(135deg, #1b1815 0 12px, #171410 12px 24px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  :root[data-theme='light'] .art { background: repeating-linear-gradient(135deg, #e9e3d4 0 12px, #efeadd 12px 24px); }
+  .scan {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 24px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    animation: scan 4.5s linear infinite;
+  }
+  .code {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--accent);
+    border: 1px solid var(--border2);
+    padding: 8px 14px;
+    border-radius: var(--radius-btn-sm);
+    background: var(--navbg);
+  }
+  .tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .body { padding: 18px 18px 20px; display: flex; flex-direction: column; flex: 1; }
+  h3 { font-family: var(--font-display); font-size: var(--text-card-title); font-weight: 600; margin: 0 0 7px; letter-spacing: -0.01em; }
+  p { font-size: var(--text-body); line-height: var(--leading-body); color: var(--muted); margin: 0 0 16px; flex: 1; text-wrap: pretty; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .actions a {
+    padding: 8px 12px;
+    border-radius: var(--radius-btn-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 600;
+    background: var(--chip);
+    color: var(--text);
+    border: 1px solid var(--border2);
+  }
+  .actions a:hover { border-color: var(--border3); }
+  .actions a.primary { background: var(--accent); color: var(--ink-on-accent); border-color: transparent; }
+  .actions a.primary:hover { filter: brightness(1.08); border-color: transparent; }
+</style>

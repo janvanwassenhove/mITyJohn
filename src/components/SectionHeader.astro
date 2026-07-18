@@ -1,0 +1,51 @@
+---
+// Level badge + section label + h2 — the design's recurring section header.
+interface Props {
+  level: string; // '01'
+  section: string; // 'THE STORE'
+  accentVar: string; // e.g. 'var(--level-store)'
+  inkVar: string; // e.g. 'var(--ink-on-accent)'
+  title: string;
+}
+const { level, section, accentVar, inkVar, title } = Astro.props;
+---
+
+<div class="head">
+  <div class="badges">
+    <span class="level" style={`background:${accentVar};color:${inkVar};box-shadow:0 8px 20px -8px ${accentVar};`}>
+      <span class="pip mj-anim" style={`background:${inkVar};`}></span>LEVEL {level}
+    </span>
+    <span class="section">{section}</span>
+  </div>
+  <h2>{title}</h2>
+</div>
+
+<style>
+  .badges { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+  .level {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+  }
+  .pip { width: 8px; height: 8px; border-radius: 2px; animation: mj-pip 1.3s ease-in-out infinite; }
+  .section {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: var(--text-h2);
+    font-weight: 700;
+    letter-spacing: var(--tracking-display);
+    margin: 0;
+  }
+</style>

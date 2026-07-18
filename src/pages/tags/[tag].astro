@@ -1,0 +1,37 @@
+---
+// Tag archive — tags only, per D7. Same designed card grid.
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const tags = new Set(posts.flatMap((p) => p.data.tags));
+  return [...tags].map((tag) => ({
+    params: { tag },
+    props: { posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag } = Astro.params;
+const posts = Astro.props.posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title={`#${tag} — mITy.John`} description={`Posts tagged ${tag} on mITy.John.`}>
+  <section class="archive">
+    <div class="kicker">// tag archive</div>
+    <h1>#{tag}</h1>
+    <p class="note">{posts.length} post{posts.length === 1 ? '' : 's'} · <a href="/blog/">all posts →</a></p>
+    <div class="grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .archive { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); }
+  .kicker { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--accent); letter-spacing: var(--tracking-caps); text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-family: var(--font-display); font-size: var(--text-h2); font-weight: 700; letter-spacing: var(--tracking-display); margin: 0; }
+  .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); margin: 10px 0 36px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--gap-cards); }
+</style>

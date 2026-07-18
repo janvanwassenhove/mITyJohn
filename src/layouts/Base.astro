@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description = 'mITy.John — a one-person lab exploring where software has been and where it is going. Apps, music, books and one gloriously unnecessary programming language.',
+  ogImage = '/wp-content/uploads/2023/12/logo_title.png',
+  ogType = 'website',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="mITy.John" href="/rss.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script is:inline>
+      // Theme init — before paint to avoid flash. Dark is default (design).
+      (() => {
+        try {
+          const t = localStorage.getItem('mityTheme');
+          if (t === 'light') document.documentElement.dataset.theme = 'light';
+        } catch {}
+      })();
+    </script>
+  </head>
+  <body>
+    <Nav />
+    <slot />
+    <Footer />
+    <script>
+      // Scroll reveal — design behaviour, respects prefers-reduced-motion via CSS.
+      const els = document.querySelectorAll('[data-reveal]');
+      if (els.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              const el = e.target as HTMLElement;
+              const sibs = Array.from(el.parentElement?.children ?? []).filter(
+                (c) => c.hasAttribute('data-reveal'),
+              );
+              const d = Math.min(Math.max(0, sibs.indexOf(el)), 7) * 65;
+              el.style.setProperty('--reveal-delay', d + 'ms');
+              el.classList.add('is-revealed');
+              io.unobserve(el);
+            }
+          },
+          { threshold: 0.1, rootMargin: '0px 0px -6% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-revealed'));
+      }
+    </script>
+  </body>
+</html>

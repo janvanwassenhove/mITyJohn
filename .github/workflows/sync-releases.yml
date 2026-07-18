@@ -1,0 +1,28 @@
+# §10.2 / §9 — daily GitHub Releases sync (+ repository_dispatch from app repos).
+# GITHUB_TOKEN is auto-provisioned and job-scoped; no stored secrets (§11.1).
+name: Sync Releases
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+  repository_dispatch:
+    types: [release]
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22, cache: npm }
+      - run: node scripts/fetch-releases.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit if changed
+        run: |
+          git config user.name  "mITy.Bot"
+          git config user.email "bot@mityjohn.com"
+          git add src/data/releases.json
+          git diff --staged --quiet || git commit -m "chore: sync releases"
+          git push

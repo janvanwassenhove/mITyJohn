@@ -1,0 +1,29 @@
+---
+// Static page layout (about, artist) — prose on the design's type system.
+import Base from './Base.astro';
+
+interface Props { title: string; description?: string }
+const { title, description } = Astro.props;
+---
+
+<Base title={`${title} — mITy.John`} description={description}>
+  <article>
+    <h1>{title}</h1>
+    <div class="prose">
+      <slot />
+    </div>
+  </article>
+</Base>
+
+<style>
+  article { max-width: 820px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) var(--section-pad-x) var(--section-pad-y); }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(30px, 4.6vw, 52px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: var(--tracking-display);
+    margin: 0 0 26px;
+    text-wrap: balance;
+  }
+</style>

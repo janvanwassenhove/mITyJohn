@@ -1,0 +1,17 @@
+---
+// Static pages (about, artist) from the pages collection — §5.1 /{slug}/.
+import { getCollection, render } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages');
+  return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
+}
+
+const { page } = Astro.props;
+const { Content } = await render(page);
+---
+
+<Page title={page.data.title} description={page.data.description}>
+  <Content />
+</Page>

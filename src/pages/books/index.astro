@@ -1,0 +1,26 @@
+---
+// Books index — the designed bookstore section as a standalone page (gap-list G8:
+// WP pages 899/901/902 merge here; series strings group the shelf).
+import Base from '../../layouts/Base.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import BookCard from '../../components/BookCard.astro';
+import { getCollection } from 'astro:content';
+
+const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Books — mITy.John" description="Reimagined classics and picture books, in paperback and Kindle on Amazon.">
+  <section class="bookstore">
+    <SectionHeader level="03" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
+    <p class="note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
+    <div class="grid">
+      {books.map((b) => <BookCard book={b} />)}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bookstore { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); }
+  .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); max-width: 460px; margin: 10px 0 36px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--gap-books); }
+</style>

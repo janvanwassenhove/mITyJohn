@@ -1,0 +1,29 @@
+---
+// 404 — arcade-flavoured, built from existing tokens (design/README.md noted the
+// arcade language as the obvious fit; kept minimal).
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="404 — GAME OVER — mITy.John">
+  <section>
+    <div class="label">LVL ? · UNKNOWN SECTOR</div>
+    <h1>GAME OVER</h1>
+    <p class="sub">404 — this URL fell down a pit. The page moved, despawned, or never existed.</p>
+    <div class="ctas">
+      <a class="primary" href="/">Insert coin → home</a>
+      <a href="/blog/">Field notes</a>
+      <a href="/#apps">The store</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  section { max-width: var(--container-max); margin: 0 auto; padding: clamp(80px, 14vw, 160px) var(--section-pad-x); text-align: center; }
+  .label { font-family: var(--font-mono); font-size: var(--text-caption-xs); letter-spacing: 0.24em; color: var(--muted2); margin-bottom: 24px; }
+  h1 { font-family: var(--font-display); font-size: var(--text-hero); font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin: 0 0 18px; color: var(--danger); }
+  .sub { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted); margin: 0 0 36px; }
+  .ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .ctas a { padding: 13px 22px; border: 1px solid var(--border2); border-radius: 10px; font-family: var(--font-mono); font-size: var(--text-body); font-weight: 600; color: var(--text); }
+  .ctas a:hover { border-color: var(--border3); }
+  .ctas a.primary { background: var(--accent); color: var(--ink-on-accent); border-color: transparent; }
+</style>

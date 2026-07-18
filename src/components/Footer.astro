@@ -1,0 +1,129 @@
+---
+// About / footer — design: statement + 3 link columns + legal row.
+const cols = [
+  {
+    title: 'Explore',
+    links: [
+      { label: 'Apps store', href: '/#apps' },
+      { label: 'Bookstore', href: '/books/' },
+      { label: 'Blog', href: '/blog/' },
+      { label: 'Scrum Programming', href: '/apps/scrum-programming/' },
+    ],
+  },
+  {
+    title: 'Music',
+    links: [
+      { label: 'The Artist', href: '/artist/' },
+      { label: 'mITyStudio', href: '/apps/mitystudio/' },
+      { label: 'SoundCloud', href: 'https://soundcloud.com/mityjohn' },
+      { label: 'Spotify', href: 'https://open.spotify.com/artist/4lRudVkciTQ8j2bEySXqPz' },
+    ],
+  },
+  {
+    title: 'Connect',
+    links: [
+      { label: 'Instagram', href: 'https://www.instagram.com/mity.john/' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jan-van-wassenhove-9b49893/' },
+      { label: 'Twitter', href: 'https://twitter.com/mity_john' },
+      { label: 'RSS', href: '/rss.xml' },
+    ],
+  },
+];
+const year = new Date().getFullYear();
+---
+
+<footer id="about">
+  <div class="grid">
+    <div class="statement">
+      <div class="kicker">// about mITy.John</div>
+      <p>
+        Jan Van Wassenhove — architect, tinkerer, and self-appointed
+        <span class="hl">IT archeologist</span>. He digs up how we used to build software,
+        then uses it as an excuse to build far too many things.
+        <span class="aside">And now you know.</span>
+      </p>
+      <a class="more" href="/about/">Read the full story →</a>
+    </div>
+    {cols.map((col) => (
+      <div>
+        <div class="col-title">{col.title}</div>
+        <div class="col-links">
+          {col.links.map((l) => (
+            <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel={l.href.startsWith('http') ? 'noopener' : undefined}>{l.label}</a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+  <div class="legal">
+    <span>© {year} miTy John — the IT archeologist</span>
+    <span>Enforce innovation by learning from our development history.</span>
+  </div>
+</footer>
+
+<style>
+  footer { border-top: 1px solid var(--line); background: var(--bg2); }
+  .grid {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: clamp(44px, 6vw, 80px) var(--section-pad-x) 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+  }
+  .statement { grid-column: 1 / -1; max-width: 640px; }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--accent);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .statement p {
+    font-family: var(--font-display);
+    font-size: var(--text-statement);
+    font-weight: 500;
+    line-height: 1.35;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-wrap: pretty;
+    color: var(--text);
+  }
+  .hl { color: var(--accent); }
+  .aside { color: var(--muted2); }
+  .more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    padding: 11px 18px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-btn);
+  }
+  .more:hover { border-color: var(--border3); }
+  .col-title {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--muted2);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .col-links { display: flex; flex-direction: column; gap: 10px; }
+  .col-links a { font-size: var(--text-body); color: var(--muted); }
+  .col-links a:hover { color: var(--text); }
+  .legal {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 20px var(--section-pad-x) 44px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .legal span { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--faint); }
+</style>

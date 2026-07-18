@@ -1,0 +1,62 @@
+---
+// Click-to-load Spotify artist embed — MANDATORY per §8.1. The iframe (and its
+// third-party cookies) load only after the visitor acts; the site stays cookieless
+// (D5, no consent banner). Do not "optimize" this into an eager iframe.
+const ARTIST_ID = '4lRudVkciTQ8j2bEySXqPz';
+---
+
+<div class="spotify" id="spotify-embed" data-artist={ARTIST_ID}>
+  <button type="button" class="poster" aria-label="Load the Spotify player (loads Spotify content and cookies)">
+    <span class="glyph mj-anim">▶</span>
+    <span class="line1">Listen on Spotify</span>
+    <span class="line2">Tap to load the player — nothing loads until you do.</span>
+  </button>
+</div>
+
+<style>
+  .spotify { border-radius: var(--radius-embed); overflow: hidden; width: 100%; min-height: 352px; display: flex; }
+  .poster {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-embed);
+    background:
+      radial-gradient(400px 200px at 50% 30%, rgba(111, 179, 201, 0.12), transparent 70%),
+      var(--s1);
+    color: var(--text);
+  }
+  .poster:hover { border-color: var(--accent-2); }
+  .glyph {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent-2);
+    color: var(--ink-on-accent-2);
+    font-size: 22px;
+    animation: floaty 3s ease-in-out infinite;
+  }
+  .line1 { font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+  .line2 { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
+  iframe { border-radius: var(--radius-embed); width: 100%; height: 352px; border: 0; }
+</style>
+
+<script>
+  const box = document.getElementById('spotify-embed');
+  box?.querySelector('.poster')?.addEventListener('click', () => {
+    const id = box.dataset.artist;
+    const f = document.createElement('iframe');
+    f.src = `https://open.spotify.com/embed/artist/${id}?utm_source=generator&theme=0`;
+    f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    f.loading = 'lazy';
+    f.title = 'Spotify artist player';
+    box.replaceChildren(f);
+  });
+</script>
