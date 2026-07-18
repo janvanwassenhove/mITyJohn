@@ -19,10 +19,10 @@ Companion spec: MIGRATION_BRIEF.md §7 (Instagram), §5.3 (redirects), §11.5 (r
 ## A. Any time before cutover
 
 ### A1. Giscus (comments)
-1. Repo → Settings → General → Features → enable **Discussions**.
-2. Install <https://github.com/apps/giscus> on the repo.
-3. On <https://giscus.app>, pick repo + category (Announcements), copy `data-repo-id`
-   and `data-category-id` into `src/components/Giscus.astro`. Commit.
+Discussions are enabled and the repo/category IDs are already wired into
+`src/components/Giscus.astro`. Two clicks remain:
+1. Install <https://github.com/apps/giscus> on the repo.
+2. Flip `ENABLED` to `true` in `src/components/Giscus.astro`. Commit.
 
 ### A2. Instagram Worker (D10 — token broker)
 1. developers.facebook.com → app → add **Instagram** product; note App ID + Secret.

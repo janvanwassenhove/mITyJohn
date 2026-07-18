@@ -1,13 +1,14 @@
 ---
 // Giscus comments (D4) — blog posts only, lazy, below the fold, never render-blocking.
-// SETUP (Jan): enable GitHub Discussions on this repo, install the giscus app
-// (https://github.com/apps/giscus), then fill REPO_ID and CATEGORY_ID from
-// https://giscus.app. The component renders nothing until both are set.
+// Discussions are enabled and the IDs below are real (fetched via the GitHub API).
+// LAST STEP (Jan): install https://github.com/apps/giscus on the repo, then flip
+// ENABLED to true — without the app installed the widget would show an error box.
+const ENABLED = false; // TODO(Jan): flip after installing the giscus app
 const REPO = 'janvanwassenhove/mITyJohn';
-const REPO_ID = ''; // TODO(Jan): from giscus.app
-const CATEGORY = 'Announcements';
-const CATEGORY_ID = ''; // TODO(Jan): from giscus.app
-const configured = REPO_ID !== '' && CATEGORY_ID !== '';
+const REPO_ID = 'R_kgDOTcsZDQ';
+const CATEGORY = 'General';
+const CATEGORY_ID = 'DIC_kwDOTcsZDc4DBe4b';
+const configured = ENABLED && REPO_ID !== '' && CATEGORY_ID !== '';
 ---
 
 {configured && (
