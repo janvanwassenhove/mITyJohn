@@ -2,7 +2,7 @@
 title: "Ghosts in the Machine: I built a haunted IT sim by inviting a ghost in"
 date: 2026-07-18T16:19:48
 tags: ["development"]
-cover: "/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_12_01.png"
+cover: "/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_12_01-1024x1024.webp"
 cardTag: "Development"
 wpId: 941
 wpSlug: "ghosts-in-the-machine-i-built-a-haunted-it-sim-by-inviting-a-ghost-in"
@@ -10,17 +10,17 @@ wpSlug: "ghosts-in-the-machine-i-built-a-haunted-it-sim-by-inviting-a-ghost-in"
 
 I spent a chunk of my evenings building a game about getting ghosts out of machines. I did it by putting one in.
 
-![](/wp-content/uploads/2026/07/logo_title.png)
+![](/wp-content/uploads/2026/07/logo_title-768x256.webp)
 
 The game is called **Ghosts in the Machine**, and it is a browser-based management sim in which you run _NetherNet Solutions_, a paranormal IT support company. You build rooms in a haunted office building, hire staff of frankly questionable competence, and work an endless queue of support tickets.  
   
 Real tickets, from the world we all actually live in, only slightly more honest: “Keyboard speaks only in umlauts.” “Printer produced a contract in blood-red toner.” You triage them in the Ticket Triage Desk, escalate the bad ones to the Debugging Chapel, and when the printer is beyond reason you send it to the Printer Exorcism Booth, which is a sentence I got to write as a feature and not as an incident report, for once.
 
-![](/wp-content/uploads/2026/07/02-campaign-1024x576.png)
+![](/wp-content/uploads/2026/07/02-campaign-1024x576.webp)
 
 Ghosts in the Machine gameplay: an office floor plan with Triage, Patch and Debug rooms, resource counters across the top, and a scrolling incident log. _A quiet Tuesday at NetherNet Solutions: three rooms, one dangerously unstaffed Patch Containment Unit, and a client who hung up mid-wail._  
 
-![](/wp-content/uploads/2026/07/03-gameplay-1024x576.png)
+![](/wp-content/uploads/2026/07/03-gameplay-1024x576.webp)
 
 Under the hood it is deeply unglamorous in the way good things usually are: TypeScript, Vite, Phaser, fully static, saves in LocalStorage, no backend to page you at 3 AM. Twenty-two rooms, seventeen staff roles — the Bug Whisperer, the Scrum Necromancer, the Groundskeeper who tends the Oak of Undefined Behaviour — and twenty-four incident types that queue, escalate and mutate, because a single ghost is a bug and a population of ghosts is a distributed system. There is a coffee plantation. There is an audit by the Bureau of Digital Sanctity. My author bio for the project reads “Chief Exorcist of Undefined Behaviour and the only person who reads the logs after 2 AM,” and I stand by every word of it.
 
@@ -28,7 +28,7 @@ None of that is the interesting part. This is the interesting part: I have been 
 
 ## The old ghost in the machine
 
-![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_12_08-1024x576.png)
+![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_12_08-1024x576.webp)
 
 We have always had ghosts in our machines. You know them. The flaky test that passes on your laptop and fails in CI and passes again if you rerun it while holding your breath. The `@Ignore` someone added in 2019 with a comment that just says `// TODO: figure out why`. The config value that must be exactly `true` and not `"true"`, discovered at 02:14 on a Sunday. The undefined behaviour that isn’t a bug so much as a haunting — reproducible only under the full moon of production load.
 
@@ -62,7 +62,7 @@ That is the genuinely-many-steps-further part. Not a feature on a changelog. A c
 
 ## The joke I couldn’t resist
 
-![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_11_56-1-1024x576.png)
+![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_11_56-1-1024x576.webp)
 
 I did notice, somewhere around the Printer Exorcism Booth, that I was building a game about expelling malevolent, inexplicable presences from computers using an extremely capable, mostly-benevolent presence that lives in a computer. The Debugging Chapel wrote itself, in a manner of speaking.  
   
@@ -74,7 +74,7 @@ I’m keeping the title anyway. It was true before it was ironic.
 
 Ghosts in the Machine title screen. 
 
-![](/wp-content/uploads/2026/07/01-main-menu-1024x576.png)
+![](/wp-content/uploads/2026/07/01-main-menu-1024x576.webp)
 
 _The title screen. It is the calmest this software will ever be._
 

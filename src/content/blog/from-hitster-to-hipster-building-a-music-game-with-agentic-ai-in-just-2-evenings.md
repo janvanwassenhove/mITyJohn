@@ -3,7 +3,7 @@ title: "From Hitster to Hipster: Building a Music Game with Agentic AI in Just 2
 date: 2025-07-18T21:43:21
 updated: 2025-07-19T12:46:16
 tags: ["development"]
-cover: "/wp-content/uploads/2025/07/ChatGPT-Image-18-jul-2025-23_42_39.png"
+cover: "/wp-content/uploads/2025/07/ChatGPT-Image-18-jul-2025-23_42_39-768x768.webp"
 cardTag: "Development"
 wpId: 520
 wpSlug: "from-hitster-to-hipster-building-a-music-game-with-agentic-ai-in-just-2-evenings"
@@ -17,7 +17,7 @@ As a Belgian (and Flemish), I just didn’t know many of them—and neither did 
 
 Welcome to **Hipster** – a fast-paced, web-based version of Hitster, lovingly crafted with **TypeScript**, **Vue.js**, and some serious AI help.
 
-![](/wp-content/uploads/2025/07/image-5.png)
+![](/wp-content/uploads/2025/07/image-5.webp)
 
 **Play it now**: [hipster.mityjohn.com](http://hipster.mityjohn.com/)  
 **Fork it here**: [GitHub: janvanwassenhove/Hipster](https://github.com/janvanwassenhove/Hipster)
@@ -32,7 +32,7 @@ To streamline and autocomplete repetitive coding bits, I used **GitHub Copilot**
 
 Total dev time? Just **6 hours**, split across **two evenings**.
 
-![](/wp-content/uploads/2025/07/image-2-606x1024.png)
+![](/wp-content/uploads/2025/07/image-2-606x1024.webp)
 
 ## How the Game Works
 
@@ -49,7 +49,7 @@ While the AI side of this project felt like smooth sailing—rapid prototyping, 
 
 **It was getting Spotify playback to work reliably on mobile.**
 
-![](/wp-content/uploads/2025/07/image-3.png)
+![](/wp-content/uploads/2025/07/image-3.webp)
 
 That’s where years of **developer grit** and **architectural experience** kicked in.
 

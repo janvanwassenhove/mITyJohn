@@ -7,8 +7,7 @@
         "http://localhost/blog/ghosts-in-the-machine-i-built-a-haunted-it-sim-by-inviting-a-ghost-in/index.html",
         "http://localhost/apps/mitystudio/index.html"
       ],
-      "numberOfRuns": 1,
-      "settings": { "preset": "mobile" }
+      "numberOfRuns": 1
     },
     "assert": {
       "assertions": {

@@ -3,7 +3,7 @@ title: "Are your applications being watched? "
 date: 2022-12-31T21:45:12
 updated: 2023-12-20T22:33:36
 tags: ["development", "monitoring", "observability", "programming"]
-cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.40.10-Create-a-retro-style-image-for-a-blog-post-about-improving-software-quality-through-monitoring.-The-image-should-have-a-vintage-aesthetic-with-a-color-1.png"
+cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.40.10-Create-a-retro-style-image-for-a-blog-post-about-improving-software-quality-through-monitoring.-The-image-should-have-a-vintage-aesthetic-with-a-color-1-768x768.webp"
 cardTag: "Development · Monitoring"
 wpId: 96
 wpSlug: "the-race-for-qa"
@@ -17,7 +17,7 @@ It is also an essential part of the DevOps lifecycle, as it helps organizations 
 
 In the DevOps approach, monitoring is closely linked to the other key phases of the lifecycle, such as development, testing, and deployment. By monitoring applications throughout the development process, teams can identify and fix issues early on, reducing the risk of downtime or other problems in production.  
 
-![](/wp-content/uploads/2023/12/image-3.png)
+![](/wp-content/uploads/2023/12/image-3.webp)
 
 There are many different tools and techniques that can be used for monitoring in a DevOps environment, including real-time performance monitoring, log analysis, and alerting systems. By leveraging these tools and integrating them into their workflow, teams can ensure that their applications are always running smoothly and meeting the needs of their users. 
 
@@ -55,7 +55,7 @@ Some common tools and techniques used in software monitoring include log analysi
 
 Monitoring software ensures high performance for your enterprise software. Constant monitoring of your system allows you to manage the performance and availability of software applications. This leads to quick response times, improved computing processes and satisfied customers.  
 
-![](/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.33.33-A-cartoon-image-of-an-individual-sitting-at-a-workstation-with-two-monitors-each-displaying-different-types-of-graphs-and-data-analytics.-The-person-.png)
+![](/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.33.33-A-cartoon-image-of-an-individual-sitting-at-a-workstation-with-two-monitors-each-displaying-different-types-of-graphs-and-data-analytics.-The-person--768x768.webp)
 
 Especially digital end user experience (while often neglected in software development) is one of the main goals when dealing with real user interactions and business transactions. Monitoring software saves the effort of interpreting such dependent events on your own and directs you to the component that might cause performance issues or problems for your customers. Fixing, accelerating, and optimizing your servers and software applications has become a lot easier, but it makes it hard to see the wood for the trees. 
 
@@ -96,11 +96,11 @@ This type of monitoring is typically performed by creating a script that mimics 
 
 One advantage of synthetic monitoring is that it can be performed on a regular basis, even when there are no real users accessing the website or application. This allows businesses to identify performance issues proactively and take action before they impact end users. 
 
-![](/wp-content/uploads/2023/12/image.jpeg)
+![](/wp-content/uploads/2023/12/image.webp)
 
 However, synthetic monitoring does have some limitations. Because it is performed by a script, it cannot capture the full range of user experiences and may not accurately reflect the performance of the website or application for real users. As such, it is often used in conjunction with other monitoring techniques, such as **real user monitoring**. 
 
-![](/wp-content/uploads/2023/12/image-5-1024x597.png)
+![](/wp-content/uploads/2023/12/image-5-1024x597.webp)
 
 Synthetic monitoring is often compared with this particular application performance technique known as real user monitoring (**RUM**). As the name suggests, RUM tracks actions taken by actual users instead of emulating them. Organizations often implement RUM by injecting JavaScript code into a webpage and then collecting performance data in the background as actual users interact with that page. 
 
@@ -108,7 +108,7 @@ So, what is synthetic monitoring typically used for, and when might a business d
 
 Synthetic monitoring is often helpful to **identify short-term performance issues** that may impact the user experience while an application is still under development. Early detection helps businesses nip potential performance issues in the bud. This approach is handy for regression testing and production site monitoring, for example. Real user monitoring, by contrast, can help a business understand **long-term trends in an application’s performance** after it has been deployed. 
 
-![](/wp-content/uploads/2023/12/image-6-1024x597.png)
+![](/wp-content/uploads/2023/12/image-6-1024x597.webp)
 
 There are many different tools that businesses can use for synthetic monitoring. Some popular tools include: 
 
@@ -158,7 +158,7 @@ This type of monitoring is important because the performance of a website or app
 
 These monitoring tools typically provide a detailed view of the performance of individual servers, including metrics such as CPU usage, memory usage, and network traffic. Some tools also include features such as alerting and reporting, which can help businesses proactively identify and address performance issues. 
 
-![](/wp-content/uploads/2023/12/image-1-1024x566.jpeg)
+![](/wp-content/uploads/2023/12/image-1-1024x566.webp)
 
 Popular server monitoring tools include Datadog, New Relic, and SolarWinds. These as mentioned before, are often part of a complete monitoring platform. 
 
@@ -170,7 +170,7 @@ This monitoring type is important because the performance of a website or applic
 
 When looking at network monitoring tools,  they’ll logically will provide a detailed view of the performance of the network, while including metrics such as network latency, packet loss, and network availability. Some of these tools also include features such as alerting and reporting, which can help businesses proactively identify and address network performance issues. 
 
-![](/wp-content/uploads/2023/12/image-2-1024x612.png)
+![](/wp-content/uploads/2023/12/image-2-1024x612.webp)
 
 Popular network monitoring tools include Datadog, New Relic, and SolarWinds.    
  
@@ -181,7 +181,7 @@ Popular network monitoring tools include Datadog, New Relic, and SolarWinds.  
 
 Event monitoring is often used to track events that are important to the business, such as user login attempts, database queries, or the submission of a form. By tracking these events, businesses can gain a better understanding of how their website or application is being used, and identify any performance issues or problems that may be occurring.  
 
-![](/wp-content/uploads/2023/12/image-4-1024x601.png)
+![](/wp-content/uploads/2023/12/image-4-1024x601.webp)
 
 Event monitoring tools will provide detailed **metrics on the frequency and performance of specific events**, and may include features such as alerting and reporting to help your businesses proactively identify and address performance issues. Some tools also include diagnostic capabilities, such as the ability to capture detailed traces of event requests and responses, which can help developers identify the root cause of performance problems. 
 
@@ -201,7 +201,7 @@ To set up real user monitoring (RUM), a business will need to follow these steps
 
 4.  Monitor performance: Once set up and configured, the team can start monitoring the performance of the website or application from the perspective of end users. This will typically involve monitoring metrics such as response time, error rate, and throughput, and taking action when performance issues are detected. 
 
-![](/wp-content/uploads/2023/12/image-2-1024x466.jpeg)
+![](/wp-content/uploads/2023/12/image-2-1024x466.webp)
 
 There are many different tools that businesses can use for real user monitoring (RUM). Some popular tools as for the previous monitoring solutions can be: New Relic, AppDynamics, Dynatrace, Datadog & SolarWinds. Keep in mind, these are mostly cloud based tools, having a private cloud setup will increase complexity and cost setting up these kind of monitorings. 
 

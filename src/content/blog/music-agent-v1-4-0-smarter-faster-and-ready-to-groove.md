@@ -3,7 +3,7 @@ title: "Music Agent v1.4.0 – Smarter, Faster, and Ready to Groove!"
 date: 2025-03-02T21:07:44
 updated: 2025-03-03T15:07:35
 tags: ["development", "generative-ai", "programming", "python", "vuejs", "ai"]
-cover: "/wp-content/uploads/2025/03/DALL·E-2025-03-02-22.02.19-A-vintage-style-illustration-of-people-enjoying-listening-to-and-creating-music.-The-scene-features-a-warm-nostalgic-atmosphere-with-musicians-playin.webp"
+cover: "/wp-content/uploads/2025/03/DALL·E-2025-03-02-22.02.19-A-vintage-style-illustration-of-people-enjoying-listening-to-and-creating-music.-The-scene-features-a-warm-nostalgic-atmosphere-with-musicians-playin-768x768.webp"
 cardTag: "Development · GenAI"
 wpId: 441
 wpSlug: "music-agent-v1-4-0-smarter-faster-and-ready-to-groove"
@@ -20,7 +20,7 @@ This release isn’t just an update—it’s a full-blown remix. We’ve revampe
 -   We’ve upgraded to Vue.js 3, making the interface faster, sleeker, and ready for the future.
 -   A shiny new navigation bar keeps everything within easy reach.
 
-![](/wp-content/uploads/2025/03/ma_webapp.png)
+![](/wp-content/uploads/2025/03/ma_webapp-768x638.webp)
 
 ### Smarter Browsing & Song Management
 
@@ -28,7 +28,7 @@ This release isn’t just an update—it’s a full-blown remix. We’ve revampe
 -   **Playback Upgrades** – Listen to samples directly in the interface without hassle.
 -   **Search & Pagination** – No more endless scrolling—find what you need instantly.
 
-![](/wp-content/uploads/2025/03/songlibrary-1024x912.png)
+![](/wp-content/uploads/2025/03/songlibrary-1024x912.webp)
 
 ### AI Gets a Memory
 
@@ -40,13 +40,13 @@ This release isn’t just an update—it’s a full-blown remix. We’ve revampe
 
 -   Adjust styling and Sonic Pi settings straight from the web app.
 
-![](/wp-content/uploads/2025/03/settings_sonic_pi-1024x594.png)
+![](/wp-content/uploads/2025/03/settings_sonic_pi-1024x594.webp)
 
-![](/wp-content/uploads/2025/03/settings_general-1024x538.png)
+![](/wp-content/uploads/2025/03/settings_general-1024x538.webp)
 
 -   A **spectrum analyzer** now gives a visual touch to your sample playback.
 
-![](/wp-content/uploads/2025/03/samples_playback-1024x1013.png)
+![](/wp-content/uploads/2025/03/samples_playback-1024x1013.webp)
 
 ### Smarter Metadata & Automation
 

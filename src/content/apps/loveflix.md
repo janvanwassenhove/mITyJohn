@@ -26,7 +26,7 @@ LoveFlix is a playful AI experiment that asks a simple question:
 
 What if every movie… was secretly a love story?
 
-![](/wp-content/uploads/2026/02/image-7.png)
+![](/wp-content/uploads/2026/02/image-7-768x715.webp)
 
 Whether it’s an action blockbuster, a sci-fi thriller, or something that absolutely should not be romanticized, LoveFlix reframes it through a romantic lens. Explosions become emotional turning points. Villains become misunderstood. Chaos becomes longing.
 
@@ -36,7 +36,7 @@ But beneath the humor sits a serious idea.
 
 LoveFlix explores how AI reshapes narrative framing. The plot may remain the same, but tone and emphasis change everything. It’s a small sandbox to experiment with how context, language, and presentation influence interpretation.
 
-![](/wp-content/uploads/2026/02/image-8.png)
+![](/wp-content/uploads/2026/02/image-8-768x473.webp)
 
 The project evolved into a full desktop application with AI-powered movie transformations, real-time discovery features, and a cinematic interface inspired by modern streaming platforms.
 

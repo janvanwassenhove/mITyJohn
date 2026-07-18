@@ -4,7 +4,7 @@ wpId: 2
 wpSlug: "sample-page"
 ---
 
-![](/wp-content/uploads/2024/10/54059031003_c72efa2b53_k-683x1024.jpg)
+![](/wp-content/uploads/2024/10/54059031003_c72efa2b53_k-683x1024.webp)
 
 **Jan Van Wassenhove** aka **mITy.John** – #Sofware #development #archeologist  
 _Knowing our past, tells us our future!_  
@@ -12,13 +12,13 @@ Enforce **innovation** by learning from our history!
 
 Today I serve as the Technical Director @ Sopra Steria company for the Business Line of Digital Solutions (DiSo), deeply involved in software craftsmanship, architectural thinking, and technology leadership.
 
-![](/wp-content/uploads/2023/12/image-10-1024x585.png)
+![](/wp-content/uploads/2023/12/image-10-1024x585.webp)
 
 My journey in tech began when I transitioned from being a naval officer — and quickly realized I wanted to build things, not navigate ships. I dove into software as a **Java developer in 2007**, and ever since have been swimming in various waters of the digital world: from web systems to AI experiments, agile practices to creative side hustles.
 
 Over time, another passion emerged: **history — not just of people, but of technology itself**. That curiosity grew into this site, where I share thoughts on software development, the stories behind technology, and the occasionally unexpected side interests that pop up along the way.
 
-![](/wp-content/uploads/2023/12/image-12-1024x585.png)
+![](/wp-content/uploads/2023/12/image-12-1024x585.webp)
 
 As an _IT-thinker with a creative streak_, you’ll also find the occasional nod to **music, design, and home crafting** here — think of them as playful Easter eggs that add flavour without derailing the core mission of the blog.
 
@@ -54,7 +54,7 @@ Conference talks
 
 **The Future Of the SDLC** (2026 – Munich Germany) conference- **Rethinking the SDLC in an AI-first world**
 
-![](/wp-content/uploads/2026/05/image.png)
+![](/wp-content/uploads/2026/05/image.webp)
 
 **Devoxx FR 2026 – Conference** – (Paris – France)  
 [https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove](https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove)
@@ -92,12 +92,12 @@ _Corporate & community talks @ Sopra Steria – Tobania
 Seminar speaker @PXL  
 …_
 
-![](/wp-content/uploads/2025/07/image-6.png)
+![](/wp-content/uploads/2025/07/image-6-768x290.webp)
 
-![](/wp-content/uploads/2025/07/image-7-1024x256.png)
+![](/wp-content/uploads/2025/07/image-7-1024x256.webp)
 
-![](/wp-content/uploads/2025/07/image-8.png)
+![](/wp-content/uploads/2025/07/image-8-768x400.webp)
 
-![](/wp-content/uploads/2025/07/image-9.png)
+![](/wp-content/uploads/2025/07/image-9.webp)
 
-![](/wp-content/uploads/2025/07/image-10.png)
+![](/wp-content/uploads/2025/07/image-10-768x362.webp)

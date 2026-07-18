@@ -3,7 +3,7 @@ title: "Rise of the GPT music agent"
 date: 2023-12-29T12:00:00
 updated: 2025-01-29T21:50:12
 tags: ["ai", "development", "generative-ai", "music", "python"]
-cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-28-16.33.40-Create-a-retro-style-image-for-a-blog-post-about-a-musicians-journey.-The-image-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green-1.png"
+cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-28-16.33.40-Create-a-retro-style-image-for-a-blog-post-about-a-musicians-journey.-The-image-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green-1-768x768.webp"
 cardTag: "AI · Development"
 wpId: 207
 wpSlug: "rise-of-the-gpt-music-agent"
@@ -21,7 +21,7 @@ An agent that could compose, write, arrange, remaster and even publish my songs.
 
 What if could create an agent that would help me out on all the aspects in song creation that I kinda lack today?
 
-![](/wp-content/uploads/2023/12/img-1024x585.png)
+![](/wp-content/uploads/2023/12/img-1024x585.webp)
 
 One other thing I’m quirte good at… coding (preferrably by default Java of course, but hey, in this case Python’s fine as well for getting the job done).
 
@@ -33,7 +33,7 @@ If I want to create songs and music, I might as well do it in a way I know best.
 
 Sonic Pi is an innovative coding-based music creation and performance tool. It allows users to write code in a simple programming language, which is then converted into music. This software is designed to be accessible for both beginners and experienced programmers, making it a unique bridge between the worlds of coding and music.
 
-![](/wp-content/uploads/2023/12/image-13-1024x730.png)
+![](/wp-content/uploads/2023/12/image-13-1024x730.webp)
 
 One of the key features of Sonic Pi is its use of the Ruby programming language, known for its readability and simplicity. Users write scripts that control synthesizers, samples, and effects, effectively composing music through code. This approach to music creation opens up a wide range of possibilities, allowing for precise control over every aspect of the sound, from melody and harmony to rhythm and timbre.
 
@@ -47,31 +47,31 @@ The complexity process of composing a song
 
 Okay, we can start coding music… but, should’nt we know how to compose a song? Let put the pieces together!
 
-#### The Birth of a Melody – The Songwriter/Composer’s Tale
+## The Birth of a Melody – The Songwriter/Composer’s Tale
 
 Imagine a spark of inspiration, a melody that hums in the mind of the Songwriter or Composer. This is where our musical journey begins. The Songwriter sits under the night sky, guitar in hand, translating feelings and thoughts into a tapestry of lyrics and tunes. It’s a magical process, where a simple idea blossoms into a song with the power to touch hearts.
 
-#### The Sculptor of Sounds – The Arranger’s Craft
+## The Sculptor of Sounds – The Arranger’s Craft
 
 As the melody takes shape, the Arranger steps in. Picture them as a sculptor, molding the raw melody into a refined structure. They decide the flow of verses and chorus, breathing life into the composition with an array of instruments. Each decision, from a gentle piano accompaniment to the swell of strings, is made to elevate the song’s emotional impact.
 
-#### The Voices and Virtuosos – Musicians/Artists in Action
+## The Voices and Virtuosos – Musicians/Artists in Action
 
 Now enters the ensemble of Musicians and Artists, the performers who infuse the composition with color and energy. Each artist, whether a soulful vocalist or a dynamic drummer, adds a unique layer to the song. Their performances are not just about technical skill but about pouring their soul into every note.
 
-#### Capturing the Magic – The Recording Engineer’s Realm
+## Capturing the Magic – The Recording Engineer’s Realm
 
 In the studio, amidst a jungle of cables and microphones, the Recording Engineer works their magic. Their domain is one of dials and screens, where they capture the essence of the performance. Every adjustment, from microphone placement to sound levels, is crucial in ensuring that the soul of the music is preserved in its recorded form.
 
-#### The Visionary – The Producer’s Perspective
+## The Visionary – The Producer’s Perspective
 
 Amidst the bustle of the studio, the Producer oversees the vision. They are the guiding star, aligning the creative talents with the technical aspects. The Producer tweaks, suggests, and sometimes challenges, always with the aim of bringing out the best in the song and the artists.
 
-#### The Alchemist of Sound – The Mix Engineer’s Mix
+## The Alchemist of Sound – The Mix Engineer’s Mix
 
 After the recording, the Mix Engineer takes over, an alchemist turning raw audio into gold. In their studio, surrounded by sliders and knobs, they blend the tracks. Their touch can turn a good song into a masterpiece, ensuring every element from the bass line to the backing vocals is heard in harmony.
 
-#### The Final Brushstroke – The Mastering Engineer’s Finishing Touch
+## The Final Brushstroke – The Mastering Engineer’s Finishing Touch
 
 As the song nears completion, the Mastering Engineer adds the final brushstrokes. Their studio is a place of precision, where even the slightest adjustment can make a world of difference. They ensure the song shines, no matter where it’s played, from giant speakers at a concert to the earbuds of a smartphone.
 
@@ -104,7 +104,7 @@ All roles take there part in different phases of composing a song.
 
 And when we put everything together, we produce following composer chain:
 
-![](/wp-content/uploads/2024/01/Flow-Creation-917x1024.jpg)
+![](/wp-content/uploads/2024/01/Flow-Creation-917x1024.webp)
 
 The eventual output is a booklet with an album cover, and of course the coded song track in a **“\*.rb”** file.
 
@@ -136,7 +136,7 @@ MusicAgent ends by generating a complete set of files in a seperate songs folder
 
 Now you’re all set to go and publish your music!
 
-![](/wp-content/uploads/2024/01/WAV-recording-1024x234.jpg)
+![](/wp-content/uploads/2024/01/WAV-recording-1024x234.webp)
 
 You can either use **Sonic Pi** to play your tracks, or you might as well directly record them and publish your music on any streaming platform (e.g. [SoundCloud](https://soundcloud.com/mityjohn))
 

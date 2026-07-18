@@ -20,9 +20,9 @@ It is free, open source, and nothing you feed it leaves your machine.
 > **Download for Windows** → [Latest release](https://github.com/janvanwassenhove/mITyStudio/releases)   
 > **Source code** → [github.com/janvanwassenhove/mITyStudio](https://github.com/janvanwassenhove/mITyStudio)
 
-![](/wp-content/uploads/2026/07/studio-1024x610.png)
+![](/wp-content/uploads/2026/07/studio-1024x610.webp)
 
-### What it does
+## What it does
 
 **Chat a song into existence.** Type _“create a synthwave track at 105 BPM in A minor with a dreamy pad, punchy drums and a sung chorus about neon rain”_ and you get sections, chords, drums, bass, melody, lyrics and a vocal — using instruments from your library, in the language you’re chatting in.
 
@@ -36,9 +36,9 @@ It is free, open source, and nothing you feed it leaves your machine.
 
 **Exports cleanly.** A WAV or MP3 mixdown, or a portable bundle containing the project, every sound it uses and your AI voices, so the whole thing rebuilds on another machine.
 
-![](/wp-content/uploads/2026/07/onboarding-1024x610.png)
+![](/wp-content/uploads/2026/07/onboarding-1024x610.webp)
 
-### What you need
+## What you need
 
 -   **Windows.** The installer bootstraps its own Python runtime and fetches FluidSynth and ffmpeg for you. Installing a new version over an old one updates in place and leaves your projects, sounds and voices untouched.
 -   **Your own sounds.** SoundFonts and samples are not bundled — the studio plays your library. The first-start guide walks you through adding them.
@@ -47,7 +47,7 @@ It is free, open source, and nothing you feed it leaves your machine.
 
 ---
 
-### Where to get it
+## Where to get it
 
 -   **Windows installer** — [Latest release](https://github.com/janvanwassenhove/mITyStudio/releases)
 -   **Source, issues and documentation** — [github.com/janvanwassenhove/mITyStudio](https://github.com/janvanwassenhove/mITyStudio)
@@ -56,7 +56,7 @@ It is free, open source, and nothing you feed it leaves your machine.
 
 ---
 
-### A note on licences
+## A note on licences
 
 The speech-cloning engine is licensed for non-commercial use. Singing voicebanks come from their creators under their own terms — read them before releasing anything. Voice profiles require recorded consent, including your own.
 

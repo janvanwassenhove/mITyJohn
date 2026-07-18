@@ -2,7 +2,7 @@
 title: "SoundFonts: The Unsung Heroes of Virtual Instruments"
 date: 2025-09-07T20:43:35
 tags: ["development"]
-cover: "/wp-content/uploads/2025/09/ChatGPT-Image-7-sep-2025-15_20_59.png"
+cover: "/wp-content/uploads/2025/09/ChatGPT-Image-7-sep-2025-15_20_59-768x768.webp"
 cardTag: "Development"
 wpId: 553
 wpSlug: "soundfonts-the-unsung-heroes-of-virtual-instruments"
@@ -60,7 +60,7 @@ The web is full of free and commercial SoundFonts. Some great starting points:
 
 Here’s where things get tricky. Just because you can _download_ a SoundFont doesn’t mean you can _use_ it freely.
 
-![](/wp-content/uploads/2025/09/image-1.png)
+![](/wp-content/uploads/2025/09/image-1-768x768.webp)
 
 **Generally safe:**
 
@@ -89,7 +89,7 @@ Remember: in a personal or experimental project, the risk may be low. But as soo
 
 One of the best parts of working with SoundFonts is how seamlessly they plug into **mITyStudio**. You don’t need any external setup — it’s all built right into the app.
 
-![](/wp-content/uploads/2025/09/image-2.png)
+![](/wp-content/uploads/2025/09/image-2.webp)
 
 1.  **Upload your SoundFonts**  
     Head to the **Settings** tab in mITyStudio, scroll down to **SoundFont Library**, and simply click **Upload SF2 Files**. Your new instruments will be added to the library instantly.
@@ -98,11 +98,11 @@ One of the best parts of working with SoundFonts is how seamlessly they plug int
 3.  **Experiment with Styles**  
     Since SoundFonts can dramatically change the vibe of your MIDI arrangement, try loading different banks while composing. It’s a fast way to explore ideas — from realistic pianos to quirky vintage synths — without breaking your workflow.
 
-![](/wp-content/uploads/2025/09/image-3.png)
+![](/wp-content/uploads/2025/09/image-3.webp)
 
 With just a couple of clicks, SoundFonts turn mITyStudio into a flexible, customizable playground for sound design and composition.
 
-![](/wp-content/uploads/2025/09/image-4-1024x139.png)
+![](/wp-content/uploads/2025/09/image-4-1024x139.webp)
 
 ---
 

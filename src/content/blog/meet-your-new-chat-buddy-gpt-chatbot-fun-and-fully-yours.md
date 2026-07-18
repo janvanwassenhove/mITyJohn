@@ -3,7 +3,7 @@ title: "Meet Your New Chat Buddy: GPT-Chatbot, Fun and Fully Yours!"
 date: 2023-10-18T10:32:00
 updated: 2023-12-20T22:32:14
 tags: ["development", "gpt", "python", "react", "ai"]
-cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.19.29-Create-a-retro-style-image-depicting-a-person-chatting-with-a-chatbot.-The-design-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green.png"
+cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.19.29-Create-a-retro-style-image-depicting-a-person-chatting-with-a-chatbot.-The-design-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green-768x768.webp"
 cardTag: "Development · GPT"
 wpId: 142
 wpSlug: "meet-your-new-chat-buddy-gpt-chatbot-fun-and-fully-yours"
@@ -33,7 +33,7 @@ And guess what? It talks back!
 
 It’s like having a conversation with a friend who’s always there.
 
-![](/wp-content/uploads/2023/12/image-1024x537.png)
+![](/wp-content/uploads/2023/12/image-1024x537.webp)
 
 So, whether you’re looking to add a bit of fun to your day or need a chatbot for more serious stuff, GPT-Chatbot is your go-to.
 

@@ -2,7 +2,7 @@
 title: "SCRUM Programming Language — Release v1.3.0"
 date: 2025-12-11T21:03:49
 tags: ["development"]
-cover: "/wp-content/uploads/2025/12/mITy.John-Logo-scaled.png"
+cover: "/wp-content/uploads/2025/12/mITy.John-Logo-scaled.webp"
 cardTag: "Development"
 wpId: 681
 wpSlug: "scrum-programming-language-release-v1-3-0"
@@ -36,7 +36,7 @@ Thanks to the new IntelliJ and VS Code extensions, you get:
 Writing SCRUM code suddenly feels _normal_. Maybe even… pleasant?  
 (Scrummy calls this “velocity.” The rest of us call it “finally.”)
 
-![](/wp-content/uploads/2025/12/image-2.png)
+![](/wp-content/uploads/2025/12/image-2.webp)
 
 ---
 
@@ -127,7 +127,7 @@ He will appear in:
 He also tried to rewrite the compiler using only sticky notes and an “inspirational sprint board.”  
 We are still investigating what happened to sprint 2.
 
-![](/wp-content/uploads/2025/12/scrummy_christmas-1-1024x683.png)
+![](/wp-content/uploads/2025/12/scrummy_christmas-1-1024x683.webp)
 
 ---
 

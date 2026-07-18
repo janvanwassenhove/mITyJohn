@@ -3,7 +3,7 @@ title: "When a cat makes you publish you're first picture book"
 date: 2026-07-05T08:58:35
 updated: 2026-07-05T08:59:46
 tags: ["development"]
-cover: "/wp-content/uploads/2026/07/ChatGPT-Image-5-jul-2026-10_57_32.png"
+cover: "/wp-content/uploads/2026/07/ChatGPT-Image-5-jul-2026-10_57_32-1024x1024.webp"
 cardTag: "Development"
 wpId: 921
 wpSlug: "921"
@@ -17,7 +17,7 @@ The idea was almost too silly to say out loud: _what if a cat jumped straight i
 
 I couldn’t stop thinking about it. And when a software person can’t stop thinking about something, they do the reasonable thing: they start building it.
 
-![](/wp-content/uploads/2026/07/spread_vangogh-2-1024x662.jpg)
+![](/wp-content/uploads/2026/07/spread_vangogh-2-1024x662.webp)
 
 Falling into Van Gogh
 
@@ -31,7 +31,7 @@ And oh, the print details. Bleed is 3.175 mm, not 3. Text has to stay a quarter
 
 Then I got greedy and made it multilingual. Because a good cat travels, she changed her name at every border: **Nel** in Dutch, **Felix** in English, **Filou** in French, **Mimi** in German — the kids got local names too. Same adventure, four editions, four times the proofreading.
 
-![](/wp-content/uploads/2026/07/four_editions-1-1024x410.jpg)
+![](/wp-content/uploads/2026/07/four_editions-1-1024x410.webp)
 
 The four language editions side by side
 

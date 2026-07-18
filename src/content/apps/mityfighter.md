@@ -33,7 +33,7 @@ And yes — the whole thing was prototyped in half a day, including:
 Live game:  
 [https://janvanwassenhove.github.io/mITyFighter/](https://janvanwassenhove.github.io/mITyFighter/)
 
-![](/wp-content/uploads/2026/01/image-8-1024x714.png)
+![](/wp-content/uploads/2026/01/image-8-1024x714.webp)
 
 ## The experiment: Half-a-day game dev with Copilot
 
@@ -83,7 +83,7 @@ It’s not a AAA fighter.
 
 It’s the kind of game you’d find in a weird arcade corner and remember forever.
 
-![](/wp-content/uploads/2026/01/image-9-1024x584.png)
+![](/wp-content/uploads/2026/01/image-9-1024x584.webp)
 
 ---
 
@@ -105,7 +105,7 @@ Built as a lightweight web game so it’s easy to run, tweak, and deploy.
 -   mobile control overlay
 -   deployed using GitHub Pages
 
-![](/wp-content/uploads/2026/01/image-10-1024x610.png)
+![](/wp-content/uploads/2026/01/image-10-1024x610.webp)
 
 ---
 

@@ -2,7 +2,7 @@
 title: "The Workflow Is the New Unit of Software Delivery"
 date: 2026-06-28T19:56:17
 tags: ["ai", "architecture", "delivery", "development", "engineering", "leadership", "sdlc", "software-delivery"]
-cover: "/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_55_54.png"
+cover: "/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_55_54-1024x1024.webp"
 cardTag: "AI · Architecture"
 wpId: 891
 wpSlug: "the-workflow-is-the-new-unit-of-software-delivery"
@@ -41,7 +41,7 @@ It changed because I started to see that AI was not only helping inside the soft
 
 And once that happens, the old unit of work starts to crack.
 
-![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-1-1024x576.png)
+![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-1-1024x576.webp)
 
 Looking at software delivery from a higher point of view.
 
@@ -150,7 +150,7 @@ The scalable unit is not the prompt.
 
 It is the workflow.
 
-![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-2-1024x576.png)
+![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-2-1024x576.webp)
 
 From individual execution to reusable delivery workflows.
 
@@ -335,7 +335,7 @@ So we wrap AI with deterministic checks: tests, type checks, linters, security s
 
 The workflow is where trust is built.
 
-![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-3-1024x576.png)
+![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-3-1024x576.webp)
 
 Governance is no longer a gate at the end. It becomes part of the delivery machine.  
 
@@ -425,7 +425,7 @@ Judgment. Taste. Context. Responsibility. Courage. The ability to say: this is f
 
 That may become one of the most important skills in software delivery.
 
-![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-4-1024x576.png)
+![](/wp-content/uploads/2026/06/ChatGPT-Image-28-jun-2026-21_48_12-4-1024x576.webp)
 
 The future team is hybrid: humans, agents, workflows and validation.
 

@@ -3,7 +3,7 @@ title: "A Guitar Hero Controller Is Still a Guitar (If You Treat It Like One)"
 date: 2026-01-04T21:29:01
 updated: 2026-01-04T21:30:38
 tags: ["ai", "development", "electron", "programming", "rust", "fun"]
-cover: "/wp-content/uploads/2026/01/ChatGPT-Image-4-jan-2026-22_28_26.png"
+cover: "/wp-content/uploads/2026/01/ChatGPT-Image-4-jan-2026-22_28_26-768x768.webp"
 cardTag: "AI · Development"
 wpId: 711
 wpSlug: "a-guitar-hero-controller-is-still-a-guitar-if-you-treat-it-like-one"
@@ -16,11 +16,11 @@ That plan failed almost immediately.
 
 During the Christmas–New Year holidays, I stumbled upon my old Nintendo Wii. Next to it: a Guitar Hero / Rock Band guitar controller. Plastic body, five colored frets, strum bar, whammy bar. A device that once convinced an entire generation they were playing music.
 
-![](/wp-content/uploads/2026/01/controller-1.png)
+![](/wp-content/uploads/2026/01/controller-1-768x644.webp)
 
 Out of curiosity, I plugged it in.
 
-![](/wp-content/uploads/2026/01/dongle.png)
+![](/wp-content/uploads/2026/01/dongle-768x644.webp)
 
 And the interesting part wasn’t nostalgia. It was that the thing still _made sense_.  
 Five buttons. A strum. Timing. Harmony. Expression.
@@ -38,7 +38,7 @@ That’s how **mITyGuitar** started.
 
 **mITyGuitar** is a desktop application that allows you to connect your old Guitar Hero or Rock Band guitar to your PC or laptop and use it as a musical instrument.
 
-![](/wp-content/uploads/2026/01/mITyGuitar-Logo-1-1024x1024.png)
+![](/wp-content/uploads/2026/01/mITyGuitar-Logo-1-1024x1024.webp)
 
 Not as a game controller.  
 Not as a nostalgic toy.  
@@ -75,7 +75,7 @@ It feels familiar, but the goal is fundamentally different.
 
 ## Two modes, one idea
 
-![](/wp-content/uploads/2026/01/splashscreen-1-1024x851.png)
+![](/wp-content/uploads/2026/01/splashscreen-1-1024x851.webp)
 
 ### Live Mode
 

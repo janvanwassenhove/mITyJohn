@@ -10,7 +10,7 @@ wpId: 219
 wpSlug: "music"
 ---
 
-![](/wp-content/uploads/2023/12/DALL·E-2023-12-26-14.33.31-Create-a-full-bleed-landscape-poster-design-with-a-retro-and-vintage-style-inspired-by-a-music-agency-named-mITY.John_.-The-entire-image-should-be-f-1-1024x585.png)
+![](/wp-content/uploads/2023/12/DALL·E-2023-12-26-14.33.31-Create-a-full-bleed-landscape-poster-design-with-a-retro-and-vintage-style-inspired-by-a-music-agency-named-mITY.John_.-The-entire-image-should-be-f-1-1024x585.webp)
 
 All my music tracks are available on **Spotify, Itunes, Apple Music &** **Soundcloud**.  
 Produced by mITy.John using [MusicAgent](https://github.com/janvanwassenhove/MusicAgent), final edit and recording made by mITy.John in Sonic Pi.

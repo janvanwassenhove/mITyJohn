@@ -16,7 +16,7 @@ wpSlug: "sportsmadness"
 **Sports Madness** (initially **Hockey Madness**) is a modular game format that adds chaos, creativity and strategic fun to traditional sports.  
 Instead of rewriting the sport itself, Sports Madness introduces **short-lived game modifiers** — “boosters” and “maddies” — that temporarily change the rules and transform matches into energetic, unpredictable experiences.
 
-![](/wp-content/uploads/2025/11/51781271-e481-4a68-83ed-36a438f791fd-1-1024x768.jpg)
+![](/wp-content/uploads/2025/11/51781271-e481-4a68-83ed-36a438f791fd-1-1024x768.webp)
 
 Originally designed for indoor field hockey, the concept has proven flexible enough to adapt to:
 
@@ -106,7 +106,7 @@ Used by organizers/referees to:
 
 Everything updates in real time to every connected screen.
 
-![](/wp-content/uploads/2025/11/match_control-1-920x1024.png)
+![](/wp-content/uploads/2025/11/match_control-1-920x1024.webp)
 
 #### **Professional-Looking Scoreboard**
 
@@ -127,7 +127,7 @@ Shows:
 
 Designed for fast readability from a distance.
 
-![](/wp-content/uploads/2025/11/scoreboard_2-2-1024x656.png)
+![](/wp-content/uploads/2025/11/scoreboard_2-2-1024x656.webp)
 
 #### **Coach Mobile Booster Control**
 
@@ -163,7 +163,7 @@ Everything runs browser-only — no installation, no servers.
 
 Flexible enough to support **multiple sports**, **different rule packs**, and **custom game modes**.
 
-![](/wp-content/uploads/2025/11/tournament_builder-1-924x1024.png)
+![](/wp-content/uploads/2025/11/tournament_builder-1-924x1024.webp)
 
 ---
 

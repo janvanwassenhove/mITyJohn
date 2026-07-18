@@ -2,7 +2,7 @@
 title: "Outcoded by Our Kids: It Took Us 20 Years, They Used 20 Prompts!"
 date: 2025-10-26T21:19:03
 tags: ["development"]
-cover: "/wp-content/uploads/2025/10/ChatGPT-Image-26-okt-2025-22_18_22.png"
+cover: "/wp-content/uploads/2025/10/ChatGPT-Image-26-okt-2025-22_18_22-768x768.webp"
 cardTag: "Development"
 wpId: 572
 wpSlug: "outcoded-by-our-kids-it-took-us-20-years-they-used-20-prompts"

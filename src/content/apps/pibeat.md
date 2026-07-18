@@ -11,7 +11,7 @@ wpId: 853
 wpSlug: "pibeat"
 ---
 
-![](/wp-content/uploads/2026/05/1-1024x512.png)
+![](/wp-content/uploads/2026/05/1-1024x512.webp)
 
 ## Code. Play. Repeat.
 
@@ -49,7 +49,7 @@ The editor is not a side panel hidden behind menus and settings. It is the instr
 
 Multiple buffers, live execution, waveform feedback, built-in synths, samples, scales, effects, and timeline visualisation work together to keep you inside the creative loop instead of fighting the software.
 
-![](/wp-content/uploads/2026/03/image-5-1024x657.png)
+![](/wp-content/uploads/2026/03/image-5-1024x657.webp)
 
 **The main PiBeat workspace.**  
 Write music as code, execute it instantly, inspect the result, and iterate before the idea has time to escape.
@@ -67,7 +67,7 @@ You are having a conversation with time.
 PiBeat embraces that workflow by providing fast execution, Sonic Pi-inspired syntax, pattern generation, effects routing, and real-time audio feedback.  
 AI Chat Interface & samples overview
 
-![](/wp-content/uploads/2026/03/image-2-1024x658.png)
+![](/wp-content/uploads/2026/03/image-2-1024x658.webp)
 
 **From code to sound in seconds.**  
 The goal is simple: reduce friction until experimentation becomes the default behavior.
@@ -84,7 +84,7 @@ Behavioral fidelity.
 
 Parser validation, event snapshots, fixture testing, audio comparisons, synth behavior checks, and Sonic Pi parity investigations help ensure that the instrument behaves honestly when the music starts.
 
-![](/wp-content/uploads/2026/03/image-1024x658.png)
+![](/wp-content/uploads/2026/03/image-1024x658.webp)
 
 Highlighting sonic pi code during run
 
@@ -107,7 +107,7 @@ and
 
 Generate rhythms, reshape patterns, explore variations, or use AI as a musical sparring partner when inspiration decides to take a coffee break.
 
-![](/wp-content/uploads/2026/03/image-1-1024x656.png)
+![](/wp-content/uploads/2026/03/image-1-1024x656.webp)
 
 Sonic Pic code timeline overview
 

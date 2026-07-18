@@ -19,7 +19,7 @@ It’s built for creative minds, team sessions, and anyone curious about what ma
 → [Try Typix](https://janvanwassenhove.github.io/Typix/#/)  
 → [View Source on GitHub](https://github.com/janvanwassenhove/Typix)
 
-![](/wp-content/uploads/2025/05/image-9-1007x1024.png)
+![](/wp-content/uploads/2025/05/image-9-1007x1024.webp)
 
 ---
 
@@ -43,7 +43,7 @@ The classic 4-quadrant model that categorizes people into:
 -   **Steadiness**: calm, supportive
 -   **Conscientiousness**: analytical, precise
 
-![](/wp-content/uploads/2025/05/image-8.png)
+![](/wp-content/uploads/2025/05/image-8-768x890.webp)
 
 ### 2. **Typix Discovery**
 
@@ -57,7 +57,7 @@ Based on the **personality theory of Carl Gustav Jung**, a Swiss psychiatrist a
 Combined with the attitudes **introversion** and **extraversion**, these lead to **eight psychological types**.  
 Typix Discovery visualizes this on a circular chart, showing the dynamic balance of cognitive preferences in color-coded energy levels. It’s inspired by Jung’s framework, not affiliated with any commercial system.
 
-![](/wp-content/uploads/2025/05/image-6-667x1024.png)
+![](/wp-content/uploads/2025/05/image-6-667x1024.webp)
 
 ### 3. **Enneagram**
 
@@ -76,7 +76,7 @@ The types include:
 
 Typix provides a simplified questionnaire and results breakdown to help users recognize their dominant type and core traits.
 
-![](/wp-content/uploads/2025/05/image-10.png)
+![](/wp-content/uploads/2025/05/image-10.webp)
 
 ---
 

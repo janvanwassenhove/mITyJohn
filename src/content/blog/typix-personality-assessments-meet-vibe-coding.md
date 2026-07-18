@@ -3,7 +3,7 @@ title: "Typix: Personality Assessments Meet Vibe Coding"
 date: 2025-05-30T14:25:36
 updated: 2025-05-30T15:27:36
 tags: ["development", "generative-ai", "personality", "programming", "vuejs", "ai", "fun"]
-cover: "/wp-content/uploads/2025/05/ChatGPT-Image-30-mei-2025-16_21_40.png"
+cover: "/wp-content/uploads/2025/05/ChatGPT-Image-30-mei-2025-16_21_40-768x768.webp"
 cardTag: "Development · GenAI"
 wpId: 483
 wpSlug: "typix-personality-assessments-meet-vibe-coding"
@@ -13,7 +13,7 @@ wpSlug: "typix-personality-assessments-meet-vibe-coding"
 
 Meet **[Typix](http://typix.mityjohn.com)** — a playful yet functional experiment in building a free personality assessment tool, powered by AI-driven development, curiosity, and a healthy disregard for overpriced quiz platforms.
 
-![](/wp-content/uploads/2025/05/image-9-1007x1024.png)
+![](/wp-content/uploads/2025/05/image-9-1007x1024.webp)
 
 I’ve always been fascinated by personality assessments. They’re part psychology, part storytelling — and always a good catalyst for conversation. I wanted to do one with the family, but every option I found felt… wrong. Too commercial, too scattered, or just way too expensive.
 
@@ -25,7 +25,7 @@ Typix was born in a few hours thanks to the latest wave of AI tooling. Think of 
 
 To bring Typix to life, I used **Bolt.DIY**, an experimental AI coding companion powered by **Claude Sonnet 4**. Think of it as a supercharged project starter that builds full applications from natural language prompts.
 
-![](/wp-content/uploads/2025/05/image-4-1024x434.png)
+![](/wp-content/uploads/2025/05/image-4-1024x434.webp)
 
 You tell Bolt what you want — the stack, the features, maybe even the aesthetic — and it scaffolds the whole project for you. Not just a single file or function, but actual working apps with components, routes, state management, and deployment support.
 
@@ -56,7 +56,7 @@ The classic 4-quadrant model that categorizes people into:
 -   **Steadiness**: calm, supportive
 -   **Conscientiousness**: analytical, precise
 
-![](/wp-content/uploads/2025/05/image-8.png)
+![](/wp-content/uploads/2025/05/image-8-768x890.webp)
 
 ### 2\. **Typix Discovery**
 
@@ -70,7 +70,7 @@ Based on the **personality theory of Carl Gustav Jung**, a Swiss psychiatrist an
 Combined with the attitudes **introversion** and **extraversion**, these lead to **eight psychological types**.  
 Typix Discovery visualizes this on a circular chart, showing the dynamic balance of cognitive preferences in color-coded energy levels. It’s inspired by Jung’s framework, not affiliated with any commercial system.
 
-![](/wp-content/uploads/2025/05/image-6-667x1024.png)
+![](/wp-content/uploads/2025/05/image-6-667x1024.webp)
 
 ### 3\. **Enneagram**
 
@@ -89,7 +89,7 @@ The types include:
 
 Typix provides a simplified questionnaire and results breakdown to help users recognize their dominant type and core traits.
 
-![](/wp-content/uploads/2025/05/image-10.png)
+![](/wp-content/uploads/2025/05/image-10.webp)
 
 ## Vibe Coding in Practice
 

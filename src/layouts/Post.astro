@@ -9,6 +9,7 @@ interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const { title, date, tags, cover, ogImage } = post.data;
 const fmt = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
+const coverDims = cover?.match(/-(\d+)x(\d+)\.\w+$/);
 ---
 
 <Base title={`${title} — mITy.John`} ogImage={ogImage ?? cover} ogType="article">
@@ -19,7 +20,16 @@ const fmt = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', d
         {tags.map((t) => <a class="tag" href={`/tags/${t}/`}>#{t}</a>)}
       </div>
       <h1>{title}</h1>
-      {cover && <img class="cover" src={cover} alt="" />}
+      {cover && (
+        <img
+          class="cover"
+          src={cover}
+          alt=""
+          fetchpriority="high"
+          width={coverDims?.[1]}
+          height={coverDims?.[2]}
+        />
+      )}
     </header>
     <div class="prose">
       <slot />

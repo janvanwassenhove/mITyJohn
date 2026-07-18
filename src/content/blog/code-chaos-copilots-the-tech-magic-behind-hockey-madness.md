@@ -2,7 +2,7 @@
 title: "Code, Chaos & Copilots: The Tech Magic Behind Hockey Madness"
 date: 2025-11-30T22:42:16
 tags: ["generative-ai", "hockey", "vuejs", "ai", "development"]
-cover: "/wp-content/uploads/2025/11/5373fbbb-de96-4aef-9ec6-1b1fc999f67f.png"
+cover: "/wp-content/uploads/2025/11/5373fbbb-de96-4aef-9ec6-1b1fc999f67f-768x768.webp"
 cardTag: "GenAI · Hockey"
 wpId: 603
 wpSlug: "code-chaos-copilots-the-tech-magic-behind-hockey-madness"
@@ -10,7 +10,7 @@ wpSlug: "code-chaos-copilots-the-tech-magic-behind-hockey-madness"
 
 At first glance Hockey Madness looked like a playful festival, but behind the confetti there was an awful lot of code. Turning a multi‑match tournament into an interactive experience required live scorekeeping, authentication, rule management and mobile controls for coaches.
 
-![](/wp-content/uploads/2025/11/startscherm-1-980x1024.png)
+![](/wp-content/uploads/2025/11/startscherm-1-980x1024.webp)
 
 Think of it as building a game engine and a broadcast studio in your browser. In this post we peek behind the curtain — spreadsheets and all — to see how the system was architected and how modern tools like Supabase and GitHub Copilot helped us ship quickly without losing our sanity (or our sense of humour).
 
@@ -20,17 +20,17 @@ The first decision was to use a **Vue 3** frontend with Vite and Tailwind CSS.
 
 For the backend we chose **Supabase**, an open‑source Firebase alternative that offers Postgres storage, authentication, auto‑generated REST/GraphQL APIs and **real‑time subscriptions out of the box**. This meant we could build a live scoreboard without managing WebSocket servers or custom authentication flows.
 
-![](/wp-content/uploads/2025/11/match_control-920x1024.png)
+![](/wp-content/uploads/2025/11/match_control-920x1024.webp)
 
 ### Real‑time scores and boosters
 
 At the heart of the app lies a **match‑control dashboard** for officials. When an official adds a goal, penalty corner or card, the change is sent to Supabase via a simple `INSERT` or `UPDATE` and then propagated to all connected clients through the real‑time channel. Similarly, when a booster is activated, a record is created in a `boosters` table with its team, effect and expiration time. Subscribed clients update their UI instantly, which is how the public scoreboard displays active boosters and countdown timers. The use of Postgres triggers ensures that effects expire automatically — once a `boosters` row’s `expires_at` is in the past, a cron function cleans it up and broadcasts a “booster removed” event.
 
-![](/wp-content/uploads/2025/11/scoreboard_2-1-1024x656.png)
+![](/wp-content/uploads/2025/11/scoreboard_2-1-1024x656.webp)
 
 The match controller also supports **Maddies**, which modify multiple aspects at once. A single “Maddie started” event notifies the crew to place extra goals or swap balls on the pitch. After the effect ends, the system resets the rules and normal play resumes. This reactive design kept our codebase cohesive: all time‑based effects relied on the same subscription mechanism, whether they lasted fifteen seconds or two minutes.
 
-![](/wp-content/uploads/2025/11/booster_countdown.png)
+![](/wp-content/uploads/2025/11/booster_countdown-768x711.webp)
 
 ### Draft automation and rules engine
 
@@ -42,9 +42,9 @@ Instead of hardcoding regulations, we built a **rule editor** where admins can d
 
 The public “game guide” reads from this dataset, so when we tweak a rule, it updates everywhere instantly. We also store metadata like whether a booster has a countdown and who may activate it. This flexible approach means we can add new Maddies (like **Sniper** or **Golden Oldies**) without redeploying the client.
 
-![](/wp-content/uploads/2025/11/rules_control-948x1024.png)
+![](/wp-content/uploads/2025/11/rules_control-948x1024.webp)
 
-![](/wp-content/uploads/2025/11/gameguide-1018x1024.png)
+![](/wp-content/uploads/2025/11/gameguide-1018x1024.webp)
 
 Coding with AI: Copilot as pair programmer
 
@@ -56,9 +56,9 @@ In practice, this meant we could stub out a Vue component and Copilot would prop
 
 Hockey Madness isn’t a one‑size‑fits‑all event; some evenings call for a simple round‑robin, others need a group stage followed by knock‑out rounds. To accommodate this, we built a **tournament builder**. Each phase (poule, bracket or single match) is stored with attributes like number of groups, teams per group and advancement criteria.
 
-![](/wp-content/uploads/2025/11/tournament_builder-924x1024.png)
+![](/wp-content/uploads/2025/11/tournament_builder-924x1024.webp)
 
-![](/wp-content/uploads/2025/11/tournament_creation-1.png)
+![](/wp-content/uploads/2025/11/tournament_creation-1.webp)
 
 Phases are ordered, and the bracket generator uses that sequence to create match schedules. Admins can drag and drop phases and configure them through a form.
 

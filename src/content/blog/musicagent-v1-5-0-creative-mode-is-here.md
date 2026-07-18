@@ -2,7 +2,7 @@
 title: "MusicAgent v1.5.0 – Creative Mode Is Here!"
 date: 2025-04-19T22:17:35
 tags: ["ai", "development", "generative-ai", "music", "musicagent", "python"]
-cover: "/wp-content/uploads/2025/04/ChatGPT-Image-20-apr-2025-00_17_18.png"
+cover: "/wp-content/uploads/2025/04/ChatGPT-Image-20-apr-2025-00_17_18-768x768.webp"
 cardTag: "AI · Development"
 wpId: 454
 wpSlug: "musicagent-v1-5-0-creative-mode-is-here"
@@ -10,7 +10,7 @@ wpSlug: "musicagent-v1-5-0-creative-mode-is-here"
 
 The latest MusicAgent release is here — version 1.5.0 introduces **Creative Mode**: a new visual way to compose music with Sonic Pi, while chatting live with your AI music assistant.
 
-![](/wp-content/uploads/2025/04/CreativeMode-1024x502.png)
+![](/wp-content/uploads/2025/04/CreativeMode-1024x502.webp)
 
 Creative Mode – Starting from scratch
 
@@ -29,7 +29,7 @@ Until now, MusicAgent focused on generating Sonic Pi code through a Multi Agent 
 
 It’s like jamming in a studio, except one of the bandmates speaks fluent Ruby.
 
-![](/wp-content/uploads/2025/04/SonicPi_Visualisation.png)
+![](/wp-content/uploads/2025/04/SonicPi_Visualisation.webp)
 
 Sonic Pi Code Song Visualization
 
@@ -39,7 +39,7 @@ The creative mode also includes a new **multi-sample selector**, supporting both
 
 Samples drop directly into the timeline and are integrated into the live Sonic Pi loop — with effects or structure hints if needed.
 
-![](/wp-content/uploads/2025/04/hcat_history_samples-1024x430.png)
+![](/wp-content/uploads/2025/04/hcat_history_samples-1024x430.webp)
 
 Adding Samples To The composition
 

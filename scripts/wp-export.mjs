@@ -5,7 +5,8 @@
 // Run: node scripts/wp-export.mjs
 
 import { mkdir, writeFile, rm } from 'node:fs/promises';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import TurndownService from 'turndown';
 import turndownPluginGfm from 'turndown-plugin-gfm';
 
@@ -39,9 +40,41 @@ const APP_META = {
   typix: { name: 'Typix', code: 'TYPIX', tag: 'fun', cat: 'fun', order: 11, demoUrl: 'https://janvanwassenhove.github.io/Typix', blurb: 'Type pixels into being. Oddly meditative, mildly pointless.' },
   mitylaundry: { name: 'mITyLaundry', code: 'WASH', tag: 'fun', cat: 'fun', order: 12, demoUrl: 'https://janvanwassenhove.github.io/mITyLaundry', blurb: 'Because someone had to gamify the laundry. Reluctantly, that someone was Jan.' },
   mitylex: { name: 'mITyLex', code: 'LEX', tag: 'fun', cat: 'fun', order: 13, demoUrl: 'https://janvanwassenhove.github.io/mITyLex', blurb: 'A word game with the vocabulary of a very confident intern.' },
-  mitygarden: { name: 'mITyGarden', code: 'GARDEN', tag: 'fun', cat: 'fun', order: 14, blurb: 'The lab goes outdoors: gardening, but with dashboards.' }, // G3 — not in design's 14
+  mitygarden: { name: 'mITyGarden', code: 'GARDEN', tag: 'fun', cat: 'fun', order: 14, repo: 'mITyGarden', demoUrl: 'https://janvanwassenhove.github.io/mITyGarden', blurb: 'An AI garden design studio. Move the pool with a prompt, not a shovel.' }, // G3 — not in design's 14
   'scrum-programming': { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', cat: 'lab', order: 15, repo: 'scrum-lang', blurb: 'A real programming language where you code entirely in ceremonies. Yes, really.' },
 };
+
+// ---------------------------------------------------------------------------
+// Image downscaling — content referenced full-size originals (multi-MB PNGs) that
+// tanked mobile LCP (N5). Where the mirror holds a WP-generated ≤1024 derivative,
+// reference that instead. Originals stay untouched at their identical paths (N2).
+const uploadsBase = fileURLToPath(new URL('public/wp-content/uploads/', ROOT));
+const uploadFiles = new Set(
+  readdirSync(uploadsBase, { recursive: true }).map((f) => '/wp-content/uploads/' + String(f).replaceAll('\\', '/')),
+);
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function pickVariant(src) {
+  const m = src.match(/^(\/wp-content\/uploads\/.+)\.(png|jpe?g|webp)$/i);
+  if (!m || /-\d+x\d+$/.test(m[1])) return src;
+  for (const w of [1024, 768]) {
+    const re = new RegExp('^' + escapeRe(m[1]) + '-' + w + 'x\\d+\\.' + m[2] + '$', 'i');
+    for (const f of uploadFiles) if (re.test(f)) return f;
+  }
+  return src;
+}
+
+// PNG/JPEG → WebP siblings (multi-MB AI-art PNGs fail the N5 mobile budget even at
+// 1024px). Originals keep their identical paths untouched (N2); content references
+// the generated .webp alongside. Conversion runs after emit (sharp).
+const webpQueue = new Map(); // sourceLocalPath -> webpLocalPath
+function downscale(src) {
+  const v = pickVariant(src);
+  const m = v.match(/^(\/wp-content\/uploads\/.+)\.(png|jpe?g)$/i);
+  if (!m) return v;
+  const webp = `${m[1]}.webp`;
+  webpQueue.set(v, webp);
+  return webp;
+}
 
 // ---------------------------------------------------------------------------
 // HTML pre-processing (before turndown)
@@ -56,6 +89,8 @@ function rewriteUrls(html) {
   });
   // Bare site root links
   out = out.replace(/https?:\/\/(?:www\.)?mityjohn\.com\/?(?=["'])/g, '/');
+  // Swap full-size image refs for ≤1024 derivatives where the mirror has them
+  out = out.replace(/src="(\/wp-content\/uploads\/[^"]+)"/g, (_, u) => `src="${downscale(u)}"`);
   return out;
 }
 
@@ -99,9 +134,31 @@ const decode = (s) => (s || '')
 const yamlStr = (s) => JSON.stringify(decode(s));
 
 function toMarkdown(html) {
-  return td.turndown(stripPluginMarkup(rewriteUrls(html)))
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
+  return normalizeHeadings(
+    td.turndown(stripPluginMarkup(rewriteUrls(html)))
+      .replace(/\n{3,}/g, '\n\n')
+      .trim(),
+  );
+}
+
+// WP bodies often start at h3/h4 under the layout's h1, failing the a11y
+// heading-order audit (N5). Shift the whole document so its top level is h2.
+function normalizeHeadings(md) {
+  const lines = md.split('\n');
+  let inCode = false, min = 7;
+  for (const l of lines) {
+    if (/^```/.test(l)) { inCode = !inCode; continue; }
+    if (!inCode) { const m = l.match(/^(#{1,6})\s/); if (m) min = Math.min(min, m[1].length); }
+  }
+  if (min === 7 || min <= 2) return md;
+  const shift = min - 2;
+  inCode = false;
+  return lines.map((l) => {
+    if (/^```/.test(l)) { inCode = !inCode; return l; }
+    if (inCode) return l;
+    const m = l.match(/^(#{1,6})\s/);
+    return m ? '#'.repeat(m[1].length - shift) + l.slice(m[1].length) : l;
+  }).join('\n');
 }
 
 function coverFor(item) {
@@ -109,7 +166,7 @@ function coverFor(item) {
     const m = mediaById.get(item.featured_media);
     const u = m.source_url || '';
     const local = u.replace(/https?:\/\/(?:www\.)?mityjohn\.com/, '');
-    if (local.startsWith('/wp-content/uploads/')) return local;
+    if (local.startsWith('/wp-content/uploads/')) return downscale(local);
   }
   const m = rewriteUrls(item.content.rendered).match(/src="(\/wp-content\/uploads\/[^"]+\.(?:png|jpe?g|webp|gif))"/i);
   return m ? m[1] : undefined;
@@ -191,8 +248,32 @@ for (const page of inv.pages) {
 
 console.log('emitted:', JSON.stringify(counts));
 
+// Generate queued WebP siblings (skip ones already on disk)
+{
+  const sharp = (await import('sharp')).default;
+  const { readFile, writeFile: wf } = await import('node:fs/promises');
+  const pub = new URL('public/', ROOT);
+  // \\?\ prefix sidesteps Windows MAX_PATH for the very long DALL·E filenames
+  const longPath = (u) => {
+    const p = fileURLToPath(u);
+    return process.platform === 'win32' && !p.startsWith('\\\\?\\') ? '\\\\?\\' + p : p;
+  };
+  let made = 0, kept = 0;
+  for (const [src, webp] of webpQueue) {
+    if (uploadFiles.has(webp)) { kept++; continue; }
+    try {
+      const buf = await sharp(await readFile(longPath(new URL('.' + src, pub)))).webp({ quality: 82 }).toBuffer();
+      await wf(longPath(new URL('.' + webp, pub)), buf);
+      uploadFiles.add(webp);
+      made++;
+    } catch (e) {
+      console.error(`  webp failed for ${src}: ${e.message}`);
+    }
+  }
+  console.log(`webp: ${made} generated, ${kept} existing (${webpQueue.size} referenced)`);
+}
+
 // Post-emit F3 audit: no query-string internal links may remain
-const { readdirSync } = await import('node:fs');
 let bad = 0;
 for (const dir of outDirs) {
   for (const f of readdirSync(new URL(dir + '/', ROOT))) {

@@ -3,7 +3,7 @@ title: "LoveFlix 2.0 — Or How I Turned Explosions into Romance (Again)"
 date: 2026-02-09T22:59:21
 updated: 2026-02-11T19:57:16
 tags: ["ai", "electron", "fun", "generative-ai", "openai", "tmdb", "development"]
-cover: "/wp-content/uploads/2026/02/ChatGPT-Image-10-feb-2026-00_01_38.png"
+cover: "/wp-content/uploads/2026/02/ChatGPT-Image-10-feb-2026-00_01_38-768x768.webp"
 cardTag: "AI · Electron"
 wpId: 801
 wpSlug: "loveflix-2-0-or-how-i-turned-explosions-into-romance-again"
@@ -22,7 +22,7 @@ Last year, in a moment of questionable judgment and mild creative curiosity, I b
 
 You typed in _Die Hard_ and suddenly it wasn’t about terrorists and ventilation shafts anymore. It was about a man desperately trying to reconnect with the love of his life on Christmas Eve.
 
-![](/wp-content/uploads/2026/02/image-4-1024x557.png)
+![](/wp-content/uploads/2026/02/image-4-1024x557.webp)
 
 You entered _Terminator_ and what emerged was not a dystopian AI apocalypse — but a misunderstood machine discovering vulnerability.  
 It was absurd.
@@ -37,7 +37,7 @@ The human was always in the loop.
   
 Naturally, I decided the only reasonable next step was to turn it into a full desktop application — because when something is slightly ridiculous, the logical response is to engineer it properly.
 
-![](/wp-content/uploads/2026/02/image-1-1024x953.png)
+![](/wp-content/uploads/2026/02/image-1-1024x953.webp)
 
 ---
 
@@ -82,9 +82,9 @@ With the right framing:
 -   A monster becomes emotionally misunderstood.
 -   A war epic becomes a meditation on separation and longing.
 
-![](/wp-content/uploads/2026/02/image-5-1024x259.png)
+![](/wp-content/uploads/2026/02/image-5-1024x259.webp)
 
-![](/wp-content/uploads/2026/02/image-6-1024x631.png)
+![](/wp-content/uploads/2026/02/image-6-1024x631.webp)
 
 Nothing factual changes. The events remain. The explosions still happen. The villain still has a plan.
 

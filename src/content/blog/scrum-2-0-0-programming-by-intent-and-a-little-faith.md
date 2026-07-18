@@ -3,7 +3,7 @@ title: "SCRUM 2.0.0 — Programming by Intent (and a Little Faith)"
 date: 2025-12-29T22:03:32
 updated: 2025-12-29T22:24:39
 tags: ["ai", "generative-ai", "llm", "programming", "scrum", "development"]
-cover: "/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-22_48_04.png"
+cover: "/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-22_48_04-768x768.webp"
 cardTag: "AI · GenAI"
 wpId: 688
 wpSlug: "scrum-2-0-0-programming-by-intent-and-a-little-faith"
@@ -16,7 +16,7 @@ Not because the syntax suddenly got stricter, or because someone wrote a 40-page
 
 This release marks the point where SCRUM moves from “interesting experiment” to something you can genuinely reason about, build with, and trust.
 
-![](/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-22_48_04-2.png)
+![](/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-22_48_04-2-768x768.webp)
 
 And yes, this involves **Large Language Models at compile time**.  
 No, this is not a runtime magic trick.  
@@ -136,7 +136,7 @@ Everything **starts as SCRUM**.
 
 When the compiler encounters a `#INTENT` block, this is what really happens:
 
-![](/wp-content/uploads/2025/12/image-4-683x1024.png)
+![](/wp-content/uploads/2025/12/image-4-683x1024.webp)
 
 Once compilation finishes, the AI is gone.
 
@@ -278,7 +278,7 @@ Think of it this way:
 
 Putting it all together:
 
-![](/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-23_03_05.png)
+![](/wp-content/uploads/2025/12/ChatGPT-Image-29-dec-2025-23_03_05-768x768.webp)
 
 -   **Java** provides predictability, performance, and maturity
 -   **Classic SCRUM** provides structure and human readability

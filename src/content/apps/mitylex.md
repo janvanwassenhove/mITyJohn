@@ -20,7 +20,7 @@ No noise — just forward momentum.
 mITyLex is more than a language app.  
 It’s an experiment in building meaningful digital products with code, curiosity, and a slightly obsessive drive to improve things that already “work.”
 
-![](/wp-content/uploads/2026/02/lexi.png)
+![](/wp-content/uploads/2026/02/lexi-768x768.webp)
 
 Lexy – your learning companion
 

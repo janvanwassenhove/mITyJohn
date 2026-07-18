@@ -3,7 +3,7 @@ title: "PiBeat: From Sonic Pi and MusicAgent to a New Live-Coding IDE"
 date: 2026-04-21T22:01:00
 updated: 2026-05-31T20:28:36
 tags: ["generative-ai", "music", "sonicpi", "ai", "development", "fun"]
-cover: "/wp-content/uploads/2026/03/ChatGPT-Image-21-mrt-2026-22_58_21.png"
+cover: "/wp-content/uploads/2026/03/ChatGPT-Image-21-mrt-2026-22_58_21-768x768.webp"
 cardTag: "GenAI · Music"
 wpId: 852
 wpSlug: "pibeat-from-sonic-pi-and-musicagent-to-a-new-live-coding-ide"
@@ -23,13 +23,13 @@ And somewhere inside that experiment, a more stubborn idea started tapping on th
 
 The assistant was interesting. The instrument was the real story.
 
-![](/wp-content/uploads/2026/03/image-3-1024x683.png)
+![](/wp-content/uploads/2026/03/image-3-1024x683.webp)
 
 So this is the first release of PiBeat.
 
 PiBeat is a desktop live-coding music environment built with Tauri, Rust, React, TypeScript, and a workflow deeply inspired by the original Sonic Pi and its IDE. You write code. You run it. The machine answers with rhythm instead of a stack trace. On good days, it even answers with style.
 
-![](/wp-content/uploads/2026/05/1-1024x512.png)
+![](/wp-content/uploads/2026/05/1-1024x512.webp)
 
 That last part is not guaranteed, of course. Software can provide a synth. It cannot provide taste. We remain tragically responsible for that ourselves.
 
@@ -71,7 +71,7 @@ At its core, PiBeat is a place to write music as code and hear the result immedi
 
 That sentence sounds neat and tidy. Building it was not.
 
-![](/wp-content/uploads/2026/03/image-2-1024x658.png)
+![](/wp-content/uploads/2026/03/image-2-1024x658.webp)
 
 The first release includes:
 
@@ -199,4 +199,4 @@ That seems like a good first beat.
 [PiBeat on GitHub](https://github.com/janvanwassenhove/PiBeat)  
 [PiBeat @ mITyJohn](/apps/pibeat/)
 
-![](/wp-content/uploads/2026/03/image-4-1024x683.png)
+![](/wp-content/uploads/2026/03/image-4-1024x683.webp)

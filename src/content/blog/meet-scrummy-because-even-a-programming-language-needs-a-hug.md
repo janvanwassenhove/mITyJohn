@@ -3,7 +3,7 @@ title: "Meet Scrummy: Because Even a Programming Language Needs a Hug"
 date: 2025-12-11T12:55:15
 updated: 2025-12-11T12:58:17
 tags: ["development"]
-cover: "/wp-content/uploads/2025/12/ChatGPT-Image-11-dec-2025-13_57_46.png"
+cover: "/wp-content/uploads/2025/12/ChatGPT-Image-11-dec-2025-13_57_46-768x768.webp"
 cardTag: "Development"
 wpId: 667
 wpSlug: "meet-scrummy-because-even-a-programming-language-needs-a-hug"
@@ -23,7 +23,7 @@ Like a sprint without snacks.
 
 Until now.
 
-![](/wp-content/uploads/2025/12/ChatGPT-Image-11-dec-2025-12_59_44.png)
+![](/wp-content/uploads/2025/12/ChatGPT-Image-11-dec-2025-12_59_44-768x768.webp)
 
 Introducing **Scrummy**, the official mascot of the SCRUM programming language.  
 Round. Green. Soft enough to make a marshmallow jealous.  
@@ -144,7 +144,7 @@ Strange.
 Confusing.  
 And very on-brand.
 
-![](/wp-content/uploads/2025/12/image.png)
+![](/wp-content/uploads/2025/12/image-768x768.webp)
 
 ## What’s Next for Scrummy? (Chaos, Probably.)
 
@@ -160,7 +160,7 @@ Upcoming initiatives could include…
 
 Soon, no sprint will feel complete without him.
 
-![](/wp-content/uploads/2025/12/image-1-683x1024.png)
+![](/wp-content/uploads/2025/12/image-1-683x1024.webp)
 
 ---
 

@@ -3,7 +3,7 @@ title: "Token Tuning: Mastering Character & Token Limits for Anthropic and OpenA
 date: 2024-12-30T21:22:46
 updated: 2025-01-17T14:21:28
 tags: ["ai", "anthropic", "generative-ai", "openai", "development"]
-cover: "/wp-content/uploads/2024/12/DALL·E-2024-12-30-22.22.17-A-retro-styled-blog-illustration-representing-AI-and-token-tuning-with-abstract-geometric-shapes-and-data-flows.-The-design-uses-a-color-palette-of-da.webp"
+cover: "/wp-content/uploads/2024/12/DALL·E-2024-12-30-22.22.17-A-retro-styled-blog-illustration-representing-AI-and-token-tuning-with-abstract-geometric-shapes-and-data-flows.-The-design-uses-a-color-palette-of-da-768x768.webp"
 cardTag: "AI · Anthropic"
 wpId: 360
 wpSlug: "token-tuning-mastering-character-token-limits-for-anthropic-and-openai-models"
@@ -13,7 +13,7 @@ When developing [MusicAgent](https://github.com/janvanwassenhove/MusicAgent), my
 
 Token and character management became our strategy to chunk and split data into manageable movements, ensuring the orchestra of APIs stayed perfectly in tune without spiraling into discord.
 
-### **Tokens vs. Characters: What’s the Difference?**
+## **Tokens vs. Characters: What’s the Difference?**
 
 Understanding the difference between tokens and characters is crucial when working with APIs like Anthropic and OpenAI. Think of characters as individual letters and symbols—the raw ingredients of text—while tokens are the processed chunks, like words or pieces of a puzzle that the model understands.
 
@@ -26,9 +26,9 @@ The key distinction is that models process tokens, not characters, so their limi
 
 ---
 
-### **Token Usage in Anthropic Models**
+## **Token Usage in Anthropic Models**
 
-#### **Key Points to Note:**
+### **Key Points to Note:**
 
 1.  **Input and Output Count:**
     -   Anthropic’s models, like Claude, treat tokens like a buffet. Every input and output gets tallied, so if you drop a 500-token appetizer and expect a 1,000-token main course, you’ve served a 1,500-token feast.
@@ -39,9 +39,9 @@ The key distinction is that models process tokens, not characters, so their limi
 
 ---
 
-### **Token Usage in OpenAI Models**
+## **Token Usage in OpenAI Models**
 
-#### **Key Points to Note:**
+### **Key Points to Note:**
 
 1.  **Input and Output Count:**
     -   OpenAI’s GPT models count tokens as if you’re tabbing up at a coffee shop. Whether it’s a single espresso input or a grande latte output, every sip counts.
@@ -55,7 +55,7 @@ The key distinction is that models process tokens, not characters, so their limi
 
 ---
 
-### **Why Token Limits Matter More Than Characters**
+## **Why Token Limits Matter More Than Characters**
 
 While it might seem intuitive to think in terms of characters, both tokens and characters play a role in understanding limitations and optimizing costs. For instance, a long word like “supercalifragilisticexpialidocious” counts as one word in characters but could be several tokens. Similarly, languages like Chinese or Arabic may use fewer characters but consume more tokens due to their complexity.
 
@@ -66,7 +66,7 @@ When developing MusicAgent, we frequently encountered situations where managing 
 
 ---
 
-### **Token Budgeting: Lessons from the MusicAgent Orchestra**
+## **Token Budgeting: Lessons from the MusicAgent Orchestra**
 
 Building MusicAgent was like writing a symphony while the musicians charged per note. Every agent played its part, but the trick was ensuring they didn’t use the whole budget on an epic drum solo.  
 
@@ -87,7 +87,7 @@ Here’s what we learned:
 
 ---
 
-### **Example: Token Snack Math**
+## **Example: Token Snack Math**
 
 During MusicAgent’s development, a typical query went something like this:
 
@@ -101,11 +101,11 @@ This input would munch about 20 tokens. A response with detailed notes and rhyth
 
 ---
 
-### **Example Solutions**
+## **Example Solutions**
 
 Here are example solutions in Python and Java to estimate token and character usage when interacting with Anthropic and OpenAI APIs.
 
-#### **Python Example**
+### **Python Example**
 
 ```
 import tiktoken
@@ -129,7 +129,7 @@ prompt = "Compose a four-bar melody in C major with a jazzy feel and a slight sy
 estimate_token_and_character_usage(prompt)
 ```
 
-#### **Java Example**
+### **Java Example**
 
 ```
 import java.nio.charset.StandardCharsets;
@@ -159,7 +159,7 @@ These examples demonstrate how to calculate token and character counts for a giv
 
 ---
 
-### **Conclusion**
+## **Conclusion**
 
 Understanding the difference between tokens and characters is key to effective API usage. Building [MusicAgent](https://github.com/janvanwassenhove/MusicAgent) taught us that tokens are the true currency of interaction.
 
@@ -171,7 +171,7 @@ Happy coding and composing!
 
 ---
 
-### **Sources**
+## **Sources**
 
 -   [MusicAgent Repository](https://github.com/janvanwassenhove/MusicAgent)
 -   [OpenAI Pricing](https://openai.com/pricing)

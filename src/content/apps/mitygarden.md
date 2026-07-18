@@ -3,7 +3,9 @@ name: "mITyGarden"
 code: "GARDEN"
 tag: "fun"
 cat: "fun"
-blurb: "The lab goes outdoors: gardening, but with dashboards."
+blurb: "An AI garden design studio. Move the pool with a prompt, not a shovel."
+repo: "mITyGarden"
+demoUrl: "https://janvanwassenhove.github.io/mITyGarden"
 order: 14
 wpId: 883
 wpSlug: "mitygarden"
@@ -35,7 +37,7 @@ What if we stopped pretending we know what landscape architects do all day?
 
 mITyGarden allows you to create layouts, place objects, experiment with styles, and generate visual concepts based on your garden structure and goals.
 
-![](/wp-content/uploads/2026/05/image-3-1024x572.png)
+![](/wp-content/uploads/2026/05/image-3-1024x572.webp)
 
 **Build and shape your garden visually.**  
 Experiment with layouts, zones, dimensions, and ideas without committing to expensive changes.
@@ -56,7 +58,7 @@ Sometimes it proposes a garden that appears to have been designed by an enthusia
 
 Both can be surprisingly useful.
 
-![](/wp-content/uploads/2026/05/image-4-1024x653.png)
+![](/wp-content/uploads/2026/05/image-4-1024x653.webp)
 
 **Generate new ideas in seconds.**  
 Explore multiple garden concepts, styles, and arrangements without starting from scratch every time.

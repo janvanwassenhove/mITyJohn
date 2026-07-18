@@ -3,7 +3,7 @@ title: "mITyStudio — I can't (or hardly) play music. So I built something that
 date: 2026-07-12T15:52:20
 updated: 2026-07-18T16:51:20
 tags: ["ai", "music", "fun"]
-cover: "/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-17_54_14.png"
+cover: "/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-17_54_14-1024x1024.webp"
 cardTag: "AI · Music"
 wpId: 931
 wpSlug: "mitystudio-i-cant-or-hardly-play-music-so-i-built-something-that-can"
@@ -19,9 +19,9 @@ A normal person books lessons. Half an hour a week, a patient teacher, some scal
 
 This is mITyStudio, and I have just rebuilt it from scratch.
 
-![](/wp-content/uploads/2026/07/studio-1-1024x610.png)
+![](/wp-content/uploads/2026/07/studio-1-1024x610.webp)
 
-### The point isn’t that a computer makes the music
+## The point isn’t that a computer makes the music
 
 It would be easy to sell this as _type words, receive song_, because that part is real. Type _“create a synthwave track at 105 BPM in A minor with a dreamy pad, punchy drums and a sung chorus about neon rain”_ and you get a song: sections, chords, drums, bass, melody, lyrics, a sung vocal.
 
@@ -35,7 +35,7 @@ So mITyStudio never gives you a rendering. It gives you a **project**. Real tra
 
 That distinction is the entire product. Everything below is in service of it.
 
-### The AI proposes, the engine disposes
+## The AI proposes, the engine disposes
 
 This is the design decision I’d keep if I threw away everything else.
 
@@ -45,7 +45,7 @@ The practical effect: it cannot invent a sound that doesn’t exist, cannot refe
 
 It composes properly, too. Ask for a bass part and you get a playable one instantly; if you’ve connected an AI provider, the model then writes a real line note by note in the background and swaps it in when it’s finished. That takes a couple of minutes for something like ninety-five notes, which is why it happens behind you instead of behind a progress bar.
 
-### It sings — and it can sing in your voice
+## It sings — and it can sing in your voice
 
 A guided wizard records your voice. You read a consent line aloud, do a range test, then work through coached exercises with live pitch feedback and a quality check on every take. It trains a personal voice model on your own GPU, in your own house.
 
@@ -53,29 +53,29 @@ After that, vocal tracks sing your lyrics in that voice, in English, Dutch, Fren
 
 The consent isn’t decoration. A voice profile cannot exist without explicit, recorded permission from the person being cloned, kept as a permanent record. In a field currently running on scraped audio and optimism, asking first is either quaint or the only defensible position. I’ve settled on the second.
 
-### Your sounds, not a subscription’s sounds
+## Your sounds, not a subscription’s sounds
 
 mITyStudio doesn’t rent you a curated library. It plays _your_ files: drop `.sf2`/`.sf3` SoundFonts in a folder, drop audio in another, hit rescan.
 
 Then it does the tedious part for you. It reads what’s actually inside every SoundFont and sorts it — 89 piano banks, 26 basses, 12 drum kits — so the library becomes browsable instead of intimidating. It surfaces who made each bank and under what terms, which is information those files have been carrying since the 1990s that almost nothing bothers to show you. And it listens to your samples with an audio model, tagging them by what they sound like rather than what they’re named, so a file called `XZ_0231.wav` still turns up when you go looking for a pad.
 
-### It behaves like a DAW, because eventually you’ll want it to
+## It behaves like a DAW, because eventually you’ll want it to
 
 Clips split, duplicate, drag and resize. Fades per clip. A piano roll for melodic parts, a step grid for drums, a Smart Drums board where you push pieces around until the groove is right, plus pads, chord strips and a keyboard that all audition with the real instrument sound. A mixer whose faders, mutes and solos take effect _while the song is playing_ — which sounds like a low bar until you’ve used software where they don’t.
 
 Lyrics get karaoke timing and version history. Export a WAV or MP3 mixdown, or a portable bundle containing the project, every sound it uses and your AI voices, so the whole thing rebuilds on another machine.
 
-### Everything stays on your machine
+## Everything stays on your machine
 
 Your recordings, your voice models, your projects and your API keys never leave your computer. Rendering, voice cloning, singing and mixing all run locally — on your GPU if you have one, your CPU if you don’t. The only thing that ever leaves is the chat request, and only if you choose to connect a provider at all.
 
-![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_49_58-1024x576.png)
+![](/wp-content/uploads/2026/07/ChatGPT-Image-18-jul-2026-18_49_58-1024x576.webp)
 
 It installs like a normal Windows application. A new version installed over an old one updates in place and leaves your workspace alone, because your projects, sounds and voices live outside the install folder where no installer can reach them.
 
 ---
 
-### Get it
+## Get it
 
 -   **Download the Windows installer** — [Releases](https://github.com/janvanwassenhove/mITyStudio/releases)
 -   **Read the source** — [github.com/janvanwassenhove/mITyStudio](https://github.com/janvanwassenhove/mITyStudio)

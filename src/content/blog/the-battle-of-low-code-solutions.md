@@ -3,7 +3,7 @@ title: "The battle of low-code solutions!"
 date: 2022-09-23T17:13:00
 updated: 2023-12-20T22:33:51
 tags: ["development", "lowcode", "programming"]
-cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.23.33-Create-a-retro-style-image-for-a-blog-post-about-the-battle-of-low-code-solutions-featuring-a-vintage-aesthetic-with-a-color-palette-of-dark-green-y.png"
+cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.23.33-Create-a-retro-style-image-for-a-blog-post-about-the-battle-of-low-code-solutions-featuring-a-vintage-aesthetic-with-a-color-palette-of-dark-green-y-768x768.webp"
 cardTag: "Development · Lowcode"
 wpId: 1
 wpSlug: "hello-world"
@@ -86,11 +86,11 @@ OutSystems
 
 OutSystems is the most popular and widely used modernised low-code platform that is loaded with AI automation, visualisation tools, integration help, cloud architecture and, last but not least, fast drag and drop functions.
 
-![](/wp-content/uploads/2022/11/image-1.png)
+![](/wp-content/uploads/2022/11/image-1-768x427.webp)
 
 It enables developers to build robust and scalable enterprisegrade applications using a model-driven development environment. This is where you can craft customer experiences with modern applications based on pre-built templates. The applications that you build are secure, resilient, manageable and easy to scale.
 
-![](/wp-content/uploads/2022/11/image.png)
+![](/wp-content/uploads/2022/11/image-768x512.webp)
 
 The OutSystems low-code platform is a comprehensive package of:
 
@@ -106,7 +106,7 @@ Mendix
 
 Mendix’s low-code platform enables abstraction and automation in a drag-and-drop GUI. The platform enables developers to build powerful business applications that improve your bottom line while simplifying work processes.  
 
-![](/wp-content/uploads/2022/11/image-3.png)
+![](/wp-content/uploads/2022/11/image-3.webp)
 
   
 The cloud-native architecture of the platform delivers proven portability, scalable architectures and mission-critical reliability to the built applications. Mendix is considered one of the leaders in low-code, which allows you to build robust, scalable and resilient applications without needing a niche expertise.
@@ -124,7 +124,7 @@ Microsoft Power Apps
 
 Power Apps is a suite of apps, services and connectors, and a data platform, that provides a rapid development environment to build custom apps for your business needs. With Power Apps, you can quickly build custom business apps that connect to your data stored in the underlying data platform (Microsoft Dataverse) or in various online and on-premises data sources (such as SharePoint, Microsoft 365, Dynamics 365, SQL Server, etc.).
 
-![](/wp-content/uploads/2022/11/image-5.png)
+![](/wp-content/uploads/2022/11/image-5.webp)
 
   
   
@@ -133,7 +133,7 @@ apps by enabling users to create feature-rich, custom enterprise apps without wr
   
 Power Apps provides an extensible platform that allows professional developers to interact programmatically with data and metadata, apply business logic, create custom connectors, and integrate with external data (although with some limitations)
 
-![](/wp-content/uploads/2022/11/image-4-1024x646.png)
+![](/wp-content/uploads/2022/11/image-4-1024x646.webp)
 
 How do these platforms differentiate from each other?
 

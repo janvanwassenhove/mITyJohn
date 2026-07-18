@@ -14,7 +14,7 @@ wpSlug: "mitylaundry"
 
 **mITyLaundry** is a smart AR laundry sorting assistant that runs **entirely in your browser**. Point your camera at a garment and it will **segment the item**, draw a **colored contour overlay**, and suggest the right laundry pile — with a confidence score to match.
 
-![](/wp-content/uploads/2026/02/image-9.png)
+![](/wp-content/uploads/2026/02/image-9.webp)
 
 Because apparently, _sorting socks is still not fully automated in 2026_.
 

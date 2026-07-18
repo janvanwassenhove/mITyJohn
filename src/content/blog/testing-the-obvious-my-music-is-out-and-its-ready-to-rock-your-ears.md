@@ -2,7 +2,7 @@
 title: "Testing the Obvious: My Music is Out, and It’s Ready to Rock Your Ears!"
 date: 2024-12-31T08:24:42
 tags: ["development"]
-cover: "/wp-content/uploads/2024/12/DALL·E-2024-12-31-09.21.45-A-retro-styled-illustration-celebrating-a-music-release-featuring-a-vinyl-record-cassette-tape-and-vintage-speakers-in-a-dark-green-yellow-and-d.webp"
+cover: "/wp-content/uploads/2024/12/DALL·E-2024-12-31-09.21.45-A-retro-styled-illustration-celebrating-a-music-release-featuring-a-vinyl-record-cassette-tape-and-vintage-speakers-in-a-dark-green-yellow-and-d-768x768.webp"
 cardTag: "Development"
 wpId: 367
 wpSlug: "testing-the-obvious-my-music-is-out-and-its-ready-to-rock-your-ears"

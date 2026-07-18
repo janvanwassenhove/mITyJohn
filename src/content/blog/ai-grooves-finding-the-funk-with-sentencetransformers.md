@@ -3,7 +3,7 @@ title: "AI Grooves: Finding the Funk with SentenceTransformers"
 date: 2025-02-16T22:48:12
 updated: 2025-02-16T22:53:02
 tags: ["ai", "development", "music", "python"]
-cover: "/wp-content/uploads/2025/02/DALL·E-2025-02-16-23.43.51-A-highly-funky-and-retro-inspired-square-image-with-a-smooth-yellow-background-featuring-the-theme-AI-Grooves_-Finding-the-Funk-with-SentenceTransfo.webp"
+cover: "/wp-content/uploads/2025/02/DALL·E-2025-02-16-23.43.51-A-highly-funky-and-retro-inspired-square-image-with-a-smooth-yellow-background-featuring-the-theme-AI-Grooves_-Finding-the-Funk-with-SentenceTransfo-768x768.webp"
 cardTag: "AI · Development"
 wpId: 428
 wpSlug: "ai-grooves-finding-the-funk-with-sentencetransformers"
@@ -15,7 +15,7 @@ When jamming with my Music Agent—a multi-agent system for composing and arrang
 
 SentenceTransformers is a powerful framework built on top of **BERT (Bidirectional Encoder Representations from Transformers)**, designed specifically for creating dense vector representations of sentences. Unlike traditional word embeddings, which only capture individual word meanings, SentenceTransformers generates **context-aware sentence embeddings**, making it perfect for tasks like semantic similarity, clustering, and search. Instead of relying on exact word matches, it maps sentences to a high-dimensional space where similar meanings are closer together. This allows for more nuanced and flexible retrieval of relevant content.
 
-![](/wp-content/uploads/2025/02/image-1024x576.png)
+![](/wp-content/uploads/2025/02/image-1024x576.webp)
 
 Turns out, letting AI guess isn’t the best strategy. SentenceTransformers provides **semantic similarity searches**, meaning it understands meaning, not just words. Perfect for making sure my AI doesn’t suggest a jazz flute solo when I need a pounding techno kick. I chose **all-MiniLM-L6-v2**—a snappy model balancing performance and speed, ideal for real-time music noodling.
 
@@ -67,7 +67,7 @@ Integrating SentenceTransformers was a game-changer:
 -   **No AI Meltdowns**: The MiniLM model is lightweight, keeping things running smooth.
 -   **Faster Funk**: No more digging through samples manually—my agent finds the right one in seconds.
 
-![](/wp-content/uploads/2025/02/architecture_musicagent-1024x692.jpg)
+![](/wp-content/uploads/2025/02/architecture_musicagent-1024x692.webp)
 
 Music Agent Architecture
 

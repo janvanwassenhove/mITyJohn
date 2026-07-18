@@ -3,7 +3,7 @@ title: "Modern Java Development – The Fast And The Furious"
 date: 2023-02-05T18:41:58
 updated: 2023-12-20T22:33:01
 tags: ["development", "java", "programming", "quarkus"]
-cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.20.48-Create-a-retro-style-image-for-a-blog-post-about-a-vintage-car-rally.-The-image-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green-.png"
+cover: "/wp-content/uploads/2023/12/DALL·E-2023-12-19-22.20.48-Create-a-retro-style-image-for-a-blog-post-about-a-vintage-car-rally.-The-image-should-have-a-vintage-aesthetic-using-a-color-palette-of-dark-green--768x768.webp"
 cardTag: "Development · Java"
 wpId: 60
 wpSlug: "modern-java-development-the-fast-and-the-furious"
@@ -17,7 +17,7 @@ The difference between the way Java and other programming languages were working
 
 For some decades, Java was the undisputed number one programming language. We define it as an interpreted, moderately complex, multi-threaded, garbage-collected and powerful programming platform. Moreover, the JVM is battle-tested, powerful, mature and one of the best Process Virtual Machines in the industry. At the time, Java was perfect for large, monolithic enterprise applications.
 
-![](/wp-content/uploads/2022/12/Slide4-1024x576.png)
+![](/wp-content/uploads/2022/12/Slide4-1024x576.webp)
 
 Even today it is still one of the most popular programming languages today due to many reasons :
 
@@ -38,7 +38,7 @@ On the other hand we encounter different challenges to the traditional Java ecos
 7.  _Runtime Byte-code generation_: The interpretation process that converts Java bytecode to machine code happens in the runtime. Because interpretation is slow, Java uses the JIT compiler, trying to improve the performance.
 8.  Java 8 memory limits in _Containers_ \[solved later\]
 
-![](/wp-content/uploads/2022/12/image-1024x576.png)
+![](/wp-content/uploads/2022/12/image-1024x576.webp)
 
 Unfortunately, with the rise of Microservices and Serverless, Java had become disadvantageous as the JVM seems too large (high memory footprint) and slow (slow start-up time).And, as we can observe in modern container-based development, the container comes with limited resources. Considering all these points, we are reaching fresh challenges in terms of new **Software Architectures**:
 
@@ -64,11 +64,11 @@ But actually, we cannot provide a straight answer because of Java’s world wide
 
 Finally, the Java Community started to offer a modern version of Java with **GraalVM**:
 
-![](/wp-content/uploads/2022/12/image-2-1024x722.png)
+![](/wp-content/uploads/2022/12/image-2-1024x722.webp)
 
 No, not that old bike, we needed something fast and furious. Rather something like this… GraalVM.
 
-![](/wp-content/uploads/2022/12/Slide9-1024x576.png)
+![](/wp-content/uploads/2022/12/Slide9-1024x576.webp)
 
 GraalVM is JDK distribution that offers AOT compilation and polyglot programming. Moreover, it compiles directly to Native Code and is perfectly suitable for Cloud Native Development (because of its low memory footprint and fast start-up time).
 
@@ -82,17 +82,17 @@ A new era of speed arises
 
 First, we are taking a small sidestep to look at Microframeworks. In the past, we used to build large monolithic architectures, but these had their pitfalls. Since they combined multiple functional modules, whenever one module failed, everything failed. So, we began breaking them down into separate modules, ‘microservices’, which minimised their dependencies and reduced the impact of one of the services failing. These microservices were meant to work separately from each other, deployed on separate servers, running in their own specific environment.
 
-![](/wp-content/uploads/2022/12/Slide12-1024x576.png)
+![](/wp-content/uploads/2022/12/Slide12-1024x576.webp)
 
 With the rise of cloud computing, these services became serverless (function-as-a-service), eliminating the complexity of building and maintaining the infrastructure that normally accompanied the development and launch of new applications.
 
 Accordingly, by virtualising the environments on which our services ran, we made them sustainable and flexible, we automated delivery and made the services highly scalable. Especially in a cloud environment, we can easily scale those services…. but in the end, our resources are still finite!
 
-![](/wp-content/uploads/2022/12/image-4.png)
+![](/wp-content/uploads/2022/12/image-4-768x561.webp)
 
 So, we had to rethink it: how can or should we use less resources?
 
-![](/wp-content/uploads/2022/12/image-5.png)
+![](/wp-content/uploads/2022/12/image-5-768x432.webp)
 
 Therefore we first need to take a closer look to microframeworks. To start with, the name refers to minimalistic web application frameworks. These frameworks are composed:
 
@@ -104,11 +104,11 @@ Some examples of microframeworks are Javalin, Micronaut, Helidon, Quarlus, …
 
 But fewer modules, functions and dependencies aren’t sufficient … If we take a closer look at the number of lines of code related to start-up time and memory usage, we can also immediately notice the impact when using reflection.The result? Well, there goes our speed. Just line up and wait in the queue, please.
 
-![](/wp-content/uploads/2022/12/image-8-1024x513.png)
+![](/wp-content/uploads/2022/12/image-8-1024x513.webp)
 
 he result? Well, there goes our speed. Just line up and wait in the queue, please.
 
-![](/wp-content/uploads/2022/12/image-6-819x1024.png)
+![](/wp-content/uploads/2022/12/image-6-819x1024.webp)
 
 …. given all this, is it still posisble to have the same productivity but without reflection?
 
@@ -155,7 +155,7 @@ Among others, we distinguish three main components that make up the core of Graa
 -   **Ahead-of-time compiler** to build native executables
 -   **multiple languages support**: the ability to implement language interpreters. This allows GraalVM to be expanded to add additional languages to the Java ecosystem. It also supports tools such as a language-agnostic debugger, profiler and heap viewer.
 
-![](/wp-content/uploads/2022/12/image-10-1024x520.png)
+![](/wp-content/uploads/2022/12/image-10-1024x520.webp)
 
 #### How does GraalVM work?
 
@@ -167,7 +167,7 @@ Object allocations are also improved through optimizations made in memory-alloca
 
 Potential attack surfaces are also minimized when the ahead-of-time compiler compiles Java code into a native executable. This is because only the code required to execute the application is included. To do this, GrallVM will analyze the application code, its dependencies, dependent JDK libraries and VM components.
 
-![](/wp-content/uploads/2022/12/image-11-1024x362.png)
+![](/wp-content/uploads/2022/12/image-11-1024x362.webp)
 
 When we compile our Java programme (e.g., using the Java command), we’ll end up with our source code compiled into the binary representation of our code – a JVM bytecode (1). This bytecode is simpler and more compact than our source code, but conventional processors in our computers cannot execute it.
 
@@ -187,7 +187,7 @@ Unlike JIT mode, where compilation and execution happen at the same time, in AOT
 
 The GraalVM ‘native-image’ utility takes Java bytecode as input and outputs a native executable. To do so, the utility performs a static analysis of the bytecode under a closed world assumption. During the analysis, the utility looks for all the code that your application actually uses and eliminates everything that is unnecessary.
 
-![](/wp-content/uploads/2022/12/image-12-1024x418.png)
+![](/wp-content/uploads/2022/12/image-12-1024x418.webp)
 
 These three key concepts help you better understand the Native Image generation process:
 
@@ -234,7 +234,7 @@ In order to understand the immediate benefit of using Quarkus, let’s first loo
 
 **So how does a regular framework work?**
 
-![](/wp-content/uploads/2022/12/image-13-1024x417.png)
+![](/wp-content/uploads/2022/12/image-13-1024x417.webp)
 
 When the traditional Java cloud native frameworks start there are certain set of activities which are performed during the build time.
 
@@ -249,7 +249,7 @@ With Java, there is another intermediate step: The source text is first translat
 
 The bytecode is traditionally interpreted for execution in the JVM. The bytecode instructions are translated piece by piece into machine code instructions and executed. The process of “just-in-time compilation” (JIT) is more effective. With that process, the bytecode is also converted into machine code, but further optimizations also come into play.
 
-![](/wp-content/uploads/2022/12/Slide39-1024x576.png)
+![](/wp-content/uploads/2022/12/Slide39-1024x576.webp)
 
 **Let’s do it the Quarkus way**
 
@@ -259,7 +259,7 @@ Loading of the configuration files, class path scanning, read and set the proper
 
 So when your application starts, since all the metadata is already loaded and set during build time, it minimises the need of dynamic scanning and loading of classes during the runtime. Naturally this results in a significant improvement in the startup times of the applications. So this is the way Quarkus works behind the scenes and the reason for its **supersonic, subatomic nature**.
 
-![](/wp-content/uploads/2022/12/image-14-1024x365.png)
+![](/wp-content/uploads/2022/12/image-14-1024x365.webp)
 
 In contrast to the native execution of Java applications, Quarkus offers several advantages. Let’s differentiate between **the** **two** **modes** **supported** **by** **Quarkus**:
 
@@ -298,7 +298,7 @@ The second mode supported by Quarkus for running Java applications is even more 
 -   The severely limited possibilities for introspection may make it **difficult to debug** an application.
 -   The highly-optimized build process for native images **takes a long time**…
 
-![](/wp-content/uploads/2022/12/image-15.png)
+![](/wp-content/uploads/2022/12/image-15.webp)
 
 Micronaut
 
@@ -340,7 +340,7 @@ Because of the ahead-of-time compilation and resolving DI during the build phase
 
 Let’s say, you need native images but you cannot handle living on the bleeding edge or having frequent updates or you may need something special, Micronaut might be your solution.It’s can be used for Spring MVC/Spring Boot, which is the most dominant Server-Side framework in Java. It also uses the conventional OpenJDK, but this will slowly lose its charm in Cloud-Native Java Development.
 
-![](/wp-content/uploads/2022/12/image-17-1024x576.png)
+![](/wp-content/uploads/2022/12/image-17-1024x576.webp)
 
 ## Spring Native
 
@@ -358,7 +358,7 @@ The main difference between Spring and Spring Native images:
 
 It’s time for a line-up
 
-![](/wp-content/uploads/2022/12/image-16-952x1024.png)
+![](/wp-content/uploads/2022/12/image-16-952x1024.webp)
 
 **Quarkus**
 
