@@ -7,7 +7,7 @@ interface Props { limit?: number }
 const { limit } = Astro.props;
 
 type Talk = {
-  year?: number; event: string; location: string;
+  year?: number; date?: string; event: string; location: string;
   title?: string; kind?: string; link?: string; video?: string;
 };
 
@@ -37,6 +37,7 @@ for (const t of list) {
             </div>
             {t.title && <div class="title">{t.title}</div>}
             <div class="meta">
+              {t.date && <span class="date">{t.date}</span>}
               <span class="loc">{t.location}</span>
               {t.link && (
                 <a href={t.link} target="_blank" rel="noopener">Details ↗</a>
@@ -116,6 +117,7 @@ for (const t of list) {
   }
   .title { font-size: var(--text-body); color: var(--muted); margin-top: 6px; text-wrap: pretty; }
   .meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-family: var(--font-mono); font-size: var(--text-caption); }
+  .date { color: var(--level-stage); }
   .loc { color: var(--muted2); }
   .talk-video { min-height: 150px; margin: 14px 0 2px; padding: 18px; }
 

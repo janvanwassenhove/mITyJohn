@@ -8,6 +8,7 @@
   },
   {
     "year": 2026,
+    "date": "22–24 April 2026",
     "event": "Devoxx FR 2026",
     "location": "Paris, France",
     "kind": "Conference",
@@ -16,8 +17,9 @@
   },
   {
     "year": 2026,
+    "date": "29 May 2026",
     "event": "dotnetZuid",
-    "location": "Netherlands · 29 May 2026",
+    "location": "Netherlands",
     "title": "Outcoded by our kids — and this is no longer the job I signed for, with Bart",
     "kind": "Meetup",
     "link": "https://www.dotnetzuid.nl/events/outcoded-by-our-kids-and-this-is-no-longer-the-job-i-signed-for"
@@ -31,6 +33,7 @@
   },
   {
     "year": 2025,
+    "date": "6–10 October 2025",
     "event": "Devoxx 2025",
     "location": "Antwerp, Belgium",
     "kind": "Conference",
@@ -39,13 +42,15 @@
   },
   {
     "year": 2025,
-    "event": "EU Lisa Roundtable 2025",
+    "date": "June 2025",
+    "event": "EU-LISA Industry Roundtable",
     "location": "Warsaw, Poland",
     "kind": "Roundtable",
     "link": "https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers"
   },
   {
     "year": 2025,
+    "date": "26–28 May 2025",
     "event": "Techorama BE 2025",
     "location": "Antwerp, Belgium",
     "kind": "Conference",
@@ -53,6 +58,7 @@
   },
   {
     "year": 2025,
+    "date": "16–18 April 2025",
     "event": "Devoxx FR 2025",
     "location": "Paris, France",
     "kind": "Conference",
@@ -67,6 +73,7 @@
   },
   {
     "year": 2024,
+    "date": "7–11 October 2024",
     "event": "Devoxx 2024",
     "location": "Antwerp, Belgium",
     "kind": "Conference",
@@ -75,6 +82,7 @@
   },
   {
     "year": 2024,
+    "date": "7–11 October 2024",
     "event": "Devoxx 2024 — Tools In Action",
     "location": "Antwerp, Belgium",
     "kind": "Tools In Action",
