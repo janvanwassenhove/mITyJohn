@@ -14,11 +14,15 @@ name = "redirects"
 main = "src/index.ts"
 compatibility_date = "2026-07-01"
 
-# zone_name lets wrangler resolve the zone without hardcoding its id
+# Route patterns cannot contain a query string (the API rejects `/?*`), and a
+# bare `mityjohn.com/` did not match `mityjohn.com/?p=941` in practice. So the
+# route is `/*` and the Worker itself bails out immediately for any path other
+# than the root — see src/index.ts. Non-root requests cost one near-zero
+# passthrough rather than a lookup.
 [[routes]]
-pattern = "mityjohn.com/"
+pattern = "mityjohn.com/*"
 zone_name = "mityjohn.com"
 
 [[routes]]
-pattern = "www.mityjohn.com/"
+pattern = "www.mityjohn.com/*"
 zone_name = "mityjohn.com"

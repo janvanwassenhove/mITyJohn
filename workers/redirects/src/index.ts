@@ -18,9 +18,21 @@ type RedirectMap = Record<string, Record<string, string>>;
 // Query keys we answer for, in the order WordPress used them.
 const KEYS = ['p', 'page_id', 'cat', 'category_name', 'tag', 'author', 'feed'] as const;
 
+// Always land on the canonical apex over HTTPS. Without this, a hit on
+// http://… or www.… would 301 to a target that keeps the wrong scheme/host and
+// then need a second redirect to get canonical — two hops where one will do.
+const CANONICAL = 'https://mityjohn.com';
+
 export default {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
+
+    // The route has to be /* (Cloudflare route patterns cannot express "root
+    // with a query string"), so bail out immediately for everything else. Posts,
+    // apps and the uploads never pay for a lookup.
+    if (url.pathname !== '/') return fetch(request);
+    if (!url.search) return fetch(request);
+
     const map = MAP as RedirectMap;
 
     for (const key of KEYS) {
@@ -28,7 +40,7 @@ export default {
       if (value === null) continue;
       const target = map[key]?.[value];
       if (target) {
-        return Response.redirect(new URL(target, url.origin).toString(), 301);
+        return Response.redirect(new URL(target, CANONICAL).toString(), 301);
       }
     }
 
