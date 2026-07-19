@@ -3,7 +3,7 @@ name: "Scrum Programming Language"
 code: "SPL"
 tag: "lab"
 cat: "lab"
-blurb: "A real programming language where you code entirely in ceremonies. Yes, really."
+blurb: "An intentional programming language: you write ceremonies, it compiles to Java."
 repo: "scrum"
 order: 15
 wpId: 100

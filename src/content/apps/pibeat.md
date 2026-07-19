@@ -5,7 +5,6 @@ tag: "music"
 cat: "music"
 blurb: "The ultimate music timeline challenge, running on a Raspberry Pi."
 repo: "PiBeat"
-demoUrl: "https://janvanwassenhove.github.io/PiBeat"
 order: 4
 wpId: 853
 wpSlug: "pibeat"

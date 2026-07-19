@@ -55,6 +55,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Nav />
     <slot />
     <Footer />
+
+    {/* Book previews open here instead of downloading the PDF. */}
+    <dialog id="pdf-viewer" aria-label="Book preview">
+      <div class="pdf-bar">
+        <span class="pdf-title"></span>
+        <span class="pdf-actions">
+          <a class="pdf-open" href="#" target="_blank" rel="noopener">Open in new tab ↗</a>
+          <button class="pdf-close" type="button" aria-label="Close preview">✕</button>
+        </span>
+      </div>
+      <div class="pdf-frame"></div>
+    </dialog>
     <script>
       // Click-to-load third-party embeds in converted content (§8.1, D5). The
       // provider is contacted only after the visitor clicks; sandboxed so an
@@ -71,6 +83,53 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         f.style.cssText = `display:block;width:100%;height:${btn.dataset.embedH || 352}px;border:0;border-radius:var(--radius-embed);margin:1.6em 0;`;
         btn.replaceWith(f);
       });
+    </script>
+    <script>
+      // Book preview lightbox: render the teaser PDF inline rather than letting the
+      // browser download it. The iframe is only created on open.
+      {
+        const dlg = document.getElementById('pdf-viewer') as HTMLDialogElement | null;
+        const frame = dlg?.querySelector('.pdf-frame') as HTMLElement | null;
+        const titleEl = dlg?.querySelector('.pdf-title') as HTMLElement | null;
+        const openLink = dlg?.querySelector('.pdf-open') as HTMLAnchorElement | null;
+
+        const close = () => {
+          dlg?.close();
+          if (frame) frame.replaceChildren();
+        };
+
+        document.addEventListener('click', (e) => {
+          const btn = (e.target as HTMLElement).closest('[data-pdf]') as HTMLElement | null;
+          if (!btn || !dlg || !frame) return;
+          const src = btn.dataset.pdf!;
+          if (titleEl) titleEl.textContent = btn.dataset.pdfTitle ?? 'Preview';
+          if (openLink) openLink.href = src;
+
+          // Desktop browsers render PDFs in an iframe; mobile ones mostly refuse,
+          // so there we show the first-page render and let the button open the file.
+          const canEmbed = window.matchMedia('(min-width: 820px)').matches;
+          if (canEmbed) {
+            const f = document.createElement('iframe');
+            f.src = src;
+            f.title = (btn.dataset.pdfTitle ?? 'Book') + ' preview';
+            frame.replaceChildren(f);
+          } else {
+            const img = document.createElement('img');
+            img.src = btn.dataset.pdfPoster ?? '';
+            img.alt = (btn.dataset.pdfTitle ?? 'Book') + ' — first page of the teaser';
+            img.className = 'pdf-poster';
+            frame.replaceChildren(img);
+          }
+          dlg.showModal();
+        });
+
+        dlg?.querySelector('.pdf-close')?.addEventListener('click', close);
+        // click the backdrop (outside the dialog box) to dismiss
+        dlg?.addEventListener('click', (e) => {
+          if (e.target === dlg) close();
+        });
+        dlg?.addEventListener('close', () => frame?.replaceChildren());
+      }
     </script>
     <script>
       // Scroll reveal — design behaviour, respects prefers-reduced-motion via CSS.

@@ -27,12 +27,24 @@ const { title, series, badge, desc, buy, preview, cover } = book.data;
     <div class="ctas">
       <a class="buy" href={buy} target="_blank" rel="noopener">Buy on Amazon</a>
       {preview && (
-        <a
-          class="preview"
-          href={preview}
-          target={preview.startsWith('http') ? '_blank' : undefined}
-          rel={preview.startsWith('http') ? 'noopener' : undefined}
-        >Preview</a>
+        preview.endsWith('.pdf') ? (
+          /* Read in a lightbox rather than downloading the file. data-pdf-poster is
+             WordPress's render of the first page, used where PDF iframes don't work. */
+          <button
+            class="preview"
+            type="button"
+            data-pdf={preview}
+            data-pdf-title={title}
+            data-pdf-poster={preview.replace(/\.pdf$/, '-pdf-1024x658.jpg')}
+          >Preview</button>
+        ) : (
+          <a
+            class="preview"
+            href={preview}
+            target={preview.startsWith('http') ? '_blank' : undefined}
+            rel={preview.startsWith('http') ? 'noopener' : undefined}
+          >Preview</a>
+        )
       )}
     </div>
   </div>
@@ -96,6 +108,8 @@ const { title, series, badge, desc, buy, preview, cover } = book.data;
     font-family: var(--font-mono);
     font-size: var(--text-caption);
     color: var(--text);
+    background: transparent;
+    cursor: pointer;
   }
   .preview:hover { border-color: var(--border3); }
 </style>

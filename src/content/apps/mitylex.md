@@ -4,6 +4,7 @@ code: "LEX"
 tag: "fun"
 cat: "fun"
 blurb: "A word game with the vocabulary of a very confident intern."
+repo: "mITyLex"
 demoUrl: "https://janvanwassenhove.github.io/mITyLex"
 order: 13
 wpId: 841

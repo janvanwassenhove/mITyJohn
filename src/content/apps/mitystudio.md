@@ -5,7 +5,6 @@ tag: "music"
 cat: "music"
 blurb: "Your vibe-composing DAW. Hum an idea, it does the rest — allegedly."
 repo: "mITyStudio"
-demoUrl: "https://janvanwassenhove.github.io/mITyStudio"
 order: 1
 wpId: 514
 wpSlug: "mitystudio"

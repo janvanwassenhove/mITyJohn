@@ -4,8 +4,8 @@ code: "SPORT"
 tag: "fun"
 cat: "fun"
 blurb: "Gamification, creativity & real-time control for literally any sport."
-repo: "SportsMadness"
-demoUrl: "https://janvanwassenhove.github.io/SportsMadness"
+repo: "sportsmadness"
+demoUrl: "https://janvanwassenhove.github.io/sportsmadness"
 order: 9
 wpId: 640
 wpSlug: "sportsmadness"

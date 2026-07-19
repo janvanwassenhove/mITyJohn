@@ -5,7 +5,6 @@ tag: "fun"
 cat: "fun"
 blurb: "Where every movie finds its heart. A matchmaker for your watchlist."
 repo: "LoveFlix"
-demoUrl: "https://janvanwassenhove.github.io/LoveFlix"
 order: 8
 wpId: 760
 wpSlug: "loveflix"

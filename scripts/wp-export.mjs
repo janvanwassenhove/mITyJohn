@@ -27,21 +27,23 @@ const mediaById = new Map(inv.media.map((m) => [m.id, m]));
 
 // Design's per-app metadata (design/handoff is source of truth; gap-list G3 adds mITyGarden)
 const APP_META = {
-  mitystudio: { name: 'mITyStudio', code: 'STUDIO', tag: 'music', cat: 'music', order: 1, repo: 'mITyStudio', demoUrl: 'https://janvanwassenhove.github.io/mITyStudio', blurb: 'Your vibe-composing DAW. Hum an idea, it does the rest — allegedly.' },
+  // repo / demoUrl verified against the GitHub API and live HTTP status by
+  // scripts/validate-apps.mjs — do not hand-edit without re-running it.
+  mitystudio: { name: 'mITyStudio', code: 'STUDIO', tag: 'music', cat: 'music', order: 1, repo: 'mITyStudio', blurb: 'Your vibe-composing DAW. Hum an idea, it does the rest — allegedly.' },
   'music-agent': { name: 'Music Agent', code: 'AGENT', tag: 'music', cat: 'music', order: 2, repo: 'MusicAgent', blurb: 'A multi-agent system that writes electronic songs with Sonic Pi. Bring snacks.' },
   mityguitar: { name: 'mITyGuitar', code: 'GUITAR', tag: 'music', cat: 'music', order: 3, repo: 'mITyGuitar', blurb: 'Turns a game controller into an actual guitar. Your neighbours: thrilled.' },
-  pibeat: { name: 'PiBeat', code: 'PIBEAT', tag: 'music', cat: 'music', order: 4, demoUrl: 'https://janvanwassenhove.github.io/PiBeat', repo: 'PiBeat', blurb: 'The ultimate music timeline challenge, running on a Raspberry Pi.' },
-  'ghosts-in-the-machine': { name: 'Ghosts in the Machine', code: 'GHOSTS', tag: 'game', cat: 'games', order: 5, demoUrl: 'https://janvanwassenhove.github.io/ghosts', repo: 'ghosts', blurb: 'A haunted IT sim built by inviting a ghost in. It went about as well as you’d expect.' },
+  pibeat: { name: 'PiBeat', code: 'PIBEAT', tag: 'music', cat: 'music', order: 4, repo: 'PiBeat', blurb: 'The ultimate music timeline challenge, running on a Raspberry Pi.' },
+  'ghosts-in-the-machine': { name: 'Ghosts in the Machine', code: 'GHOSTS', tag: 'game', cat: 'games', order: 5, demoUrl: 'https://janvanwassenhove.github.io/ghostsinthemachine', repo: 'ghostsinthemachine', blurb: 'A haunted IT sim built by inviting a ghost in. It went about as well as you’d expect.' },
   mityfighter: { name: 'mITyFighter', code: 'FIGHT', tag: 'game', cat: 'games', order: 6, demoUrl: 'https://janvanwassenhove.github.io/mITyFighter', repo: 'mITyFighter', blurb: 'A retro fighter where the real boss is legacy code. Flawless victory.' },
   hipster: { name: 'Hipster', code: 'HIPSTER', tag: 'game', cat: 'games', order: 7, demoUrl: 'https://janvanwassenhove.github.io/Hipster', repo: 'Hipster', blurb: 'You probably haven’t played it yet. That’s kind of the point.' },
-  loveflix: { name: 'LoveFlix', code: 'LOVE', tag: 'fun', cat: 'fun', order: 8, demoUrl: 'https://janvanwassenhove.github.io/LoveFlix', repo: 'LoveFlix', blurb: 'Where every movie finds its heart. A matchmaker for your watchlist.' },
-  sportsmadness: { name: 'Sports Madness', code: 'SPORT', tag: 'fun', cat: 'fun', order: 9, demoUrl: 'https://janvanwassenhove.github.io/SportsMadness', repo: 'SportsMadness', blurb: 'Gamification, creativity & real-time control for literally any sport.' },
-  mitystories: { name: 'mITyStories', code: 'STORY', tag: 'fun', cat: 'fun', order: 10, demoUrl: 'https://janvanwassenhove.github.io/mITyStories', blurb: 'Tiny generative stories for when the meeting runs long.' },
-  typix: { name: 'Typix', code: 'TYPIX', tag: 'fun', cat: 'fun', order: 11, demoUrl: 'https://janvanwassenhove.github.io/Typix', blurb: 'Type pixels into being. Oddly meditative, mildly pointless.' },
-  mitylaundry: { name: 'mITyLaundry', code: 'WASH', tag: 'fun', cat: 'fun', order: 12, demoUrl: 'https://janvanwassenhove.github.io/mITyLaundry', blurb: 'Because someone had to gamify the laundry. Reluctantly, that someone was Jan.' },
-  mitylex: { name: 'mITyLex', code: 'LEX', tag: 'fun', cat: 'fun', order: 13, demoUrl: 'https://janvanwassenhove.github.io/mITyLex', blurb: 'A word game with the vocabulary of a very confident intern.' },
+  loveflix: { name: 'LoveFlix', code: 'LOVE', tag: 'fun', cat: 'fun', order: 8, repo: 'LoveFlix', blurb: 'Where every movie finds its heart. A matchmaker for your watchlist.' },
+  sportsmadness: { name: 'Sports Madness', code: 'SPORT', tag: 'fun', cat: 'fun', order: 9, demoUrl: 'https://janvanwassenhove.github.io/sportsmadness', repo: 'sportsmadness', blurb: 'Gamification, creativity & real-time control for literally any sport.' },
+  mitystories: { name: 'mITyStories', code: 'STORY', tag: 'fun', cat: 'fun', order: 10, blurb: 'Tiny generative stories for when the meeting runs long.' },
+  typix: { name: 'Typix', code: 'TYPIX', tag: 'fun', cat: 'fun', order: 11, demoUrl: 'https://janvanwassenhove.github.io/Typix', repo: 'Typix', blurb: 'Type pixels into being. Oddly meditative, mildly pointless.' },
+  mitylaundry: { name: 'mITyLaundry', code: 'WASH', tag: 'fun', cat: 'fun', order: 12, demoUrl: 'https://janvanwassenhove.github.io/mITyLaundry', repo: 'mITyLaundry', blurb: 'Because someone had to gamify the laundry. Reluctantly, that someone was Jan.' },
+  mitylex: { name: 'mITyLex', code: 'LEX', tag: 'fun', cat: 'fun', order: 13, demoUrl: 'https://janvanwassenhove.github.io/mITyLex', repo: 'mITyLex', blurb: 'A word game with the vocabulary of a very confident intern.' },
   mitygarden: { name: 'mITyGarden', code: 'GARDEN', tag: 'fun', cat: 'fun', order: 14, repo: 'mITyGarden', demoUrl: 'https://janvanwassenhove.github.io/mITyGarden', blurb: 'An AI garden design studio. Move the pool with a prompt, not a shovel.' }, // G3 — not in design's 14
-  'scrum-programming': { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', cat: 'lab', order: 15, repo: 'scrum', blurb: 'A real programming language where you code entirely in ceremonies. Yes, really.' },
+  'scrum-programming': { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', cat: 'lab', order: 15, repo: 'scrum', blurb: 'An intentional programming language: you write ceremonies, it compiles to Java.' },
 };
 
 // ---------------------------------------------------------------------------

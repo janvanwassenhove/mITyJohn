@@ -79,6 +79,60 @@ a:hover { color: var(--text); }
 .prose th { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted2); }
 .prose iframe { max-width: 100%; border: 0; border-radius: var(--radius-embed); }
 
+/* Book preview lightbox — renders the teaser PDF inline instead of downloading it. */
+#pdf-viewer {
+  width: min(1000px, 94vw);
+  max-height: 88vh;
+  padding: 0;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-card);
+  background: var(--s1);
+  color: var(--text);
+  overflow: hidden;
+}
+#pdf-viewer::backdrop { background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(3px); }
+#pdf-viewer .pdf-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+}
+#pdf-viewer .pdf-title { font-weight: 600; color: var(--text); }
+#pdf-viewer .pdf-actions { display: flex; align-items: center; gap: 14px; }
+#pdf-viewer .pdf-open { color: var(--accent-2); }
+#pdf-viewer .pdf-close {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-btn-sm);
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 10px;
+  font-size: 13px;
+}
+#pdf-viewer .pdf-close:hover { border-color: var(--border3); color: var(--text); }
+#pdf-viewer .pdf-frame { overflow: auto; }
+#pdf-viewer iframe { width: 100%; height: 100%; border: 0; display: block; }
+#pdf-viewer .pdf-poster { display: block; width: 100%; height: auto; }
+
+/* Two mutually exclusive breakpoints rather than an override, so the rules don't
+   depend on source order (Tailwind reorders the sheet).
+   >=820px embeds the PDF and needs a tall fixed box; below that the viewer shows
+   a first-page image and should shrink-wrap it. */
+@media (min-width: 820px) {
+  #pdf-viewer { height: min(88vh, 900px); }
+  #pdf-viewer .pdf-frame { height: calc(100% - 45px); }
+}
+@media (max-width: 819px) {
+  /* fit-content, not auto: an open dialog is fixed with inset:0, so `auto`
+     stretches to the max-height instead of shrink-wrapping the poster image. */
+  #pdf-viewer { height: fit-content; }
+  #pdf-viewer .pdf-frame { height: auto; max-height: calc(88vh - 45px); }
+}
+
 /* Click-to-load facades for third-party embeds in converted content (§8.1, D5).
    Nothing is requested from the provider until the visitor clicks, so the site
    stays cookieless and needs no consent banner. */

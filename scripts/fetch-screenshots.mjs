@@ -30,6 +30,21 @@ const SOURCES = {
   'scrum-programming': { repo: 'scrum', files: ['asset/banner.png'] },
 };
 
+// Apps whose repos hold no usable screenshot (only sprites/icons/frames). These
+// come from the WordPress mirror instead — the same images the app's own page uses.
+const LOCAL = {
+  'ghosts-in-the-machine': [
+    'wp-content/uploads/2026/07/gitm-01-main-menu-1024x576.png',
+    'wp-content/uploads/2026/07/gitm-03-gameplay-1024x576.png',
+    'wp-content/uploads/2026/07/gitm-02-campaign-1024x576.png',
+  ],
+  mityfighter: ['wp-content/uploads/2026/01/image-8-1024x714.png'],
+  mitygarden: ['wp-content/uploads/2026/05/image-3-1024x572.png'],
+  mitylaundry: ['wp-content/uploads/2026/02/image-9.png'],
+  mitystories: ['wp-content/uploads/2026/01/image-7-768x624.png'],
+  sportsmadness: ['wp-content/uploads/2025/11/51781271-e481-4a68-83ed-36a438f791fd-1-1024x768.jpg'],
+};
+
 // Mascot art for the Scrum level (asset/ in the scrum repo).
 const MASCOTS = [
   { repo: 'scrum', path: 'asset/scrummy_transparant.png', out: 'scrummy.png' },
@@ -79,6 +94,30 @@ for (const [slug, { repo, files }] of Object.entries(SOURCES)) {
     } catch (e) {
       failed++;
       console.error(`  ${slug} <- ${repo}/${path}: ${e.message}`);
+    }
+  }
+  if (shots.length) index[slug] = shots;
+}
+
+// Re-encode the WordPress-mirrored art to the same card size as the repo shots.
+for (const [slug, paths] of Object.entries(LOCAL)) {
+  const shots = [];
+  for (const [i, rel] of paths.entries()) {
+    const name = `${slug}-${i + 1}.webp`;
+    const dest = fileURLToPath(new URL(name, SHOT_DIR));
+    try {
+      if (!(await stat(dest).catch(() => null))) {
+        const srcFile = fileURLToPath(new URL('public/' + rel, ROOT));
+        const img = sharp(await readFile(srcFile));
+        const meta = await img.metadata();
+        const out = await (meta.width > 560 ? img.resize({ width: 560 }) : img).webp({ quality: 76 }).toBuffer();
+        await writeFile(dest, out);
+        fetched++;
+      } else cached++;
+      shots.push({ src: `/screenshots/${name}`, alt: `${slug} screenshot ${i + 1}` });
+    } catch (e) {
+      failed++;
+      console.error(`  ${slug} <- ${rel}: ${e.message}`);
     }
   }
   if (shots.length) index[slug] = shots;

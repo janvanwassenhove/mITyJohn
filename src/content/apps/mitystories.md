@@ -4,7 +4,6 @@ code: "STORY"
 tag: "fun"
 cat: "fun"
 blurb: "Tiny generative stories for when the meeting runs long."
-demoUrl: "https://janvanwassenhove.github.io/mITyStories"
 order: 10
 wpId: 771
 wpSlug: "mitystories"

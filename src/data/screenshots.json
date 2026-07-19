@@ -100,5 +100,49 @@
       "src": "/screenshots/scrum-programming-1.webp",
       "alt": "scrum-programming screenshot 1"
     }
+  ],
+  "ghosts-in-the-machine": [
+    {
+      "src": "/screenshots/ghosts-in-the-machine-1.webp",
+      "alt": "ghosts-in-the-machine screenshot 1"
+    },
+    {
+      "src": "/screenshots/ghosts-in-the-machine-2.webp",
+      "alt": "ghosts-in-the-machine screenshot 2"
+    },
+    {
+      "src": "/screenshots/ghosts-in-the-machine-3.webp",
+      "alt": "ghosts-in-the-machine screenshot 3"
+    }
+  ],
+  "mityfighter": [
+    {
+      "src": "/screenshots/mityfighter-1.webp",
+      "alt": "mityfighter screenshot 1"
+    }
+  ],
+  "mitygarden": [
+    {
+      "src": "/screenshots/mitygarden-1.webp",
+      "alt": "mitygarden screenshot 1"
+    }
+  ],
+  "mitylaundry": [
+    {
+      "src": "/screenshots/mitylaundry-1.webp",
+      "alt": "mitylaundry screenshot 1"
+    }
+  ],
+  "mitystories": [
+    {
+      "src": "/screenshots/mitystories-1.webp",
+      "alt": "mitystories screenshot 1"
+    }
+  ],
+  "sportsmadness": [
+    {
+      "src": "/screenshots/sportsmadness-1.webp",
+      "alt": "sportsmadness screenshot 1"
+    }
   ]
 }

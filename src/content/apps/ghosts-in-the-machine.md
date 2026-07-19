@@ -4,8 +4,8 @@ code: "GHOSTS"
 tag: "game"
 cat: "games"
 blurb: "A haunted IT sim built by inviting a ghost in. It went about as well as you’d expect."
-repo: "ghosts"
-demoUrl: "https://janvanwassenhove.github.io/ghosts"
+repo: "ghostsinthemachine"
+demoUrl: "https://janvanwassenhove.github.io/ghostsinthemachine"
 order: 5
 wpId: 951
 wpSlug: "ghosts-in-the-machine"

@@ -22,7 +22,7 @@
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 0,
+        "downloads": 1,
         "platform": "macOS"
       },
       {
@@ -50,7 +50,7 @@
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
-        "downloads": 1,
+        "downloads": 2,
         "platform": "Windows"
       }
     ]
@@ -84,15 +84,22 @@
         "name": "pibeat-0.2.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat-0.2.1-1.x86_64.rpm",
         "size": 5175700,
-        "downloads": 0,
+        "downloads": 1,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.2.1_amd64.AppImage",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.AppImage",
         "size": 82516472,
-        "downloads": 0,
+        "downloads": 1,
         "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.2.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64_en-US.msi",
+        "size": 3981312,
+        "downloads": 1,
+        "platform": "Windows"
       },
       {
         "name": "pibeat_0.2.1_amd64.deb",
@@ -116,17 +123,87 @@
         "platform": "Windows"
       },
       {
-        "name": "pibeat_0.2.1_x64_en-US.msi",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64_en-US.msi",
-        "size": 3981312,
-        "downloads": 0,
-        "platform": "Windows"
-      },
-      {
         "name": "pibeat_universal.app.tar.gz",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_universal.app.tar.gz",
         "size": 7949711,
         "downloads": 0
+      }
+    ]
+  },
+  "ghostsinthemachine": {
+    "tag": "v1.0.5",
+    "date": "2026-07-14T09:19:33Z",
+    "changelog": "**Ghosts in the Machine v1.0.5** — a haunted IT management sim. Run a paranormal IT\nsupport company: build rooms, hire staff of questionable qualification, and route an\nendless queue of absurd tickets while juggling money, client trust, technical debt\nand the coffee supply.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/ghostsinthemachine/\n\n## Download\n\n| Platform | Installer |\n| --- | --- |\n| Windows (x64) | [`GhostsInTheMachine-1.0.5-win-x64.exe`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-win-x64.exe) |\n| macOS (Apple Silicon) | [`GhostsInTheMachine-1.0.5-mac-arm64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg) |\n| macOS (Intel) | [`GhostsInTheMachine-1.0.5-mac-x64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg) |\n\nThe Windows build **updates itself**: if an older version is installed it downloads the\nnew one in the background and applies it on quit.\n\n> **macOS is unsigned.** On first launch, right-click the app → *Open* to get past\n> Gatekeeper. macOS auto-update is disabled until the app is signed and notarized.\n\n## Screenshots\n\n| Main menu | Campaign |\n| --- | --- |\n| ![Main menu](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png) | ![Campaign](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png) |\n\n![Gameplay](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png)\n\n## What's changed\n\n- Cap rooms at two staff; a second worker reliably speeds up the room\n\n\n**Full changelog:** https://github.com/janvanwassenhove/ghostsinthemachine/compare/v1.0.4...v1.0.5\n",
+    "assets": [
+      {
+        "name": "GhostsInTheMachine-1.0.5-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg",
+        "size": 134457974,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.5-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg",
+        "size": 136227827,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.5-win-x64.exe",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-win-x64.exe",
+        "size": 114125603,
+        "downloads": 0,
+        "platform": "Windows"
+      },
+      {
+        "name": "01-main-menu.png",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
+        "size": 867069,
+        "downloads": 3
+      },
+      {
+        "name": "02-campaign.png",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
+        "size": 60247,
+        "downloads": 3
+      },
+      {
+        "name": "03-gameplay.png",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
+        "size": 239706,
+        "downloads": 3
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.zip",
+        "size": 134372890,
+        "downloads": 0
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.5-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.zip",
+        "size": 136209268,
+        "downloads": 0
+      }
+    ]
+  },
+  "scrum": {
+    "tag": "v2.0.0",
+    "date": "2025-12-28T22:38:26Z",
+    "changelog": "# SCRUM v2.0.0\r\n\r\n\r\n## 🧠 New Language Feature: `#INTENT`\r\n\r\nSCRUM introduces **`#INTENT`**, enabling developers to express logic in natural language that is transformed into executable SCRUM code **at compile time**.\r\n\r\n### Key characteristics\r\n\r\n- Natural language → SCRUM code\r\n- Executed at **compile time**\r\n- Powered by LLMs with **automatic provider fallback**\r\n- Generated code is validated and re-parsed\r\n- **No runtime AI dependency**\r\n\r\n### Example\r\n\r\n```scrum\r\nEPIC \"StatisticsApp\"\r\n    USER STORY \"ComputeStats\"\r\n        #INTENT\r\n        I want to create a list of 5 numbers,\r\n        calculate their sum and average,\r\n        and display the results in a readable format.\r\n        #END INTENT\r\n    END OF USER STORY\r\nEND OF EPIC\r\n\r\nStatisticsApp IS NEW StatisticsApp\r\nStatisticsApp::ComputeStats USING []\r\n```\r\nDuring compilation, the #INTENT block is processed by the configured LLM provider.\r\nSCRUM generates valid SCRUM code, validates it, and executes it like any handwritten implementation.\r\n\r\nSame determinism.\r\nLess boilerplate.\r\nZero AI magic at runtime.\r\n\r\n---\r\n\r\n\r\n## ☕ Platform Upgrade\r\n\r\n- **Upgraded to **Java 25** (LTS)**  \r\n  SCRUM now runs on the latest long-term support JVM, bringing improved performance, stability, and long-term maintainability.\r\n\r\n<img width=\"1024\" height=\"1024\" alt=\"scrummy_duke\" src=\"https://github.com/user-attachments/assets/a1286183-b5eb-446a-9b1c-f8cd86a54120\" />\r\n\r\n---\r\n\r\n## 📦 Fully Standalone SDK\r\n\r\nSCRUM is now distributed as a **complete, installable SDK**, allowing it to be used independently without manual JAR execution.\r\n\r\n### What’s included\r\n\r\n- Cross-platform installers (Windows, Linux, macOS)\r\n- Global `scrum` CLI available on the PATH\r\n- No manual Java command invocation required\r\n- Bundled:\r\n  - Examples\r\n  - Documentation\r\n  - CLI tooling\r\n\r\nSCRUM can now be installed, executed, and integrated like a first-class programming language.\r\n\r\n---\r\n\r\n## 🧰 Developer Experience Improvements\r\n\r\n- Enhanced CLI support:\r\n  - ",
+    "assets": [
+      {
+        "name": "scrum-language-2.0.0-sdk.zip",
+        "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.zip",
+        "size": 1082091,
+        "downloads": 4
+      },
+      {
+        "name": "scrum-language-2.0.0-sdk.tar.gz",
+        "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.tar.gz",
+        "size": 1069463,
+        "downloads": 1
       }
     ]
   }

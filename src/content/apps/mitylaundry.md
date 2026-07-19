@@ -4,6 +4,7 @@ code: "WASH"
 tag: "fun"
 cat: "fun"
 blurb: "Because someone had to gamify the laundry. Reluctantly, that someone was Jan."
+repo: "mITyLaundry"
 demoUrl: "https://janvanwassenhove.github.io/mITyLaundry"
 order: 12
 wpId: 830
