@@ -1,8 +1,86 @@
 [
-  { "tag": "#Flash", "href": "https://www.instagram.com/p/Daq-zcojIzB/" },
-  { "tag": "#RubberDuck", "href": "https://www.instagram.com/p/DabT7Y3jMK4/" },
-  { "tag": "#BCPL", "href": "https://www.instagram.com/p/DaWKovEDKWO/" },
-  { "tag": "#Simula", "href": "https://www.instagram.com/p/DaQxORKDGeF/" },
-  { "tag": "#Xamarin", "href": "https://www.instagram.com/p/DaOC9l2jBoL/" },
-  { "tag": "#COBOL", "href": "https://www.instagram.com/p/DaJE6SZDOxd/" }
+  {
+    "href": "https://www.instagram.com/p/Daq-zcojIzB/",
+    "image": "/instagram/18004362086761304.jpg",
+    "tag": "#Flash",
+    "alt": "Flash & ActionScript once made the web move.\n\nBefore HTML5 became the default answer to everything, Flash was everywhere.\n\nAnimations.\nBrowser games.\nInteractive menus.\nCartoons.\nE-learning.\nTiny loading bars that somehow felt like an event.\n\nFlash started life in 1996 as FutureSplash Animator.\nLater that year, Macromedia acquired it and renamed it Flash.\n\nThen came the scripting.\n\nFirst simple actions.\nThen ActionScript.\nThen ActionScript 2.0.\nThen ActionScript 3.0, where Flash stopped being “j",
+    "timestamp": "2026-07-11T23:47:50+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DabT7Y3jMK4/",
+    "image": "/instagram/18113037169937924.jpg",
+    "tag": "#RubberDuckDebugging",
+    "alt": "Rubber duck debugging sounds ridiculous.\n\nAnd that is exactly why it works.\n\nThe idea is simple:\nyou explain your code, line by line, to a rubber duck.\n\nThe duck says nothing.\nThe duck judges nothing.\nThe duck has no sprint planning after this.\n\nBut while explaining the problem out loud, something strange happens.\n\nYour brain slows down.\nYour assumptions become visible.\nThat vague “it should work” turns into actual logic.\n\nAnd suddenly you hear it:\n\n“Wait… why am I passing null there?”\n“Why did ",
+    "timestamp": "2026-07-05T21:44:34+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DaWKovEDKWO/",
+    "image": "/instagram/17897072901513490.jpg",
+    "tag": "#BCPL",
+    "alt": "Curly braces feel so normal today that we barely notice them.\n\n{\ncode lives here\n}\n\nBut before C made them famous, **BCPL** was already putting code in braces.\n\nBCPL stands for **Basic Combined Programming Language**.\n\nA wonderfully practical name for a wonderfully practical language.\n\nIt was designed by Martin Richards in the 1960s as a simpler descendant of CPL, focused on portability, compiler writing and systems programming.\n\nNot exactly a language built for hype.\n\nMore like:\n\n“Can we make t",
+    "timestamp": "2026-07-03T21:47:11+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DaQxORKDGeF/",
+    "image": "/instagram/18099245081090422.jpg",
+    "tag": "#Simula",
+    "alt": "Before objects were cool, Simula already had classes.\n\nSimula sounds almost too obvious.\n\nAnd that is because it was.\n\nThe name comes from SIMUlation LAnguage: a language created to model and simulate systems, especially discrete-event systems.\n\nIn the early 1960s, Ole-Johan Dahl and Kristen Nygaard worked on it at the Norwegian Computing Center.\n\nThe goal was practical: describe systems, events, processes and behaviour in a way computers could actually run.\n\nBut then something bigger happened.\n",
+    "timestamp": "2026-07-01T19:28:54+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DaOC9l2jBoL/",
+    "image": "/instagram/17972495496080653.jpg",
+    "tag": "#Xamarin",
+    "alt": "Xamarin sounds like a mysterious framework from a sci-fi lab.\n\nReality?\n\nIt was named after a monkey.\n\nMore precisely: the tamarin monkey.\nThe “T” became an “X”, keeping the playful naming tradition around Ximian, Mono, and the wider .NET ecosystem.\n\nAnd honestly, it fits.\n\nXamarin’s mission was all about movement:\none codebase, multiple platforms, iOS and Android, C Sharp and .NET trying to keep everyone in the same tree.\n\nWas it perfect?\nNo.\n\nWas cross-platform mobile development ever peaceful",
+    "timestamp": "2026-06-30T18:06:12+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DaJE6SZDOxd/",
+    "image": "/instagram/18082061636646398.jpg",
+    "tag": "#COBOL",
+    "alt": "COBOL didn’t try to sound mysterious.\nIt basically showed up with a job description.\n\nIn 1959, the people behind COBOL needed a shared language for business data processing.\nSo they named it exactly that:\n\nCommon Business-Oriented Language.\n\nCommon: less tied to one machine.\nBusiness-oriented: payroll, ledgers, reports, records.\nLanguage: readable enough that humans could still recognize what was going on.\n\nNot the coolest name in computing.\nPossibly one of the most honest.\n\nAnd more than 60 yea",
+    "timestamp": "2026-06-28T19:47:01+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DaGn51CjC6s/",
+    "image": "/instagram/18095933585152891.jpg",
+    "tag": "#Ada",
+    "alt": "Some programming languages become trendy.\nAda became trusted.\n\nBuilt in the early 1980s, named after Ada Lovelace, and designed for systems where “oops, runtime surprise” is not exactly a feature.\n\nAda was created with reliability, strong typing, safety and maintainability in mind. That made it a natural fit for mission-critical domains like defense, avionics, aerospace and space-station software.\n\nIn 1995, Ada 95 became an international standard: ISO/IEC 8652:1995.\n\nOr, in less formal terms:\n\nA",
+    "timestamp": "2026-06-27T20:55:04+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DNLwNqXNKnT/",
+    "image": "/instagram/18124115296422814.jpg",
+    "tag": "#PacMan",
+    "alt": "🍕🎮 Fun fact: Pac‑Man’s name started with a pizza! In 1980, Namco designer Toru Iwatani was hungry and doodled a pizza with one slice missing; that sketch became our yellow hero. He was first called ‘Puck‑Man’, after the Japanese onomatopoeia “paku paku” (the sound of munching), but for the U.S. release the name was tweaked to ‘Pac‑Man’ to deter mischievous arcade scribblers. Since then he’s been chomping dots and dodging ghosts as an arcade legend. Game over? Never.\n\n#PacMan #RetroGaming #Gami",
+    "timestamp": "2025-08-10T17:55:46+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/DBFLPE0MbIt/",
+    "image": "/instagram/17845945341310121.jpg",
+    "tag": "#Turing",
+    "alt": "🤖 Bombe-bastic Engineering! How #Turing Went Full 'Enigma-ineer' 💣💡\n\nBack in WWII, Alan Turing and his team worked tirelessly to break the German #Enigma code. Their tool? The Bombe, an electro-mechanical machine that revolutionized cryptography and gave birth to modern computing. This incredible innovation was a precursor to the very systems we use today, shaping how we think about algorithms, data, and security.\n\nIt's not just about solving puzzles—it’s about building a future where technol",
+    "timestamp": "2024-10-13T22:20:28+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/C1aqoHet7dy/",
+    "image": "/instagram/18393396259064016.jpg",
+    "tag": "#sonicpi",
+    "alt": "Nothing beats a Sonic Pi(e) 🎧🎼😎\n\nAlso checkout:\nhttps://github.com/janvanwassenhove/MusicAgent for AI driven song creation (with Sonic Pi)!\n\n#sonicpi #ruby #development #programming #programmer #code #coder #java #developer #music #music #livecode #dj #programmerslife💻 #raspberry #composer #digital #javascript #script #scripting #softwaredeveloper #softwareengineer #developer #computer #computerscience #computerhistory #creative #songwriter #songwriting #web #ai #musician",
+    "timestamp": "2023-12-29T00:22:05+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/CuxgbDqNL0S/",
+    "image": "/instagram/17982374246471615.jpg",
+    "tag": "#php",
+    "alt": "The chronicles of Laravel, the framework, Bootplant & the creator! \nWhere did the framework get his name from…\n\n#php #laravel #webdeveloper #webdevelopment #web #programmer #programming #code #framework #coder #coderlife #developer #javascript #digital #webdesign  #webdesigner #techie #technology #internet #website #drupal #symfony #mvc #narnia #computer #computerhistory #computerscience #history #historyfacts #java",
+    "timestamp": "2023-07-16T21:35:42+0000"
+  },
+  {
+    "href": "https://www.instagram.com/p/Crot_IOtNIb/",
+    "image": "/instagram/18014646442597851.jpg",
+    "tag": "#vuejs",
+    "alt": "Making UIs Vue-nique!\n#vuejs your favourite #web #framework ?\n\n#webdeveloper #webdevelopment #webdesigner #programmer #programming #programmerlife #code #coder #codergirl #webdesign #digital #internet #computer #developer #development #fullstackdeveloper #software #softwaredeveloper #computer  #computers #computerscience #website #history #javascript #scripting #java #angular #react",
+    "timestamp": "2023-04-29T22:06:52+0000"
+  }
 ]
