@@ -3,7 +3,7 @@ name: "mITyStories"
 code: "STORY"
 tag: "fun"
 cat: "fun"
-blurb: "Tiny generative stories for when the meeting runs long."
+blurb: "Generates complete illustrated picture books and comics — in English, Dutch, Flemish and French."
 order: 10
 wpId: 771
 wpSlug: "mitystories"

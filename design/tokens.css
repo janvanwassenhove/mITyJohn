@@ -57,6 +57,8 @@
   --ink-on-level-stage: #2b1219;
   --level-notes: #7fc99a;               /* LEVEL 06 · FIELD NOTES (blog) */
   --ink-on-level-notes: #12201a;
+  --level-dig: #5ab5a0;                 /* LEVEL 07 · THE DIG (instagram) — added post-launch */
+  --ink-on-level-dig: #0d211d;
 
   /* Status / semantic */
   --ok: #7fc99a;                        /* status dot, health bar */

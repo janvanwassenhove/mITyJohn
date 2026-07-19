@@ -3,8 +3,10 @@
 // Motion is pure CSS; a small shared script (bottom) keeps score and handles the
 // level-1 stomp. It runs only while a strip is on screen and not at all under
 // prefers-reduced-motion. Everything here is aria-hidden.
+import { MITYJOHN, ARCHEOLOGIST } from './sprites';
+
 interface Props {
-  variant: 'store' | 'scrum' | 'artist' | 'books' | 'stage' | 'notes';
+  variant: 'store' | 'scrum' | 'artist' | 'books' | 'stage' | 'notes' | 'dig';
 }
 const { variant } = Astro.props;
 
@@ -15,11 +17,11 @@ const LABELS = {
   books: 'LVL 4 · THE BOOKSTORE — DELIVERY ROUND · EVERY DOOR ON THE STREET',
   stage: 'LVL 5 · THE STAGE — DODGE · SURVIVE THE Q&A',
   notes: 'LVL 6 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
+  dig: 'LVL 7 · THE DIG — RUNNER · OUTRUN THE BOULDER, GRAB THE RELIC',
 };
 
 // --- pixel sprites (box-shadow art on a single element) ---------------------
-const RUNNER =
-  '18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent), 18px 24px 0 var(--accent-2), 24px 24px 0 var(--accent), 30px 24px 0 var(--accent), 36px 24px 0 var(--accent), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent), 18px 30px 0 var(--accent), 24px 30px 0 var(--accent-2), 30px 30px 0 var(--accent), 36px 30px 0 var(--accent), 42px 30px 0 var(--accent-2), 12px 36px 0 var(--accent), 18px 36px 0 var(--accent), 24px 36px 0 var(--accent), 30px 36px 0 var(--accent), 36px 36px 0 var(--accent), 42px 36px 0 var(--accent-2), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b';
+const RUNNER = MITYJOHN;
 
 // Delivery van for the book round (Paperboy-style), 6px cells.
 const VAN = (() => {
@@ -243,6 +245,23 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     </>
   )}
 
+  {/* LVL 7 — the dig: outrun the boulder, grab the relic on the way out */}
+  {variant === 'dig' && (
+    <>
+      <div class="temple left"></div>
+      <div class="temple right"></div>
+      {['22%', '48%', '74%'].map((left, i) => (
+        <div class="torch" style={`left:${left};animation-delay:${i * 0.4}s;`}></div>
+      ))}
+      <div class="relic" data-mj-beat>▽</div>
+      <div class="boulder"></div>
+      <div class="digger">
+        <div class="sprite" style={`box-shadow:${ARCHEOLOGIST};`}></div>
+        <span class="whip"></span>
+      </div>
+    </>
+  )}
+
   {variant === 'store' && (
     <div class="runner hopper" data-mj-vehicle>
       <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
@@ -398,23 +417,25 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     transform-origin: left center;
     animation: mj-strum 0.5s ease-in-out infinite;
   }
-  .guitar .neck {
-    position: absolute; left: 0; top: 8px; width: 28px; height: 5px;
-    background: #4a3620; border-radius: 1px;
-  }
-  /* two lobes + a waist reads as a guitar body at this size */
+  /* Body against the torso, neck reaching out toward the notes — the way a guitar
+     is actually held (it was mirrored before). */
   .guitar .body {
-    position: absolute; left: 24px; top: 1px; width: 20px; height: 20px;
+    position: absolute; left: 0; top: 1px; width: 20px; height: 20px;
     background: #c98b6a; border: 1px solid #8a5c42;
-    border-radius: 46% 54% 60% 40% / 40% 40% 60% 60%;
-    box-shadow: inset -3px 0 0 #a86f52;
+    border-radius: 54% 46% 40% 60% / 40% 40% 60% 60%;
+    box-shadow: inset 3px 0 0 #a86f52;
   }
   .guitar .body::after {
     content: ''; position: absolute; left: 7px; top: 7px;
     width: 6px; height: 6px; border-radius: 50%; background: #4a3620;
   }
+  .guitar .neck {
+    position: absolute; left: 16px; top: 8px; width: 28px; height: 5px;
+    background: #4a3620; border-radius: 1px;
+  }
+  /* strumming hand sits over the body, not up the neck */
   .guitar .strum {
-    position: absolute; left: 31px; top: 6px; width: 8px; height: 2px;
+    position: absolute; left: 6px; top: 6px; width: 8px; height: 2px;
     background: var(--accent); opacity: 0.95;
     animation: mj-pick 0.25s linear infinite;
   }
@@ -519,7 +540,60 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     animation: mj-impact 1.9s ease-in-out infinite;
   }
 
+  /* ---------- LVL 7 · the dig ---------- */
+  .temple {
+    position: absolute; bottom: 42px; width: 46px; height: 74px;
+    background: repeating-linear-gradient(180deg, #2a2a26 0 10px, #232320 10px 20px);
+    border: 2px solid #3a3a33; border-bottom: 0;
+  }
+  .temple.left { left: 2%; }
+  .temple.right { right: 2%; }
+  .torch {
+    position: absolute; bottom: 92px; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 16px 4px rgba(224, 164, 74, 0.55);
+    animation: mj-flicker 1.3s ease-in-out infinite;
+  }
+  .relic {
+    position: absolute; bottom: 74px; left: 62%;
+    font-size: 20px; line-height: 1; color: var(--level-dig);
+    text-shadow: 0 0 12px var(--level-dig);
+    animation: mj-relic 6s ease-in-out infinite;
+  }
+  /* the boulder rolls in behind and keeps coming */
+  .boulder {
+    position: absolute; bottom: 40px; left: -70px;
+    width: 56px; height: 56px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 32%, #6a6258, #3b3730 70%);
+    border: 2px solid #2b2822;
+    animation: mj-boulder 6s linear infinite;
+  }
+  .digger { position: absolute; bottom: 42px; left: 34%; width: 48px; height: 60px; animation: mj-sprint 6s linear infinite; }
+  .digger .sprite { width: 6px; height: 6px; }
+  .digger .whip {
+    position: absolute; right: -16px; top: 26px; width: 18px; height: 2px;
+    background: #6b4a2a; border-radius: 2px; transform-origin: left center;
+    animation: mj-whip 0.9s ease-in-out infinite;
+  }
+
   /* ---------- keyframes ---------- */
+  @keyframes mj-flicker { 0%, 100% { opacity: 1; transform: scale(1); } 45% { opacity: 0.6; transform: scale(0.82); } }
+  @keyframes mj-relic {
+    0%, 62% { opacity: 1; transform: translateY(0) scale(1); }
+    70% { opacity: 0; transform: translateY(-16px) scale(1.9); }
+    71%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+  }
+  @keyframes mj-boulder {
+    from { transform: translateX(0) rotate(0); }
+    to { transform: translateX(calc(100vw + 140px)) rotate(900deg); }
+  }
+  /* archeologist stays ahead of the boulder, then legs it off screen */
+  @keyframes mj-sprint {
+    0% { transform: translateX(-38vw); }
+    70% { transform: translateX(18vw); }
+    100% { transform: translateX(64vw); }
+  }
+  @keyframes mj-whip { 0%, 100% { transform: rotate(6deg); } 50% { transform: rotate(-26deg); } }
   @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @keyframes mj-debris {
     0% { opacity: 1; transform: rotate(var(--a)) translateX(0); }
@@ -604,13 +678,14 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
   // while the strip is visible, and not at all under prefers-reduced-motion.
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduced) {
-    const POINTS: Record<string, number> = { store: 100, scrum: 100, artist: 100, books: 150, stage: 50, notes: 120 };
+    const POINTS: Record<string, number> = { store: 100, scrum: 100, artist: 100, books: 150, stage: 50, notes: 120, dig: 250 };
     const CALLOUT: Record<string, string> = {
       scrum: 'SHIPPED +100',
       artist: 'PERFECT +100',
       books: 'DELIVERED +150',
       stage: 'DODGED +50',
       notes: 'HIT +120',
+      dig: 'RELIC +250',
     };
 
     document.querySelectorAll<HTMLElement>('[data-mj-strip]').forEach((strip) => {

@@ -3,7 +3,7 @@ name: "mITyLex"
 code: "LEX"
 tag: "fun"
 cat: "fun"
-blurb: "A word game with the vocabulary of a very confident intern."
+blurb: "Language learning built by a developer who got tired of the big apps. Short lessons, clear goals, visible progress."
 repo: "mITyLex"
 demoUrl: "https://janvanwassenhove.github.io/mITyLex"
 order: 13

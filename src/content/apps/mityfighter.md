@@ -3,7 +3,7 @@ name: "mITyFighter"
 code: "FIGHT"
 tag: "game"
 cat: "games"
-blurb: "A retro fighter where the real boss is legacy code. Flawless victory."
+blurb: "A retro 2D arcade fighter, built in half a day with Copilot. The real boss is legacy code."
 repo: "mITyFighter"
 demoUrl: "https://janvanwassenhove.github.io/mITyFighter"
 order: 6

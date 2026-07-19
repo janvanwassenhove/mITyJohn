@@ -1,5 +1,8 @@
 ---
-// "Words to build by" — three tinted quote cards, design content verbatim.
+// "Words to build by" — three tinted quote cards, design content verbatim,
+// with mITy.John listening in at the side.
+import { MITYJOHN } from './sprites';
+
 const quotes = [
   {
     kicker: 'Creative',
@@ -27,7 +30,13 @@ const quotes = [
 
 <section class="quotes">
   <div class="wrap">
-    <div class="kicker">// words to build by</div>
+    <div class="intro">
+      <div class="mj mj-anim" aria-hidden="true">
+        <span class="sprite" style={`box-shadow:${MITYJOHN};`}></span>
+        <span class="bubble">…taking notes.</span>
+      </div>
+      <div class="kicker">// words to build by</div>
+    </div>
     <div class="grid">
       {quotes.map((q) => (
         <figure data-reveal style={`--q-accent:${q.accent};--q-tint:${q.tint};`}>
@@ -45,15 +54,47 @@ const quotes = [
 <style>
   .quotes { border-top: 1px solid var(--line); background: var(--s0); }
   .wrap { max-width: var(--container-max); margin: 0 auto; padding: clamp(40px, 5vw, 68px) var(--section-pad-x); }
+  .intro {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
   .kicker {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
     color: var(--accent);
     letter-spacing: var(--tracking-caps);
     text-transform: uppercase;
-    margin-bottom: 28px;
     text-align: center;
   }
+  /* mITy.John, listening to his betters */
+  .mj { position: relative; width: 48px; height: 60px; animation: mj-bob 2.6s ease-in-out infinite; }
+  .mj .sprite { position: absolute; left: 0; top: 0; width: 6px; height: 6px; background: transparent; }
+  .mj .bubble {
+    position: absolute;
+    left: 54px;
+    top: 2px;
+    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted2);
+    background: var(--s2);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 4px 9px;
+  }
+  .mj .bubble::before {
+    content: '';
+    position: absolute;
+    left: -5px; top: 8px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-right: 5px solid var(--border2);
+  }
+  @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @media (max-width: 520px) { .mj .bubble { display: none; } }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(18px, 2vw, 26px); }
   figure {
     margin: 0;

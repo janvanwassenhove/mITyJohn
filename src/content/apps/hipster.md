@@ -3,7 +3,7 @@ name: "Hipster"
 code: "HIPSTER"
 tag: "game"
 cat: "games"
-blurb: "You probably haven’t played it yet. That’s kind of the point."
+blurb: "Guess the song, place it on the timeline. A web remake of Hitster — with a music library that actually knows Belgium."
 repo: "Hipster"
 demoUrl: "https://janvanwassenhove.github.io/Hipster"
 order: 7

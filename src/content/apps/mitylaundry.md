@@ -3,7 +3,7 @@ name: "mITyLaundry"
 code: "WASH"
 tag: "fun"
 cat: "fun"
-blurb: "Because someone had to gamify the laundry. Reluctantly, that someone was Jan."
+blurb: "Point your camera at a garment and it sorts the wash for you — AR, entirely in the browser. Sorting socks: still not automated in 2026."
 repo: "mITyLaundry"
 demoUrl: "https://janvanwassenhove.github.io/mITyLaundry"
 order: 12

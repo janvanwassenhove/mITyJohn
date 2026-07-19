@@ -2,16 +2,27 @@
 // Instagram grid — reads build-time src/data/instagram.json (§7.3). Renders
 // nothing when the feed is empty (N4: no runtime dependency on Instagram).
 import feed from '../data/instagram.json';
+import SectionHeader from './SectionHeader.astro';
+import ArcadeStrip from './ArcadeStrip.astro';
 
 type Item = { tag?: string; href: string; image?: string; alt?: string };
 const items = (feed as Item[]).slice(0, 6);
 ---
 
 {items.length > 0 && (
-  <section class="ig">
+  <>
+  <ArcadeStrip variant="dig" />
+  <section class="ig" id="dig">
     <div class="wrap">
+      <SectionHeader
+        level="07"
+        section="THE DIG"
+        accentVar="var(--level-dig)"
+        inkVar="var(--ink-on-level-dig)"
+        title="Retro-IT, one square at a time"
+      />
       <div class="head">
-        <h2>Retro-IT, one square at a time</h2>
+        <p class="note">Field finds from computing's past, posted daily-ish.</p>
         <a href="https://www.instagram.com/mity.john/" target="_blank" rel="noopener">@mity.john →</a>
       </div>
       <div class="grid">
@@ -24,13 +35,14 @@ const items = (feed as Item[]).slice(0, 6);
       </div>
     </div>
   </section>
+  </>
 )}
 
 <style>
   .ig { border-top: 1px solid var(--line); background: var(--s0); }
   .wrap { max-width: var(--container-max); margin: 0 auto; padding: clamp(36px, 5vw, 64px) var(--section-pad-x); }
-  .head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 24px; }
-  h2 { font-family: var(--font-display); font-size: var(--text-h2-minor); font-weight: 700; margin: 0; }
+  .head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin: 10px 0 24px; }
+  .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); margin: 0; }
   .head a { font-family: var(--font-mono); font-size: var(--text-small); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--gap-tiles); }
   .tile {

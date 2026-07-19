@@ -3,7 +3,7 @@ name: "Sports Madness"
 code: "SPORT"
 tag: "fun"
 cat: "fun"
-blurb: "Gamification, creativity & real-time control for literally any sport."
+blurb: "Drops short-lived \"boosters\" and \"maddies\" into a normal match, so any sport turns strategic and slightly chaotic."
 repo: "sportsmadness"
 demoUrl: "https://janvanwassenhove.github.io/sportsmadness"
 order: 9

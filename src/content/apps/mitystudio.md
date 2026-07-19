@@ -3,7 +3,7 @@ name: "mITyStudio"
 code: "STUDIO"
 tag: "music"
 cat: "music"
-blurb: "Your vibe-composing DAW. Hum an idea, it does the rest — allegedly."
+blurb: "A local-first AI music studio. Describe a song, get a real multitrack project you can shape by hand — and sing it in a voice you trained."
 repo: "mITyStudio"
 order: 1
 wpId: 514

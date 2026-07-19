@@ -3,7 +3,7 @@ name: "PiBeat"
 code: "PIBEAT"
 tag: "music"
 cat: "music"
-blurb: "The ultimate music timeline challenge, running on a Raspberry Pi."
+blurb: "A live-coding music environment for people who would rather write rhythm than drag rectangles. Runs on a Raspberry Pi."
 repo: "PiBeat"
 order: 4
 wpId: 853

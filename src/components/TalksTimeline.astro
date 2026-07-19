@@ -3,8 +3,8 @@
 // click-to-load YouTube facade (§8.1/D5: nothing reaches youtube.com until clicked).
 import talks from '../data/talks.json';
 
-interface Props { limit?: number }
-const { limit } = Astro.props;
+interface Props { limit?: number; more?: string }
+const { limit, more } = Astro.props;
 
 type Talk = {
   year?: number; date?: string; event: string; location: string;
@@ -61,6 +61,15 @@ for (const t of list) {
       </div>
     </div>
   ))}
+
+  {more && (
+    /* the timeline is truncated here — the rail carries on to invite the click */
+    <a class="more" href={more}>
+      <span class="rail"></span>
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="more-label">{talks.length - (limit ?? 0)} more talks →</span>
+    </a>
+  )}
 </div>
 
 <style>
@@ -120,6 +129,33 @@ for (const t of list) {
   .date { color: var(--level-stage); }
   .loc { color: var(--muted2); }
   .talk-video { min-height: 150px; margin: 14px 0 2px; padding: 18px; }
+
+  /* truncation affordance: the rail continues, three dots pulse down it */
+  .more {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-left: 96px;
+    padding: 4px 0 2px;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--muted2);
+  }
+  .more:hover { color: var(--level-stage); }
+  .more .rail { position: absolute; left: -20px; top: 0; bottom: 50%; width: 1px; background: var(--border); }
+  .more .dots { display: flex; flex-direction: column; gap: 5px; margin-left: -25px; }
+  .more .dots i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--level-stage);
+    opacity: 0.25;
+    animation: mj-trail 1.6s ease-in-out infinite;
+  }
+  .more .dots i:nth-child(2) { animation-delay: 0.2s; }
+  .more .dots i:nth-child(3) { animation-delay: 0.4s; }
+  .more-label { margin-left: 4px; }
+  @keyframes mj-trail { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .more .dots i { animation: none; opacity: 0.6; } }
 
   @media (max-width: 620px) {
     .group { grid-template-columns: 1fr; gap: 10px; }

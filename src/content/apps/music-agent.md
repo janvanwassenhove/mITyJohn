@@ -3,7 +3,7 @@ name: "Music Agent"
 code: "AGENT"
 tag: "music"
 cat: "music"
-blurb: "A multi-agent system that writes electronic songs with Sonic Pi. Bring snacks."
+blurb: "A multi-agent system that composes electronic tracks and plays them through Sonic Pi. Bring snacks."
 repo: "MusicAgent"
 order: 2
 wpId: 219

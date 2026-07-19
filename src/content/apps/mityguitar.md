@@ -3,7 +3,7 @@ name: "mITyGuitar"
 code: "GUITAR"
 tag: "music"
 cat: "music"
-blurb: "Turns a game controller into an actual guitar. Your neighbours: thrilled."
+blurb: "Turns a Guitar Hero controller into a real practice guitar — chords, charts and all. Your neighbours: thrilled."
 repo: "mITyGuitar"
 order: 3
 wpId: 706

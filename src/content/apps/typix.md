@@ -3,7 +3,7 @@ name: "Typix"
 code: "TYPIX"
 tag: "fun"
 cat: "fun"
-blurb: "Type pixels into being. Oddly meditative, mildly pointless."
+blurb: "Personality assessments that are actually fun: DISC, Enneagram and more, mapped to colour and energy zones."
 repo: "Typix"
 demoUrl: "https://janvanwassenhove.github.io/Typix"
 order: 11

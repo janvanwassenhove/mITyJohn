@@ -3,7 +3,7 @@ name: "LoveFlix"
 code: "LOVE"
 tag: "fun"
 cat: "fun"
-blurb: "Where every movie finds its heart. A matchmaker for your watchlist."
+blurb: "An AI experiment that rewrites any movie as a romance — poster, plot and all. Where every movie finds its heart."
 repo: "LoveFlix"
 order: 8
 wpId: 760

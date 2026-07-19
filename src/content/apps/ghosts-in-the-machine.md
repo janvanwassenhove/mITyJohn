@@ -3,7 +3,7 @@ name: "Ghosts in the Machine"
 code: "GHOSTS"
 tag: "game"
 cat: "games"
-blurb: "A haunted IT sim built by inviting a ghost in. It went about as well as you’d expect."
+blurb: "A haunted IT management sim. The tickets are ghosts: they queue, they escalate, and if you ignore them they mutate."
 repo: "ghostsinthemachine"
 demoUrl: "https://janvanwassenhove.github.io/ghostsinthemachine"
 order: 5
