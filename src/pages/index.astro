@@ -45,13 +45,16 @@ const stats = [
 ];
 
 // Hero level selector — every level, with a live count so the numbers can't go stale.
+// Ordered by what a first-time visitor is most likely to want: the things you
+// can buy or verify first, the personal projects after. Books and Talks used to
+// sit at 04/05 behind SPL and the Spotify embed.
 const levels = [
   { no: '01', label: 'Apps', section: 'The store', href: '#apps', count: `${apps.length} apps`, accent: 'var(--level-store)', ink: 'var(--ink-on-accent)' },
-  { no: '02', label: 'Scrum', section: 'Sprint zero', href: '#scrum', count: '1 language', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
-  { no: '03', label: 'Artist', section: 'The artist', href: '#artist', count: 'Press play', accent: 'var(--level-artist)', ink: 'var(--ink-on-accent-2)' },
-  { no: '04', label: 'Books', section: 'The bookstore', href: '#books', count: `${inPrint} editions`, accent: 'var(--level-books)', ink: 'var(--ink-on-level-books)' },
-  { no: '05', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
-  { no: '06', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
+  { no: '02', label: 'Books', section: 'The bookstore', href: '#books', count: `${inPrint} editions`, accent: 'var(--level-books)', ink: 'var(--ink-on-level-books)' },
+  { no: '03', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
+  { no: '04', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
+  { no: '05', label: 'Scrum', section: 'Sprint zero', href: '#scrum', count: '1 language', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
+  { no: '06', label: 'Artist', section: 'The artist', href: '#artist', count: 'Press play', accent: 'var(--level-artist)', ink: 'var(--ink-on-accent-2)' },
   { no: '07', label: 'Insta', section: 'The dig', href: '#dig', count: `${insta.length} finds`, accent: 'var(--level-dig)', ink: 'var(--ink-on-level-dig)' },
   { no: '08', label: 'About', section: 'The archeologist', href: '/about/', count: '1 human', accent: 'var(--muted)', ink: 'var(--bg)' },
 ];
@@ -136,14 +139,51 @@ for (const e of urlMap) {
     </div>
   </section>
 
+  <ArcadeStrip variant="books" />
+
+  <!-- ===== BOOKSTORE ===== -->
+  <section id="books" class="bookstore">
+    <div class="wrap">
+      <SectionHeader level="02" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
+      <p class="books-note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
+      <div class="grid">
+        {books.map((b) => <BookCard book={b} />)}
+      </div>
+    </div>
+  </section>
+
+  <ArcadeStrip variant="stage" />
+
+  <!-- ===== SPEAKER (THE STAGE) ===== -->
+  <section id="talks" class="stage">
+    <div class="stage-head">
+      <SectionHeader level="03" section="THE STAGE" accentVar="var(--level-stage)" inkVar="var(--ink-on-level-stage)" title="Talks & conferences" />
+      <a class="all" href="/talks/">All {talks.length} talks →</a>
+    </div>
+    <TalksTimeline limit={4} more="/talks/" />
+  </section>
+
+  <ArcadeStrip variant="notes" />
+
+  <!-- ===== BLOG ===== -->
+  <section id="blog" class="blog">
+    <div class="blog-head">
+      <SectionHeader level="04" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
+      <a class="all" href="/blog/">All posts →</a>
+    </div>
+    <div class="grid">
+      {posts.map((p) => <PostCard post={p} />)}
+    </div>
+  </section>
+
   <ArcadeStrip variant="scrum" />
 
-  <!-- ===== SCRUM (LEVEL 02 — THE LAB) =====
+  <!-- ===== SCRUM (SPRINT ZERO) =====
        Deliberate scope addition beyond the original Claude Design export (Jan's
        request, post-launch): promotes SPL from a plain feature banner into a full
        numbered level with its own kart-racing arcade strip. -->
   <section id="scrum" class="lab">
-    <SectionHeader level="02" section="SPRINT ZERO" accentVar="var(--level-scrum)" inkVar="var(--ink-on-level-scrum)" title="A language that compiles ceremonies" />
+    <SectionHeader level="05" section="SPRINT ZERO" accentVar="var(--level-scrum)" inkVar="var(--ink-on-level-scrum)" title="A language that compiles ceremonies" />
     <ScrumFeature />
   </section>
 
@@ -154,7 +194,7 @@ for (const e of urlMap) {
     <div class="wrap">
       <div data-reveal class="panel">
         <div>
-          <SectionHeader level="03" section="THE ARTIST" accentVar="var(--level-artist)" inkVar="var(--ink-on-accent-2)" title="mITy.John, but make it sound" />
+          <SectionHeader level="06" section="THE ARTIST" accentVar="var(--level-artist)" inkVar="var(--ink-on-accent-2)" title="mITy.John, but make it sound" />
           <p class="artist-lead">
             Songs composed with a suspicious amount of AI and a Raspberry Pi that never asked
             for any of this. Press play, judge gently.
@@ -167,43 +207,6 @@ for (const e of urlMap) {
         </div>
         <SpotifyEmbed />
       </div>
-    </div>
-  </section>
-
-  <ArcadeStrip variant="books" />
-
-  <!-- ===== BOOKSTORE ===== -->
-  <section id="books" class="bookstore">
-    <div class="wrap">
-      <SectionHeader level="04" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
-      <p class="books-note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
-      <div class="grid">
-        {books.map((b) => <BookCard book={b} />)}
-      </div>
-    </div>
-  </section>
-
-  <ArcadeStrip variant="stage" />
-
-  <!-- ===== SPEAKER (LEVEL 05 — THE STAGE) ===== -->
-  <section id="talks" class="stage">
-    <div class="stage-head">
-      <SectionHeader level="05" section="THE STAGE" accentVar="var(--level-stage)" inkVar="var(--ink-on-level-stage)" title="Talks & conferences" />
-      <a class="all" href="/talks/">All {talks.length} talks →</a>
-    </div>
-    <TalksTimeline limit={4} more="/talks/" />
-  </section>
-
-  <ArcadeStrip variant="notes" />
-
-  <!-- ===== BLOG ===== -->
-  <section id="blog" class="blog">
-    <div class="blog-head">
-      <SectionHeader level="06" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
-      <a class="all" href="/blog/">All posts →</a>
-    </div>
-    <div class="grid">
-      {posts.map((p) => <PostCard post={p} />)}
     </div>
   </section>
 

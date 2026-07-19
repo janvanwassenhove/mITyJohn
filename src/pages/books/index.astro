@@ -13,7 +13,7 @@ const books = (await getCollection('books')).sort((a, b) => a.data.order - b.dat
 <Base title="Books — mITy.John" description="Reimagined classics and picture books, in paperback and Kindle on Amazon.">
   <ArcadeStrip variant="books" />
   <section class="bookstore">
-    <SectionHeader level="04" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
+    <SectionHeader level="02" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
     <p class="note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
     <div class="grid">
       {books.map((b) => <BookCard book={b} />)}
