@@ -14,3 +14,6 @@ dist/
 
 # lighthouse ci artifacts
 .lighthouseci/
+
+# wrangler build artifacts
+workers/**/.wrangler/
