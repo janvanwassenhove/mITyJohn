@@ -8,18 +8,21 @@
   <div class="text">
     <div class="kicker">programming by intent · compiles to Java</div>
     <div class="title">Scrum Programming Language</div>
-    <div class="sub">A real language where you code entirely in ceremonies — sprint goals, epics, user stories. Yes, really. Sprint zero compiles. Say hello to Scrummy.</div>
+    <div class="sub">A real language where you code entirely in ceremonies — sprint goals, epics, user stories. Yes, really. Sprint zero compiles. Say hello to <strong>Scrummy</strong>, the language&rsquo;s mascot.</div>
   </div>
   <span class="cta">Explore →</span>
 </a>
 
-<p class="spl-intro" data-reveal>
-  SCRUM is a programming language I designed and built myself. Not a framework, not a
-  DSL bolted onto something else — an actual language with its own compiler. You write
-  the ceremonies you already argue about in stand-up, and it compiles them to
-  deterministic Java. The AI runs at <em>compile</em> time, not at runtime, so the
-  binary you ship behaves the same every single run.
-</p>
+<div class="spl-intro" data-reveal>
+  <span class="intro-tag">what it is</span>
+  <p>
+    SCRUM is a programming language I designed and built myself. Not a framework, not a
+    DSL bolted onto something else — an actual language with its own compiler. You write
+    the ceremonies you already argue about in stand-up, and it compiles them to
+    deterministic Java. The AI runs at <em>compile</em> time, not at runtime, so the
+    binary you ship behaves the same every single run.
+  </p>
+</div>
 
 <div class="spl-samples" data-reveal>
   <div class="spl-sample">
@@ -98,8 +101,26 @@
   .sub { font-size: var(--text-small); color: var(--muted); margin-top: 4px; text-wrap: pretty; }
   .cta { font-family: var(--font-mono); font-size: var(--text-small); color: var(--level-scrum); white-space: nowrap; }
 
+  /* the explainer sits in its own box, matching the code samples below it */
   .spl-intro {
-    margin: 18px 0 0;
+    margin-top: 14px;
+    padding: 16px clamp(16px, 3vw, 24px) 18px;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--level-scrum);
+    border-radius: var(--radius-card-lg);
+  }
+  .intro-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--level-scrum);
+    margin-bottom: 8px;
+  }
+  .spl-intro p {
+    margin: 0;
     max-width: 78ch;
     font-size: var(--text-body-lg);
     line-height: var(--leading-relaxed);

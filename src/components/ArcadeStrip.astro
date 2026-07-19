@@ -389,13 +389,14 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
   /* ---------- LVL 2 · Temple Run down the sprint ---------- */
   /* Perspective track: rails converge on a vanishing point at the top centre. */
   .track { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  /* rails splay wide so the track fills ~80% of the strip at the near end */
   .track .rail {
-    position: absolute; bottom: 0; left: 50%; width: 2px; height: 108px;
+    position: absolute; bottom: 0; left: 50%; width: 2px; height: 128px;
     background: linear-gradient(180deg, transparent, var(--level-scrum));
     opacity: 0.5; transform-origin: top center;
   }
-  .track .rail.left { transform: rotate(28deg); }
-  .track .rail.right { transform: rotate(-28deg); }
+  .track .rail.left { transform: rotate(52deg); }
+  .track .rail.right { transform: rotate(-52deg); }
   /* sleepers sweeping toward the camera, widening as they come */
   .track .tie {
     position: absolute; top: 52px; left: 50%; height: 2px; width: 40px;
@@ -748,27 +749,27 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     100% { transform: translateX(calc((100vw + 60px) * 1 - 60px)) translateY(0); }
   }
   @keyframes mj-blink-soft { 0%, 60% { opacity: 1; } 61%, 100% { opacity: 0.32; } }
-  /* sleeper sweeps from the vanishing point to the camera, widening */
+  /* sleeper sweeps from the vanishing point to the camera, widening to ~80vw */
   @keyframes mj-tie {
     0% { transform: translateY(0) scaleX(0.2); opacity: 0; }
     12% { opacity: 0.4; }
-    100% { transform: translateY(74px) scaleX(6); opacity: 0; }
+    100% { transform: translateY(78px) scaleX(24); opacity: 0; }
   }
-  /* ceremony grows out of the vanishing point and sweeps past the camera */
+  /* ceremony grows out of the vanishing point and sweeps wide past the camera */
   @keyframes mj-onrush {
     0% { transform: translate(-50%, 0) translateX(0) scale(0.35); opacity: 0; }
     10% { opacity: 1; }
-    82% { transform: translate(-50%, 62px) translateX(calc(var(--lane) * 120px)) scale(1.15); opacity: 1; }
-    100% { transform: translate(-50%, 82px) translateX(calc(var(--lane) * 190px)) scale(1.5); opacity: 0; }
+    82% { transform: translate(-50%, 62px) translateX(calc(var(--lane) * 26vw)) scale(1.15); opacity: 1; }
+    100% { transform: translate(-50%, 82px) translateX(calc(var(--lane) * 40vw)) scale(1.5); opacity: 0; }
   }
   /* the sprinter shifts lane to meet whatever is arriving */
   @keyframes mj-strafe {
     0%, 12% { transform: translateX(0); }
-    28% { transform: translateX(-58px); }
-    45% { transform: translateX(58px); }
+    28% { transform: translateX(-24vw); }
+    45% { transform: translateX(24vw); }
     62% { transform: translateX(0); }
-    78% { transform: translateX(-58px); }
-    95%, 100% { transform: translateX(58px); }
+    78% { transform: translateX(-24vw); }
+    95%, 100% { transform: translateX(24vw); }
   }
   @keyframes mj-wave { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(-58deg); } }
   /* Note slides in from the right and lands exactly on the 16% hit bar.

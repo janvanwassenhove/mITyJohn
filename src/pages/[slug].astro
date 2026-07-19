@@ -2,6 +2,7 @@
 // Static pages (about, artist) from the pages collection — §5.1 /{slug}/.
 import { getCollection, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
+import Quotes from '../components/Quotes.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
@@ -10,8 +11,13 @@ export async function getStaticPaths() {
 
 const { page } = Astro.props;
 const { Content } = await render(page);
+
+// The quotes belong with the About story too — same component as the home page,
+// rendered once here rather than copied.
+const showQuotes = page.id === 'about';
 ---
 
 <Page title={page.data.title} description={page.data.description}>
   <Content />
+  {showQuotes && <Quotes slot="full" />}
 </Page>

@@ -42,11 +42,6 @@ const quotes = [
     <div class="grid">
       {quotes.map((q) => (
         <figure data-reveal style={`--q-accent:${q.accent};--q-tint:${q.tint};`}>
-          <div class="mark">&ldquo;</div>
-          <div class="label">{q.kicker}</div>
-          <blockquote>{q.text}</blockquote>
-          <div class="rule"></div>
-          <figcaption>{q.who}</figcaption>
           <div class={`mj ${q.pose} mj-anim`} aria-hidden="true">
             <span class="sprite" style={`box-shadow:${MITYJOHN};`}></span>
             {q.pose === 'idea' && <span class="bulb"></span>}
@@ -54,6 +49,11 @@ const quotes = [
             {q.pose === 'team' && <span class="wave"></span>}
             <span class="aside">{q.aside}</span>
           </div>
+          <div class="mark">&ldquo;</div>
+          <div class="label">{q.kicker}</div>
+          <blockquote>{q.text}</blockquote>
+          <div class="rule"></div>
+          <figcaption>{q.who}</figcaption>
         </figure>
       ))}
     </div>
@@ -78,14 +78,14 @@ const quotes = [
     position: relative;
     width: 48px;
     height: 62px;
-    margin-top: 4px;
+    margin-bottom: -6px;
     transform-origin: bottom center;
   }
   .mj .sprite { position: absolute; left: 0; top: 0; width: 6px; height: 6px; background: transparent; }
   .mj .aside {
     position: absolute;
     left: 50%;
-    top: -18px;
+    bottom: -14px;
     transform: translateX(-50%);
     white-space: nowrap;
     font-family: var(--font-mono);

@@ -13,6 +13,8 @@ const { title, description } = Astro.props;
       <slot />
     </div>
   </article>
+  {/* full-bleed content below the prose column (e.g. the quotes on About) */}
+  <slot name="full" />
 </Base>
 
 <style>
