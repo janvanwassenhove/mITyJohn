@@ -2,9 +2,9 @@
 # Secrets are set with `wrangler secret put IG_APP_ID` / `IG_APP_SECRET` / `IG_TOKEN`
 # and live in Cloudflare only — NEVER in this file, never in git.
 #
-# One-off setup (Jan):
-#   wrangler login
-#   wrangler kv namespace create IG        # paste the id below
+# One-off setup (Jan) — KV namespace done 2026-07-19, secrets remain:
+#   wrangler login                         [done]
+#   wrangler kv namespace create IG        [done, id below]
 #   wrangler secret put IG_APP_ID
 #   wrangler secret put IG_APP_SECRET
 #   wrangler secret put IG_TOKEN           # bootstrap long-lived token (§7.1)
@@ -19,4 +19,4 @@ crons = ["0 3 * * *"] # daily: refresh token + fetch media
 
 [[kv_namespaces]]
 binding = "IG"
-id = "TODO_AFTER_wrangler_kv_namespace_create"
+id = "07f7db5729464844aff42827b01e7a3f"

@@ -23,6 +23,26 @@ async function getToken(env: Env): Promise<{ token: string; expires: number }> {
   return { token, expires };
 }
 
+/**
+ * Report why a Graph call failed, without ever echoing the URL — it carries the
+ * access_token as a query parameter. Status plus Graph's own error fields only.
+ */
+async function logFailure(env: Env, where: string, res: Response): Promise<void> {
+  let detail = '';
+  try {
+    const body = (await res.clone().json()) as { error?: { message?: string; type?: string; code?: number } };
+    const e = body.error;
+    if (e) detail = `${e.type ?? ''} code=${e.code ?? ''} ${e.message ?? ''}`.trim();
+  } catch {
+    detail = (await res.clone().text()).slice(0, 160);
+  }
+  const msg = `${where}: HTTP ${res.status} ${detail}`.trim();
+  console.error(`[ig] ${msg}`);
+  // Also persist it: /health surfaces this so a failing sync is diagnosable
+  // without shell access, and the weekly monitor can report the reason.
+  await env.IG.put('last_error', JSON.stringify({ at: new Date().toISOString(), msg }));
+}
+
 async function refreshToken(env: Env): Promise<void> {
   const { token, expires } = await getToken(env);
   const now = Date.now() / 1000;
@@ -33,7 +53,7 @@ async function refreshToken(env: Env): Promise<void> {
   if (expires && expires < now) return; // expired — manual re-auth needed (§7.1)
 
   const res = await fetch(`${GRAPH}/refresh_access_token?grant_type=ig_refresh_token&access_token=${encodeURIComponent(token)}`);
-  if (!res.ok) return; // skip; monitoring surfaces stale expiry via /health
+  if (!res.ok) { await logFailure(env, 'refresh_access_token', res); return; } // skip; /health surfaces stale expiry
   const data = (await res.json()) as { access_token: string; expires_in: number };
   await env.IG.put('token', data.access_token);
   await env.IG.put('token_expires', String(Math.floor(now + data.expires_in)));
@@ -43,9 +63,9 @@ async function refreshToken(env: Env): Promise<void> {
 async function syncMedia(env: Env): Promise<void> {
   const { token } = await getToken(env);
   const res = await fetch(`${GRAPH}/me/media?fields=${MEDIA_FIELDS}&limit=12&access_token=${encodeURIComponent(token)}`);
-  if (!res.ok) return; // keep previous media
+  if (!res.ok) { await logFailure(env, 'me/media', res); return; } // keep previous media
   const data = (await res.json()) as { data?: Record<string, string>[] };
-  if (!data.data?.length) return;
+  if (!data.data?.length) { console.error('[ig] me/media returned no items'); await env.IG.put('last_error', JSON.stringify({ at: new Date().toISOString(), msg: 'me/media returned no items' })); return; }
   // Whitelisted shape only — the token or any signed extras never ride along (R5).
   const media = data.data.map((m) => ({
     id: m.id,
@@ -78,7 +98,10 @@ export default {
       const expires = parseInt((await env.IG.get('token_expires')) ?? '0', 10);
       const lastSync = (await env.IG.get('last_sync')) ?? null;
       const tokenExpiresIn = expires ? Math.floor((expires - Date.now() / 1000) / 86400) : null;
-      return new Response(JSON.stringify({ tokenExpiresIn, lastSync }), { headers: CORS });
+      const itemCount = JSON.parse((await env.IG.get('media')) ?? '[]').length;
+      // last_error explains a stalled sync (bad token, revoked scope, empty account)
+      const lastError = JSON.parse((await env.IG.get('last_error')) ?? 'null');
+      return new Response(JSON.stringify({ tokenExpiresIn, lastSync, itemCount, lastError }), { headers: CORS });
     }
 
     return new Response('not found', { status: 404 });
