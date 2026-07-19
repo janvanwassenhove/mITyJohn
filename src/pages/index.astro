@@ -22,8 +22,11 @@ const books = (await getCollection('books')).sort((a, b) => a.data.order - b.dat
 const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const posts = allPosts.slice(0, 8); // two rows of four on the home grid
 
+// "New" is a cross-cutting filter (data-new), not a category — an app is music
+// *and* new, so it cannot live in the same field as cat.
 const filters = [
   { id: 'all', label: 'All' },
+  { id: 'new', label: `New (${apps.filter((a) => a.data.isNew).length})` },
   { id: 'music', label: 'Music' },
   { id: 'games', label: 'Games' },
   { id: 'fun', label: 'Fun' },
@@ -218,7 +221,8 @@ for (const e of urlMap) {
     root.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b === btn));
     const f = btn.dataset.filter;
     grid.querySelectorAll<HTMLElement>('[data-cat]').forEach((card) => {
-      card.style.display = f === 'all' || card.dataset.cat === f ? '' : 'none';
+      const show = f === 'all' || (f === 'new' ? card.dataset.new === 'true' : card.dataset.cat === f);
+      card.style.display = show ? '' : 'none';
     });
   });
 </script>

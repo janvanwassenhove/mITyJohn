@@ -1,0 +1,146 @@
+---
+// "About the name" — lifted out of the converted WordPress prose into a designed
+// block, because it is the one bit of the About page people actually quote back.
+// wp-export cuts the original section from about.md so the two cannot drift.
+---
+
+<section class="name-origin" data-reveal>
+  <div class="kicker">// about the name</div>
+
+  <div class="wordmark">
+    <span class="m">m</span><span class="it">IT</span><span class="m">y</span><span class="dot">.</span><span class="m">John</span>
+  </div>
+
+  <div class="phonetic">
+    <span class="ipa">/ˈmaɪti dʒɒn/</span>
+    <span class="say">say it like &ldquo;mighty john&rdquo;</span>
+  </div>
+
+  <div class="breakdown">
+    <div class="bit">
+      <span class="bit-key">sounds like</span>
+      <span class="bit-val">mighty</span>
+    </div>
+    <div class="bit">
+      <span class="bit-key">contains</span>
+      <span class="bit-val it">IT</span>
+      <span class="bit-note">Information Technology, the bit that pays the rent</span>
+    </div>
+    <div class="bit">
+      <span class="bit-key">John</span>
+      <span class="bit-val">= Jan</span>
+      <span class="bit-note">English for my Dutch name, a nod to anyone outside Belgium</span>
+    </div>
+  </div>
+
+  <p class="closer">
+    No, you don&rsquo;t have to spell it out letter by letter. If you ever hesitate,
+    just say it like a superhero with a laptop.
+  </p>
+</section>
+
+<style>
+  .name-origin {
+    margin: clamp(32px, 5vw, 52px) 0;
+    padding: clamp(24px, 3.5vw, 38px) clamp(20px, 3vw, 34px);
+    background: linear-gradient(140deg, var(--s2), var(--s1));
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-panel);
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+
+  /* the wordmark, with the IT actually doing the shouting */
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(34px, 6vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .wordmark .it {
+    color: var(--accent);
+    position: relative;
+  }
+  /* underline only under the IT */
+  .wordmark .it::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .wordmark .dot { color: var(--accent); }
+
+  .phonetic {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+  }
+  .ipa {
+    color: var(--text);
+    border: 1px solid var(--border3);
+    border-radius: var(--radius-btn-sm);
+    padding: 4px 10px;
+  }
+  .say { color: var(--muted2); }
+
+  .breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-top: 26px;
+  }
+  .bit {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+  }
+  .bit-key {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted2);
+  }
+  .bit-val {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .bit-val.it { color: var(--accent); }
+  .bit-note {
+    font-size: var(--text-small);
+    line-height: 1.45;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .closer {
+    margin: 22px 0 0;
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--muted);
+    max-width: 62ch;
+    text-wrap: pretty;
+  }
+</style>

@@ -3,6 +3,7 @@
 import { getCollection, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
 import Quotes from '../components/Quotes.astro';
+import NameOrigin from '../components/NameOrigin.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
@@ -19,5 +20,6 @@ const showQuotes = page.id === 'about';
 
 <Page title={page.data.title} description={page.data.description}>
   <Content />
+  {showQuotes && <NameOrigin />}
   {showQuotes && <Quotes slot="full" />}
 </Page>

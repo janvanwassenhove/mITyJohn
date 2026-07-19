@@ -24,25 +24,6 @@ As an _IT-thinker with a creative streak_, you’ll also find the occasional nod
 
 ---
 
-## About the Name: **mITy John**
-
-TThe name is a bit of wordplay.
-
-It’s pronounced exactly like **“mighty john.”**
-
-> **Pronunciation:** /ˈmaɪti dʒɒn/ — “mighty john”
-
-The capital **IT** in the middle is intentional — it highlights _Information Technology_, which sits at the core of what I do.
-
-So yes:
-
--   It sounds like **mighty**
--   It contains **IT**
--   And no, you don’t have to spell it out letter by letter
-
-If you ever hesitate, just say it like a superhero with a laptop.
-
-The “John” part? That’s the English translation of my Dutch name _Jan_ — simple, personal, and a small nod to international audiences.
 
 ---
 

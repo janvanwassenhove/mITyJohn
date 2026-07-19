@@ -269,6 +269,16 @@ for (const page of inv.pages) {
     // The About page's conference list now lives in its own section (src/data/talks.json,
     // rendered as the Speaker level). Cut it here so the two never drift apart.
     if (page.id === 2) {
+      // "About the Name" is rendered by NameOrigin.astro as a designed block —
+      // cut the prose version so the two cannot drift apart.
+      const nameStart = body.search(/^#+\s*About the Name/m);
+      if (nameStart > -1) {
+        const rest = body.slice(nameStart);
+        const nameEnd = rest.search(/^\s*-{3,}\s*$/m);
+        body = (body.slice(0, nameStart) + (nameEnd > -1 ? rest.slice(nameEnd) : '')).trimEnd();
+      } else {
+        console.warn('  About: "About the Name" marker not found — may be duplicated');
+      }
       const cut = body.search(/^\s*(?:#+\s*)?Conference talks\s*$/m);
       if (cut > -1) body = body.slice(0, cut).replace(/\n*-{3,}\s*$/, '').trimEnd();
       else console.warn('  About: "Conference talks" marker not found — talks may be duplicated');

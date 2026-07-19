@@ -24,7 +24,7 @@ if (repo) actions.push({ label: 'Code', href: gh(repo), external: true });
 actions.push({ label: 'Info', href: `/apps/${app.id}/` });
 ---
 
-<div class="card" data-reveal data-cat={cat}>
+<div class="card" data-reveal data-cat={cat} data-new={String(isNew)}>
   <div
     class={`art${gallery.length ? ' has-shot' : ''}`}
     data-gallery={gallery.length > 1 ? JSON.stringify(gallery.slice(1).map((s) => s.src)) : undefined}
