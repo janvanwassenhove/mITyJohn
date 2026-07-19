@@ -53,7 +53,9 @@ const levels = [
   { no: '02', label: 'Books', section: 'The bookstore', href: '#books', count: `${inPrint} editions`, accent: 'var(--level-books)', ink: 'var(--ink-on-level-books)' },
   { no: '03', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
   { no: '04', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
-  { no: '05', label: 'Scrum', section: 'Sprint zero', href: '#scrum', count: '1 language', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
+  // Subtitle says what it is rather than repeating the level's arcade name —
+  // "Sprint zero" read like a project phase, not a programming language.
+  { no: '05', label: 'Scrum', section: 'Programming language', href: '#scrum', count: '→ Java', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
   { no: '06', label: 'Artist', section: 'The artist', href: '#artist', count: 'Press play', accent: 'var(--level-artist)', ink: 'var(--ink-on-accent-2)' },
   { no: '07', label: 'Insta', section: 'The dig', href: '#dig', count: `${insta.length} finds`, accent: 'var(--level-dig)', ink: 'var(--ink-on-level-dig)' },
   { no: '08', label: 'About', section: 'The archeologist', href: '/about/', count: '1 human', accent: 'var(--muted)', ink: 'var(--bg)' },
@@ -304,6 +306,8 @@ for (const e of urlMap) {
     letter-spacing: 0.12em;
     color: var(--muted2);
     margin-top: 2px;
+    /* wrap at spaces only — `anywhere` split words as BOOKSTO/RE */
+    overflow-wrap: normal;
   }
   .lv-count {
     font-family: var(--font-mono);
@@ -311,6 +315,8 @@ for (const e of urlMap) {
     color: var(--muted2);
     white-space: nowrap;
     flex-shrink: 0;
+    align-self: center;
+    padding-left: 6px;
   }
   .level-btn:hover .lv-count { color: var(--lv); }
   .stats {

@@ -9,6 +9,7 @@ const { limit, more } = Astro.props;
 type Talk = {
   year?: number; date?: string; event: string; location: string;
   title?: string; kind?: string; link?: string; video?: string;
+  with?: string; // co-speaker
 };
 
 // Sort newest first from the date string ("5 May 2026", "22–24 April 2026",
@@ -53,6 +54,7 @@ for (const t of list) {
             <div class="meta">
               {t.date && <span class="date">{t.date}</span>}
               <span class="loc">{t.location}</span>
+              {t.with && <span class="with">with {t.with}</span>}
               {t.link && (
                 <a href={t.link} target="_blank" rel="noopener">Details ↗</a>
               )}
@@ -142,6 +144,8 @@ for (const t of list) {
   .meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-family: var(--font-mono); font-size: var(--text-caption); }
   .date { color: var(--level-stage); }
   .loc { color: var(--muted2); }
+  .with { color: var(--muted); }
+  .with::before { content: '· '; color: var(--muted2); }
   .talk-video { min-height: 150px; margin: 14px 0 2px; padding: 18px; }
 
   /* truncation affordance: the rail continues, three dots pulse down it */

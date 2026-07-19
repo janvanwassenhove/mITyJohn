@@ -14,16 +14,19 @@
     "location": "Paris, France",
     "kind": "Conference",
     "link": "https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove",
-    "video": "e2KKcrqeWsU"
+    "video": "e2KKcrqeWsU",
+    "title": "Outcoded by Our Kids : Il nous a fallu 20 ans… ils ont eu besoin de 20 prompts !",
+    "with": "Bart Wullems"
   },
   {
     "year": 2026,
     "date": "29 May 2026",
     "event": "dotnetZuid",
     "location": "Netherlands",
-    "title": "Outcoded by our kids — and this is no longer the job I signed for, with Bart",
+    "title": "Outcoded by our kids: it took us 20 years… they needed 20 prompts",
     "kind": "Meetup",
-    "link": "https://www.dotnetzuid.nl/events/outcoded-by-our-kids-and-this-is-no-longer-the-job-i-signed-for"
+    "link": "https://www.dotnetzuid.nl/events/outcoded-by-our-kids-and-this-is-no-longer-the-job-i-signed-for",
+    "with": "Bart Wullems"
   },
   {
     "year": 2026,
@@ -40,7 +43,8 @@
     "location": "Antwerp, Belgium",
     "kind": "Conference",
     "link": "https://m.devoxx.com/events/dvbe25/speaker/12053/jan-van-wassenhove",
-    "video": "ZO-619lqjK0"
+    "video": "ZO-619lqjK0",
+    "title": "Outcoded by our kids: it took us 20 years… they needed 20 prompts"
   },
   {
     "year": 2025,
@@ -48,7 +52,8 @@
     "event": "EU-LISA Industry Roundtable",
     "location": "Warsaw, Poland",
     "kind": "Roundtable",
-    "link": "https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers"
+    "link": "https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers",
+    "title": "Developer Productivity in the age of AI"
   },
   {
     "year": 2025,
@@ -73,7 +78,8 @@
     "link": "https://youtu.be/z81O_iZQBQs",
     "video": "z81O_iZQBQs",
     "date": "January 2025",
-    "year": 2025
+    "year": 2025,
+    "title": "Harmonizing Code and Melody: making electronical music in a matter of speaking!"
   },
   {
     "year": 2024,
@@ -82,7 +88,8 @@
     "location": "Antwerp, Belgium",
     "kind": "Conference",
     "link": "https://mobile.devoxx.com/events/dvbe24/talks/17654/details",
-    "video": "1Cy8pGknPpg"
+    "video": "1Cy8pGknPpg",
+    "title": "Harmonizing Code and Melody: making electronical music in a matter of speaking!"
   },
   {
     "year": 2024,
@@ -91,15 +98,23 @@
     "location": "Antwerp, Belgium",
     "kind": "Tools In Action",
     "link": "https://mobile.devoxx.com/events/dvbe24/talks/17653/details",
-    "video": "rcfCjKbLkK0"
+    "video": "rcfCjKbLkK0",
+    "title": "Harmonizing Code and Melody: making electronical music in a matter of speaking!"
   },
   {
     "year": 2024,
     "event": "Code & Comedy 2024",
     "location": "Nieuwegein, Netherlands",
-    "title": "Harmonizing code and melody — making electronical music in a matter of speaking",
+    "title": "Harmonizing Code and Melody: making electronical music in a matter of speaking!",
     "kind": "Conference",
     "link": "https://code-comedy.nl/talks/harmonizing-code-and-melody-making-electronical-music-in-a-matter-of-speaking",
     "date": "June 2024"
+  },
+  {
+    "year": 2026,
+    "event": "Learning World Tour",
+    "location": "TBC",
+    "title": "Outcoded by our kids: it took us 20 years… they needed 20 prompts",
+    "kind": "Conference"
   }
 ]
