@@ -19,7 +19,7 @@ import talks from '../data/talks.json';
 const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
-const posts = allPosts.slice(0, 4);
+const posts = allPosts.slice(0, 8); // two rows of four on the home grid
 
 const filters = [
   { id: 'all', label: 'All' },
@@ -388,5 +388,7 @@ for (const e of urlMap) {
     white-space: nowrap;
   }
   .all:hover { border-color: var(--border3); }
-  .blog .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--gap-cards); }
+  /* four across on wide screens (two rows of four), degrading to 3/2/1 */
+  .blog .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: var(--gap-cards); }
+  @media (min-width: 1100px) { .blog .grid { grid-template-columns: repeat(4, 1fr); } }
 </style>

@@ -3,7 +3,7 @@
 // Motion is pure CSS; a small shared script (bottom) keeps score and handles the
 // level-1 stomp. It runs only while a strip is on screen and not at all under
 // prefers-reduced-motion. Everything here is aria-hidden.
-import { MITYJOHN, ARCHEOLOGIST } from './sprites';
+import { MITYJOHN, ARCHEOLOGIST, ARCHEOLOGIST_B } from './sprites';
 
 interface Props {
   variant: 'store' | 'scrum' | 'artist' | 'books' | 'stage' | 'notes' | 'dig';
@@ -232,6 +232,16 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
   {/* LVL 6 — actual fight: trade blows with the blank page until it folds */}
   {variant === 'notes' && (
     <>
+      {/* ringside: a crowd of onlookers, stage lights and a hanging banner */}
+      <div class="crowd">
+        {Array.from({ length: 16 }, (_, i) => (
+          <span class={i % 3 === 0 ? 'tall' : ''} style={`animation-delay:${(i % 4) * 0.25}s;`}></span>
+        ))}
+      </div>
+      <div class="ring-light" style="left:22%;"></div>
+      <div class="ring-light" style="left:50%;animation-delay:0.6s;"></div>
+      <div class="ring-light" style="left:78%;animation-delay:1.2s;"></div>
+      <div class="banner">ROUND 1 · WRITE SOMETHING</div>
       <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
       <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger" data-mj-hp></div></div></div>
       <div class="fighter">
@@ -250,13 +260,22 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     <>
       <div class="temple left"></div>
       <div class="temple right"></div>
-      {['22%', '48%', '74%'].map((left, i) => (
+      {['14%', '34%', '58%', '82%'].map((left, i) => (
         <div class="torch" style={`left:${left};animation-delay:${i * 0.4}s;`}></div>
       ))}
+      {/* ruins: broken columns, vines and a watching idol */}
+      {['20%', '44%', '68%', '90%'].map((left, i) => (
+        <div class="column" style={`left:${left};height:${[30, 22, 34, 26][i]}px;`}></div>
+      ))}
+      {['28%', '52%', '76%'].map((left, i) => (
+        <div class="vine" style={`left:${left};height:${[26, 34, 20][i]}px;animation-delay:${i * 0.5}s;`}></div>
+      ))}
+      <div class="idol" style="left:63%;"></div>
       <div class="relic" data-mj-beat>▽</div>
       <div class="boulder"></div>
-      <div class="digger">
-        <div class="sprite" style={`box-shadow:${ARCHEOLOGIST};`}></div>
+      <div class="digger" data-mj-beat>
+        <div class="sprite frame-a" style={`box-shadow:${ARCHEOLOGIST};`}></div>
+        <div class="sprite frame-b" style={`box-shadow:${ARCHEOLOGIST_B};`}></div>
         <span class="whip"></span>
       </div>
     </>
@@ -412,8 +431,9 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     width: 48px; height: 60px;
     animation: mj-bob 1.9s ease-in-out infinite;
   }
+  /* sits across the body, low enough to leave the head clear */
   .guitar {
-    position: absolute; left: 26px; top: 22px; width: 44px; height: 22px;
+    position: absolute; left: 26px; top: 32px; width: 44px; height: 22px;
     transform-origin: left center;
     animation: mj-strum 0.5s ease-in-out infinite;
   }
@@ -533,6 +553,33 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     animation: mj-recoil 1.9s ease-in-out infinite;
   }
   .page-boss .sprite { width: 8px; height: 8px; }
+  /* ringside dressing */
+  .crowd {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 30px;
+    display: flex; align-items: flex-end; justify-content: space-around;
+    padding: 0 12px; pointer-events: none; opacity: 0.75;
+  }
+  .crowd span {
+    width: 11px; height: 12px; border-radius: 6px 6px 0 0;
+    background: var(--border2);
+    animation: mj-bob 2.2s ease-in-out infinite;
+  }
+  .crowd span.tall { height: 17px; background: var(--border3); }
+  .ring-light {
+    position: absolute; top: 0; width: 90px; height: 62px; margin-left: -45px;
+    background: linear-gradient(180deg, rgba(127, 201, 154, 0.16), transparent 85%);
+    clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+    animation: mj-flicker 2.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .banner {
+    position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.2em;
+    color: var(--muted2);
+    border: 1px solid var(--border2); border-top: 0;
+    padding: 3px 10px 4px; border-radius: 0 0 5px 5px;
+    background: var(--s2);
+  }
   .impact {
     position: absolute; left: 50%; top: 74px; transform: translate(-50%, 0) scale(0.5);
     font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--danger);
@@ -560,16 +607,44 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
     text-shadow: 0 0 12px var(--level-dig);
     animation: mj-relic 6s ease-in-out infinite;
   }
-  /* the boulder rolls in behind and keeps coming */
+  .column {
+    position: absolute; bottom: 42px; width: 12px;
+    background: repeating-linear-gradient(180deg, #34332e 0 6px, #2b2a26 6px 12px);
+    border: 1px solid #3f3d36; border-bottom: 0;
+  }
+  .vine {
+    position: absolute; top: 0; width: 3px;
+    background: linear-gradient(180deg, #2f5c3d, #3f7a4f);
+    border-radius: 0 0 3px 3px;
+    transform-origin: top center;
+    animation: mj-sway 3.4s ease-in-out infinite;
+  }
+  .idol {
+    position: absolute; bottom: 42px; width: 16px; height: 20px;
+    background: #4a5b52; border: 1px solid #5d7166;
+    border-radius: 3px 3px 0 0;
+    box-shadow: inset 0 -4px 0 #3b4a42;
+  }
+  .idol::after {
+    content: ''; position: absolute; left: 3px; top: 5px;
+    width: 3px; height: 3px; background: var(--level-dig);
+    box-shadow: 7px 0 0 var(--level-dig);
+  }
+  /* boulder chases from behind and closes the gap across the run */
   .boulder {
-    position: absolute; bottom: 40px; left: -70px;
-    width: 56px; height: 56px; border-radius: 50%;
+    position: absolute; bottom: 40px; left: -90px;
+    width: 58px; height: 58px; border-radius: 50%;
     background: radial-gradient(circle at 35% 32%, #6a6258, #3b3730 70%);
     border: 2px solid #2b2822;
+    box-shadow: 0 0 22px rgba(0, 0, 0, 0.6);
     animation: mj-boulder 6s linear infinite;
   }
-  .digger { position: absolute; bottom: 42px; left: 34%; width: 48px; height: 60px; animation: mj-sprint 6s linear infinite; }
-  .digger .sprite { width: 6px; height: 6px; }
+  /* stays ahead of it — same clock, shorter distance, so the gap narrows */
+  .digger { position: absolute; bottom: 42px; left: 40px; width: 48px; height: 60px; animation: mj-sprint 6s linear infinite; }
+  .digger .sprite { position: absolute; left: 0; top: 0; width: 6px; height: 6px; }
+  /* two-frame run cycle */
+  .digger .frame-a { animation: mj-frame-a 0.26s steps(1, end) infinite; }
+  .digger .frame-b { animation: mj-frame-b 0.26s steps(1, end) infinite; }
   .digger .whip {
     position: absolute; right: -16px; top: 26px; width: 18px; height: 2px;
     background: #6b4a2a; border-radius: 2px; transform-origin: left center;
@@ -585,14 +660,16 @@ const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
   }
   @keyframes mj-boulder {
     from { transform: translateX(0) rotate(0); }
-    to { transform: translateX(calc(100vw + 140px)) rotate(900deg); }
+    to { transform: translateX(calc(100vw + 230px)) rotate(1080deg); }
   }
-  /* archeologist stays ahead of the boulder, then legs it off screen */
+  /* shorter travel than the boulder over the same 6s, so it gains on him */
   @keyframes mj-sprint {
-    0% { transform: translateX(-38vw); }
-    70% { transform: translateX(18vw); }
-    100% { transform: translateX(64vw); }
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(calc(100vw + 150px)) translateY(0); }
   }
+  @keyframes mj-frame-a { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes mj-frame-b { 0%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
+  @keyframes mj-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
   @keyframes mj-whip { 0%, 100% { transform: rotate(6deg); } 50% { transform: rotate(-26deg); } }
   @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @keyframes mj-debris {
