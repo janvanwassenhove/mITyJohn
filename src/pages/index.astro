@@ -33,9 +33,10 @@ const inPrint = books.filter((b) => b.data.series !== 'Coming soon').length;
 
 const stats = [
   { n: String(apps.length), label: 'apps in the lab' },
+  { n: String(allPosts.length), label: 'field notes filed' },
   { n: String(inPrint), label: 'books in print' },
   { n: '60+', label: 'years of IT dug up' },
-  { n: '1', label: 'very tired Pi' },
+  { n: '1', label: 'suspiciously helpful robot' },
 ];
 
 // Hero level selector — every level, with a live count so the numbers can't go stale.

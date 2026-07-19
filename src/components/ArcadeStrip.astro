@@ -108,8 +108,6 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
   { at: '62%', kind: 'mac' },
   { at: '86%', kind: 'floppy' },
 ];
-// Level 5 slides the speaker delivers at the podium.
-const slides = ['30%', '48%', '66%', '84%'];
 ---
 
 <div class="strip mj-anim" data-mj-strip={variant} aria-hidden="true">
@@ -129,9 +127,14 @@ const slides = ['30%', '48%', '66%', '84%'];
           <span class="obstacle-tag">{HARDWARE[kind].label}</span>
         </div>
       ))}
-      <div class="boss legacy">
+      <div class="boss legacy" data-mj-boss>
         <div class="sprite" style={`box-shadow:${BOSS_LEGACY};`}></div>
         <span class="boss-tag">LEGACY CODE</span>
+        {/* debris burst, released when the runner stomps it */}
+        <span class="debris">
+          {Array.from({ length: 8 }, (_, i) => <i style={`--a:${i * 45}deg;`}></i>)}
+        </span>
+        <span class="ko">K.O.</span>
       </div>
     </>
   )}
@@ -178,12 +181,13 @@ const slides = ['30%', '48%', '66%', '84%'];
 
   {variant === 'stage' && (
     <>
-      {/* spotlight cone + podium; slides fly in and get "delivered" */}
+      {/* Speaker holds centre stage under the spotlight and sidesteps whatever the
+          audience lobs at him — questions from the left, tomatoes from the right. */}
       <div class="spotlight"></div>
-      {slides.map((left, i) => (
-        <div class="slide" data-mj-collect style={`left:${left};animation-delay:${i * 0.45}s;`}>▤</div>
-      ))}
-      <div class="podium"></div>
+      <div class="heckle from-left" style="top:66px;animation-duration:3.4s;">?</div>
+      <div class="heckle from-left" style="top:104px;animation-duration:4.1s;animation-delay:1.6s;">?</div>
+      <div class="heckle from-right" style="top:82px;animation-duration:3.8s;animation-delay:0.8s;">🍅</div>
+      <div class="heckle from-right" style="top:118px;animation-duration:4.6s;animation-delay:2.4s;">?</div>
       <div class="mic"></div>
       <div class="audience">
         {Array.from({ length: 14 }, (_, i) => (
@@ -362,7 +366,7 @@ const slides = ['30%', '48%', '66%', '84%'];
     transform-origin: bottom center;
     animation: mj-boss 1.4s ease-in-out infinite;
   }
-  .boss .sprite { width: 8px; height: 8px; background: transparent; }
+  .boss .sprite { width: 8px; height: 8px; background: transparent; transition: transform 0.18s ease, opacity 0.35s ease; }
   .boss-tag {
     position: absolute;
     top: -16px;
@@ -372,34 +376,64 @@ const slides = ['30%', '48%', '66%', '84%'];
     letter-spacing: 0.16em;
     color: var(--danger);
     white-space: nowrap;
+    transition: opacity 0.25s ease;
+  }
+  /* Stomped: the mainframe squashes flat, throws debris and drops a K.O. */
+  .boss.defeated { animation: none; }
+  .boss.defeated .sprite { transform: translateY(26px) scaleY(0.12); opacity: 0; }
+  .boss.defeated .boss-tag { opacity: 0; }
+  .debris { position: absolute; left: 24px; top: 20px; width: 0; height: 0; }
+  .debris i {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #545a66;
+    opacity: 0;
+  }
+  .boss.defeated .debris i {
+    animation: mj-debris 0.65s ease-out forwards;
+    transform: rotate(var(--a)) translateX(0);
+  }
+  .ko {
+    position: absolute;
+    left: 4px;
+    top: -6px;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--danger);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .boss.defeated .ko { animation: mj-ko 1s ease-out forwards; }
+  @keyframes mj-debris {
+    0% { opacity: 1; transform: rotate(var(--a)) translateX(0); }
+    100% { opacity: 0; transform: rotate(var(--a)) translateX(46px); }
+  }
+  @keyframes mj-ko {
+    0% { opacity: 0; transform: translateY(6px) scale(0.6); }
+    30% { opacity: 1; transform: translateY(-10px) scale(1.1); }
+    100% { opacity: 0; transform: translateY(-30px) scale(1); }
   }
   /* The runner hops the hardware and vaults the boss, timed to the 15s lap. */
   .runner.hopper { animation: mj-level 15s linear infinite; }
 
   /* level 5 — the stage ---------------------------------------------------- */
+  /* cone centred on the speaker, who now holds centre stage */
   .spotlight {
     position: absolute;
-    left: 6%;
+    left: 50%;
     top: 0;
-    width: 190px;
+    width: 230px;
+    margin-left: -115px;
     height: 100%;
     background: linear-gradient(180deg, rgba(224, 122, 154, 0.16), transparent 78%);
     clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
     pointer-events: none;
   }
-  .podium {
-    position: absolute;
-    left: 9%;
-    bottom: 40px;
-    width: 34px;
-    height: 30px;
-    background: var(--s2);
-    border: 2px solid var(--border3);
-    border-bottom: 0;
-  }
   .mic {
     position: absolute;
-    left: calc(9% + 30px);
+    left: calc(50% + 26px);
     bottom: 70px;
     width: 3px;
     height: 16px;
@@ -415,14 +449,26 @@ const slides = ['30%', '48%', '66%', '84%'];
     border-radius: 50%;
     background: var(--level-stage);
   }
-  .slide {
+  /* heckles fly in from either side and sail past the dodging speaker */
+  .heckle {
     position: absolute;
-    bottom: 76px;
-    font-size: 20px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
     line-height: 1;
     color: var(--level-stage);
-    animation: mj-coin 1.7s ease-in-out infinite;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .heckle.from-left { left: -30px; animation: mj-throw-right linear infinite; }
+  .heckle.from-right { right: -30px; animation: mj-throw-left linear infinite; }
+  @keyframes mj-throw-right {
+    0% { transform: translateX(0) rotate(0); opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { transform: translateX(calc(100vw + 60px)) rotate(540deg); opacity: 0; }
+  }
+  @keyframes mj-throw-left {
+    0% { transform: translateX(0) rotate(0); opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { transform: translateX(calc(-100vw - 60px)) rotate(-540deg); opacity: 0; }
   }
   .audience {
     position: absolute;
@@ -443,7 +489,19 @@ const slides = ['30%', '48%', '66%', '84%'];
     background: var(--border2);
     animation: mj-bob 2.4s ease-in-out infinite;
   }
-  .runner.speaker { left: 8%; top: 52px; animation: mj-bob 2s ease-in-out infinite; }
+  /* centre stage, sidestepping the incoming questions */
+  .runner.speaker {
+    left: 50%;
+    top: 56px;
+    margin-left: -24px;
+    animation: mj-dodge 3.1s ease-in-out infinite;
+  }
+  @keyframes mj-dodge {
+    0%, 100% { transform: translateX(-34px); }
+    25% { transform: translateX(-34px) translateY(-6px); }
+    50% { transform: translateX(34px); }
+    75% { transform: translateX(34px) translateY(-6px); }
+  }
 
   /* level 6 — fight ------------------------------------------------------- */
   .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
@@ -492,6 +550,7 @@ const slides = ['30%', '48%', '66%', '84%'];
       const vehicle = strip.querySelector<HTMLElement>('[data-mj-vehicle]');
       const pickups = [...strip.querySelectorAll<HTMLElement>('[data-mj-collect]')];
       const gems = [...strip.querySelectorAll<HTMLElement>('[data-mj-gem]')];
+      const boss = strip.querySelector<HTMLElement>('[data-mj-boss]');
       let score = 0;
       let lastX = -1e9;
 
@@ -521,8 +580,9 @@ const slides = ['30%', '48%', '66%', '84%'];
           const v = vehicle.getBoundingClientRect();
           const vx = v.left - box.left;
           if (vx < lastX) {
-            // looped back to the start — respawn the collectibles
+            // looped back to the start — respawn the collectibles and the boss
             pickups.forEach((p) => p.classList.remove('collected'));
+            boss?.classList.remove('defeated');
           }
           lastX = vx;
           for (const p of pickups) {
@@ -533,6 +593,18 @@ const slides = ['30%', '48%', '66%', '84%'];
               score += 100;
               render();
               pop(r.left - box.left - 12, '+100', getComputedStyle(p).color);
+            }
+          }
+
+          // Stomp the boss: the runner is mid-vault when it overlaps, so landing
+          // on it flattens it rather than the other way round.
+          if (boss && !boss.classList.contains('defeated')) {
+            const b = boss.getBoundingClientRect();
+            if (v.right > b.left && v.left < b.right) {
+              boss.classList.add('defeated');
+              score += 500;
+              render();
+              pop(b.left - box.left - 10, 'K.O. +500', '#e05a48');
             }
           }
         }

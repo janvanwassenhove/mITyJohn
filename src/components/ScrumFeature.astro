@@ -13,6 +13,26 @@
   <span class="cta">Explore →</span>
 </a>
 
+<div class="spl-sample" data-reveal>
+  <div class="sample-head">
+    <span class="dots"><i></i><i></i><i></i></span>
+    <span class="file">hello-world.scrum</span>
+    <span class="out">→ compiles to Java</span>
+  </div>
+  <pre><code><span class="c-dir">#SPRINTGOAL</span> Deliver our first Scrum program
+
+<span class="c-kw">EPIC</span> <span class="c-str">"SampleStories"</span>
+
+    <span class="c-kw">USER STORY</span> <span class="c-str">"HelloWorld"</span>
+
+        <span class="c-dir">#REVIEW</span> Our first Scrum Program
+        <span class="c-kw">SAY</span> <span class="c-str">"Hello world!"</span>
+
+    <span class="c-kw">END OF STORY</span>
+
+<span class="c-kw">END OF EPIC</span></code></pre>
+</div>
+
 <style>
   .scrum-card {
     display: flex;
@@ -48,4 +68,39 @@
   .title { font-family: var(--font-display); font-size: var(--text-feature); font-weight: 700; letter-spacing: -0.01em; }
   .sub { font-size: var(--text-small); color: var(--muted); margin-top: 4px; text-wrap: pretty; }
   .cta { font-family: var(--font-mono); font-size: var(--text-small); color: var(--level-scrum); white-space: nowrap; }
+
+  /* SPL "hello world" — the language's own syntax, straight from the SPL docs */
+  .spl-sample {
+    margin-top: 14px;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card-lg);
+    overflow: hidden;
+  }
+  .sample-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    color: var(--muted2);
+  }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border3); }
+  .file { color: var(--text); }
+  .out { margin-left: auto; color: var(--level-scrum); }
+  .spl-sample pre {
+    margin: 0;
+    padding: 18px clamp(16px, 3vw, 24px);
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .c-kw { color: var(--level-scrum); font-weight: 600; }
+  .c-str { color: var(--ok); }
+  .c-dir { color: var(--accent); }
 </style>
