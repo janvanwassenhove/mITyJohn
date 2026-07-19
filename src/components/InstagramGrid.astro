@@ -6,7 +6,8 @@ import SectionHeader from './SectionHeader.astro';
 import ArcadeStrip from './ArcadeStrip.astro';
 
 type Item = { tag?: string; href: string; image?: string; alt?: string };
-const items = (feed as Item[]).slice(0, 6);
+const all = feed as Item[];
+const items = all.slice(0, 12); // two rows of six
 ---
 
 {items.length > 0 && (
@@ -33,6 +34,11 @@ const items = (feed as Item[]).slice(0, 6);
           </a>
         ))}
       </div>
+      {/* the grid is a slice of the feed — nudge people to the rest of it */}
+      <a class="more" href="https://www.instagram.com/mity.john/" target="_blank" rel="noopener">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>more finds on Instagram →</span>
+      </a>
     </div>
   </section>
   </>
@@ -44,7 +50,31 @@ const items = (feed as Item[]).slice(0, 6);
   .head { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin: 10px 0 24px; }
   .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); margin: 0; }
   .head a { font-family: var(--font-mono); font-size: var(--text-small); }
+  /* two rows of six on desktop, degrading to 4 / 3 / 2 as it narrows */
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--gap-tiles); }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(6, 1fr); } }
+
+  .more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--muted2);
+  }
+  .more:hover { color: var(--level-dig); }
+  .more .dots { display: flex; gap: 5px; }
+  .more .dots i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--level-dig); opacity: 0.25;
+    animation: mj-trail 1.6s ease-in-out infinite;
+  }
+  .more .dots i:nth-child(2) { animation-delay: 0.2s; }
+  .more .dots i:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes mj-trail { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .more .dots i { animation: none; opacity: 0.6; } }
   .tile {
     position: relative;
     aspect-ratio: 1;

@@ -22,8 +22,12 @@ jobs:
           echo "health: $H"
           DAYS=$(echo "$H" | jq -r '.tokenExpiresIn // -1')
           LAST=$(echo "$H" | jq -r '.lastSync // empty')
+          ERR=$(echo "$H" | jq -r '.lastError.msg // empty')
+          COUNT=$(echo "$H" | jq -r '.itemCount // 0')
           PROBLEM=""
           if [ "$DAYS" -lt 14 ]; then PROBLEM="Instagram token expires in ${DAYS} days."; fi
+          if [ -n "$ERR" ]; then PROBLEM="$PROBLEM Last error: ${ERR}."; fi
+          if [ "$COUNT" -eq 0 ]; then PROBLEM="$PROBLEM Feed is empty."; fi
           if [ -n "$LAST" ]; then
             AGE=$(( ( $(date +%s) - $(date -d "$LAST" +%s) ) / 3600 ))
             if [ "$AGE" -gt 72 ]; then PROBLEM="$PROBLEM Last sync ${AGE}h ago."; fi
