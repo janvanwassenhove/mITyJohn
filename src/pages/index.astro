@@ -55,7 +55,9 @@ const levels = [
   { no: '04', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
   // Subtitle says what it is rather than repeating the level's arcade name —
   // "Sprint zero" read like a project phase, not a programming language.
-  { no: '05', label: 'Scrum', section: 'Programming language', href: '#scrum', count: '→ Java', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
+  // count uses the language's own keyword — short enough not to crowd the
+  // two-line subtitle, and it says what SPL compiles from
+  { no: '05', label: 'Scrum', section: 'Programming language', href: '#scrum', count: '#INTENT', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
   { no: '06', label: 'Artist', section: 'The artist', href: '#artist', count: 'Press play', accent: 'var(--level-artist)', ink: 'var(--ink-on-accent-2)' },
   { no: '07', label: 'Insta', section: 'The dig', href: '#dig', count: `${insta.length} finds`, accent: 'var(--level-dig)', ink: 'var(--ink-on-level-dig)' },
   { no: '08', label: 'About', section: 'The archeologist', href: '/about/', count: '1 human', accent: 'var(--muted)', ink: 'var(--bg)' },
@@ -108,8 +110,8 @@ for (const e of urlMap) {
           <span class="lv-body">
             <span class="lv-label">{l.label}</span>
             <span class="lv-sub">{l.section}</span>
+            <span class="lv-count">{l.count}</span>
           </span>
-          <span class="lv-count">{l.count}</span>
         </a>
       ))}
     </div>
@@ -309,14 +311,14 @@ for (const e of urlMap) {
     /* wrap at spaces only — `anywhere` split words as BOOKSTO/RE */
     overflow-wrap: normal;
   }
+  /* Count sits under the subtitle rather than beside it. Side by side, a subtitle
+     that wrapped to two lines collided with it — "PROGRAMMINGBy intent" — and the
+     same happened on Books and About. Stacked, the text always has full width. */
   .lv-count {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
     color: var(--muted2);
-    white-space: nowrap;
-    flex-shrink: 0;
-    align-self: center;
-    padding-left: 6px;
+    margin-top: 6px;
   }
   .level-btn:hover .lv-count { color: var(--lv); }
   .stats {
