@@ -7,6 +7,7 @@ blurb: "A haunted IT management sim. The tickets are ghosts: they queue, they es
 repo: "ghostsinthemachine"
 demoUrl: "https://janvanwassenhove.github.io/ghostsinthemachine"
 order: 5
+isNew: true
 wpId: 951
 wpSlug: "ghosts-in-the-machine"
 ---

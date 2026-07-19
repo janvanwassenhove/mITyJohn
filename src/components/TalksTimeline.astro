@@ -11,10 +11,24 @@ type Talk = {
   title?: string; kind?: string; link?: string; video?: string;
 };
 
-const list = (talks as Talk[]).slice(0, limit ?? talks.length);
+// Sort newest first from the date string ("5 May 2026", "22–24 April 2026",
+// "January 2025"): year, then month, then the first day if one is given.
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+const sortKey = (t: Talk) => {
+  const year = t.year ?? 0;
+  const d = (t.date ?? '').toLowerCase();
+  const month = MONTHS.findIndex((m) => d.includes(m));
+  const day = parseInt(d.match(/\b(\d{1,2})\b/)?.[1] ?? '0', 10);
+  return year * 10000 + (month + 1) * 100 + day;
+};
 
-// Preserve source order (already newest-first); group consecutive runs by year so
-// an undated entry stays where it belongs rather than being invented into a year.
+const list = (talks as Talk[])
+  .slice()
+  .sort((a, b) => sortKey(b) - sortKey(a))
+  .slice(0, limit ?? talks.length);
+
+// Group consecutive runs by year so an undated entry stays where it belongs
+// rather than being invented into a year.
 const groups: { year: number | null; items: Talk[] }[] = [];
 for (const t of list) {
   const y = t.year ?? null;

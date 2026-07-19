@@ -6,6 +6,7 @@ cat: "music"
 blurb: "A local-first AI music studio. Describe a song, get a real multitrack project you can shape by hand — and sing it in a voice you trained."
 repo: "mITyStudio"
 order: 1
+isNew: true
 wpId: 514
 wpSlug: "mitystudio"
 ---

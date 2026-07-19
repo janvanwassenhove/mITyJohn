@@ -6,6 +6,7 @@ cat: "music"
 blurb: "A live-coding music environment for people who would rather write rhythm than drag rectangles. Runs on a Raspberry Pi."
 repo: "PiBeat"
 order: 4
+isNew: true
 wpId: 853
 wpSlug: "pibeat"
 ---

@@ -6,5 +6,6 @@ desc: "From Bruegel to Matisse — twelve masterpieces for little viewers. A mis
 buy: "https://a.co/d/0cqGZG3H"
 preview: "/wp-content/uploads/2026/07/Felix_Jumps_In_teaser.pdf"
 cover: "/books/nel-jumps-in-en.jpg"
+isNew: true
 order: 2
 ---

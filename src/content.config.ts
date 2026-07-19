@@ -28,6 +28,7 @@ const apps = defineCollection({
     repo: z.string().optional(),
     demoUrl: z.string().url().optional(),
     order: z.number().default(99),
+    isNew: z.boolean().default(false), // shows a NEW flag on the store card
     wpId: z.number().optional(),
     wpSlug: z.string().optional(),
   }),
@@ -44,6 +45,7 @@ const books = defineCollection({
     preview: z.string().optional(),
     cover: z.string().optional(),
     order: z.number().default(99),
+    isNew: z.boolean().default(false),
   }),
 });
 

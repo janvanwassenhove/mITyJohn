@@ -6,5 +6,6 @@ desc: "Von Bruegel bis Matisse — zwölf Meisterwerke für kleine Betrachter. E
 buy: "https://amzn.eu/d/046DbrGd"
 preview: "/wp-content/uploads/2026/07/Mimi_springt_ins_Bild_teaser.pdf"
 cover: "/books/nel-jumps-in-de.jpg"
+isNew: true
 order: 4
 ---

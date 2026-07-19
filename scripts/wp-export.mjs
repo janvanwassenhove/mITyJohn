@@ -31,11 +31,11 @@ const APP_META = {
   // scripts/validate-apps.mjs — do not hand-edit without re-running it.
   // Blurbs describe what the app actually does (checked against each app's own
   // page); the joke rides along, it doesn't replace the description.
-  mitystudio: { name: 'mITyStudio', code: 'STUDIO', tag: 'music', cat: 'music', order: 1, repo: 'mITyStudio', blurb: 'A local-first AI music studio. Describe a song, get a real multitrack project you can shape by hand — and sing it in a voice you trained.' },
+  mitystudio: { name: 'mITyStudio', code: 'STUDIO', tag: 'music', cat: 'music', order: 1, isNew: true, repo: 'mITyStudio', blurb: 'A local-first AI music studio. Describe a song, get a real multitrack project you can shape by hand — and sing it in a voice you trained.' },
   'music-agent': { name: 'Music Agent', code: 'AGENT', tag: 'music', cat: 'music', order: 2, repo: 'MusicAgent', blurb: 'A multi-agent system that composes electronic tracks and plays them through Sonic Pi. Bring snacks.' },
   mityguitar: { name: 'mITyGuitar', code: 'GUITAR', tag: 'music', cat: 'music', order: 3, repo: 'mITyGuitar', blurb: 'Turns a Guitar Hero controller into a real practice guitar — chords, charts and all. Your neighbours: thrilled.' },
-  pibeat: { name: 'PiBeat', code: 'PIBEAT', tag: 'music', cat: 'music', order: 4, repo: 'PiBeat', blurb: 'A live-coding music environment for people who would rather write rhythm than drag rectangles. Runs on a Raspberry Pi.' },
-  'ghosts-in-the-machine': { name: 'Ghosts in the Machine', code: 'GHOSTS', tag: 'game', cat: 'games', order: 5, demoUrl: 'https://janvanwassenhove.github.io/ghostsinthemachine', repo: 'ghostsinthemachine', blurb: 'A haunted IT management sim. The tickets are ghosts: they queue, they escalate, and if you ignore them they mutate.' },
+  pibeat: { name: 'PiBeat', code: 'PIBEAT', tag: 'music', cat: 'music', order: 4, isNew: true, repo: 'PiBeat', blurb: 'A live-coding music environment for people who would rather write rhythm than drag rectangles. Runs on a Raspberry Pi.' },
+  'ghosts-in-the-machine': { name: 'Ghosts in the Machine', code: 'GHOSTS', tag: 'game', cat: 'games', order: 5, isNew: true, demoUrl: 'https://janvanwassenhove.github.io/ghostsinthemachine', repo: 'ghostsinthemachine', blurb: 'A haunted IT management sim. The tickets are ghosts: they queue, they escalate, and if you ignore them they mutate.' },
   mityfighter: { name: 'mITyFighter', code: 'FIGHT', tag: 'game', cat: 'games', order: 6, demoUrl: 'https://janvanwassenhove.github.io/mITyFighter', repo: 'mITyFighter', blurb: 'A retro 2D arcade fighter, built in half a day with Copilot. The real boss is legacy code.' },
   hipster: { name: 'Hipster', code: 'HIPSTER', tag: 'game', cat: 'games', order: 7, demoUrl: 'https://janvanwassenhove.github.io/Hipster', repo: 'Hipster', blurb: 'Guess the song, place it on the timeline. A web remake of Hitster — with a music library that actually knows Belgium.' },
   loveflix: { name: 'LoveFlix', code: 'LOVE', tag: 'fun', cat: 'fun', order: 8, repo: 'LoveFlix', blurb: 'An AI experiment that rewrites any movie as a romance — poster, plot and all. Where every movie finds its heart.' },
@@ -257,6 +257,7 @@ for (const page of inv.pages) {
       ...(meta.repo ? [`repo: ${JSON.stringify(meta.repo)}`] : []),
       ...(meta.demoUrl ? [`demoUrl: ${JSON.stringify(meta.demoUrl)}`] : []),
       `order: ${meta.order}`,
+      ...(meta.isNew ? [`isNew: true`] : []),
       `wpId: ${page.id}`,
       `wpSlug: ${JSON.stringify(page.slug)}`,
       '---',

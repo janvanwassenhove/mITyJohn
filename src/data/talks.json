@@ -4,7 +4,8 @@
     "event": "The Future Of the SDLC",
     "location": "Munich, Germany",
     "title": "Rethinking the SDLC in an AI-first world",
-    "kind": "Conference"
+    "kind": "Conference",
+    "date": "5 May 2026"
   },
   {
     "year": 2026,
@@ -29,7 +30,8 @@
     "event": "Roundtable — The art of staying ahead",
     "location": "Leuven, Belgium",
     "title": "The future of DXP",
-    "kind": "Roundtable"
+    "kind": "Roundtable",
+    "date": "29 January 2026"
   },
   {
     "year": 2025,
@@ -42,7 +44,7 @@
   },
   {
     "year": 2025,
-    "date": "June 2025",
+    "date": "12 June 2025",
     "event": "EU-LISA Industry Roundtable",
     "location": "Warsaw, Poland",
     "kind": "Roundtable",
@@ -69,7 +71,9 @@
     "location": "Online",
     "kind": "Conference",
     "link": "https://youtu.be/z81O_iZQBQs",
-    "video": "z81O_iZQBQs"
+    "video": "z81O_iZQBQs",
+    "date": "January 2025",
+    "year": 2025
   },
   {
     "year": 2024,
@@ -95,6 +99,7 @@
     "location": "Nieuwegein, Netherlands",
     "title": "Harmonizing code and melody — making electronical music in a matter of speaking",
     "kind": "Conference",
-    "link": "https://code-comedy.nl/talks/harmonizing-code-and-melody-making-electronical-music-in-a-matter-of-speaking"
+    "link": "https://code-comedy.nl/talks/harmonizing-code-and-melody-making-electronical-music-in-a-matter-of-speaking",
+    "date": "June 2024"
   }
 ]

@@ -6,5 +6,6 @@ desc: "De Bruegel à Matisse — douze chefs-d'œuvre pour petits curieux. Un ch
 buy: "https://amzn.eu/d/0c2678oV"
 preview: "/wp-content/uploads/2026/07/Filou_saute_dedans_teaser.pdf"
 cover: "/books/nel-jumps-in-fr.jpg"
+isNew: true
 order: 3
 ---

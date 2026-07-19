@@ -38,6 +38,7 @@ const stats = [
   { n: String(inPrint), label: 'books in print' },
   { n: '60+', label: 'years of IT dug up' },
   { n: '1', label: 'suspiciously helpful robot' },
+  { n: '0', label: 'cookies served' }, // true as well as funny: analytics here are cookieless
 ];
 
 // Hero level selector — every level, with a live count so the numbers can't go stale.
@@ -49,6 +50,7 @@ const levels = [
   { no: '05', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
   { no: '06', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
   { no: '07', label: 'Insta', section: 'The dig', href: '#dig', count: `${insta.length} finds`, accent: 'var(--level-dig)', ink: 'var(--ink-on-level-dig)' },
+  { no: '08', label: 'About', section: 'The archeologist', href: '/about/', count: '1 human', accent: 'var(--muted)', ink: 'var(--bg)' },
 ];
 
 // §5.4 JS shim — compact map inlined from url-map.json (belt and braces under §5.3).
