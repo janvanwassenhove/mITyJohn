@@ -11,9 +11,13 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
     ogImage: z.string().optional(),
-    wpId: z.number(),
-    wpSlug: z.string(),
+    // Migration provenance — present on the 37 posts imported from WordPress,
+    // absent on anything written since. Optional so new posts can be authored
+    // by hand without inventing a WordPress id.
+    wpId: z.number().optional(),
+    wpSlug: z.string().optional(),
     cardTag: z.string().optional(),
+    draft: z.boolean().default(false), // excluded from the build; see blog index
   }),
 });
 

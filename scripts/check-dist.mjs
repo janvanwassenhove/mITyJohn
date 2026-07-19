@@ -23,9 +23,11 @@ for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
   const rel = path.relative(DIST, file);
 
-  // 1. Legacy query-string internal links (§6 Phase 4 done-when)
-  for (const m of html.matchAll(/(?:https?:\/\/(?:www\.)?mityjohn\.com)?\/\?(?:p|page_id|cat|category_name|tag|feed)=[^"'\s<>]*/g)) {
-    console.log(`LEGACY ${rel}: ${m[0]}`);
+  // 1. Legacy query-string internal LINKS (§6 Phase 4 done-when).
+  // Only href/src count: a post may legitimately quote /?p=941 in prose or a
+  // code block to explain the migration, and that is not a broken link.
+  for (const m of html.matchAll(/(?:href|src)="((?:https?:\/\/(?:www\.)?mityjohn\.com)?\/\?(?:p|page_id|cat|category_name|tag|feed)=[^"]*)"/g)) {
+    console.log(`LEGACY ${rel}: ${m[1]}`);
     legacy++;
   }
 

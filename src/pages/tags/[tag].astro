@@ -5,7 +5,7 @@ import PostCard from '../../components/PostCard.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', (p) => !p.data.draft);
   const tags = new Set(posts.flatMap((p) => p.data.tags));
   return [...tags].map((tag) => ({
     params: { tag },
