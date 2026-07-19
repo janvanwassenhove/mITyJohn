@@ -1,8 +1,8 @@
 ---
-// Decorative arcade divider strips — pixel-art scenes between sections.
-// Motion is CSS keyframes; a small shared script (below) runs only while a strip
-// is on screen and handles score + collectible pickups. aria-hidden throughout,
-// and prefers-reduced-motion disables both the animation and the script.
+// Decorative arcade divider strips — one mini "level" between sections.
+// Motion is pure CSS; a small shared script (bottom) keeps score and handles the
+// level-1 stomp. It runs only while a strip is on screen and not at all under
+// prefers-reduced-motion. Everything here is aria-hidden.
 interface Props {
   variant: 'store' | 'scrum' | 'artist' | 'books' | 'stage' | 'notes';
 }
@@ -10,10 +10,10 @@ const { variant } = Astro.props;
 
 const LABELS = {
   store: 'LVL 1 · THE STORE — PLATFORMER · BOSS: LEGACY CODE',
-  scrum: 'LVL 2 · SPRINT ZERO — KART RACING · RIVAL: THE BACKLOG',
-  artist: 'LVL 3 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
-  books: 'LVL 4 · THE BOOKSTORE — RACING · COLLECT: THE BACKLIST',
-  stage: 'LVL 5 · THE STAGE — PRESENTATION · BOSS: THE Q&A',
+  scrum: 'LVL 2 · SPRINT ZERO — STACKER · GOAL: CLEAR THE BACKLOG',
+  artist: 'LVL 3 · THE ARTIST — RHYTHM · HIT THE NOTES',
+  books: 'LVL 4 · THE BOOKSTORE — DELIVERY ROUND · EVERY DOOR ON THE STREET',
+  stage: 'LVL 5 · THE STAGE — DODGE · SURVIVE THE Q&A',
   notes: 'LVL 6 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
 };
 
@@ -21,31 +21,39 @@ const LABELS = {
 const RUNNER =
   '18px 0 0 #4a3620, 24px 0 0 #4a3620, 30px 0 0 #4a3620, 12px 6px 0 #4a3620, 18px 6px 0 #4a3620, 24px 6px 0 #4a3620, 30px 6px 0 #4a3620, 36px 6px 0 #4a3620, 42px 6px 0 #4a3620, 18px 12px 0 #e8c39a, 24px 12px 0 #e8c39a, 30px 12px 0 #e8c39a, 36px 12px 0 #e8c39a, 18px 18px 0 #e8c39a, 24px 18px 0 #e8c39a, 30px 18px 0 #17140f, 36px 18px 0 #e8c39a, 12px 24px 0 var(--accent), 18px 24px 0 var(--accent-2), 24px 24px 0 var(--accent), 30px 24px 0 var(--accent), 36px 24px 0 var(--accent), 6px 30px 0 #e8c39a, 12px 30px 0 var(--accent), 18px 30px 0 var(--accent), 24px 30px 0 var(--accent-2), 30px 30px 0 var(--accent), 36px 30px 0 var(--accent), 42px 30px 0 var(--accent-2), 12px 36px 0 var(--accent), 18px 36px 0 var(--accent), 24px 36px 0 var(--accent), 30px 36px 0 var(--accent), 36px 36px 0 var(--accent), 42px 36px 0 var(--accent-2), 18px 42px 0 #33302b, 24px 42px 0 #33302b, 30px 42px 0 #33302b, 18px 48px 0 #33302b, 30px 48px 0 #33302b, 12px 54px 0 #33302b, 18px 54px 0 #33302b, 30px 54px 0 #33302b, 36px 54px 0 #33302b';
 
-// Rival kart — same mesh, grey chassis / red trim so it reads as a second racer.
-const RIVAL = RUNNER.replaceAll('var(--accent-2)', '#e05a48').replaceAll('var(--accent)', '#6b7280');
+// Delivery van for the book round (Paperboy-style), 6px cells.
+const VAN = (() => {
+  const A = 'var(--level-books)', W = '#efe6d6', D = '#33302b';
+  const c: string[] = [];
+  const put = (x: number, y: number, col: string) => c.push(`${x * 6}px ${y * 6}px 0 ${col}`);
+  for (let x = 0; x <= 4; x++) put(x, 0, A); // box body roof
+  for (let x = 0; x <= 6; x++) put(x, 1, A);
+  for (let x = 0; x <= 6; x++) put(x, 2, A);
+  [5, 6].forEach((x) => put(x, 1, W)); // cab window
+  for (let x = 0; x <= 6; x++) put(x, 3, A);
+  [1, 5].forEach((x) => put(x, 4, D)); // wheels
+  return c.join(', ');
+})();
 
-// Side-view car for the bookstore level, 6px cells. `body` colours the chassis.
-const car = (body: string) => {
-  const A = body, B = 'var(--accent-2)', D = '#33302b';
-  const cells: string[] = [];
-  const put = (x: number, y: number, c: string) => cells.push(`${x * 6}px ${y * 6}px 0 ${c}`);
-  [3, 4, 5].forEach((x) => put(x, 0, A)); // roof
-  put(2, 1, A); [3, 4, 5].forEach((x) => put(x, 1, B)); put(6, 1, A); // windows
-  for (let x = 0; x <= 9; x++) { put(x, 2, A); put(x, 3, A); } // body
-  [1, 2, 7, 8].forEach((x) => put(x, 4, D)); // wheels
-  return cells.join(', ');
-};
-
-// Guitar held by the level-3 character: wooden body, dark neck angled up-right.
-const GUITAR = [
-  ...[[0, 4], [1, 4], [2, 4], [0, 5], [1, 5], [2, 5], [0, 6], [1, 6], [2, 6]].map(([x, y]) => `${x * 5}px ${y * 5}px 0 #c98b6a`),
-  ...[[3, 3], [4, 2], [5, 1], [6, 0]].map(([x, y]) => `${x * 5}px ${y * 5}px 0 #4a3620`),
+// Boss for level 1: LEGACY CODE — a hulking mainframe with red status eyes.
+const BOSS_LEGACY = [
+  ...Array.from({ length: 6 }, (_, r) => Array.from({ length: 7 }, (_, c) => `${c * 8}px ${r * 8}px 0 #545a66`)).flat(),
+  '8px 8px 0 #1b2027', '16px 8px 0 #1b2027', '24px 8px 0 #1b2027', '32px 8px 0 #1b2027', '40px 8px 0 #1b2027',
+  '16px 16px 0 #e05a48', '32px 16px 0 #e05a48',
+  '8px 32px 0 #3b414b', '24px 32px 0 #3b414b', '40px 32px 0 #3b414b',
+  '8px 24px 0 #e0a44a', '40px 24px 0 #e0a44a',
 ].join(', ');
 
-// Retro IT hardware the runner hurdles on level 1 — the obstacles are the history
-// the lab digs up: a beige tower PC, a CRT compact Mac, and a floppy disk.
+// Boss for level 6: THE BLANK PAGE — a blank sheet with a smug cursor.
+const BOSS_PAGE = [
+  ...Array.from({ length: 6 }, (_, r) => Array.from({ length: 5 }, (_, c) => `${c * 8}px ${r * 8}px 0 #ece7dd`)).flat(),
+  '8px 8px 0 #cfc7b8', '16px 8px 0 #cfc7b8', '24px 8px 0 #cfc7b8',
+  '8px 24px 0 #cfc7b8', '16px 24px 0 #cfc7b8',
+  '32px 16px 0 #7fc99a', // blinking cursor
+].join(', ');
+
+// Retro IT hardware the runner hurdles on level 1.
 const HARDWARE: Record<string, { art: string; w: number; h: number; label: string }> = {
-  // beige tower + dark drive slots
   tower: {
     w: 24, h: 34, label: 'PC',
     art: [
@@ -55,7 +63,6 @@ const HARDWARE: Record<string, { art: string; w: number; h: number; label: strin
       '18px 30px 0 #7fc99a',
     ].join(', '),
   },
-  // compact all-in-one Mac: body, screen, disk slot
   mac: {
     w: 30, h: 34, label: 'MAC',
     art: [
@@ -65,7 +72,6 @@ const HARDWARE: Record<string, { art: string; w: number; h: number; label: strin
       '12px 24px 0 #4a443b', '18px 24px 0 #4a443b',
     ].join(', '),
   },
-  // 3.5" floppy: shell, shutter, label
   floppy: {
     w: 24, h: 24, label: 'DISK',
     art: [
@@ -76,45 +82,38 @@ const HARDWARE: Record<string, { art: string; w: number; h: number; label: strin
   },
 };
 
-// Boss for level 1: LEGACY CODE — a hulking grey mainframe with red status eyes.
-const BOSS_LEGACY = [
-  ...Array.from({ length: 6 }, (_, r) =>
-    Array.from({ length: 7 }, (_, c) => `${c * 8}px ${r * 8}px 0 #545a66`),
-  ).flat(),
-  // screen
-  '8px 8px 0 #1b2027', '16px 8px 0 #1b2027', '24px 8px 0 #1b2027', '32px 8px 0 #1b2027', '40px 8px 0 #1b2027',
-  // angry eyes
-  '16px 16px 0 #e05a48', '32px 16px 0 #e05a48',
-  // grille
-  '8px 32px 0 #3b414b', '24px 32px 0 #3b414b', '40px 32px 0 #3b414b',
-  // blinking tape reels
-  '8px 24px 0 #e0a44a', '40px 24px 0 #e0a44a',
-].join(', ');
-
-// Guitar Hero fret colours, top lane to bottom lane.
+// Guitar Hero fret colours + lanes (level 3).
 const FRETS = ['#7fc99a', '#e05a48', '#e0c04a', '#6fb3c9', '#e08a4a'];
 const LANE_Y = [52, 70, 88, 106, 124];
-// note gems: [lane, delay] — staggered so they arrive as a playable pattern
 const GEMS: [number, number][] = [
-  [0, 0], [2, 0.55], [4, 1.1], [1, 1.65], [3, 2.2], [0, 2.75], [2, 3.3], [4, 3.85], [1, 4.4], [3, 4.95],
+  [0, 0], [2, 0.7], [4, 1.4], [1, 2.1], [3, 2.8], [0, 3.5], [2, 4.2], [4, 4.9], [1, 5.6], [3, 6.3],
 ];
 
-const coins = { store: ['28%', '54%', '79%'], scrum: [], books: [], artist: [], stage: [], notes: [] }[variant];
-// Books the car drives through and collects
-const backlist = ['24%', '42%', '60%', '78%', '92%'];
-// Level 1 obstacles: retro IT hardware the runner hops over, placed between coins.
+// Level 2 stacker: backlog items dropping into the sprint (Tetris-ish).
+const BACKLOG: { at: string; w: number; delay: number; label: string }[] = [
+  { at: '18%', w: 34, delay: 0, label: 'STORY' },
+  { at: '31%', w: 26, delay: 1.1, label: 'BUG' },
+  { at: '44%', w: 40, delay: 2.2, label: 'EPIC' },
+  { at: '58%', w: 28, delay: 3.3, label: 'SPIKE' },
+  { at: '71%', w: 34, delay: 4.4, label: 'CHORE' },
+  { at: '84%', w: 30, delay: 5.5, label: 'TASK' },
+];
+
+const coins = variant === 'store' ? ['28%', '54%', '79%'] : [];
 const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
   { at: '36%', kind: 'tower' },
   { at: '62%', kind: 'mac' },
   { at: '86%', kind: 'floppy' },
 ];
+// Houses on the book round; the van throws a parcel at each door.
+const HOUSES = ['16%', '34%', '52%', '70%', '88%'];
 ---
 
 <div class="strip mj-anim" data-mj-strip={variant} aria-hidden="true">
   <div class="label">{LABELS[variant]}</div>
   <div class="score" data-mj-score>SCORE 000000</div>
   <div class="pop" data-mj-pop>+100</div>
-  {variant !== 'artist' && <div class="ground"></div>}
+  {variant !== 'artist' && variant !== 'scrum' && <div class="ground"></div>}
 
   {variant === 'store' && (
     <>
@@ -130,89 +129,97 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
       <div class="boss legacy" data-mj-boss>
         <div class="sprite" style={`box-shadow:${BOSS_LEGACY};`}></div>
         <span class="boss-tag">LEGACY CODE</span>
-        {/* debris burst, released when the runner stomps it */}
-        <span class="debris">
-          {Array.from({ length: 8 }, (_, i) => <i style={`--a:${i * 45}deg;`}></i>)}
-        </span>
+        <span class="debris">{Array.from({ length: 8 }, (_, i) => <i style={`--a:${i * 45}deg;`}></i>)}</span>
         <span class="ko">K.O.</span>
       </div>
     </>
   )}
 
+  {/* LVL 2 — backlog items drop and stack into the sprint */}
   {variant === 'scrum' && (
     <>
-      <div class="streak" style="top:64px;animation-duration:2.6s;"></div>
-      <div class="streak" style="top:96px;animation-duration:2.1s;animation-delay:0.4s;"></div>
-      <div class="streak" style="top:124px;animation-duration:2.9s;animation-delay:0.9s;"></div>
-      <div class="runner rival">
-        <div class="sprite" style={`box-shadow:${RIVAL};`}></div>
-      </div>
+      <div class="sprint-floor"></div>
+      <div class="sprint-tag">SPRINT</div>
+      {BACKLOG.map((b) => (
+        <div
+          class="block"
+          data-mj-beat
+          style={`left:${b.at};width:${b.w}px;animation-delay:${b.delay}s;`}
+        >{b.label}</div>
+      ))}
     </>
   )}
 
+  {/* LVL 3 — notes travel to the guitarist and are struck at the cross section */}
   {variant === 'artist' && (
     <>
-      {/* Guitar Hero highway: five colour-coded lanes running into a strike bar */}
       {LANE_Y.map((y, i) => (
         <div class="lane" style={`top:${y}px;--fret:${FRETS[i]};`}></div>
       ))}
       <div class="strike"></div>
-      <div class="strike-label">STRIKE</div>
+      <div class="strike-label">HIT</div>
       {LANE_Y.map((y, i) => (
         <div class="fret" style={`top:${y - 5}px;--fret:${FRETS[i]};`}></div>
       ))}
       {GEMS.map(([lane, delay]) => (
-        <div
-          class="gem"
-          data-mj-gem
-          style={`top:${LANE_Y[lane] - 6}px;--fret:${FRETS[lane]};animation-delay:${delay}s;`}
-        ></div>
+        <div class="gem" data-mj-beat style={`top:${LANE_Y[lane] - 6}px;--fret:${FRETS[lane]};animation-delay:${delay}s;`}></div>
       ))}
       <div class="guitarist">
         <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
-        <div class="guitar" style={`box-shadow:${GUITAR};`}></div>
+        <div class="guitar"><span class="strum"></span></div>
       </div>
     </>
   )}
 
-  {variant === 'books' && backlist.map((left, i) => (
-    <div class="book-pickup" data-mj-collect style={`left:${left};animation-delay:${i * 0.4}s;`}>❏</div>
-  ))}
+  {/* LVL 4 — Paperboy-style round: the van drives past and lobs a book at each door */}
+  {variant === 'books' && (
+    <>
+      {HOUSES.map((left, i) => (
+        <div class="house" style={`left:${left};`}>
+          <span class="roof"></span>
+          <span class="door"></span>
+          <span class="parcel" data-mj-beat style={`animation-delay:${i * 1.4}s;`}>❏</span>
+        </div>
+      ))}
+      <div class="van">
+        <div class="sprite" style={`box-shadow:${VAN};`}></div>
+      </div>
+    </>
+  )}
 
+  {/* LVL 5 — speaker centre stage, dodging what the room throws */}
   {variant === 'stage' && (
     <>
-      {/* Speaker holds centre stage under the spotlight and sidesteps whatever the
-          audience lobs at him — questions from the left, tomatoes from the right. */}
       <div class="spotlight"></div>
-      <div class="heckle from-left" style="top:66px;animation-duration:3.4s;">?</div>
-      <div class="heckle from-left" style="top:104px;animation-duration:4.1s;animation-delay:1.6s;">?</div>
-      <div class="heckle from-right" style="top:82px;animation-duration:3.8s;animation-delay:0.8s;">🍅</div>
-      <div class="heckle from-right" style="top:118px;animation-duration:4.6s;animation-delay:2.4s;">?</div>
+      <div class="heckle from-left" data-mj-beat style="top:66px;animation-duration:3.4s;">?</div>
+      <div class="heckle from-left" data-mj-beat style="top:104px;animation-duration:4.1s;animation-delay:1.6s;">?</div>
+      <div class="heckle from-right" data-mj-beat style="top:82px;animation-duration:3.8s;animation-delay:0.8s;">🍅</div>
+      <div class="heckle from-right" data-mj-beat style="top:118px;animation-duration:4.6s;animation-delay:2.4s;">?</div>
       <div class="mic"></div>
       <div class="audience">
-        {Array.from({ length: 14 }, (_, i) => (
-          <span style={`animation-delay:${(i % 5) * 0.3}s;`}></span>
-        ))}
+        {Array.from({ length: 14 }, (_, i) => <span style={`animation-delay:${(i % 5) * 0.3}s;`}></span>)}
       </div>
     </>
   )}
 
+  {/* LVL 6 — actual fight: trade blows with the blank page until it folds */}
   {variant === 'notes' && (
     <>
       <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
-      <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger"></div></div></div>
+      <div class="hp boss-hp">THE BLANK PAGE<div class="bar"><div class="fill danger" data-mj-hp></div></div></div>
+      <div class="fighter">
+        <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
+        <span class="fist"></span>
+      </div>
+      <div class="page-boss" data-mj-beat>
+        <div class="sprite" style={`box-shadow:${BOSS_PAGE};`}></div>
+      </div>
+      <div class="impact">✹</div>
     </>
   )}
 
-  {variant === 'books' ? (
-    <div class="car" data-mj-vehicle>
-      <div class="sprite" style={`box-shadow:${car('var(--level-books)')};`}></div>
-    </div>
-  ) : variant === 'artist' ? null : (
-    <div
-      class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''} ${variant === 'stage' ? 'speaker' : ''} ${variant === 'store' ? 'hopper' : ''}`}
-      data-mj-vehicle
-    >
+  {variant === 'store' && (
+    <div class="runner hopper" data-mj-vehicle>
       <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
     </div>
   )}
@@ -254,158 +261,183 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
     height: 2px;
     background: repeating-linear-gradient(90deg, var(--border2) 0 12px, transparent 12px 24px);
   }
+  .sprite { width: 6px; height: 6px; background: transparent; }
 
-  /* collectibles ---------------------------------------------------------- */
-  .coin, .book-pickup {
+  /* ---------- LVL 1 ---------- */
+  .coin {
     position: absolute;
     font-family: var(--font-display);
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
+    color: var(--accent);
     animation: mj-coin 1.7s ease-in-out infinite;
     transition: opacity 0.25s ease, transform 0.25s ease;
   }
-  .coin { color: var(--accent); }
-  .book-pickup { color: var(--level-books); bottom: 74px; font-size: 23px; }
   .collected { opacity: 0; transform: scale(2.2); }
-
-  /* vehicles -------------------------------------------------------------- */
-  /* Explicit size: box-shadow pixel art contributes nothing to the layout box,
-     so without this the element measures 6x6 and collision would fire at the
-     sprite's origin instead of where the vehicle visually is. */
-  .runner, .car { position: absolute; top: 58px; left: 0; animation: mj-run 15s linear infinite; }
-  .runner { width: 48px; height: 60px; }
-  .car { width: 60px; height: 30px; }
-  .runner.fixed { animation: none; left: 28%; }
-  .runner.kart { animation-duration: 9s; }
-  .runner.rival { top: 90px; animation: mj-run 12.5s linear infinite; animation-delay: -4s; }
-  .car { top: 84px; animation-duration: 7s; }
-  .sprite { width: 6px; height: 6px; background: transparent; }
-  .streak {
-    position: absolute;
-    left: 0;
-    width: 46px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--muted2));
-    opacity: 0.4;
-    animation: mj-streak linear infinite;
-  }
-
-  /* level 3 — Guitar Hero highway ----------------------------------------- */
-  .lane {
-    position: absolute;
-    left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--fret), transparent 78%);
-    opacity: 0.22;
-  }
-  .strike {
-    position: absolute;
-    left: 16%;
-    top: 44px;
-    height: 92px;
-    width: 3px;
-    background: var(--text);
-    opacity: 0.5;
-    box-shadow: 0 0 12px var(--accent-2);
-  }
-  .strike-label {
-    position: absolute;
-    left: 16%;
-    top: 30px;
-    transform: translateX(-50%);
-    font-family: var(--font-mono);
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: var(--muted2);
-  }
-  .fret {
-    position: absolute;
-    left: 16%;
-    transform: translateX(-50%);
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--fret);
-    opacity: 0.75;
-  }
-  .gem {
-    position: absolute;
-    right: -24px;
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    background: var(--fret);
-    box-shadow: 0 0 10px var(--fret);
-    animation: mj-gem 5.5s linear infinite;
-  }
-  .gem.hit { animation-play-state: running; }
-  .guitarist { position: absolute; left: 4%; top: 58px; animation: mj-bob 1.9s ease-in-out infinite; }
-  .guitar { position: absolute; left: 34px; top: 22px; width: 5px; height: 5px; background: transparent; }
-
-  /* level 1 — obstacles + boss --------------------------------------------- */
   .obstacle { position: absolute; bottom: 42px; }
-  .obstacle .sprite { width: 6px; height: 6px; background: transparent; }
+  .obstacle .sprite { width: 6px; height: 6px; }
   .obstacle-tag {
     position: absolute;
-    top: -14px;
-    left: 0;
-    font-family: var(--font-mono);
-    font-size: 8px;
-    letter-spacing: 0.16em;
-    color: var(--muted2);
-    opacity: 0.7;
-    white-space: nowrap;
+    top: -14px; left: 0;
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.16em;
+    color: var(--muted2); opacity: 0.7; white-space: nowrap;
   }
   .boss {
-    position: absolute;
-    bottom: 42px;
-    right: 5%;
-    width: 56px;
-    height: 48px;
+    position: absolute; bottom: 42px; right: 5%;
+    width: 56px; height: 48px;
     transform-origin: bottom center;
     animation: mj-boss 1.4s ease-in-out infinite;
   }
-  .boss .sprite { width: 8px; height: 8px; background: transparent; transition: transform 0.18s ease, opacity 0.35s ease; }
+  .boss .sprite { width: 8px; height: 8px; transition: transform 0.18s ease, opacity 0.35s ease; }
   .boss-tag {
-    position: absolute;
-    top: -16px;
-    right: 0;
-    font-family: var(--font-mono);
-    font-size: 8px;
-    letter-spacing: 0.16em;
-    color: var(--danger);
-    white-space: nowrap;
-    transition: opacity 0.25s ease;
+    position: absolute; top: -16px; right: 0;
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.16em;
+    color: var(--danger); white-space: nowrap; transition: opacity 0.25s ease;
   }
-  /* Stomped: the mainframe squashes flat, throws debris and drops a K.O. */
   .boss.defeated { animation: none; }
   .boss.defeated .sprite { transform: translateY(26px) scaleY(0.12); opacity: 0; }
   .boss.defeated .boss-tag { opacity: 0; }
   .debris { position: absolute; left: 24px; top: 20px; width: 0; height: 0; }
-  .debris i {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: #545a66;
-    opacity: 0;
-  }
-  .boss.defeated .debris i {
-    animation: mj-debris 0.65s ease-out forwards;
-    transform: rotate(var(--a)) translateX(0);
-  }
+  .debris i { position: absolute; width: 6px; height: 6px; background: #545a66; opacity: 0; }
+  .boss.defeated .debris i { animation: mj-debris 0.65s ease-out forwards; transform: rotate(var(--a)) translateX(0); }
   .ko {
-    position: absolute;
-    left: 4px;
-    top: -6px;
-    font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--danger);
-    opacity: 0;
-    pointer-events: none;
+    position: absolute; left: 4px; top: -6px;
+    font-family: var(--font-display); font-size: 20px; font-weight: 700;
+    color: var(--danger); opacity: 0; pointer-events: none;
   }
   .boss.defeated .ko { animation: mj-ko 1s ease-out forwards; }
+  .runner { position: absolute; top: 58px; left: 0; width: 48px; height: 60px; }
+  .runner.hopper { animation: mj-level 15s linear infinite; }
+
+  /* ---------- LVL 2 · stacker ---------- */
+  .sprint-floor {
+    position: absolute; left: 6%; right: 6%; bottom: 38px;
+    height: 3px; background: var(--level-scrum); opacity: 0.55;
+    box-shadow: 0 0 12px var(--level-scrum);
+  }
+  .sprint-tag {
+    position: absolute; left: 6%; bottom: 22px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--muted2);
+  }
+  .block {
+    position: absolute; top: -26px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.1em;
+    color: var(--ink-on-level-scrum);
+    background: var(--level-scrum);
+    border-radius: 3px;
+    animation: mj-drop 6.6s cubic-bezier(0.45, 0, 0.7, 1) infinite;
+  }
+
+  /* ---------- LVL 3 · rhythm ---------- */
+  .lane {
+    position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--fret), transparent 78%);
+    opacity: 0.22;
+  }
+  .strike {
+    position: absolute; left: 16%; top: 44px; height: 92px; width: 3px;
+    background: var(--text); opacity: 0.5; box-shadow: 0 0 12px var(--accent-2);
+  }
+  .strike-label {
+    position: absolute; left: 16%; top: 30px; transform: translateX(-50%);
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: var(--muted2);
+  }
+  .fret {
+    position: absolute; left: 16%; transform: translateX(-50%);
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--fret); opacity: 0.75;
+  }
+  /* Notes travel in and stop at the strike line, where they are played. */
+  .gem {
+    position: absolute; right: -24px;
+    width: 14px; height: 14px; border-radius: 3px;
+    background: var(--fret); box-shadow: 0 0 10px var(--fret);
+    animation: mj-note 7s linear infinite;
+  }
+  .guitarist { position: absolute; left: 4%; top: 58px; width: 48px; height: 60px; animation: mj-bob 1.9s ease-in-out infinite; }
+  .guitar {
+    position: absolute; left: 30px; top: 20px; width: 34px; height: 20px;
+    background: linear-gradient(90deg, #4a3620 0 55%, #c98b6a 55%);
+    border-radius: 2px 8px 8px 2px;
+    transform-origin: left center;
+    animation: mj-strum 0.5s ease-in-out infinite;
+  }
+  .guitar .strum {
+    position: absolute; right: 5px; top: 5px; width: 10px; height: 2px;
+    background: var(--accent); opacity: 0.9;
+    animation: mj-pick 0.25s linear infinite;
+  }
+
+  /* ---------- LVL 4 · book round ---------- */
+  .house { position: absolute; bottom: 42px; width: 40px; height: 46px; background: var(--s2); border: 2px solid var(--border3); border-bottom: 0; }
+  .house .roof {
+    position: absolute; left: -4px; top: -12px;
+    border-left: 24px solid transparent; border-right: 24px solid transparent;
+    border-bottom: 12px solid var(--level-books);
+  }
+  .house .door { position: absolute; left: 13px; bottom: 0; width: 14px; height: 20px; background: var(--bg); border: 1px solid var(--border3); border-bottom: 0; }
+  /* the parcel arcs from the van's lane down to the doorstep */
+  .parcel {
+    position: absolute; left: 10px; top: -34px;
+    font-size: 15px; line-height: 1; color: var(--level-books);
+    opacity: 0;
+    animation: mj-throw 7s ease-in infinite;
+  }
+  .van { position: absolute; top: 62px; left: 0; width: 42px; height: 30px; animation: mj-run 7s linear infinite; }
+
+  /* ---------- LVL 5 · dodge ---------- */
+  .spotlight {
+    position: absolute; left: 50%; top: 0; width: 230px; margin-left: -115px; height: 100%;
+    background: linear-gradient(180deg, rgba(224, 122, 154, 0.16), transparent 78%);
+    clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+  }
+  .mic { position: absolute; left: calc(50% + 26px); bottom: 70px; width: 3px; height: 16px; background: var(--border3); }
+  .mic::after { content: ''; position: absolute; top: -5px; left: -3px; width: 9px; height: 7px; border-radius: 50%; background: var(--level-stage); }
+  .heckle {
+    position: absolute;
+    font-family: var(--font-display); font-size: 17px; font-weight: 700; line-height: 1;
+    color: var(--level-stage);
+  }
+  .heckle.from-left { left: -30px; animation: mj-throw-right linear infinite; }
+  .heckle.from-right { right: -30px; animation: mj-throw-left linear infinite; }
+  .audience {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 34px;
+    display: flex; align-items: flex-end; justify-content: space-around;
+    padding: 0 var(--section-pad-x); pointer-events: none;
+  }
+  .audience span { width: 12px; height: 14px; border-radius: 6px 6px 0 0; background: var(--border2); animation: mj-bob 2.4s ease-in-out infinite; }
+
+  /* ---------- LVL 6 · fight ---------- */
+  .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
+  .hp.you { left: var(--section-pad-x); }
+  .hp.boss-hp { right: var(--section-pad-x); }
+  .bar { margin-top: 4px; width: 100%; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .fill { width: 100%; height: 100%; }
+  .fill.ok { background: var(--ok); }
+  .fill.danger { background: var(--danger); transition: width 0.25s ease; }
+  .fighter { position: absolute; top: 58px; left: 32%; width: 48px; height: 60px; animation: mj-lunge 1.9s ease-in-out infinite; }
+  .fighter .fist {
+    position: absolute; right: -6px; top: 26px; width: 10px; height: 8px;
+    background: #e8c39a; opacity: 0;
+    animation: mj-punch 1.9s ease-in-out infinite;
+  }
+  .page-boss {
+    position: absolute; top: 56px; right: 32%; width: 40px; height: 48px;
+    animation: mj-recoil 1.9s ease-in-out infinite;
+  }
+  .page-boss .sprite { width: 8px; height: 8px; }
+  .impact {
+    position: absolute; left: 50%; top: 74px; transform: translate(-50%, 0) scale(0.5);
+    font-family: var(--font-display); font-size: 30px; font-weight: 700; color: var(--danger);
+    opacity: 0; pointer-events: none;
+    animation: mj-impact 1.9s ease-in-out infinite;
+  }
+
+  /* ---------- keyframes ---------- */
+  @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
   @keyframes mj-debris {
     0% { opacity: 1; transform: rotate(var(--a)) translateX(0); }
     100% { opacity: 0; transform: rotate(var(--a)) translateX(46px); }
@@ -415,108 +447,6 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
     30% { opacity: 1; transform: translateY(-10px) scale(1.1); }
     100% { opacity: 0; transform: translateY(-30px) scale(1); }
   }
-  /* The runner hops the hardware and vaults the boss, timed to the 15s lap. */
-  .runner.hopper { animation: mj-level 15s linear infinite; }
-
-  /* level 5 — the stage ---------------------------------------------------- */
-  /* cone centred on the speaker, who now holds centre stage */
-  .spotlight {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 230px;
-    margin-left: -115px;
-    height: 100%;
-    background: linear-gradient(180deg, rgba(224, 122, 154, 0.16), transparent 78%);
-    clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
-    pointer-events: none;
-  }
-  .mic {
-    position: absolute;
-    left: calc(50% + 26px);
-    bottom: 70px;
-    width: 3px;
-    height: 16px;
-    background: var(--border3);
-  }
-  .mic::after {
-    content: '';
-    position: absolute;
-    top: -5px;
-    left: -3px;
-    width: 9px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--level-stage);
-  }
-  /* heckles fly in from either side and sail past the dodging speaker */
-  .heckle {
-    position: absolute;
-    font-family: var(--font-display);
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--level-stage);
-  }
-  .heckle.from-left { left: -30px; animation: mj-throw-right linear infinite; }
-  .heckle.from-right { right: -30px; animation: mj-throw-left linear infinite; }
-  @keyframes mj-throw-right {
-    0% { transform: translateX(0) rotate(0); opacity: 0; }
-    10%, 85% { opacity: 1; }
-    100% { transform: translateX(calc(100vw + 60px)) rotate(540deg); opacity: 0; }
-  }
-  @keyframes mj-throw-left {
-    0% { transform: translateX(0) rotate(0); opacity: 0; }
-    10%, 85% { opacity: 1; }
-    100% { transform: translateX(calc(-100vw - 60px)) rotate(-540deg); opacity: 0; }
-  }
-  .audience {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 34px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-around;
-    padding: 0 var(--section-pad-x);
-    pointer-events: none;
-  }
-  .audience span {
-    width: 12px;
-    height: 14px;
-    border-radius: 6px 6px 0 0;
-    background: var(--border2);
-    animation: mj-bob 2.4s ease-in-out infinite;
-  }
-  /* centre stage, sidestepping the incoming questions */
-  .runner.speaker {
-    left: 50%;
-    top: 56px;
-    margin-left: -24px;
-    animation: mj-dodge 3.1s ease-in-out infinite;
-  }
-  @keyframes mj-dodge {
-    0%, 100% { transform: translateX(-34px); }
-    25% { transform: translateX(-34px) translateY(-6px); }
-    50% { transform: translateX(34px); }
-    75% { transform: translateX(34px) translateY(-6px); }
-  }
-
-  /* level 6 — fight ------------------------------------------------------- */
-  .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
-  .hp.you { left: var(--section-pad-x); }
-  .hp.boss-hp { right: var(--section-pad-x); }
-  .bar { margin-top: 4px; width: 100%; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .fill { width: 100%; height: 100%; }
-  .fill.ok { background: var(--ok); }
-  .fill.danger { background: var(--danger); }
-
-  @keyframes mj-gem { from { transform: translateX(0); } to { transform: translateX(calc(-100vw - 40px)); } }
-  @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
-
-  /* Level 1 lap: run right, hop each piece of hardware, vault the boss.
-     Hop X-positions match the obstacle left offsets above (36 / 62 / 86 / ~95%). */
   @keyframes mj-level {
     0%   { transform: translateX(-60px) translateY(0); }
     32%  { transform: translateX(calc((100vw + 60px) * 0.32 - 60px)) translateY(0); }
@@ -532,27 +462,87 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
     96%  { transform: translateX(calc((100vw + 60px) * 0.96 - 60px)) translateY(-42px); }
     100% { transform: translateX(calc((100vw + 60px) * 1 - 60px)) translateY(0); }
   }
+  /* backlog item falls, lands on the sprint floor, then clears */
+  @keyframes mj-drop {
+    0% { transform: translateY(0); opacity: 0; }
+    6% { opacity: 1; }
+    38% { transform: translateY(122px); }
+    44% { transform: translateY(116px); }
+    50%, 88% { transform: translateY(122px); opacity: 1; }
+    100% { transform: translateY(122px); opacity: 0; }
+  }
+  /* note slides in from the right and is struck at the 16% line */
+  @keyframes mj-note {
+    0% { transform: translateX(0); opacity: 0; }
+    4% { opacity: 1; }
+    88% { transform: translateX(calc(-84vw + 24px)); opacity: 1; }
+    94% { transform: translateX(calc(-84vw + 24px)) scale(2.1); opacity: 0; }
+    100% { transform: translateX(calc(-84vw + 24px)) scale(1); opacity: 0; }
+  }
+  @keyframes mj-strum { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(-2deg); } }
+  @keyframes mj-pick { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  @keyframes mj-run { from { transform: translateX(-60px); } to { transform: translateX(102vw); } }
+  /* parcel appears as the van passes the house, arcs down to the door */
+  @keyframes mj-throw {
+    0%, 8% { opacity: 0; transform: translate(0, 0) rotate(0); }
+    10% { opacity: 1; transform: translate(-6px, -6px) rotate(-40deg); }
+    18% { opacity: 1; transform: translate(4px, 30px) rotate(140deg); }
+    24%, 100% { opacity: 1; transform: translate(4px, 34px) rotate(180deg); }
+  }
+  @keyframes mj-throw-right {
+    0% { transform: translateX(0) rotate(0); opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { transform: translateX(calc(100vw + 60px)) rotate(540deg); opacity: 0; }
+  }
+  @keyframes mj-throw-left {
+    0% { transform: translateX(0) rotate(0); opacity: 0; }
+    10%, 85% { opacity: 1; }
+    100% { transform: translateX(calc(-100vw - 60px)) rotate(-540deg); opacity: 0; }
+  }
+  @keyframes mj-lunge {
+    0%, 55%, 100% { transform: translateX(0); }
+    35% { transform: translateX(26px); }
+  }
+  @keyframes mj-punch {
+    0%, 28%, 55%, 100% { opacity: 0; transform: translateX(0); }
+    35%, 45% { opacity: 1; transform: translateX(10px); }
+  }
+  @keyframes mj-recoil {
+    0%, 30%, 100% { transform: translateX(0) rotate(0); }
+    40% { transform: translateX(16px) rotate(6deg); }
+    60% { transform: translateX(4px) rotate(0); }
+  }
+  @keyframes mj-impact {
+    0%, 32%, 60%, 100% { opacity: 0; transform: translate(-50%, 0) scale(0.5); }
+    38%, 48% { opacity: 1; transform: translate(-50%, 0) scale(1.25) rotate(12deg); }
+  }
+  @keyframes mj-coin { 0%, 100% { transform: translateY(0) scaleX(1); } 25% { transform: translateY(-7px) scaleX(0.25); } 50% { transform: translateY(0) scaleX(1); } 75% { transform: translateY(-7px) scaleX(0.25); } }
+  @keyframes mj-boss { 0%, 100% { transform: translateY(0) scaleX(1); } 50% { transform: translateY(-7px) scaleX(1.06); } }
 </style>
 
 <script>
-  // Score + pickups. One observer for all strips; per-strip polling only while
-  // visible, and never at all when the visitor prefers reduced motion.
+  // Score + level-1 stomp. Points come from CSS animation cycles (`data-mj-beat`),
+  // so the number always moves in step with what is actually on screen. Runs only
+  // while the strip is visible, and not at all under prefers-reduced-motion.
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduced) {
-    const strips = document.querySelectorAll<HTMLElement>('[data-mj-strip]');
+    const POINTS: Record<string, number> = { store: 100, scrum: 100, artist: 100, books: 150, stage: 50, notes: 120 };
+    const CALLOUT: Record<string, string> = {
+      scrum: 'SHIPPED +100',
+      artist: 'PERFECT +100',
+      books: 'DELIVERED +150',
+      stage: 'DODGED +50',
+      notes: 'HIT +120',
+    };
 
-    const start = (strip: HTMLElement) => {
-      if (strip.dataset.mjRunning) return;
-      strip.dataset.mjRunning = '1';
-
+    document.querySelectorAll<HTMLElement>('[data-mj-strip]').forEach((strip) => {
+      const kind = strip.dataset.mjStrip!;
       const scoreEl = strip.querySelector<HTMLElement>('[data-mj-score]');
       const popEl = strip.querySelector<HTMLElement>('[data-mj-pop]');
-      const vehicle = strip.querySelector<HTMLElement>('[data-mj-vehicle]');
-      const pickups = [...strip.querySelectorAll<HTMLElement>('[data-mj-collect]')];
-      const gems = [...strip.querySelectorAll<HTMLElement>('[data-mj-gem]')];
-      const boss = strip.querySelector<HTMLElement>('[data-mj-boss]');
+      const hpEl = strip.querySelector<HTMLElement>('[data-mj-hp]');
       let score = 0;
-      let lastX = -1e9;
+      let hp = 100;
+      let visible = false;
 
       const render = () => {
         if (scoreEl) scoreEl.textContent = 'SCORE ' + String(Math.min(score, 999999)).padStart(6, '0');
@@ -561,7 +551,7 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
         if (!popEl) return;
         popEl.textContent = text;
         popEl.style.color = color;
-        popEl.style.left = x + 'px';
+        popEl.style.left = Math.max(8, x) + 'px';
         popEl.style.transition = 'none';
         popEl.style.opacity = '1';
         popEl.style.transform = 'translateY(0)';
@@ -571,80 +561,74 @@ const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
           popEl.style.transform = 'translateY(-26px)';
         });
       };
+      render();
+
+      // Every completed animation cycle of a scoring element = one play.
+      strip.querySelectorAll<HTMLElement>('[data-mj-beat]').forEach((el) => {
+        el.addEventListener('animationiteration', () => {
+          if (!visible) return;
+          score += POINTS[kind] ?? 100;
+          render();
+          const box = strip.getBoundingClientRect();
+          const r = el.getBoundingClientRect();
+          const colour = getComputedStyle(el).backgroundColor;
+          pop(r.left - box.left - 16, CALLOUT[kind] ?? '+100', colour.includes('rgba(0, 0, 0, 0)') ? getComputedStyle(el).color : colour);
+          if (kind === 'notes' && hpEl) {
+            hp = hp <= 20 ? 100 : hp - 20;
+            hpEl.style.width = hp + '%';
+          }
+        });
+      });
+
+      // Level 1 keeps real collision: coins picked up and the boss stomped.
+      const vehicle = strip.querySelector<HTMLElement>('[data-mj-vehicle]');
+      const pickups = [...strip.querySelectorAll<HTMLElement>('[data-mj-collect]')];
+      const boss = strip.querySelector<HTMLElement>('[data-mj-boss]');
+      let lastX = -1e9;
+      let timer: number | undefined;
 
       const tick = () => {
+        if (!vehicle) return;
         const box = strip.getBoundingClientRect();
-
-        // Vehicle levels: collect anything the sprite drives through.
-        if (vehicle) {
-          const v = vehicle.getBoundingClientRect();
-          const vx = v.left - box.left;
-          if (vx < lastX) {
-            // looped back to the start — respawn the collectibles and the boss
-            pickups.forEach((p) => p.classList.remove('collected'));
-            boss?.classList.remove('defeated');
-          }
-          lastX = vx;
-          for (const p of pickups) {
-            if (p.classList.contains('collected')) continue;
-            const r = p.getBoundingClientRect();
-            if (v.right > r.left && v.left < r.right) {
-              p.classList.add('collected');
-              score += 100;
-              render();
-              pop(r.left - box.left - 12, '+100', getComputedStyle(p).color);
-            }
-          }
-
-          // Stomp the boss: the runner is mid-vault when it overlaps, so landing
-          // on it flattens it rather than the other way round.
-          if (boss && !boss.classList.contains('defeated')) {
-            const b = boss.getBoundingClientRect();
-            if (v.right > b.left && v.left < b.right) {
-              boss.classList.add('defeated');
-              score += 500;
-              render();
-              pop(b.left - box.left - 10, 'K.O. +500', '#e05a48');
-            }
+        const v = vehicle.getBoundingClientRect();
+        const vx = v.left - box.left;
+        if (vx < lastX) {
+          pickups.forEach((p) => p.classList.remove('collected'));
+          boss?.classList.remove('defeated');
+        }
+        lastX = vx;
+        for (const p of pickups) {
+          if (p.classList.contains('collected')) continue;
+          const r = p.getBoundingClientRect();
+          if (v.right > r.left && v.left < r.right) {
+            p.classList.add('collected');
+            score += 100;
+            render();
+            pop(r.left - box.left - 12, '+100', getComputedStyle(p).color);
           }
         }
-
-        // Rhythm level: a gem crossing the strike bar is a hit.
-        if (gems.length) {
-          const strike = strip.querySelector('.strike')?.getBoundingClientRect();
-          if (strike) {
-            for (const g of gems) {
-              const r = g.getBoundingClientRect();
-              const crossing = r.left < strike.left + 6 && r.right > strike.left - 6;
-              if (crossing && !g.dataset.hit) {
-                g.dataset.hit = '1';
-                score += 100;
-                render();
-                pop(strike.left - box.left - 20, 'PERFECT +100', getComputedStyle(g).backgroundColor);
-              } else if (!crossing && g.dataset.hit && r.left > strike.left) {
-                delete g.dataset.hit; // wrapped around, arm it again
-              }
-            }
+        if (boss && !boss.classList.contains('defeated')) {
+          const b = boss.getBoundingClientRect();
+          if (v.right > b.left && v.left < b.right) {
+            boss.classList.add('defeated');
+            score += 500;
+            render();
+            pop(b.left - box.left - 10, 'K.O. +500', '#e05a48');
           }
         }
       };
 
-      render();
-      const id = window.setInterval(tick, 110);
-      strip.dataset.mjTimer = String(id);
-    };
-
-    const stop = (strip: HTMLElement) => {
-      const id = strip.dataset.mjTimer;
-      if (id) window.clearInterval(Number(id));
-      delete strip.dataset.mjTimer;
-      delete strip.dataset.mjRunning;
-    };
-
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => (e.isIntersecting ? start(e.target as HTMLElement) : stop(e.target as HTMLElement))),
-      { rootMargin: '80px 0px' },
-    );
-    strips.forEach((s) => io.observe(s));
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            visible = e.isIntersecting;
+            if (visible && vehicle && !timer) timer = window.setInterval(tick, 110);
+            if (!visible && timer) { window.clearInterval(timer); timer = undefined; }
+          }
+        },
+        { rootMargin: '80px 0px' },
+      );
+      io.observe(strip);
+    });
   }
 </script>

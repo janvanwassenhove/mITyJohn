@@ -16,6 +16,14 @@
   },
   {
     "year": 2026,
+    "event": "dotnetZuid",
+    "location": "Netherlands · 29 May 2026",
+    "title": "Outcoded by our kids — and this is no longer the job I signed for, with Bart",
+    "kind": "Meetup",
+    "link": "https://www.dotnetzuid.nl/events/outcoded-by-our-kids-and-this-is-no-longer-the-job-i-signed-for"
+  },
+  {
+    "year": 2026,
     "event": "Roundtable — The art of staying ahead",
     "location": "Leuven, Belgium",
     "title": "The future of DXP",

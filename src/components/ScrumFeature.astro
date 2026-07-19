@@ -13,13 +13,21 @@
   <span class="cta">Explore →</span>
 </a>
 
-<div class="spl-sample" data-reveal>
-  <div class="sample-head">
-    <span class="dots"><i></i><i></i><i></i></span>
-    <span class="file">hello-world.scrum</span>
-    <span class="out">→ compiles to Java</span>
-  </div>
-  <pre><code><span class="c-dir">#SPRINTGOAL</span> Deliver our first Scrum program
+<p class="spl-intro" data-reveal>
+  SCRUM is a programming language I designed and built myself. Not a framework, not a
+  DSL bolted onto something else — an actual language with its own compiler. You write
+  the ceremonies you already argue about in stand-up, and it compiles them to
+  deterministic Java. The AI runs at <em>compile</em> time, not at runtime, so the
+  binary you ship behaves the same every single run.
+</p>
+
+<div class="spl-samples" data-reveal>
+  <div class="spl-sample">
+    <div class="sample-head">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="file">hello-world.scrum</span>
+    </div>
+    <pre><code><span class="c-dir">#SPRINTGOAL</span> Deliver our first Scrum program
 
 <span class="c-kw">EPIC</span> <span class="c-str">"SampleStories"</span>
 
@@ -31,6 +39,28 @@
     <span class="c-kw">END OF STORY</span>
 
 <span class="c-kw">END OF EPIC</span></code></pre>
+    <div class="sample-foot">the ceremonies are the syntax</div>
+  </div>
+
+  <div class="spl-sample">
+    <div class="sample-head">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="file">intent.scrum</span>
+    </div>
+    <pre><code><span class="c-kw">EPIC</span> <span class="c-str">"Reporting"</span>
+
+    <span class="c-kw">USER STORY</span> <span class="c-str">"MonthlyTotals"</span>
+
+        <span class="c-dir">#INTENT</span> Sum the invoices per month
+        <span class="c-dir">#INTENT</span> and return them newest first
+
+        <span class="c-kw">SAY</span> <span class="c-str">"Report ready."</span>
+
+    <span class="c-kw">END OF STORY</span>
+
+<span class="c-kw">END OF EPIC</span></code></pre>
+    <div class="sample-foot"><span class="c-dir">#INTENT</span> states the what — the compiler writes the how, once, into Java</div>
+  </div>
 </div>
 
 <style>
@@ -69,13 +99,38 @@
   .sub { font-size: var(--text-small); color: var(--muted); margin-top: 4px; text-wrap: pretty; }
   .cta { font-family: var(--font-mono); font-size: var(--text-small); color: var(--level-scrum); white-space: nowrap; }
 
-  /* SPL "hello world" — the language's own syntax, straight from the SPL docs */
+  .spl-intro {
+    margin: 18px 0 0;
+    max-width: 78ch;
+    font-size: var(--text-body-lg);
+    line-height: var(--leading-relaxed);
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+  .spl-intro em { color: var(--text); font-style: italic; }
+
+  /* SPL samples — the language's own syntax, straight from the SPL docs */
+  .spl-samples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+  }
   .spl-sample {
-    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
     background: var(--s1);
     border: 1px solid var(--border);
     border-radius: var(--radius-card-lg);
     overflow: hidden;
+  }
+  .sample-foot {
+    margin-top: auto;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-xs);
+    color: var(--muted2);
   }
   .sample-head {
     display: flex;
@@ -90,7 +145,6 @@
   .dots { display: flex; gap: 5px; }
   .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border3); }
   .file { color: var(--text); }
-  .out { margin-left: auto; color: var(--level-scrum); }
   .spl-sample pre {
     margin: 0;
     padding: 18px clamp(16px, 3vw, 24px);
