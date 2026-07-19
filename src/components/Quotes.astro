@@ -42,15 +42,17 @@ const quotes = [
     <div class="grid">
       {quotes.map((q) => (
         <figure data-reveal style={`--q-accent:${q.accent};--q-tint:${q.tint};`}>
-          <div class={`mj ${q.pose} mj-anim`} aria-hidden="true">
-            <span class="sprite" style={`box-shadow:${MITYJOHN};`}></span>
-            {q.pose === 'idea' && <span class="bulb"></span>}
-            {q.pose === 'go' && <span class="fist"></span>}
-            {q.pose === 'team' && <span class="wave"></span>}
-            <span class="aside">{q.aside}</span>
-          </div>
           <div class="mark">&ldquo;</div>
           <div class="label">{q.kicker}</div>
+          <div class="mj-wrap" aria-hidden="true">
+            <div class={`mj ${q.pose} mj-anim`}>
+              <span class="sprite" style={`box-shadow:${MITYJOHN};`}></span>
+              {q.pose === 'idea' && <span class="bulb"></span>}
+              {q.pose === 'go' && <span class="fist"></span>}
+              {q.pose === 'team' && <span class="wave"></span>}
+              <span class="aside">{q.aside}</span>
+            </div>
+          </div>
           <blockquote>{q.text}</blockquote>
           <div class="rule"></div>
           <figcaption>{q.who}</figcaption>
@@ -74,11 +76,18 @@ const quotes = [
   }
 
   /* one mITy.John per card, each reacting to the quote in his own way */
+  /* Scaling lives on the wrapper so it can't fight the pose animations, which
+     drive transform on .mj itself. Negative margins claw back the layout space
+     the scale leaves behind. */
+  .mj-wrap {
+    transform: scale(0.8);
+    transform-origin: center top;
+    margin: -6px 0 -18px;
+  }
   .mj {
     position: relative;
     width: 48px;
     height: 62px;
-    margin-bottom: -6px;
     transform-origin: bottom center;
   }
   .mj .sprite { position: absolute; left: 0; top: 0; width: 6px; height: 6px; background: transparent; }
