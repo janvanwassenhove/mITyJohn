@@ -57,8 +57,15 @@ Discussions are enabled and the repo/category IDs are already wired into
    (185.199.108.153 / .109 / .110 / .111) + `www` CNAME → `janvanwassenhove.github.io`,
    **proxied (orange cloud)**.
 4. **Cloudflare rules**:
+   - SSL/TLS → **Full (strict)** *before* enabling the proxy, or you get a loop
+   - DNS → apex + `www` to **orange cloud**. The redirect Worker only sees
+     proxied traffic, so nothing redirects until this is on.
    - Bulk Redirects → create list from `cloudflare-redirects.csv` → enable
-     (301, preserve query string OFF, subpath matching OFF)
+     (301, preserve query string OFF, subpath matching OFF). This file now holds
+     only the two `/feed/` rules and has **no header row**.
+   - The 110 query-string redirects are served by `workers/redirects` (already
+     deployed, route `mityjohn.com/`) — Bulk Redirects cannot match query
+     strings. See MIGRATION_BRIEF §5.3.
    - Always Use HTTPS + Automatic HTTPS Rewrites
    - `www.mityjohn.com` → apex redirect
    - Enable **Web Analytics** (cookieless — no banner, per D5)

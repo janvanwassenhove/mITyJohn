@@ -231,10 +231,23 @@ hand-maintained.
 
 Cloudflare free plan. Proxy DNS (orange cloud) with GitHub Pages as origin.
 
-- Rules → **Bulk Redirects** (free tier allows a large list; use this, not Single Redirects, given the volume)
-- Source URL match includes the query string, e.g. `mityjohn.com/?p=941`
+**Corrected 2026-07-19.** This section originally specified Bulk Redirects for
+everything. That does not work: **Cloudflare Bulk Redirects cannot match a query
+string in the source URL**, and 110 of the 112 legacy URLs are query strings
+(`/?p=941`, `/?page_id=2`, `/?tag=ai`). Redirect Rules would need one rule per
+mapping, far past the free-plan limit. The split is now:
+
+- **`workers/redirects/`** — a Worker on route `mityjohn.com/` (root path only)
+  serves all 110 query-string redirects from a generated lookup table. Regenerate
+  with `node scripts/build-worker-redirects.mjs`, deploy with `wrangler deploy`.
+  Unrecognised query strings (`?utm_source=…`) fall through to the origin, and a
+  same-zone `fetch()` cannot re-enter a Worker route, so there is no loop.
+- **Bulk Redirects** — only the two path-based rules (`/feed/`, `/feed`), from
+  `scripts/build-redirects.mjs`. The CSV must have **no header row**; Cloudflare
+  reads the first line as data.
 - Status **301**, preserve query string **off**, subpath matching **off**
-- Generate the Bulk Redirect CSV from `url-map.json` via `scripts/` — never type them by hand
+
+Both require the orange cloud: a Worker route only sees traffic that is proxied.
 
 Also configure at Cloudflare: Always Use HTTPS, Automatic HTTPS Rewrites, and a redirect
 from `www.mityjohn.com` → apex.

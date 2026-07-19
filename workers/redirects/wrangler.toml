@@ -1,0 +1,24 @@
+# Legacy WordPress query-string redirects (§5.3).
+#
+# No secrets, no KV — just a generated lookup table. Regenerate it with:
+#   node scripts/build-worker-redirects.mjs
+#
+# Deploy:
+#   cd workers/redirects && wrangler deploy
+#
+# The route is the ROOT PATH ONLY. Every legacy URL is a query string on `/`
+# (/?p=941, /?page_id=2, …), so nothing else needs to pass through this Worker;
+# /blog/*, /apps/* and the uploads go straight to GitHub Pages as before.
+
+name = "redirects"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+
+# zone_name lets wrangler resolve the zone without hardcoding its id
+[[routes]]
+pattern = "mityjohn.com/"
+zone_name = "mityjohn.com"
+
+[[routes]]
+pattern = "www.mityjohn.com/"
+zone_name = "mityjohn.com"
