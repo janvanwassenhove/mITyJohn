@@ -13,13 +13,14 @@ export async function getStaticPaths() {
 const { page } = Astro.props;
 const { Content } = await render(page);
 
-// The quotes belong with the About story too — same component as the home page,
-// rendered once here rather than copied.
-const showQuotes = page.id === 'about';
+// The name explainer and the quotes belong with the About story too — same
+// components as the home page, rendered once here rather than copied. The name
+// leads: it is the first thing a stranger wonders about.
+const isAbout = page.id === 'about';
 ---
 
 <Page title={page.data.title} description={page.data.description}>
+  {isAbout && <NameOrigin />}
   <Content />
-  {showQuotes && <NameOrigin />}
-  {showQuotes && <Quotes slot="full" />}
+  {isAbout && <Quotes slot="full" />}
 </Page>

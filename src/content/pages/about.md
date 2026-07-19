@@ -24,7 +24,11 @@ As an _IT-thinker with a creative streak_, you’ll also find the occasional nod
 
 ---
 
+## The side project with a beat
 
----
+One of those Easter eggs got out of hand. Somewhere between architecture reviews
+and conference talks I make electronic music — the same wiring that likes a clean
+build also likes a clean drop. There is [more of it, and the story behind
+it, on the artist page](/artist/).
 
 <button type="button" class="embed-facade" data-embed-src="https://open.spotify.com/embed/artist/4lRudVkciTQ8j2bEySXqPz?utm_source=oembed" data-embed-h="352" data-embed-provider="spotify"><span class="ef-glyph">▶</span><span class="ef-title">Play on Spotify</span><span class="ef-note">Loads spotify.com — nothing is requested until you click.</span></button>
