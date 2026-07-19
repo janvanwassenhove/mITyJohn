@@ -65,6 +65,7 @@ a:hover { color: var(--text); }
 .prose strong { color: var(--text); }
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius-cover); border: 1px solid var(--border); margin: 1.4em 0; }
 .prose figure { margin: 1.4em 0; }
+.prose figure img { margin: 0; display: block; }
 .prose figcaption { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); margin-top: 8px; }
 .prose a { text-decoration: underline; text-underline-offset: 3px; }
 .prose blockquote { margin: 1.4em 0; padding: 4px 0 4px 20px; border-left: 3px solid var(--accent); color: var(--text); font-style: italic; }
