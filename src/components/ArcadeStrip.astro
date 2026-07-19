@@ -4,7 +4,7 @@
 // is on screen and handles score + collectible pickups. aria-hidden throughout,
 // and prefers-reduced-motion disables both the animation and the script.
 interface Props {
-  variant: 'store' | 'scrum' | 'artist' | 'books' | 'notes';
+  variant: 'store' | 'scrum' | 'artist' | 'books' | 'stage' | 'notes';
 }
 const { variant } = Astro.props;
 
@@ -13,7 +13,8 @@ const LABELS = {
   scrum: 'LVL 2 · THE LAB — KART RACING · RIVAL: THE BACKLOG',
   artist: 'LVL 3 · THE ARTIST — RHYTHM · BOSS: STAGE FRIGHT',
   books: 'LVL 4 · THE BOOKSTORE — RACING · COLLECT: THE BACKLIST',
-  notes: 'LVL 5 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
+  stage: 'LVL 5 · THE STAGE — PRESENTATION · BOSS: THE Q&A',
+  notes: 'LVL 6 · FIELD NOTES — FIGHTING · BOSS: THE BLANK PAGE',
 };
 
 // --- pixel sprites (box-shadow art on a single element) ---------------------
@@ -41,6 +42,55 @@ const GUITAR = [
   ...[[3, 3], [4, 2], [5, 1], [6, 0]].map(([x, y]) => `${x * 5}px ${y * 5}px 0 #4a3620`),
 ].join(', ');
 
+// Retro IT hardware the runner hurdles on level 1 — the obstacles are the history
+// the lab digs up: a beige tower PC, a CRT compact Mac, and a floppy disk.
+const HARDWARE: Record<string, { art: string; w: number; h: number; label: string }> = {
+  // beige tower + dark drive slots
+  tower: {
+    w: 24, h: 34, label: 'PC',
+    art: [
+      ...Array.from({ length: 6 }, (_, r) => Array.from({ length: 4 }, (_, c) => `${c * 6}px ${r * 6}px 0 #cfc3ad`)).flat(),
+      '6px 6px 0 #4a443b', '12px 6px 0 #4a443b',
+      '6px 18px 0 #4a443b', '12px 18px 0 #4a443b',
+      '18px 30px 0 #7fc99a',
+    ].join(', '),
+  },
+  // compact all-in-one Mac: body, screen, disk slot
+  mac: {
+    w: 30, h: 34, label: 'MAC',
+    art: [
+      ...Array.from({ length: 6 }, (_, r) => Array.from({ length: 5 }, (_, c) => `${c * 6}px ${r * 6}px 0 #d9d2c2`)).flat(),
+      '6px 6px 0 #1f2a33', '12px 6px 0 #1f2a33', '18px 6px 0 #1f2a33',
+      '6px 12px 0 #6fb3c9', '12px 12px 0 #1f2a33', '18px 12px 0 #1f2a33',
+      '12px 24px 0 #4a443b', '18px 24px 0 #4a443b',
+    ].join(', '),
+  },
+  // 3.5" floppy: shell, shutter, label
+  floppy: {
+    w: 24, h: 24, label: 'DISK',
+    art: [
+      ...Array.from({ length: 4 }, (_, r) => Array.from({ length: 4 }, (_, c) => `${c * 6}px ${r * 6}px 0 #3a4550`)).flat(),
+      '6px 0 0 #c9ccd1', '12px 0 0 #c9ccd1',
+      '6px 12px 0 #d9d2c2', '12px 12px 0 #d9d2c2', '6px 18px 0 #d9d2c2', '12px 18px 0 #d9d2c2',
+    ].join(', '),
+  },
+};
+
+// Boss for level 1: LEGACY CODE — a hulking grey mainframe with red status eyes.
+const BOSS_LEGACY = [
+  ...Array.from({ length: 6 }, (_, r) =>
+    Array.from({ length: 7 }, (_, c) => `${c * 8}px ${r * 8}px 0 #545a66`),
+  ).flat(),
+  // screen
+  '8px 8px 0 #1b2027', '16px 8px 0 #1b2027', '24px 8px 0 #1b2027', '32px 8px 0 #1b2027', '40px 8px 0 #1b2027',
+  // angry eyes
+  '16px 16px 0 #e05a48', '32px 16px 0 #e05a48',
+  // grille
+  '8px 32px 0 #3b414b', '24px 32px 0 #3b414b', '40px 32px 0 #3b414b',
+  // blinking tape reels
+  '8px 24px 0 #e0a44a', '40px 24px 0 #e0a44a',
+].join(', ');
+
 // Guitar Hero fret colours, top lane to bottom lane.
 const FRETS = ['#7fc99a', '#e05a48', '#e0c04a', '#6fb3c9', '#e08a4a'];
 const LANE_Y = [52, 70, 88, 106, 124];
@@ -49,9 +99,17 @@ const GEMS: [number, number][] = [
   [0, 0], [2, 0.55], [4, 1.1], [1, 1.65], [3, 2.2], [0, 2.75], [2, 3.3], [4, 3.85], [1, 4.4], [3, 4.95],
 ];
 
-const coins = { store: ['28%', '54%', '79%'], scrum: [], books: [], artist: [], notes: [] }[variant];
+const coins = { store: ['28%', '54%', '79%'], scrum: [], books: [], artist: [], stage: [], notes: [] }[variant];
 // Books the car drives through and collects
 const backlist = ['24%', '42%', '60%', '78%', '92%'];
+// Level 1 obstacles: retro IT hardware the runner hops over, placed between coins.
+const obstacles: { at: string; kind: keyof typeof HARDWARE }[] = [
+  { at: '36%', kind: 'tower' },
+  { at: '62%', kind: 'mac' },
+  { at: '86%', kind: 'floppy' },
+];
+// Level 5 slides the speaker delivers at the podium.
+const slides = ['30%', '48%', '66%', '84%'];
 ---
 
 <div class="strip mj-anim" data-mj-strip={variant} aria-hidden="true">
@@ -60,9 +118,23 @@ const backlist = ['24%', '42%', '60%', '78%', '92%'];
   <div class="pop" data-mj-pop>+100</div>
   {variant !== 'artist' && <div class="ground"></div>}
 
-  {variant === 'store' && coins.map((left, i) => (
-    <div class="coin" data-mj-collect style={`left:${left};bottom:${70 + (i % 2) * 8}px;animation-delay:${i * 0.5}s;`}>◉</div>
-  ))}
+  {variant === 'store' && (
+    <>
+      {coins.map((left, i) => (
+        <div class="coin" data-mj-collect style={`left:${left};bottom:${70 + (i % 2) * 8}px;animation-delay:${i * 0.5}s;`}>◉</div>
+      ))}
+      {obstacles.map(({ at, kind }) => (
+        <div class="obstacle" style={`left:${at};width:${HARDWARE[kind].w}px;height:${HARDWARE[kind].h}px;`}>
+          <div class="sprite" style={`box-shadow:${HARDWARE[kind].art};`}></div>
+          <span class="obstacle-tag">{HARDWARE[kind].label}</span>
+        </div>
+      ))}
+      <div class="boss legacy">
+        <div class="sprite" style={`box-shadow:${BOSS_LEGACY};`}></div>
+        <span class="boss-tag">LEGACY CODE</span>
+      </div>
+    </>
+  )}
 
   {variant === 'scrum' && (
     <>
@@ -104,6 +176,23 @@ const backlist = ['24%', '42%', '60%', '78%', '92%'];
     <div class="book-pickup" data-mj-collect style={`left:${left};animation-delay:${i * 0.4}s;`}>❏</div>
   ))}
 
+  {variant === 'stage' && (
+    <>
+      {/* spotlight cone + podium; slides fly in and get "delivered" */}
+      <div class="spotlight"></div>
+      {slides.map((left, i) => (
+        <div class="slide" data-mj-collect style={`left:${left};animation-delay:${i * 0.45}s;`}>▤</div>
+      ))}
+      <div class="podium"></div>
+      <div class="mic"></div>
+      <div class="audience">
+        {Array.from({ length: 14 }, (_, i) => (
+          <span style={`animation-delay:${(i % 5) * 0.3}s;`}></span>
+        ))}
+      </div>
+    </>
+  )}
+
   {variant === 'notes' && (
     <>
       <div class="hp you">mITy JOHN<div class="bar"><div class="fill ok"></div></div></div>
@@ -117,7 +206,7 @@ const backlist = ['24%', '42%', '60%', '78%', '92%'];
     </div>
   ) : variant === 'artist' ? null : (
     <div
-      class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''}`}
+      class={`runner ${variant === 'notes' ? 'fixed' : ''} ${variant === 'scrum' ? 'kart' : ''} ${variant === 'stage' ? 'speaker' : ''} ${variant === 'store' ? 'hopper' : ''}`}
       data-mj-vehicle
     >
       <div class="sprite" style={`box-shadow:${RUNNER};`}></div>
@@ -250,7 +339,113 @@ const backlist = ['24%', '42%', '60%', '78%', '92%'];
   .guitarist { position: absolute; left: 4%; top: 58px; animation: mj-bob 1.9s ease-in-out infinite; }
   .guitar { position: absolute; left: 34px; top: 22px; width: 5px; height: 5px; background: transparent; }
 
-  /* level 5 — fight ------------------------------------------------------- */
+  /* level 1 — obstacles + boss --------------------------------------------- */
+  .obstacle { position: absolute; bottom: 42px; }
+  .obstacle .sprite { width: 6px; height: 6px; background: transparent; }
+  .obstacle-tag {
+    position: absolute;
+    top: -14px;
+    left: 0;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: var(--muted2);
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+  .boss {
+    position: absolute;
+    bottom: 42px;
+    right: 5%;
+    width: 56px;
+    height: 48px;
+    transform-origin: bottom center;
+    animation: mj-boss 1.4s ease-in-out infinite;
+  }
+  .boss .sprite { width: 8px; height: 8px; background: transparent; }
+  .boss-tag {
+    position: absolute;
+    top: -16px;
+    right: 0;
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: var(--danger);
+    white-space: nowrap;
+  }
+  /* The runner hops the hardware and vaults the boss, timed to the 15s lap. */
+  .runner.hopper { animation: mj-level 15s linear infinite; }
+
+  /* level 5 — the stage ---------------------------------------------------- */
+  .spotlight {
+    position: absolute;
+    left: 6%;
+    top: 0;
+    width: 190px;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(224, 122, 154, 0.16), transparent 78%);
+    clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+    pointer-events: none;
+  }
+  .podium {
+    position: absolute;
+    left: 9%;
+    bottom: 40px;
+    width: 34px;
+    height: 30px;
+    background: var(--s2);
+    border: 2px solid var(--border3);
+    border-bottom: 0;
+  }
+  .mic {
+    position: absolute;
+    left: calc(9% + 30px);
+    bottom: 70px;
+    width: 3px;
+    height: 16px;
+    background: var(--border3);
+  }
+  .mic::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -3px;
+    width: 9px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--level-stage);
+  }
+  .slide {
+    position: absolute;
+    bottom: 76px;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--level-stage);
+    animation: mj-coin 1.7s ease-in-out infinite;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .audience {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 34px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 0 var(--section-pad-x);
+    pointer-events: none;
+  }
+  .audience span {
+    width: 12px;
+    height: 14px;
+    border-radius: 6px 6px 0 0;
+    background: var(--border2);
+    animation: mj-bob 2.4s ease-in-out infinite;
+  }
+  .runner.speaker { left: 8%; top: 52px; animation: mj-bob 2s ease-in-out infinite; }
+
+  /* level 6 — fight ------------------------------------------------------- */
   .hp { position: absolute; top: 40px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.18em; color: var(--muted2); width: 140px; }
   .hp.you { left: var(--section-pad-x); }
   .hp.boss-hp { right: var(--section-pad-x); }
@@ -261,6 +456,24 @@ const backlist = ['24%', '42%', '60%', '78%', '92%'];
 
   @keyframes mj-gem { from { transform: translateX(0); } to { transform: translateX(calc(-100vw - 40px)); } }
   @keyframes mj-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+  /* Level 1 lap: run right, hop each piece of hardware, vault the boss.
+     Hop X-positions match the obstacle left offsets above (36 / 62 / 86 / ~95%). */
+  @keyframes mj-level {
+    0%   { transform: translateX(-60px) translateY(0); }
+    32%  { transform: translateX(calc((100vw + 60px) * 0.32 - 60px)) translateY(0); }
+    36%  { transform: translateX(calc((100vw + 60px) * 0.36 - 60px)) translateY(-34px); }
+    40%  { transform: translateX(calc((100vw + 60px) * 0.40 - 60px)) translateY(0); }
+    58%  { transform: translateX(calc((100vw + 60px) * 0.58 - 60px)) translateY(0); }
+    62%  { transform: translateX(calc((100vw + 60px) * 0.62 - 60px)) translateY(-36px); }
+    66%  { transform: translateX(calc((100vw + 60px) * 0.66 - 60px)) translateY(0); }
+    82%  { transform: translateX(calc((100vw + 60px) * 0.82 - 60px)) translateY(0); }
+    86%  { transform: translateX(calc((100vw + 60px) * 0.86 - 60px)) translateY(-30px); }
+    90%  { transform: translateX(calc((100vw + 60px) * 0.90 - 60px)) translateY(0); }
+    93%  { transform: translateX(calc((100vw + 60px) * 0.93 - 60px)) translateY(0); }
+    96%  { transform: translateX(calc((100vw + 60px) * 0.96 - 60px)) translateY(-42px); }
+    100% { transform: translateX(calc((100vw + 60px) * 1 - 60px)) translateY(0); }
+  }
 </style>
 
 <script>

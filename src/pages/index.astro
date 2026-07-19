@@ -11,8 +11,10 @@ import ScrumFeature from '../components/ScrumFeature.astro';
 import SpotifyEmbed from '../components/SpotifyEmbed.astro';
 import InstagramGrid from '../components/InstagramGrid.astro';
 import Quotes from '../components/Quotes.astro';
+import TalksTimeline from '../components/TalksTimeline.astro';
 import { getCollection } from 'astro:content';
 import urlMap from '../../url-map.json';
+import talks from '../data/talks.json';
 
 const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
@@ -154,12 +156,23 @@ for (const e of urlMap) {
     </div>
   </section>
 
+  <ArcadeStrip variant="stage" />
+
+  <!-- ===== SPEAKER (LEVEL 05 — THE STAGE) ===== -->
+  <section id="talks" class="stage">
+    <div class="stage-head">
+      <SectionHeader level="05" section="THE STAGE" accentVar="var(--level-stage)" inkVar="var(--ink-on-level-stage)" title="Talks & conferences" />
+      <a class="all" href="/talks/">All {talks.length} talks →</a>
+    </div>
+    <TalksTimeline limit={4} />
+  </section>
+
   <ArcadeStrip variant="notes" />
 
   <!-- ===== BLOG ===== -->
   <section id="blog" class="blog">
     <div class="blog-head">
-      <SectionHeader level="05" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
+      <SectionHeader level="06" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="Latest from the blog" />
       <a class="all" href="/blog/">All posts →</a>
     </div>
     <div class="grid">
@@ -304,6 +317,10 @@ for (const e of urlMap) {
   .books-note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); max-width: 460px; margin: 10px 0 36px; }
   .bookstore .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--gap-books); }
 
+  /* SPEAKER / THE STAGE (level 05) */
+  .stage { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); scroll-margin-top: 80px; }
+  .stage-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 30px; }
+
   /* BLOG */
   .blog { max-width: var(--container-max); margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); }
   .blog-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 30px; }
@@ -313,6 +330,7 @@ for (const e of urlMap) {
     padding: 10px 16px;
     border: 1px solid var(--border2);
     border-radius: var(--radius-btn-sm);
+    white-space: nowrap;
   }
   .all:hover { border-color: var(--border3); }
   .blog .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: var(--gap-cards); }

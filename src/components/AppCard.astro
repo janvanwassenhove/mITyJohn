@@ -2,6 +2,7 @@
 // Store card — exactly the designed card: header art with code badge + tag,
 // name, blurb, action row. Actions derived from frontmatter (gap-list G1 note).
 import type { CollectionEntry } from 'astro:content';
+import shots from '../data/screenshots.json';
 
 interface Props {
   app: CollectionEntry<'apps'>;
@@ -9,6 +10,10 @@ interface Props {
 }
 const { app } = Astro.props;
 const { name, code, tag, cat, blurb, repo, demoUrl } = app.data;
+
+// Real UI screenshots pulled from the app's GitHub repo (scripts/fetch-screenshots.mjs).
+// Apps without any fall back to the design's hatched placeholder.
+const gallery = ((shots as Record<string, { src: string; alt: string }[]>)[app.id] ?? []).slice(0, 4);
 
 const gh = (r: string) => `https://github.com/janvanwassenhove/${r}`;
 type Action = { label: string; href: string; primary?: boolean; external?: boolean };
@@ -20,10 +25,31 @@ actions.push({ label: 'Info', href: `/apps/${app.id}/` });
 ---
 
 <div class="card" data-reveal data-cat={cat}>
-  <div class="art">
+  <div
+    class={`art${gallery.length ? ' has-shot' : ''}`}
+    data-gallery={gallery.length > 1 ? JSON.stringify(gallery.slice(1).map((s) => s.src)) : undefined}
+  >
+    {/* Only the first shot ships in the HTML — the rest are fetched on hover, so
+        the store grid costs 9 small images instead of 23 (N5 mobile budget). */}
+    {gallery[0] && (
+      <img
+        class="shot active"
+        src={gallery[0].src}
+        alt={`${name} screenshot`}
+        width="560"
+        height="315"
+        loading="lazy"
+        decoding="async"
+      />
+    )}
     <div class="scan"></div>
     <div class="code">{code}</div>
     <div class="tag">{tag}</div>
+    {gallery.length > 1 && (
+      <div class="dots">
+        {gallery.map((_, i) => <span class={i === 0 ? 'on' : ''}></span>)}
+      </div>
+    )}
   </div>
   <div class="body">
     <h3>{name}</h3>
@@ -63,6 +89,29 @@ actions.push({ label: 'Info', href: `/apps/${app.id}/` });
     overflow: hidden;
   }
   :root[data-theme='light'] .art { background: repeating-linear-gradient(135deg, #e9e3d4 0 12px, #efeadd 12px 24px); }
+  /* Screenshot gallery: crossfade between shots on hover, code badge stays legible */
+  .shot {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .shot.active { opacity: 1; }
+  .art.has-shot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(13, 12, 11, 0.55), rgba(13, 12, 11, 0.15) 45%, rgba(13, 12, 11, 0.7));
+  }
+  .art.has-shot .code, .art.has-shot .tag, .art.has-shot .dots { z-index: 2; }
+  .art.has-shot .code { background: rgba(13, 12, 11, 0.72); }
+  .dots { position: absolute; bottom: 10px; right: 12px; display: flex; gap: 5px; }
+  .dots span { width: 5px; height: 5px; border-radius: 50%; background: var(--muted2); opacity: 0.5; transition: opacity 0.3s ease, background 0.3s ease; }
+  .dots span.on { background: var(--accent); opacity: 1; }
   .scan {
     position: absolute;
     inset: 0 0 auto 0;
@@ -109,3 +158,49 @@ actions.push({ label: 'Info', href: `/apps/${app.id}/` });
   .actions a.primary { background: var(--accent); color: var(--ink-on-accent); border-color: transparent; }
   .actions a.primary:hover { filter: brightness(1.08); border-color: transparent; }
 </style>
+
+<script>
+  // Cycle a card's screenshots while the pointer is over it. The extra shots are
+  // fetched on first hover, so they cost nothing on initial load.
+  document.querySelectorAll<HTMLElement>('.card .art[data-gallery]').forEach((art) => {
+    const rest: string[] = JSON.parse(art.dataset.gallery || '[]');
+    const dots = [...art.querySelectorAll<HTMLElement>('.dots span')];
+    let shots = [...art.querySelectorAll<HTMLElement>('.shot')];
+    let i = 0;
+    let timer: number | undefined;
+    let hydrated = false;
+
+    const hydrate = () => {
+      if (hydrated) return;
+      hydrated = true;
+      for (const src of rest) {
+        const img = document.createElement('img');
+        img.className = 'shot';
+        img.src = src;
+        img.alt = '';
+        img.decoding = 'async';
+        art.insertBefore(img, art.querySelector('.scan'));
+      }
+      shots = [...art.querySelectorAll<HTMLElement>('.shot')];
+    };
+
+    const show = (n: number) => {
+      shots[i]?.classList.remove('active');
+      dots[i]?.classList.remove('on');
+      i = n % shots.length;
+      shots[i]?.classList.add('active');
+      dots[i]?.classList.add('on');
+    };
+
+    const card = art.closest('.card')!;
+    card.addEventListener('mouseenter', () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      hydrate();
+      timer = window.setInterval(() => show(i + 1), 1400);
+    });
+    card.addEventListener('mouseleave', () => {
+      window.clearInterval(timer);
+      show(0);
+    });
+  });
+</script>

@@ -1,0 +1,104 @@
+{
+  "mitystudio": [
+    {
+      "src": "/screenshots/mitystudio-1.webp",
+      "alt": "mitystudio screenshot 1"
+    },
+    {
+      "src": "/screenshots/mitystudio-2.webp",
+      "alt": "mitystudio screenshot 2"
+    },
+    {
+      "src": "/screenshots/mitystudio-3.webp",
+      "alt": "mitystudio screenshot 3"
+    },
+    {
+      "src": "/screenshots/mitystudio-4.webp",
+      "alt": "mitystudio screenshot 4"
+    }
+  ],
+  "music-agent": [
+    {
+      "src": "/screenshots/music-agent-1.webp",
+      "alt": "music-agent screenshot 1"
+    },
+    {
+      "src": "/screenshots/music-agent-2.webp",
+      "alt": "music-agent screenshot 2"
+    },
+    {
+      "src": "/screenshots/music-agent-3.webp",
+      "alt": "music-agent screenshot 3"
+    }
+  ],
+  "mityguitar": [
+    {
+      "src": "/screenshots/mityguitar-1.webp",
+      "alt": "mityguitar screenshot 1"
+    },
+    {
+      "src": "/screenshots/mityguitar-2.webp",
+      "alt": "mityguitar screenshot 2"
+    },
+    {
+      "src": "/screenshots/mityguitar-3.webp",
+      "alt": "mityguitar screenshot 3"
+    }
+  ],
+  "pibeat": [
+    {
+      "src": "/screenshots/pibeat-1.webp",
+      "alt": "pibeat screenshot 1"
+    },
+    {
+      "src": "/screenshots/pibeat-2.webp",
+      "alt": "pibeat screenshot 2"
+    },
+    {
+      "src": "/screenshots/pibeat-3.webp",
+      "alt": "pibeat screenshot 3"
+    },
+    {
+      "src": "/screenshots/pibeat-4.webp",
+      "alt": "pibeat screenshot 4"
+    }
+  ],
+  "typix": [
+    {
+      "src": "/screenshots/typix-1.webp",
+      "alt": "typix screenshot 1"
+    },
+    {
+      "src": "/screenshots/typix-2.webp",
+      "alt": "typix screenshot 2"
+    },
+    {
+      "src": "/screenshots/typix-3.webp",
+      "alt": "typix screenshot 3"
+    }
+  ],
+  "hipster": [
+    {
+      "src": "/screenshots/hipster-1.webp",
+      "alt": "hipster screenshot 1"
+    }
+  ],
+  "loveflix": [
+    {
+      "src": "/screenshots/loveflix-1.webp",
+      "alt": "loveflix screenshot 1"
+    }
+  ],
+  "mitylex": [
+    {
+      "src": "/screenshots/mitylex-1.webp",
+      "alt": "mitylex screenshot 1"
+    }
+  ],
+  "scrum-programming": [
+    {
+      "src": "/screenshots/scrum-programming-1.webp",
+      "alt": "scrum-programming screenshot 1"
+    }
+  ]
+}

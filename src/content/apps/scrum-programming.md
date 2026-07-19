@@ -4,7 +4,7 @@ code: "SPL"
 tag: "lab"
 cat: "lab"
 blurb: "A real programming language where you code entirely in ceremonies. Yes, really."
-repo: "scrum-lang"
+repo: "scrum"
 order: 15
 wpId: 100
 wpSlug: "scrum-programming"
@@ -12,15 +12,12 @@ wpSlug: "scrum-programming"
 
 ## Becoming a Programming Scrum Master
 
-```
-This is the home of the SCRUM programming language.It is an attempt to make a new custom programming language which is understandable for business as well as for developers and loosely inspired by the Scrum (software development) framework. SCRUM allows developers to express not only instructions, but also intent, which is compiled into deterministic Java code. SCRUM explores programming by intent — using AI at compile time, not at runtime.
-```
+This is the home of the **SCRUM** programming language.  
+It is an attempt to make a new custom programming language which is understandable for business as well as for developers and loosely inspired by the Scrum (software development) framework. SCRUM allows developers to express not only instructions, but also intent, which is compiled into deterministic Java code. SCRUM explores programming by intent — using AI at compile time, not at runtime.
 
 ## Why
 
-```
-So you can become an actual SCRUM programmer, instead of being just a “Scrum Master” (without even coding).
-```
+So you can become an actual **SCRUM programmer**, instead of being just a “Scrum Master” (without even coding).
 
 ![](/wp-content/uploads/2023/01/banner-768x120.webp)
 
@@ -43,9 +40,14 @@ To install it locally, download the development kit:
 
 [SCRUM v1.1.0](/wp-content/uploads/2023/04/development.zip)[Download](/wp-content/uploads/2023/04/development.zip)
 
-```
-Version Details Listingv2.0.0 (Java 25 LTS compatible - intent-aware compilation, CLI support)v1.3.0 (Java 21 LTS compatible - introducing API's)v1.2.0 (Java 21 LTS compatible)v1.1.0 (Java 17 LTS compatible)A glance of the scrum programming language using the 'Hello World' example:
-```
+  
+Version Details Listing  
+v2.0.0 (Java 25 LTS compatible - intent-aware compilation, CLI support)  
+v1.3.0 (Java 21 LTS compatible - introducing API's)  
+v1.2.0 (Java 21 LTS compatible)  
+v1.1.0 (Java 17 LTS compatible)  
+  
+A glance of the scrum programming language using the 'Hello World' example:
 
 ```
 #SPRINTGOAL Deliver our first Scrum program

@@ -1,0 +1,32 @@
+---
+// Full speaking timeline. The home page shows the recent ones and links here.
+import Base from '../../layouts/Base.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import TalksTimeline from '../../components/TalksTimeline.astro';
+import talks from '../../data/talks.json';
+---
+
+<Base
+  title="Talks & conferences — mITy.John"
+  description="Conference talks and roundtables by Jan Van Wassenhove — Devoxx, Techorama, Code & Comedy, EU-LISA and more."
+>
+  <section class="stage">
+    <SectionHeader
+      level="05"
+      section="THE STAGE"
+      accentVar="var(--level-stage)"
+      inkVar="var(--ink-on-level-stage)"
+      title="Talks & conferences"
+    />
+    <p class="note">
+      {talks.length} appearances, newest first. Recordings load only when you press play.
+      Plus corporate &amp; community talks at Sopra Steria and Tobania, and seminars at PXL.
+    </p>
+    <TalksTimeline />
+  </section>
+</Base>
+
+<style>
+  .stage { max-width: 900px; margin: 0 auto; padding: var(--section-pad-y) var(--section-pad-x); }
+  .note { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); margin: 10px 0 36px; max-width: 60ch; line-height: 1.6; }
+</style>

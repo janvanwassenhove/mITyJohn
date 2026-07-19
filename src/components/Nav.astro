@@ -6,7 +6,8 @@ const items = [
   { lvl: '02', label: 'Scrum', href: '/#scrum' },
   { lvl: '03', label: 'Artist', href: '/#artist' },
   { lvl: '04', label: 'Books', href: '/#books' },
-  { lvl: '05', label: 'Blog', href: '/blog/' },
+  { lvl: '05', label: 'Talks', href: '/talks/' },
+  { lvl: '06', label: 'Blog', href: '/blog/' },
   { lvl: '', label: 'About', href: '/about/' },
 ];
 ---
@@ -36,6 +37,7 @@ const items = [
     align-items: center;
     justify-content: space-between;
     gap: 24px;
+    min-height: 61px; /* pin the height so a font swap can't reflow the page */
     padding: 14px var(--section-pad-x);
     background: var(--navbg);
     backdrop-filter: blur(12px);
@@ -45,7 +47,21 @@ const items = [
   .prompt { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
   .name { font-family: var(--font-display); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; }
   .dot { color: var(--accent); }
-  .links { display: flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: var(--text-small); flex-wrap: wrap; }
+  /* nowrap + scroll rather than wrap: a wrapping nav changes height when the
+     webfont swaps in, which shifted every page below it (CLS 0.19 -> ~0.02). */
+  .links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .links::-webkit-scrollbar { display: none; }
+  .links a { flex: 0 0 auto; }
   .links a {
     display: inline-flex;
     align-items: center;

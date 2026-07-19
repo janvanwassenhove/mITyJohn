@@ -1,0 +1,128 @@
+---
+// Speaking timeline — grouped by year, newest first. Talks with a recording get a
+// click-to-load YouTube facade (§8.1/D5: nothing reaches youtube.com until clicked).
+import talks from '../data/talks.json';
+
+interface Props { limit?: number }
+const { limit } = Astro.props;
+
+type Talk = {
+  year?: number; event: string; location: string;
+  title?: string; kind?: string; link?: string; video?: string;
+};
+
+const list = (talks as Talk[]).slice(0, limit ?? talks.length);
+
+// Preserve source order (already newest-first); group consecutive runs by year so
+// an undated entry stays where it belongs rather than being invented into a year.
+const groups: { year: number | null; items: Talk[] }[] = [];
+for (const t of list) {
+  const y = t.year ?? null;
+  const last = groups.at(-1);
+  if (last && last.year === y) last.items.push(t);
+  else groups.push({ year: y, items: [t] });
+}
+---
+
+<div class="timeline">
+  {groups.map((g) => (
+    <div class="group">
+      <div class="year">{g.year ?? '—'}</div>
+      <div class="items">
+        {g.items.map((t) => (
+          <div class="talk" data-reveal>
+            <div class="head">
+              <span class="event">{t.event}</span>
+              {t.kind && <span class="kind">{t.kind}</span>}
+            </div>
+            {t.title && <div class="title">{t.title}</div>}
+            <div class="meta">
+              <span class="loc">{t.location}</span>
+              {t.link && (
+                <a href={t.link} target="_blank" rel="noopener">Details ↗</a>
+              )}
+            </div>
+            {t.video && (
+              <button
+                type="button"
+                class="embed-facade talk-video"
+                data-embed-src={`https://www.youtube-nocookie.com/embed/${t.video}`}
+                data-embed-h="360"
+                data-embed-provider="youtube"
+              >
+                <span class="ef-glyph">▶</span>
+                <span class="ef-title">Watch the talk</span>
+                <span class="ef-note">Loads youtube.com — nothing is requested until you click.</span>
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .timeline { display: flex; flex-direction: column; gap: 28px; }
+  .group { display: grid; grid-template-columns: 76px 1fr; gap: 20px; align-items: start; }
+  .year {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--level-stage);
+    position: sticky;
+    top: 76px;
+    padding-top: 12px;
+  }
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-left: 1px solid var(--border);
+    padding-left: 20px;
+  }
+  .talk {
+    position: relative;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+    transition: border-color var(--hover-duration) var(--hover-ease), transform var(--hover-duration) var(--hover-ease);
+  }
+  .talk:hover { border-color: var(--border3); transform: translateY(-2px); }
+  /* node on the timeline rail */
+  .talk::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 22px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--level-stage);
+    box-shadow: 0 0 0 3px var(--bg);
+  }
+  .head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .event { font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--text); }
+  .kind {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-pill);
+    padding: 2px 8px;
+  }
+  .title { font-size: var(--text-body); color: var(--muted); margin-top: 6px; text-wrap: pretty; }
+  .meta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; font-family: var(--font-mono); font-size: var(--text-caption); }
+  .loc { color: var(--muted2); }
+  .talk-video { min-height: 150px; margin: 14px 0 2px; padding: 18px; }
+
+  @media (max-width: 620px) {
+    .group { grid-template-columns: 1fr; gap: 10px; }
+    .year { position: static; padding-top: 0; }
+    .items { border-left: 0; padding-left: 0; }
+    .talk::before { display: none; }
+  }
+</style>

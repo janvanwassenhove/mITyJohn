@@ -4,11 +4,11 @@
 ---
 
 <a class="scrum-card" data-reveal href="/apps/scrum-programming/">
-  <div class="badge">SPL</div>
+  <img class="mascot" src="/mascot/scrummy.png" alt="Scrummy, the SCRUM language mascot" width="150" height="150" loading="lazy" decoding="async" />
   <div class="text">
     <div class="kicker">the lab's flagship experiment</div>
     <div class="title">Scrum Programming Language</div>
-    <div class="sub">A real language where you code entirely in ceremonies. Yes, really. Sprint zero compiles.</div>
+    <div class="sub">A real language where you code entirely in ceremonies. Yes, really. Sprint zero compiles. Say hello to Scrummy.</div>
   </div>
   <span class="cta">Explore →</span>
 </a>
@@ -27,15 +27,15 @@
     margin-top: 8px;
   }
   .scrum-card:hover { border-color: var(--level-scrum); color: var(--text); }
-  .badge {
-    font-family: var(--font-mono);
-    font-weight: 600;
-    font-size: var(--text-body);
-    color: var(--level-scrum);
-    border: 1px solid var(--border2);
-    padding: 10px 14px;
-    border-radius: 10px;
+  .mascot {
+    width: 88px;
+    height: 88px;
+    object-fit: contain;
+    flex-shrink: 0;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
+    transition: transform var(--hover-duration) var(--hover-ease);
   }
+  .scrum-card:hover .mascot { transform: translateY(-4px) rotate(-4deg); }
   .text { flex: 1; min-width: 220px; }
   .kicker {
     font-family: var(--font-mono);

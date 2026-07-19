@@ -53,7 +53,9 @@
   --level-artist: #6fb3c9;              /* LEVEL 03 · THE ARTIST (= --accent-2) */
   --level-books: #c98b6a;               /* LEVEL 04 · THE BOOKSTORE */
   --ink-on-level-books: #241812;
-  --level-notes: #7fc99a;               /* LEVEL 05 · FIELD NOTES (blog) */
+  --level-stage: #e07a9a;               /* LEVEL 05 · THE STAGE (talks) — added post-launch */
+  --ink-on-level-stage: #2b1219;
+  --level-notes: #7fc99a;               /* LEVEL 06 · FIELD NOTES (blog) */
   --ink-on-level-notes: #12201a;
 
   /* Status / semantic */

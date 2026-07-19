@@ -11,7 +11,7 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf()
 
 <Base title="Blog — mITy.John" description="Field notes from the lab: essays and experiments on AI, software delivery, music tech and retro IT.">
   <section class="blog">
-    <SectionHeader level="04" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="All field notes" />
+    <SectionHeader level="06" section="FIELD NOTES" accentVar="var(--level-notes)" inkVar="var(--ink-on-level-notes)" title="All field notes" />
     <p class="note">{posts.length} posts, newest first. Also available as <a href="/rss.xml">RSS</a>.</p>
     <div class="grid">
       {posts.map((p) => <PostCard post={p} />)}

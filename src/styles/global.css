@@ -1,5 +1,6 @@
 /* Global styles — driven by design/tokens.css (the only permitted design/ import, §15 rule 4). */
 @import '../../design/tokens.css';
+@import './fonts.css';
 @import 'tailwindcss';
 
 /* Map core tokens into Tailwind's theme so utilities like font-display work. */

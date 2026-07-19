@@ -41,7 +41,7 @@ const APP_META = {
   mitylaundry: { name: 'mITyLaundry', code: 'WASH', tag: 'fun', cat: 'fun', order: 12, demoUrl: 'https://janvanwassenhove.github.io/mITyLaundry', blurb: 'Because someone had to gamify the laundry. Reluctantly, that someone was Jan.' },
   mitylex: { name: 'mITyLex', code: 'LEX', tag: 'fun', cat: 'fun', order: 13, demoUrl: 'https://janvanwassenhove.github.io/mITyLex', blurb: 'A word game with the vocabulary of a very confident intern.' },
   mitygarden: { name: 'mITyGarden', code: 'GARDEN', tag: 'fun', cat: 'fun', order: 14, repo: 'mITyGarden', demoUrl: 'https://janvanwassenhove.github.io/mITyGarden', blurb: 'An AI garden design studio. Move the pool with a prompt, not a shovel.' }, // G3 — not in design's 14
-  'scrum-programming': { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', cat: 'lab', order: 15, repo: 'scrum-lang', blurb: 'A real programming language where you code entirely in ceremonies. Yes, really.' },
+  'scrum-programming': { name: 'Scrum Programming Language', code: 'SPL', tag: 'lab', cat: 'lab', order: 15, repo: 'scrum', blurb: 'A real programming language where you code entirely in ceremonies. Yes, really.' },
 };
 
 // ---------------------------------------------------------------------------
@@ -104,6 +104,9 @@ function embedProvider(src) {
 
 function stripPluginMarkup(html) {
   let out = html;
+  // WordPress "Preformatted" blocks hold prose, not code (only wp-block-code has
+  // a <code> child). Left as <pre> they render as monospace code with a scrollbar.
+  out = out.replace(/<pre class="wp-block-preformatted">([\s\S]*?)<\/pre>/g, '<p>$1</p>');
   // Smart Slider 3 (D3: superseded) — rendered containers and raw shortcodes
   out = out.replace(/<div[^>]*(?:id="n2-ss-|class="[^"]*n2[_-])[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g, '');
   out = out.replace(/\[smartslider3[^\]]*\]/g, '');
@@ -257,6 +260,14 @@ for (const page of inv.pages) {
     await writeFile(new URL(`src/content/apps/${m.slug}.md`, ROOT), fm + '\n\n' + toMarkdown(page.content.rendered) + '\n');
     counts.apps++;
   } else if (m.target === 'page') {
+    let body = toMarkdown(page.content.rendered);
+    // The About page's conference list now lives in its own section (src/data/talks.json,
+    // rendered as the Speaker level). Cut it here so the two never drift apart.
+    if (page.id === 2) {
+      const cut = body.search(/^\s*(?:#+\s*)?Conference talks\s*$/m);
+      if (cut > -1) body = body.slice(0, cut).replace(/\n*-{3,}\s*$/, '').trimEnd();
+      else console.warn('  About: "Conference talks" marker not found — talks may be duplicated');
+    }
     const fm = [
       '---',
       `title: ${yamlStr(page.title.rendered)}`,
@@ -264,7 +275,7 @@ for (const page of inv.pages) {
       `wpSlug: ${JSON.stringify(page.slug)}`,
       '---',
     ].join('\n');
-    await writeFile(new URL(`src/content/pages/${m.slug}.md`, ROOT), fm + '\n\n' + toMarkdown(page.content.rendered) + '\n');
+    await writeFile(new URL(`src/content/pages/${m.slug}.md`, ROOT), fm + '\n\n' + body + '\n');
     counts.pages++;
   } else {
     counts.skipped++; // merge targets — copy reviewed manually, indexes are designed

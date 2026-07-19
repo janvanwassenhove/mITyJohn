@@ -1,0 +1,82 @@
+[
+  {
+    "year": 2026,
+    "event": "The Future Of the SDLC",
+    "location": "Munich, Germany",
+    "title": "Rethinking the SDLC in an AI-first world",
+    "kind": "Conference"
+  },
+  {
+    "year": 2026,
+    "event": "Devoxx FR 2026",
+    "location": "Paris, France",
+    "kind": "Conference",
+    "link": "https://m.devoxx.com/events/devoxxfr2026/speaker/7391/jan-van-wassenhove",
+    "video": "e2KKcrqeWsU"
+  },
+  {
+    "year": 2026,
+    "event": "Roundtable — The art of staying ahead",
+    "location": "Leuven, Belgium",
+    "title": "The future of DXP",
+    "kind": "Roundtable"
+  },
+  {
+    "year": 2025,
+    "event": "Devoxx 2025",
+    "location": "Antwerp, Belgium",
+    "kind": "Conference",
+    "link": "https://m.devoxx.com/events/dvbe25/speaker/12053/jan-van-wassenhove",
+    "video": "ZO-619lqjK0"
+  },
+  {
+    "year": 2025,
+    "event": "EU Lisa Roundtable 2025",
+    "location": "Warsaw, Poland",
+    "kind": "Roundtable",
+    "link": "https://www.eulisa.europa.eu/news-and-events/events/eu-lisa-industry-roundtable-june-2025/speakers"
+  },
+  {
+    "year": 2025,
+    "event": "Techorama BE 2025",
+    "location": "Antwerp, Belgium",
+    "kind": "Conference",
+    "link": "https://techorama.be/speakers/speaker/jan-van-wassenhove/"
+  },
+  {
+    "year": 2025,
+    "event": "Devoxx FR 2025",
+    "location": "Paris, France",
+    "kind": "Conference",
+    "link": "https://www.devoxx.fr/en/agenda-2025/speaker/jan-van-wassenhove/"
+  },
+  {
+    "event": "Conf42 Python",
+    "location": "Online",
+    "kind": "Conference",
+    "link": "https://youtu.be/z81O_iZQBQs",
+    "video": "z81O_iZQBQs"
+  },
+  {
+    "year": 2024,
+    "event": "Devoxx 2024",
+    "location": "Antwerp, Belgium",
+    "kind": "Conference",
+    "link": "https://mobile.devoxx.com/events/dvbe24/talks/17654/details"
+  },
+  {
+    "year": 2024,
+    "event": "Devoxx 2024 — Tools In Action",
+    "location": "Antwerp, Belgium",
+    "kind": "Tools In Action",
+    "link": "https://mobile.devoxx.com/events/dvbe24/talks/17653/details"
+  },
+  {
+    "year": 2024,
+    "event": "Code & Comedy 2024",
+    "location": "Nieuwegein, Netherlands",
+    "title": "Harmonizing code and melody — making electronical music in a matter of speaking",
+    "kind": "Conference",
+    "link": "https://code-comedy.nl/talks/harmonizing-code-and-melody-making-electronical-music-in-a-matter-of-speaking"
+  }
+]
