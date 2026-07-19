@@ -83,6 +83,9 @@ a:hover { color: var(--text); }
 #pdf-viewer {
   width: min(1000px, 94vw);
   max-height: 88vh;
+  /* explicit: an open dialog centres via inset:0 + margin:auto, and Tailwind's
+     preflight zeroes margins, which pinned it to the top-left corner. */
+  margin: auto;
   padding: 0;
   border: 1px solid var(--border2);
   border-radius: var(--radius-card);

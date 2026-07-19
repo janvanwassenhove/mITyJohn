@@ -3,6 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import TalksTimeline from '../../components/TalksTimeline.astro';
+import ArcadeStrip from '../../components/ArcadeStrip.astro';
 import talks from '../../data/talks.json';
 ---
 
@@ -10,6 +11,7 @@ import talks from '../../data/talks.json';
   title="Talks & conferences — mITy.John"
   description="Conference talks and roundtables by Jan Van Wassenhove — Devoxx, Techorama, Code & Comedy, EU-LISA and more."
 >
+  <ArcadeStrip variant="stage" />
   <section class="stage">
     <SectionHeader
       level="05"

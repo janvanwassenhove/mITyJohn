@@ -3,6 +3,7 @@
 // action row over the prose Page layout). Version / release info from releases.json
 // when the app has a repo with releases (§9); otherwise the designed fallback CTAs.
 import Base from '../../layouts/Base.astro';
+import ArcadeStrip from '../../components/ArcadeStrip.astro';
 import { getCollection, render } from 'astro:content';
 import releases from '../../data/releases.json';
 
@@ -23,6 +24,7 @@ const fmtSize = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' :
 ---
 
 <Base title={`${name} — mITy.John`} description={blurb}>
+  <ArcadeStrip variant={cat === 'lab' ? 'scrum' : 'store'} />
   <article>
     <header class="hero-card">
       <div class="scan"></div>

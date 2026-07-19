@@ -18,7 +18,8 @@ import talks from '../data/talks.json';
 
 const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
-const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 4);
+const allPosts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const posts = allPosts.slice(0, 4);
 
 const filters = [
   { id: 'all', label: 'All' },
@@ -28,11 +29,23 @@ const filters = [
   { id: 'lab', label: 'Lab' },
 ];
 
+const inPrint = books.filter((b) => b.data.series !== 'Coming soon').length;
+
 const stats = [
   { n: String(apps.length), label: 'apps in the lab' },
-  { n: '4+', label: 'books in print' },
+  { n: String(inPrint), label: 'books in print' },
   { n: '60+', label: 'years of IT dug up' },
   { n: '1', label: 'very tired Pi' },
+];
+
+// Hero level selector — every level, with a live count so the numbers can't go stale.
+const levels = [
+  { no: '01', label: 'Apps', section: 'The store', href: '#apps', count: `${apps.length} apps`, accent: 'var(--level-store)', ink: 'var(--ink-on-accent)' },
+  { no: '02', label: 'Scrum', section: 'Sprint zero', href: '#scrum', count: '1 language', accent: 'var(--level-scrum)', ink: 'var(--ink-on-level-scrum)' },
+  { no: '03', label: 'Artist', section: 'The artist', href: '#artist', count: 'Press play', accent: 'var(--level-artist)', ink: 'var(--ink-on-accent-2)' },
+  { no: '04', label: 'Books', section: 'The bookstore', href: '#books', count: `${inPrint} editions`, accent: 'var(--level-books)', ink: 'var(--ink-on-level-books)' },
+  { no: '05', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
+  { no: '06', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
 ];
 
 // §5.4 JS shim — compact map inlined from url-map.json (belt and braces under §5.3).
@@ -75,11 +88,17 @@ for (const e of urlMap) {
       games, picture books and one <em>gloriously</em> unnecessary programming language.<br /><br />
       <span class="hl">Now with 100% more &ldquo;why did he build that?&rdquo;</span>
     </p>
-    <div data-reveal class="ctas">
-      <a class="primary" href="#apps"><span class="n">01</span> Browse the apps <span>→</span></a>
-      <a href="#artist"><span class="n n2">02</span> Hear the artist</a>
-      <a href="#books"><span class="n">03</span> Enter the bookstore</a>
-      <a href="#blog"><span class="n">04</span> Read the blog</a>
+    <div data-reveal class="levels">
+      {levels.map((l) => (
+        <a class="level-btn" href={l.href} style={`--lv:${l.accent};--lv-ink:${l.ink};`}>
+          <span class="lv-no">{l.no}</span>
+          <span class="lv-body">
+            <span class="lv-label">{l.label}</span>
+            <span class="lv-sub">{l.section}</span>
+          </span>
+          <span class="lv-count">{l.count}</span>
+        </a>
+      ))}
     </div>
     <div data-reveal class="stats">
       {stats.map((s) => (
@@ -228,25 +247,60 @@ for (const e of urlMap) {
   .hl { color: var(--accent); position: relative; }
   .cursor { display: inline-block; width: 0.5ch; height: 0.9em; background: var(--accent); margin-left: 6px; vertical-align: -0.06em; animation: blink var(--blink-duration) step-end infinite; }
   .lead { max-width: 620px; font-size: var(--text-lead); line-height: var(--leading-body); color: var(--muted); margin: 0 0 36px; text-wrap: pretty; }
-  .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
-  .ctas a {
-    display: inline-flex;
+  /* Level selector — one button per level, each carrying its own accent + count */
+  .levels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 10px;
+    max-width: 900px;
+  }
+  .level-btn {
+    display: flex;
     align-items: center;
-    gap: 9px;
-    padding: 13px 22px;
+    gap: 12px;
+    padding: 12px 14px;
     background: var(--chip);
     color: var(--text);
     border: 1px solid var(--border2);
+    border-left: 3px solid var(--lv);
     border-radius: 10px;
-    font-weight: 600;
-    font-family: var(--font-mono);
-    font-size: var(--text-body);
+    transition: border-color var(--hover-duration) var(--hover-ease), transform var(--hover-duration) var(--hover-ease), background var(--hover-duration) var(--hover-ease);
   }
-  .ctas a:hover { border-color: var(--border3); }
-  .ctas a.primary { background: var(--accent); color: var(--ink-on-accent); border-color: transparent; }
-  .ctas a.primary:hover { filter: brightness(1.08); }
-  .ctas .n { opacity: 0.8; font-weight: 700; } /* design: 0.55 — raised for WCAG contrast (N5 a11y gate) */
-  .ctas .n2 { color: var(--accent-2); }
+  .level-btn:hover {
+    border-color: var(--border3);
+    border-left-color: var(--lv);
+    transform: translateY(-3px);
+    color: var(--text);
+    background: var(--s2);
+  }
+  .lv-no {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--lv-ink);
+    background: var(--lv);
+    border-radius: 6px;
+    padding: 3px 7px;
+    flex-shrink: 0;
+  }
+  .lv-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+  .lv-label { font-family: var(--font-display); font-size: 16px; font-weight: 600; line-height: 1.2; }
+  .lv-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted2);
+    margin-top: 2px;
+  }
+  .lv-count {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--muted2);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .level-btn:hover .lv-count { color: var(--lv); }
   .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));

@@ -4,12 +4,14 @@
 import Base from '../../layouts/Base.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import BookCard from '../../components/BookCard.astro';
+import ArcadeStrip from '../../components/ArcadeStrip.astro';
 import { getCollection } from 'astro:content';
 
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Base title="Books — mITy.John" description="Reimagined classics and picture books, in paperback and Kindle on Amazon.">
+  <ArcadeStrip variant="books" />
   <section class="bookstore">
     <SectionHeader level="04" section="THE BOOKSTORE" accentVar="var(--level-books)" inkVar="var(--ink-on-level-books)" title="Books, printed & kindled" />
     <p class="note">Reimagined classics and picture books the whole family can pretend to understand. Paperback &amp; Kindle on Amazon.</p>
