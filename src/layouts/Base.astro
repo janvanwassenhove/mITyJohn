@@ -61,6 +61,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="pdf-bar">
         <span class="pdf-title"></span>
         <span class="pdf-actions">
+          <a class="pdf-buy" href="#" target="_blank" rel="noopener">Buy on Amazon ↗</a>
           <a class="pdf-open" href="#" target="_blank" rel="noopener">Open in new tab ↗</a>
           <button class="pdf-close" type="button" aria-label="Close preview">✕</button>
         </span>
@@ -92,6 +93,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         const frame = dlg?.querySelector('.pdf-frame') as HTMLElement | null;
         const titleEl = dlg?.querySelector('.pdf-title') as HTMLElement | null;
         const openLink = dlg?.querySelector('.pdf-open') as HTMLAnchorElement | null;
+        const buyLink = dlg?.querySelector('.pdf-buy') as HTMLAnchorElement | null;
 
         const close = () => {
           dlg?.close();
@@ -104,6 +106,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           const src = btn.dataset.pdf!;
           if (titleEl) titleEl.textContent = btn.dataset.pdfTitle ?? 'Preview';
           if (openLink) openLink.href = src;
+          if (buyLink) {
+            const buy = btn.dataset.pdfBuy;
+            buyLink.href = buy ?? '#';
+            buyLink.hidden = !buy;
+          }
 
           // Desktop browsers render PDFs in an iframe; mobile ones mostly refuse,
           // so there we show the first-page render and let the button open the file.

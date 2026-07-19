@@ -15,6 +15,7 @@ import TalksTimeline from '../components/TalksTimeline.astro';
 import { getCollection } from 'astro:content';
 import urlMap from '../../url-map.json';
 import talks from '../data/talks.json';
+import insta from '../data/instagram.json';
 
 const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
@@ -47,6 +48,7 @@ const levels = [
   { no: '04', label: 'Books', section: 'The bookstore', href: '#books', count: `${inPrint} editions`, accent: 'var(--level-books)', ink: 'var(--ink-on-level-books)' },
   { no: '05', label: 'Talks', section: 'The stage', href: '/talks/', count: `${talks.length} talks`, accent: 'var(--level-stage)', ink: 'var(--ink-on-level-stage)' },
   { no: '06', label: 'Blog', section: 'Field notes', href: '/blog/', count: `${allPosts.length} posts`, accent: 'var(--level-notes)', ink: 'var(--ink-on-level-notes)' },
+  { no: '07', label: 'Insta', section: 'The dig', href: '#dig', count: `${insta.length} finds`, accent: 'var(--level-dig)', ink: 'var(--ink-on-level-dig)' },
 ];
 
 // §5.4 JS shim — compact map inlined from url-map.json (belt and braces under §5.3).

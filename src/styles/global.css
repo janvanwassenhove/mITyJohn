@@ -107,6 +107,14 @@ a:hover { color: var(--text); }
 #pdf-viewer .pdf-title { font-weight: 600; color: var(--text); }
 #pdf-viewer .pdf-actions { display: flex; align-items: center; gap: 14px; }
 #pdf-viewer .pdf-open { color: var(--accent-2); }
+#pdf-viewer .pdf-buy {
+  background: var(--accent-2);
+  color: var(--ink-on-accent-2);
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-btn-sm);
+}
+#pdf-viewer .pdf-buy:hover { filter: brightness(1.08); color: var(--ink-on-accent-2); }
 #pdf-viewer .pdf-close {
   background: transparent;
   border: 1px solid var(--border2);

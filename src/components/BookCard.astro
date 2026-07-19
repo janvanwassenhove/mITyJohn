@@ -36,6 +36,7 @@ const { title, series, badge, desc, buy, preview, cover } = book.data;
             data-pdf={preview}
             data-pdf-title={title}
             data-pdf-poster={preview.replace(/\.pdf$/, '-pdf-1024x658.jpg')}
+            data-pdf-buy={buy}
           >Preview</button>
         ) : (
           <a
