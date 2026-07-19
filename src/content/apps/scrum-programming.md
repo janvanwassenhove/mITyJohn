@@ -49,34 +49,26 @@ v1.1.0 (Java 17 LTS compatible)
   
 A glance of the scrum programming language using the 'Hello World' example:
 
-```
-#SPRINTGOAL Deliver our first Scrum program
-
-EPIC "SampleStories"
-
-    USER STORY "HelloWorld"
-
-        #REVIEW Our first Scrum Program
-        SAY "Hello world!"
-
-    END OF STORY
-
-END OF EPIC
-```
+<div class="spl-sample"><div class="sample-head"><span class="dots"><i></i><i></i><i></i></span><span class="file">hello-world.scrum</span></div><pre><code><span class="c-dir">#SPRINTGOAL</span> Deliver our first Scrum program
+&#32;
+<span class="c-kw">EPIC</span> <span class="c-str">"SampleStories"</span>
+&#32;
+    <span class="c-kw">USER STORY</span> <span class="c-str">"HelloWorld"</span>
+&#32;
+        <span class="c-dir">#REVIEW</span> Our first Scrum Program
+        <span class="c-kw">SAY</span> <span class="c-str">"Hello world!"</span>
+&#32;
+    <span class="c-kw">END OF STORY</span>
+&#32;
+<span class="c-kw">END OF EPIC</span></code></pre><div class="sample-foot">the ceremonies are the syntax</div></div>
 
 SCRUM also allows expressing intent directly:
 
-```
-USER STORY "Greeting"
-    #INTENT
+<div class="spl-sample"><div class="sample-head"><span class="dots"><i></i><i></i><i></i></span><span class="file">intent.scrum</span></div><pre><code><span class="c-kw">USER STORY</span> <span class="c-str">"Greeting"</span>
+    <span class="c-dir">#INTENT</span>
     Display a friendly greeting to the user.
-    #END INTENT
-END OF STORY
-```
-
-When SCRUM encounters an `#INTENT` block, the compiler interprets it during compilation.  
-AI may assist in translating intent into explicit logic, but the result is plain Java.  
-There is no AI dependency at runtime — execution remains deterministic and JVM-based.
+    <span class="c-dir">#END INTENT</span>
+<span class="c-kw">END OF STORY</span></code></pre><div class="sample-foot">When SCRUM encounters an <span class="c-dir">#INTENT</span> block, the compiler interprets it during compilation. AI may assist in translating intent into explicit logic, but the result is plain Java. There is no AI dependency at runtime — execution remains deterministic and JVM-based.</div></div>
 
 So if you want to become a Master SCRUM programmer, make sure you check it out 😉
 

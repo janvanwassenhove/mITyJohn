@@ -80,6 +80,64 @@ a:hover { color: var(--text); }
 .prose th { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted2); }
 .prose iframe { max-width: 100%; border: 0; border-radius: var(--radius-embed); }
 
+/* SCRUM code samples — shared by the homepage feature (ScrumFeature.astro) and
+   the SPL app page, which authors the same markup inline in its Markdown so the
+   two never drift apart. Global rather than scoped for exactly that reason. */
+.spl-samples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.prose > .spl-sample { margin: 1.4em 0; }
+.spl-sample {
+  display: flex;
+  flex-direction: column;
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card-lg);
+  overflow: hidden;
+}
+.spl-sample .sample-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption-xs);
+  color: var(--muted2);
+}
+.spl-sample .dots { display: flex; gap: 5px; }
+.spl-sample .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border3); }
+.spl-sample .file { color: var(--text); }
+.spl-sample .sample-foot {
+  margin-top: auto;
+  padding: 10px 16px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--text-caption-xs);
+  line-height: 1.6;
+  color: var(--muted2);
+}
+/* wins over `.prose pre`, which owns its own border and radius */
+.spl-sample pre,
+.prose .spl-sample pre {
+  margin: 0;
+  padding: 18px clamp(16px, 3vw, 24px);
+  overflow-x: auto;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.spl-sample .c-kw { color: var(--level-scrum); font-weight: 600; }
+.spl-sample .c-str { color: var(--ok); }
+.spl-sample .c-dir { color: var(--accent); }
+
 /* Book preview lightbox — renders the teaser PDF inline instead of downloading it. */
 #pdf-viewer {
   width: min(1000px, 94vw);

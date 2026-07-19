@@ -61,7 +61,12 @@
     <span class="c-kw">END OF STORY</span>
 
 <span class="c-kw">END OF EPIC</span></code></pre>
-    <div class="sample-foot"><span class="c-dir">#INTENT</span> states the what — the compiler writes the how, once, into Java</div>
+    <div class="sample-foot">
+      When SCRUM encounters an <span class="c-dir">#INTENT</span> block, the compiler interprets it
+      during compilation. AI may assist in translating intent into explicit logic, but the result is
+      plain Java. There is no AI dependency at runtime — execution remains deterministic and
+      JVM-based.
+    </div>
   </div>
 </div>
 
@@ -129,52 +134,7 @@
   }
   .spl-intro em { color: var(--text); font-style: italic; }
 
-  /* SPL samples — the language's own syntax, straight from the SPL docs */
-  .spl-samples {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 14px;
-    margin-top: 18px;
-  }
-  .spl-sample {
-    display: flex;
-    flex-direction: column;
-    background: var(--s1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card-lg);
-    overflow: hidden;
-  }
-  .sample-foot {
-    margin-top: auto;
-    padding: 10px 16px;
-    border-top: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption-xs);
-    color: var(--muted2);
-  }
-  .sample-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: var(--text-caption-xs);
-    color: var(--muted2);
-  }
-  .dots { display: flex; gap: 5px; }
-  .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--border3); }
-  .file { color: var(--text); }
-  .spl-sample pre {
-    margin: 0;
-    padding: 18px clamp(16px, 3vw, 24px);
-    overflow-x: auto;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 1.65;
-    color: var(--muted);
-  }
-  .c-kw { color: var(--level-scrum); font-weight: 600; }
-  .c-str { color: var(--ok); }
-  .c-dir { color: var(--accent); }
+  /* SPL samples — the language's own syntax, straight from the SPL docs.
+     Styling lives in global.css because the SPL app page reuses the same
+     markup; see the "SCRUM code samples" block there. */
 </style>
