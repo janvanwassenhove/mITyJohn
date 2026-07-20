@@ -200,8 +200,8 @@ you used to think.
 
 <figure>
   <img src="/blog/write-the-brief-not-the-prompts/home.webp"
-       alt="The homepage of the rebuilt mityjohn.com, with the headline 'Knowing our past helps us build what's next' above eight numbered level cards."
-       width="1416" height="1144" loading="lazy" />
+       alt="The homepage of the rebuilt mityjohn.com, with the headline 'What happens when curiosity gets root access' above eight numbered level cards and a row of counters."
+       width="1395" height="1110" loading="lazy" />
   <figcaption>Eight numbered levels, because the brief specified structure and said nothing about tone.</figcaption>
 </figure>
 
