@@ -194,8 +194,15 @@ actions.push({ label: 'Info', href: `/apps/${app.id}/` });
     const hydrate = () => {
       if (hydrated) return;
       hydrated = true;
+      // Clone the server-rendered shot rather than building a fresh <img>: Astro
+      // scopes .shot to a data-astro-cid-* attribute, and createElement produces
+      // an element without it. Those unscoped images got none of the styling —
+      // they landed in the flex flow at full size instead of absolutely
+      // positioned and hidden, which broke the crossfade and buried the badge.
+      const template = shots[0];
+      if (!template) return;
       for (const src of rest) {
-        const img = document.createElement('img');
+        const img = template.cloneNode(false) as HTMLImageElement;
         img.className = 'shot';
         img.src = src;
         img.alt = '';
