@@ -108,6 +108,10 @@ actions.push({ label: 'Info', href: `/apps/${app.id}/` });
     inset: 0;
     background: linear-gradient(180deg, rgba(13, 12, 11, 0.55), rgba(13, 12, 11, 0.15) 45%, rgba(13, 12, 11, 0.7));
   }
+  /* z-index only applies to positioned elements. .tag and .dots are already
+     absolute; .code was not, so it stayed in flow and the ::after gradient
+     painted over it — invisible on light screenshots, washed out on dark ones. */
+  .art.has-shot .code { position: relative; }
   .art.has-shot .code, .art.has-shot .tag, .art.has-shot .dots { z-index: 2; }
   .art.has-shot .code { background: rgba(13, 12, 11, 0.72); }
   /* top-right corner flag on the card art */
