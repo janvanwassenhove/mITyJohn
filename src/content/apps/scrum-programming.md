@@ -5,7 +5,7 @@ tag: "lab"
 cat: "lab"
 blurb: "An intentional programming language: you write ceremonies, it compiles to Java."
 repo: "scrum"
-order: 15
+order: 16
 wpId: 100
 wpSlug: "scrum-programming"
 ---

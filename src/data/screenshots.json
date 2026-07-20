@@ -144,5 +144,23 @@
       "src": "/screenshots/sportsmadness-1.webp",
       "alt": "sportsmadness screenshot 1"
     }
+  ],
+  "spritelab": [
+    {
+      "src": "/screenshots/spritelab-1.webp",
+      "alt": "spritelab screenshot 1"
+    },
+    {
+      "src": "/screenshots/spritelab-2.webp",
+      "alt": "spritelab screenshot 2"
+    },
+    {
+      "src": "/screenshots/spritelab-3.webp",
+      "alt": "spritelab screenshot 3"
+    },
+    {
+      "src": "/screenshots/spritelab-4.webp",
+      "alt": "spritelab screenshot 4"
+    }
   ]
 }

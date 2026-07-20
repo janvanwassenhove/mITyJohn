@@ -28,6 +28,7 @@ const SOURCES = {
   loveflix: { repo: 'LoveFlix', files: ['LoveFlix.png'] },
   mitylex: { repo: 'mITyLex', files: ['public/lexy.png'] },
   'scrum-programming': { repo: 'scrum', files: ['asset/banner.png'] },
+  spritelab: { repo: 'SpriteLab', files: ['docs/screenshots/editor.png', 'docs/screenshots/timeline.png', 'docs/screenshots/hitboxes.png', 'docs/screenshots/ai-generation.png'] },
 };
 
 // Apps whose repos hold no usable screenshot (only sprites/icons/frames). These

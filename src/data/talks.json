@@ -38,6 +38,15 @@
   },
   {
     "year": 2025,
+    "date": "1 December 2025",
+    "event": "JCast S01E08",
+    "location": "Online",
+    "title": "AI, Java & de menselijke kant van ontwikkeling",
+    "kind": "Podcast",
+    "link": "https://jcast.dev/episodes/s01e08-ai-with-jan/"
+  },
+  {
+    "year": 2025,
     "date": "6–10 October 2025",
     "event": "Devoxx 2025",
     "location": "Antwerp, Belgium",
