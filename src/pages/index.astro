@@ -94,13 +94,13 @@ for (const e of urlMap) {
       the software archeologist&rsquo;s lab
     </div>
     <h1 data-reveal>
-      Knowing our past<br />helps us build
-      <span class="hl">what&rsquo;s next<span class="cursor mj-anim"></span></span>
+      What happens when <br />curiosity gets
+      <span class="hl">root access<span class="cursor mj-anim"></span></span>
     </h1>
     <p data-reveal class="lead">
-      A one-person lab, digging up where software has been to work out where it&rsquo;s going.
-      What happens when curiosity gets root access: apps, picture books, essays, and one
-      <em>gloriously</em> unnecessary programming language.<br /><br />
+      Apps, picture books, essays, talks, and one <em>gloriously</em> unnecessary programming
+      language. A one-person lab, digging up where software has been to work out where
+      it&rsquo;s going.<br /><br />
       <span class="hl">Now with 100% more &ldquo;why did he build that?&rdquo;</span>
     </p>
     <div data-reveal class="levels">
@@ -260,6 +260,10 @@ for (const e of urlMap) {
     margin: 0 0 26px;
     text-wrap: balance;
   }
+  /* The hard break sets the desktop rhythm, but on a phone it strands "when" on
+     a line of its own — below that width, let text-wrap: balance do the work. */
+  h1 br { display: none; }
+  @media (min-width: 640px) { h1 br { display: inline; } }
   .hl { color: var(--accent); position: relative; }
   .cursor { display: inline-block; width: 0.5ch; height: 0.9em; background: var(--accent); margin-left: 6px; vertical-align: -0.06em; animation: blink var(--blink-duration) step-end infinite; }
   .lead { max-width: 620px; font-size: var(--text-lead); line-height: var(--leading-body); color: var(--muted); margin: 0 0 36px; text-wrap: pretty; }
