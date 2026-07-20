@@ -1,15 +1,23 @@
 ---
 // Blog post layout — not designed (gap-list G1/G9 context): built from the design's
-// type system. Title block, mono meta line (date + tags), prose body, Giscus below fold.
+// type system. Title block, mono meta line (date + tags), prose body. No comments:
+// D4 specified Giscus, but Jan dropped comments for the new site, so the scaffold
+// went with them. See the correction note on D4 in MIGRATION_BRIEF.md.
 import Base from './Base.astro';
-import Giscus from '../components/Giscus.astro';
 import type { CollectionEntry } from 'astro:content';
+import imageDims from '../data/image-dims.json';
 
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
 const { title, date, tags, cover, ogImage } = post.data;
 const fmt = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
-const coverDims = cover?.match(/-(\d+)x(\d+)\.\w+$/);
+// Same rule as the markdown images (astro.config): size from the WordPress
+// `-WxH` suffix, else the measured lookup. The cover is the LCP element, so it
+// must reserve its box before it loads.
+const suffix = cover?.match(/-(\d+)x(\d+)\.\w+$/);
+const coverDims = suffix
+  ? [suffix[1], suffix[2]]
+  : (cover ? imageDims[cover.split('?')[0]] : undefined);
 ---
 
 <Base title={`${title} — mITy.John`} ogImage={ogImage ?? cover} ogType="article">
@@ -26,15 +34,14 @@ const coverDims = cover?.match(/-(\d+)x(\d+)\.\w+$/);
           src={cover}
           alt=""
           fetchpriority="high"
-          width={coverDims?.[1]}
-          height={coverDims?.[2]}
+          width={coverDims?.[0]}
+          height={coverDims?.[1]}
         />
       )}
     </header>
     <div class="prose">
       <slot />
     </div>
-    <Giscus />
   </article>
 </Base>
 

@@ -126,7 +126,7 @@ There are many different tools that businesses can use for synthetic monitoring.
 
 **Transaction monitoring** is used to monitor the performance of specific transactions or business processes on a website or web-based application. It involves tracking the performance of these transactions and providing detailed metrics and insights into how they are performing. 
 
-Often it is used to track the performance of critical business processes, such as the checkout process on an e-commerce website or the submission of a form on a banking website. By tracking the performance of these processes, businesses can identify performance bottlenecks and troubleshoot issues before they impact end users.![Service & Transaction Monitoring | Operations | Neunen IT Consulting](blob:https://mityjohn.com/62b810ea-9bb9-4cf0-8e7d-c549c07ae1ec) 
+Often it is used to track the performance of critical business processes, such as the checkout process on an e-commerce website or the submission of a form on a banking website. By tracking the performance of these processes, businesses can identify performance bottlenecks and troubleshoot issues before they impact end users.
 
 Transaction monitoring tools typically provide **detailed metrics on the performance of individual transactions**, including metrics such as response time, error rate, and throughput. Some tools also include diagnostic capabilities, such as the ability to capture detailed traces of transaction requests and responses, which can help developers identify the root cause of performance problems. 
 

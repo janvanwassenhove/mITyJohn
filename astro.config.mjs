@@ -2,9 +2,12 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import imageDims from './src/data/image-dims.json' with { type: 'json' };
 
-/** Markdown images: lazy-load + async decode, and width/height parsed from the
- *  WordPress `-WxH` filename suffix so layout doesn't shift (N5: CLS/LCP). */
+/** Markdown images: lazy-load + async decode, and width/height so layout doesn't
+ *  shift (N5: CLS/LCP). Most WordPress uploads carry their size in the filename
+ *  (`-1024x585.webp`); the originals do not, so those fall back to measured
+ *  dimensions from scripts/build-image-dims.mjs. */
 function rehypeImgAttrs() {
   /** @param {any} node @param {(n: any) => void} fn */
   const walk = (node, fn) => { fn(node); (node.children ?? []).forEach((c) => walk(c, fn)); };
@@ -12,8 +15,10 @@ function rehypeImgAttrs() {
     if (n.type === 'element' && n.tagName === 'img') {
       n.properties.loading ??= 'lazy';
       n.properties.decoding ??= 'async';
-      const m = String(n.properties.src ?? '').match(/-(\d+)x(\d+)\.\w+$/);
-      if (m) { n.properties.width ??= m[1]; n.properties.height ??= m[2]; }
+      const src = String(n.properties.src ?? '');
+      const m = src.match(/-(\d+)x(\d+)\.\w+$/);
+      const wh = m ? [m[1], m[2]] : imageDims[src.split('?')[0]];
+      if (wh) { n.properties.width ??= wh[0]; n.properties.height ??= wh[1]; }
     }
   });
 }

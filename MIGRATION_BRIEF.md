@@ -739,7 +739,7 @@ R1–R7 remain mandatory regardless.
 | D1 | CDN / redirects | **Cloudflare free plan** in front of GitHub Pages |
 | D2 | Static site generator | **Astro** |
 | D3 | "Fresh from the lab" carousel | **Superseded** — replaced by the Claude Design homepage treatment |
-| D4 | Comments | **Giscus** on GitHub Discussions, blog posts only |
+| D4 | Comments | **Superseded 2026-07-20 — dropped entirely.** Originally: Giscus on GitHub Discussions, blog posts only. Jan chose to drop comments for the new site, so the scaffold was removed rather than left disabled. Nothing to migrate: F5 confirmed comments were closed site-wide on WordPress. |
 | D5 | Analytics | **Cloudflare Web Analytics only.** No GA4, no Site Kit, no consent banner. Search Console retained separately. Export 12 months of GA history to CSV before decommissioning WordPress. |
 | D6 | Newsletter | **Dropped.** RSS only. Do not build signup forms or email capture. |
 | D7 | Taxonomy | **Tags only.** Categories are flattened into tags. Legacy `?cat=N` and `?category_name=x` URLs redirect to `/tags/{slug}/`; where a category has no tag equivalent, create the tag. |

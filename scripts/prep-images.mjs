@@ -8,9 +8,14 @@
 // e.g. node scripts/prep-images.mjs my-post "../drafts/a.png=cover:cover" "../drafts/b.png=cables"
 
 import sharp from 'sharp';
-import { mkdirSync, existsSync } from 'node:fs';
+import { mkdirSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+
+// These filenames carry no `-WxH` suffix, so the markdown plugin can only size
+// them from the measured lookup. Update it here rather than hoping someone
+// remembers to rerun build-image-dims.mjs.
+const DIMS = fileURLToPath(new URL('../src/data/image-dims.json', import.meta.url));
 
 const [slug, ...specs] = process.argv.slice(2);
 if (!slug || !specs.length) {
@@ -20,6 +25,8 @@ if (!slug || !specs.length) {
 
 const OUT = fileURLToPath(new URL(`../public/blog/${slug}/`, import.meta.url));
 mkdirSync(OUT, { recursive: true });
+
+const dims = JSON.parse(readFileSync(DIMS, 'utf8'));
 
 for (const spec of specs) {
   const [src, rest] = spec.split('=');
@@ -38,9 +45,15 @@ for (const spec of specs) {
     .webp({ quality: 82 })
     .toFile(path.join(OUT, `${name}.webp`));
 
+  dims[`/blog/${slug}/${name}.webp`] = [info.width, info.height];
+
   console.log(
     `${name}.webp`.padEnd(14) +
       `${meta.width}x${meta.height} -> ${info.width}x${info.height}  ` +
       `${(info.size / 1024).toFixed(0)} KB  /blog/${slug}/${name}.webp`,
   );
 }
+
+const sorted = Object.fromEntries(Object.keys(dims).sort().map((k) => [k, dims[k]]));
+writeFileSync(DIMS, JSON.stringify(sorted, null, 0) + '\n');
+console.log(`src/data/image-dims.json updated (${Object.keys(sorted).length} images)`);

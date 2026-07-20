@@ -27,7 +27,7 @@ As originally being a Java Developer and because Java is widely available I used
 
 ## Want to try it out?
 
-The full implementation and docmentation can be found on [Github](https://github.com/janvanwassenhove/scrum).  
+The full implementation and documentation can be found on [Github](https://github.com/janvanwassenhove/scrum).  
 SCRUM is experimental by design and evolves as a playground for new ideas in programming.
 
 To install it locally, download the development kit:
@@ -72,7 +72,7 @@ SCRUM also allows expressing intent directly:
 
 So if you want to become a Master SCRUM programmer, make sure you check it out 😉
 
-Also, being an actual SCRUM programmer looks good on you curriculum!
+Also, being an actual SCRUM programmer looks good on your curriculum!
 
 Feel free to use the badge on your socials:
 
