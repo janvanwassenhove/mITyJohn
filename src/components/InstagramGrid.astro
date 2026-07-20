@@ -34,11 +34,14 @@ const items = all.slice(0, 12); // two rows of six
           </a>
         ))}
       </div>
-      {/* the grid is a slice of the feed — nudge people to the rest of it */}
-      <a class="more" href="https://www.instagram.com/mity.john/" target="_blank" rel="noopener">
+      {/* the grid is a slice of the feed, so the trail runs into the one CTA */}
+      <div class="cta">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span>more finds on Instagram →</span>
-      </a>
+        <a class="follow" href="https://www.instagram.com/mity.john/" target="_blank" rel="noopener">
+          Follow @mity.john on Instagram →
+        </a>
+        <p class="cta-note">A new find most days. No algorithm required.</p>
+      </div>
     </div>
   </section>
   </>
@@ -54,27 +57,33 @@ const items = all.slice(0, 12); // two rows of six
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--gap-tiles); }
   @media (min-width: 900px) { .grid { grid-template-columns: repeat(6, 1fr); } }
 
-  .more {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 18px;
+  .cta { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 24px; }
+  .follow {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: var(--radius-pill);
+    background: var(--level-dig);
+    color: var(--ink-on-level-dig);
     font-family: var(--font-mono);
     font-size: var(--text-caption);
-    color: var(--muted2);
+    font-weight: 600;
+    transition: filter var(--hover-duration) var(--hover-ease), transform var(--hover-duration) var(--hover-ease);
   }
-  .more:hover { color: var(--level-dig); }
-  .more .dots { display: flex; gap: 5px; }
-  .more .dots i {
+  .follow:hover { filter: brightness(1.08); transform: translateY(-2px); }
+  .cta-note { font-family: var(--font-mono); font-size: var(--text-caption-xs); color: var(--muted2); margin: 0; }
+  .cta .dots { display: flex; gap: 5px; }
+  .cta .dots i {
     width: 6px; height: 6px; border-radius: 50%;
     background: var(--level-dig); opacity: 0.25;
     animation: mj-trail 1.6s ease-in-out infinite;
   }
-  .more .dots i:nth-child(2) { animation-delay: 0.2s; }
-  .more .dots i:nth-child(3) { animation-delay: 0.4s; }
+  .cta .dots i:nth-child(2) { animation-delay: 0.2s; }
+  .cta .dots i:nth-child(3) { animation-delay: 0.4s; }
   @keyframes mj-trail { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 1; transform: scale(1); } }
-  @media (prefers-reduced-motion: reduce) { .more .dots i { animation: none; opacity: 0.6; } }
+  @media (prefers-reduced-motion: reduce) {
+    .cta .dots i { animation: none; opacity: 0.6; }
+    .follow:hover { transform: none; }
+  }
   .tile {
     position: relative;
     aspect-ratio: 1;
