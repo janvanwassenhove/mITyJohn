@@ -56,14 +56,14 @@
     ]
   },
   "mITyStudio": {
-    "tag": "v1.1.6",
-    "date": "2026-07-20T22:28:41Z",
-    "changelog": "## mITyStudio v1.1.6\n\nAutomated Windows build of `master` @ d2237ae.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/d2237ae3d3bc06b9e141a659f063ec244c73e4df/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/d2237ae3d3bc06b9e141a659f063ec244c73e4df/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/d2237ae3d3bc06b9e141a659f063ec244c73e4df/docs/screenshots/voices.png)\n\n### Changes\nAdd a built-in synth engine as the batteries-included default instrument\n\nUntil now every pitched instrument track rendered through FluidSynth + a\nSoundFont; with neither installed, instrument rendering just failed. Add a\npure-numpy synth engine (no external binaries) that is the baked-in default\nand always makes sound, while SoundFonts stay an optional upgrade.\n\nBackend\n- render/synth_engine.py: 12 declarative patches (full band + a synthesized\n  drum kit) covering every instrument track type. PolyBLEP saw/square, FFT\n  lowpass (no scipy), vectorised period-wise Karplus-Strong for plucks, 2-op\n  FM e-piano, additive organ, GM-note drum kit. synth_catalog() +\n  synth_patch_specs() expose it.\n- render/synth_renderer.py: SynthRenderer renders straight from note events.\n  soundfont_renderer._select_renderer picks per track: explicit synth patch\n  -> synth; else FluidSynth + a resolvable SoundFont -> SoundFont; else ->\n  synth (guaranteed). ENGINE_VERSION 7 -> 8. Priority per product decision:\n  a fitting SoundFont still wins by default when a library exists; the synth\n  is the fallback and the explicit choice.\n- InstrumentConfig gains synth_patch. New assign_synth op (validated, clears\n  the SoundFont so the synth wins); add_track accepts synth_patch.\n\nAgent knowledge\n- asset_retrieval unio",
+    "tag": "v1.1.11",
+    "date": "2026-07-21T19:14:22Z",
+    "changelog": "## mITyStudio v1.1.11\n\nAutomated Windows build of `master` @ 840d444.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/840d444628954e8bc6ed68c5402e3cff46d3a7cf/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/840d444628954e8bc6ed68c5402e3cff46d3a7cf/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/840d444628954e8bc6ed68c5402e3cff46d3a7cf/docs/screenshots/voices.png)\n\n### Changes\nFix: an explicitly requested BPM is no longer overridden by the genre range\n\nReported: 'BPM is not taken into account'. Reproduced and self-inflicted —\nthe genre tempo table I added in M1 as *guidance* had become a *constraint*:\n\n- song_pipeline._fallback_spec ignored any tempo in the prompt outright, so\n  'een punk nummer op 170 bpm' generated at 142 and 'pop nummer, 175 bpm'\n  at 110 (the genre midpoint).\n- _producer_spec clamped even a correctly-parsed tempo into the genre range\n  (min(max(bpm, lo-15), hi+15)), so pop + 175 bpm came out at 140.\n- The planner prompt told the model to 'pick create_song's bpm inside the\n  range', pushing the same override into the normal chat flow.\n\nNow: explicit_bpm() parses a named tempo ('170 bpm', 'BPM: 96', '128bpm',\nand not '...summer 2024') and it ALWAYS wins — the genre range only applies\nwhen the user named no tempo, and only to a model-invented one. Prompt and\ncapability registry reworded to match for create_song and change_tempo.\n\nAlso fixes a test-isolation bug the change surfaced: test_face_id's skipif\nwas evaluated against the developer's real workspace (models installed)\nwhile the test body ran in the temp workspace fixture (models absent), so\nit failed as soon as the models existed. It now points face_id at the real\nmodel dir explicitly ",
     "assets": [
       {
-        "name": "mITyStudio.Setup.1.1.6.exe",
-        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.6/mITyStudio.Setup.1.1.6.exe",
-        "size": 153017652,
+        "name": "mITyStudio.Setup.1.1.11.exe",
+        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.11/mITyStudio.Setup.1.1.11.exe",
+        "size": 153051696,
         "downloads": 0,
         "platform": "Windows"
       }
@@ -160,19 +160,19 @@
         "name": "01-main-menu.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
         "size": 867069,
-        "downloads": 3
+        "downloads": 5
       },
       {
         "name": "02-campaign.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
         "size": 60247,
-        "downloads": 3
+        "downloads": 5
       },
       {
         "name": "03-gameplay.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
         "size": 239706,
-        "downloads": 3
+        "downloads": 5
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
