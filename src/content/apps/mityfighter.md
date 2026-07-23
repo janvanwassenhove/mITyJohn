@@ -33,6 +33,16 @@ And yes — the whole thing was prototyped in half a day, including:
 Live game:  
 [https://janvanwassenhove.github.io/mITyFighter/](https://janvanwassenhove.github.io/mITyFighter/)
 
+## TechFighter — the one that goes to conferences
+
+The half-day prototype grew a much bigger sibling. **TechFighter** lives on its own branch of the same repo, and it is the version I bring on stage: 17 playable fighters, a story mode, and local two-player on one shared keyboard. Where the original was hand-rolled HTML and JavaScript, this one is TypeScript on Phaser 3.
+
+The roster is the part that gives it away — Sir Budgetalot, Count Cardboardius III, General Dramatic Pause and Elder Honkstorm are all in there, alongside Bartholomew Blaze and Cassandra Coil below.
+
+[Play TechFighter →](https://janvanwassenhove.github.io/mITyFighter/TechFighter/)
+
+Landscape only. It will ask you to turn your phone, and it means it.
+
 ![](/wp-content/uploads/2026/01/image-8-1024x714.webp)
 
 ## The experiment: Half-a-day game dev with Copilot
