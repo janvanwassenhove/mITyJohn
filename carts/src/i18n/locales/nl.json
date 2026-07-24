@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Vlaamse kaartspellen, aan tafel of online.",
-  "app.phase": "Fase 4 — spellen & regelvarianten",
+  "app.phase": "Fase 4 — vier spellen",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Speel een sessie wiezen tegen drie botspelers. De taal- en themaswitch hierboven werken; regels en aannames staan in docs/REGELS.md.",
   "placeholder.ruleset": "Geladen ruleset: {name} (v{version}, {contracts} contracten)",
@@ -119,5 +119,18 @@
   "opt.targetPoints": "Sessiedoel (punten)",
   "manille.noTrump": "Zonder troef",
   "contract.kleine-miserie": "Kleine miserie",
-  "manille.intro": "Speel manillen tegen drie bots in vaste ploegen. 32 kaarten, de tien boven de aas, spelen tot je puntendoel. Regelvarianten kies je hieronder."
+  "manille.intro": "Speel manillen tegen drie bots in vaste ploegen. 32 kaarten, de tien boven de aas, spelen tot je puntendoel. Regelvarianten kies je hieronder.",
+  "game.bieden": "Bieden",
+  "bieden.intro": "Speel bieden tegen drie bots in vaste ploegen. 32 kaarten, bied op het aantal punten, hoogste bieder komt uit en bepaalt de troef.",
+  "bieden.title": "Biedronde",
+  "bieden.pass": "Pas",
+  "bieden.bidLabel": "Bied {points}",
+  "bieden.bids": "{name} biedt {points}",
+  "bieden.passed": "{name} past",
+  "bieden.declarer": "{name} speelt {points}",
+  "bieden.goal": "Speler {name} moet {points} punten halen",
+  "bieden.made": "Bod gehaald",
+  "bieden.failed": "Nat",
+  "bieden.redeal": "Iedereen past — de volgende deler deelt opnieuw.",
+  "bieden.trumpPending": "Troef: eerste kaart van {name}"
 }

@@ -6,6 +6,14 @@ import { ACE, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
+import {
+  biedenCardPoints,
+  biedenStrength,
+  teamOf as biedenTeamOf,
+  MIN_BID,
+  MAX_BID,
+  type BiedenGift,
+} from './engine/bieden';
 import { SUITS } from './engine/cards';
 
 export const BOT_LEVELS = ['easy', 'normal', 'strong'] as const;
@@ -296,4 +304,83 @@ function manilleBeats(
   if (!cTrump && tTrump) return false;
   if (candidate.suit === target.suit) return strength(candidate.rank) > strength(target.rank);
   return candidate.suit === ledSuit && target.suit !== ledSuit;
+}
+
+/* ---------- bieden (REGELS-BIEDEN.md) ---------- */
+
+/** Schat de haalbare punten van een hand: hoge troefkaarten + azen/tienen. */
+function biedenHandValue(hand: Card[]): number {
+  // beste kleur als troef veronderstellen
+  let best = 0;
+  for (const suit of SUITS) {
+    const trumpVal = hand.reduce(
+      (s, c) => s + biedenCardPoints(c, c.suit === suit ? suit : ('X' as Suit)),
+      0,
+    );
+    const lengthBonus = hand.filter((c) => c.suit === suit).length * 6;
+    best = Math.max(best, trumpVal + lengthBonus);
+  }
+  return best;
+}
+
+export function chooseBiedenBid(gift: BiedenGift, player: number): number | null {
+  const legal = gift.bidding.legalBids(player);
+  if (legal.length === 0) return null;
+  const value = biedenHandValue(gift.hands[player] as Card[]);
+  // Bied conservatief: ruw geschatte waarde afgerond, enkel als het minimum haalbaar lijkt.
+  const target = Math.min(MAX_BID, Math.max(MIN_BID, Math.round(value / 10) * 10));
+  if (value < MIN_BID - 10) return null;
+  const pick = legal.filter((b) => b <= target).at(-1);
+  return pick ?? null;
+}
+
+export function chooseBiedenCard(gift: BiedenGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const trumpSuit = gift.trumpSuit;
+  const trick = gift.trick;
+  const str = (c: Card): number => biedenStrength(c.rank, c.suit, trumpSuit);
+  const lowest = [...legal].sort((a, b) => str(a) - str(b))[0] as Card;
+
+  // Declarer komt uit met zijn langste kleur (die wordt troef), hoog.
+  if (trick.length === 0 && gift.trumpSuit === null) {
+    const suit = longestSuit(legal);
+    return legal.filter((c) => c.suit === suit).sort((a, b) => b.rank - a.rank)[0] as Card;
+  }
+  if (level === 'easy') return lowest;
+
+  if (trick.length === 0) {
+    return [...legal].sort((a, b) => str(b) - str(a))[0] as Card;
+  }
+
+  const led = (trick[0] as { card: Card }).card.suit;
+  let bestPlay = trick[0] as { player: number; card: Card };
+  for (const p of trick.slice(1)) {
+    const cT = trumpSuit !== null && p.card.suit === trumpSuit;
+    const bT = trumpSuit !== null && bestPlay.card.suit === trumpSuit;
+    const wins =
+      cT && !bT
+        ? true
+        : cT === bT && p.card.suit === bestPlay.card.suit && str(p.card) > str(bestPlay.card);
+    if (wins) bestPlay = p;
+  }
+  const partnerWinning = biedenTeamOf(bestPlay.player) === biedenTeamOf(player);
+  const beatsBest = (c: Card): boolean => {
+    const cT = trumpSuit !== null && c.suit === trumpSuit;
+    const bT = trumpSuit !== null && bestPlay.card.suit === trumpSuit;
+    if (cT && !bT) return true;
+    if (!cT && bT) return false;
+    if (c.suit === bestPlay.card.suit) return str(c) > str(bestPlay.card);
+    return false;
+  };
+  if (partnerWinning) {
+    // Maat ligt: smeer punten of gooi goedkoop.
+    const rich = [...legal].sort(
+      (a, b) => biedenCardPoints(b, trumpSuit) - biedenCardPoints(a, trumpSuit),
+    )[0] as Card;
+    return trick.length === 3 && biedenCardPoints(rich, trumpSuit) > 0 ? rich : lowest;
+  }
+  const winners = legal.filter(beatsBest).sort((a, b) => str(a) - str(b));
+  void led;
+  return winners.length > 0 ? (winners[0] as Card) : lowest;
 }

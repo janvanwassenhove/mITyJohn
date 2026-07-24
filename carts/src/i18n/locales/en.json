@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Flemish card games, at the table or online.",
-  "app.phase": "Phase 4 — games & rule variants",
+  "app.phase": "Phase 4 — four games",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Play a session of wiezen (Flemish whist) against three bot players. The language and theme switches above work; rules and assumptions live in docs/REGELS.md.",
   "placeholder.ruleset": "Loaded ruleset: {name} (v{version}, {contracts} contracts)",
@@ -119,5 +119,18 @@
   "opt.targetPoints": "Session target (points)",
   "manille.noTrump": "No trump",
   "contract.kleine-miserie": "Small misère",
-  "manille.intro": "Play manille against three bots in fixed teams. 32 cards, the ten above the ace, playing to your points target. Pick rule variants below."
+  "manille.intro": "Play manille against three bots in fixed teams. 32 cards, the ten above the ace, playing to your points target. Pick rule variants below.",
+  "game.bieden": "Bieden",
+  "bieden.intro": "Play bieden against three bots in fixed teams. 32 cards, bid the number of points, the highest bidder leads and sets trump.",
+  "bieden.title": "Bidding",
+  "bieden.pass": "Pass",
+  "bieden.bidLabel": "Bid {points}",
+  "bieden.bids": "{name} bids {points}",
+  "bieden.passed": "{name} passes",
+  "bieden.declarer": "{name} plays {points}",
+  "bieden.goal": "{name} must make {points} points",
+  "bieden.made": "Bid made",
+  "bieden.failed": "Down",
+  "bieden.redeal": "Everyone passed — the next dealer deals again.",
+  "bieden.trumpPending": "Trump: {name}'s first card"
 }

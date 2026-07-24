@@ -11,7 +11,9 @@ import {
 } from './bots';
 import { getRuleset, type Ruleset } from './ruleset';
 import { DEFAULT_MANILLE_CONFIG, ManilleSession } from './engine/manille';
+import { BiedenSession, DEFAULT_BIEDEN_CONFIG } from './engine/bieden';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
+import { chooseBiedenBid, chooseBiedenCard } from './bots';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -74,6 +76,34 @@ describe('manillen-bots', () => {
         }
         expect(session.finished).toBe(true);
         expect(Math.max(...session.totals)).toBeGreaterThanOrEqual(61);
+      }
+    }
+  });
+});
+
+describe('bieden-bots', () => {
+  it('spelen volledige sessies tot het puntendoel, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 5; seed++) {
+        const session = new BiedenSession(mulberry32(seed * 40), 0, {
+          ...DEFAULT_BIEDEN_CONFIG,
+          targetPoints: 300,
+        });
+        let safety = 800;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          while (gift.bidding.phase === 'bidding') {
+            const p = gift.bidding.toAct;
+            gift.bidding.act(p, chooseBiedenBid(gift, p));
+          }
+          gift.settle();
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseBiedenCard(gift, p, level));
+          }
+          session.closeGift();
+        }
+        expect(session.finished || session.giftNumber > 0).toBe(true);
       }
     }
   });

@@ -4,6 +4,7 @@
 
 import { mulberry32, type Card, type Suit } from './engine/cards';
 import { ManilleSession } from './engine/manille';
+import { BiedenSession } from './engine/bieden';
 import { Session } from './engine/game';
 import type { BidAction } from './engine/bidding';
 import type { Ruleset } from './ruleset';
@@ -187,6 +188,78 @@ export function replayManille(state: PersistedManille): ManilleSession {
         if (!session.finished) session.nextGift();
         break;
     }
+  }
+  return session;
+}
+
+/* ---------- bieden (zelfde actielog-principe) ---------- */
+
+const BIEDEN_KEY = 'carts.bieden.v1';
+
+export type BiedenAction =
+  | { t: 'bid'; p: number; bid: number | null }
+  | { t: 'play'; p: number; card: Card }
+  | { t: 'close' };
+
+export interface PersistedBieden {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  actions: BiedenAction[];
+}
+
+export function newBieden(seed: number, botLevel: BotLevel): PersistedBieden {
+  return { v: 1, seed, botLevel, actions: [] };
+}
+
+export function saveBieden(state: PersistedBieden): void {
+  try {
+    localStorage.setItem(BIEDEN_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadBieden(): PersistedBieden | null {
+  try {
+    const raw = localStorage.getItem(BIEDEN_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedBieden;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearBieden(): void {
+  try {
+    localStorage.removeItem(BIEDEN_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayBieden(state: PersistedBieden): BiedenSession {
+  const session = new BiedenSession(mulberry32(state.seed));
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'bid':
+        gift.bidding.act(action.p, action.bid);
+        break;
+      case 'play':
+        if (gift.declarer === null) gift.settle();
+        gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
+    if (gift.bidding.phase === 'done' && gift.declarer === null && !gift.score) gift.settle();
   }
   return session;
 }

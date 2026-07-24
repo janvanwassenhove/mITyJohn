@@ -21,7 +21,7 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 
 1. **Wiezen** (kleurenwiezen, Vlaams standaard) — eerst.
 2. Daarna, in volgorde (bevestigd 2026-07-24): een **kleurenwiezen-variant**,
-   **manillen** en **bieden**.
+   **manillen** en **bieden** — alle drie geïmplementeerd.
 
 ## §4 Regels & rulesets
 
@@ -95,7 +95,7 @@ alleen `main` deployen.
 | 4a | Kleurenwiezen-variant `vlaams-cafe` (piccolo + troefplicht) met rulesetkeuze in de app | ✅ |
 | 4b | Manillen speelbaar: eigen engine (10 boven aas, kaartpunten, vaste teams, troefkeuze deler, troefplicht, tot 101), spelkeuze in de app, persistentie — op de aannames uit [REGELS-MANILLEN.md](REGELS-MANILLEN.md) | ✅ |
 | 4c | Regelvarianten als **sessie-opties** op het startscherm: wiezen (troel-doel 8/9, troel overbiedbaar/onoverbiedbaar, kleine+grote miserie) en manille (puntenmodel 60/68, troefbepaling deler/laatste-kaart/maat, multiplicators, "maat ligt", sessiedoel 101/61); opties in de persistentie | ✅ |
-| 4d | Bieden (vierde spel) | ◻ |
+| 4d | Bieden speelbaar: eigen engine (32 kaarten, troef-/niet-troefwaarden, biedveiling om punten, hoogste bieder komt uit en bepaalt troef, troefvrijheid, 151 punten, zero-sum ±bod tot 500), spelkeuze in de app, persistentie — op de aannames uit [REGELS-BIEDEN.md](REGELS-BIEDEN.md) | ✅ |
 | 5 | Online multiplayer (aparte beslissing: vereist backend/workers) | ◻ |
 
 ## §13 Open punten

@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Jeux de cartes flamands, à table ou en ligne.",
-  "app.phase": "Phase 4 — jeux & variantes",
+  "app.phase": "Phase 4 — quatre jeux",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Jouez une session de wiezen (whist flamand) contre trois bots. Les sélecteurs de langue et de thème ci-dessus fonctionnent ; règles et hypothèses dans docs/REGELS.md.",
   "placeholder.ruleset": "Règles chargées : {name} (v{version}, {contracts} contrats)",
@@ -119,5 +119,18 @@
   "opt.targetPoints": "Objectif de session (points)",
   "manille.noTrump": "Sans atout",
   "contract.kleine-miserie": "Petite misère",
-  "manille.intro": "Jouez à la manille contre trois bots en équipes fixes. 32 cartes, le dix au-dessus de l'as, jusqu'à votre objectif. Choisissez les variantes ci-dessous."
+  "manille.intro": "Jouez à la manille contre trois bots en équipes fixes. 32 cartes, le dix au-dessus de l'as, jusqu'à votre objectif. Choisissez les variantes ci-dessous.",
+  "game.bieden": "Bieden",
+  "bieden.intro": "Jouez au bieden contre trois bots en équipes fixes. 32 cartes, enchérissez le nombre de points, le plus offrant entame et fixe l'atout.",
+  "bieden.title": "Enchères",
+  "bieden.pass": "Passe",
+  "bieden.bidLabel": "Enchère {points}",
+  "bieden.bids": "{name} annonce {points}",
+  "bieden.passed": "{name} passe",
+  "bieden.declarer": "{name} joue {points}",
+  "bieden.goal": "{name} doit réaliser {points} points",
+  "bieden.made": "Contrat réussi",
+  "bieden.failed": "Chuté",
+  "bieden.redeal": "Tout le monde passe — le donneur suivant redistribue.",
+  "bieden.trumpPending": "Atout : première carte de {name}"
 }

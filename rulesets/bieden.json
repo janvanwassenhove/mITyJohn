@@ -1,0 +1,55 @@
+{
+  "id": "bieden",
+  "game": "bieden",
+  "name": {
+    "nl": "Bieden — Vlaams standaard",
+    "en": "Bieden — Flemish standard",
+    "fr": "Bieden — standard flamand"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-BIEDEN.md",
+  "players": 4,
+  "teams": [
+    [0, 2],
+    [1, 3]
+  ],
+  "deck": {
+    "cards": 32,
+    "jokers": false,
+    "rankOrderTrump": ["B", "9", "A", "10", "H", "V", "8", "7"],
+    "rankOrderPlain": ["A", "10", "H", "V", "B", "9", "8", "7"],
+    "cardPointsTrump": { "B": 20, "9": 14, "A": 11, "10": 10, "H": 3, "V": 2 },
+    "cardPointsPlain": { "A": 11, "10": 10, "H": 3, "V": 2, "B": 1 }
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 8,
+    "dealPattern": [4, 4],
+    "trumpDetermination": "first-card-led",
+    "openingLead": "highest-bidder",
+    "followRule": "follow-or-trump",
+    "lastTrickBonus": 10
+  },
+  "bidding": {
+    "min": 100,
+    "max": 150,
+    "step": 10,
+    "rounds": "one-chance-each",
+    "allPassed": "redeal-next-dealer"
+  },
+  "scoring": {
+    "unit": "points",
+    "totalPoints": 151,
+    "giftScore": "zero-sum-plusminus-bid",
+    "madeIf": "declaring-team-points-ge-bid"
+  },
+  "session": {
+    "targetPoints": 500
+  },
+  "assumptions": [
+    "Bod minimum 100, veelvoud van 10, maximum 150 (REGELS-BIEDEN §4)",
+    "Altijd mogen troeven ook als je kan volgen; geen overtroefplicht (REGELS-BIEDEN §5)",
+    "Zero-sum ±bod; sessie tot 500 punten i.p.v. de traditionele aftel-boom (REGELS-BIEDEN §6)",
+    "Eén biedronde (één kans per speler); iedereen past → herdeel (REGELS-BIEDEN §4)"
+  ]
+}

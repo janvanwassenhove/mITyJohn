@@ -27,6 +27,8 @@ import * as store from './store';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
+import { teamOf as biedenTeamOf, type BiedenGift, type BiedenSession } from './engine/bieden';
+import { chooseBiedenBid, chooseBiedenCard } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
 import {
@@ -64,10 +66,13 @@ let generation = 0;
 const GAME_KEY = 'carts.game';
 const WIEZEN_OPTS_KEY = 'carts.wiezenOptions';
 const MANILLE_OPTS_KEY = 'carts.manilleOptions';
-let game: 'wiezen' | 'manille' = 'wiezen';
+let game: 'wiezen' | 'manille' | 'bieden' = 'wiezen';
 let mSession: ManilleSession | null = null;
 let mPersisted: store.PersistedManille | null = null;
 let mRestored: { state: store.PersistedManille; session: ManilleSession } | null = null;
+let bSession: BiedenSession | null = null;
+let bPersisted: store.PersistedBieden | null = null;
+let bRestored: { state: store.PersistedBieden; session: BiedenSession } | null = null;
 let wiezenOptions: WiezenOptions = { ...DEFAULT_WIEZEN_OPTIONS };
 let manilleOptions: ManilleOptions = { ...DEFAULT_MANILLE_OPTIONS };
 
@@ -520,9 +525,17 @@ function manilleOptionsPanel(): HTMLElement {
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('span', 'phase', t('app.phase')));
-  main.append(el('h1', undefined, t(game === 'manille' ? 'game.manillen' : 'placeholder.heading')));
+  const headingKey =
+    game === 'manille'
+      ? 'game.manillen'
+      : game === 'bieden'
+        ? 'game.bieden'
+        : 'placeholder.heading';
+  const bodyKey =
+    game === 'manille' ? 'manille.intro' : game === 'bieden' ? 'bieden.intro' : 'placeholder.body';
+  main.append(el('h1', undefined, t(headingKey)));
   main.append(el('p', 'tagline', t('app.tagline')));
-  main.append(el('p', undefined, t(game === 'manille' ? 'manille.intro' : 'placeholder.body')));
+  main.append(el('p', undefined, t(bodyKey)));
   if (game === 'wiezen') {
     main.append(
       el(
@@ -541,9 +554,14 @@ function startScreen(): HTMLElement {
   gameGroup.append(el('span', undefined, t('game.picker')));
   const gameSeg = el('div', 'seg');
   gameSeg.setAttribute('role', 'group');
-  for (const g of ['wiezen', 'manille'] as const) {
+  const gameLabels = {
+    wiezen: 'game.wiezen',
+    manille: 'game.manillen',
+    bieden: 'game.bieden',
+  } as const;
+  for (const g of ['wiezen', 'manille', 'bieden'] as const) {
     gameSeg.append(
-      segButton(t(g === 'wiezen' ? 'game.wiezen' : 'game.manillen'), game === g, () => {
+      segButton(t(gameLabels[g]), game === g, () => {
         game = g;
         try {
           localStorage.setItem(GAME_KEY, g);
@@ -598,17 +616,33 @@ function startScreen(): HTMLElement {
   main.append(levelGroup);
 
   // Regelvarianten worden alleen getoond wanneer er geen te herstellen sessie
-  // klaarstaat (die heeft haar eigen, vastgelegde opties).
+  // klaarstaat (die heeft haar eigen, vastgelegde opties). Bieden heeft (nog)
+  // geen sessie-opties.
   const hasRestore =
     game === 'manille'
       ? Boolean(mRestored && !mRestored.session.finished)
-      : Boolean(restored && !restored.session.finished);
-  if (!hasRestore) {
+      : game === 'bieden'
+        ? Boolean(bRestored && !bRestored.session.finished)
+        : Boolean(restored && !restored.session.finished);
+  if (!hasRestore && game !== 'bieden') {
     main.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
 
   const row = el('div', 'btn-row');
-  if (game === 'manille') {
+  if (game === 'bieden') {
+    if (bRestored && !bRestored.session.finished) {
+      row.append(button(t('start.continue'), 'btn primary', continueBieden));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearBieden();
+          bRestored = null;
+          startBieden();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary', startBieden));
+    }
+  } else if (game === 'manille') {
     if (mRestored && !mRestored.session.finished) {
       row.append(button(t('start.continue'), 'btn primary', continueManille));
       row.append(
@@ -1014,8 +1048,24 @@ function render(): void {
 
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
-  if (view === 'stats' && !session && !mSession) {
+  const bGift = bSession?.gift ?? null;
+  if (view === 'stats' && !session && !mSession && !bSession) {
     wrap.append(statsScreen());
+  } else if (game === 'bieden') {
+    if (!bSession || (!bGift && !bSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!bGift && bSession.finished) {
+      wrap.append(biedenEndScreen());
+    } else if (bGift) {
+      wrap.append(biedenStatusBar(bGift));
+      const table = el('div', 'table-grid');
+      table.append(biedenSeat(bGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(biedenSeat(bGift, 1), biedenTrickArea(bGift), biedenSeat(bGift, 3));
+      table.append(middle);
+      table.append(biedenSeat(bGift, HUMAN));
+      wrap.append(table, biedenActionPanel(bGift));
+    }
   } else if (game === 'manille') {
     if (!mSession || (!mGift && !mSession.finished)) {
       wrap.append(startScreen());
@@ -1353,6 +1403,342 @@ function manilleEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- bieden (Fase 4d) ---------- */
+
+let biedenLog: Array<{ kind: 'bid' | 'pass'; player: number; points?: number }> = [];
+
+function bTeamName(team: number): string {
+  return team === biedenTeamOf(HUMAN) ? t('team.we') : t('team.they');
+}
+
+function recordB(action: store.BiedenAction): void {
+  if (!bPersisted) return;
+  bPersisted.actions.push(action);
+  store.saveBieden(bPersisted);
+}
+
+function startBieden(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  bPersisted = store.newBieden(seed, botLevel);
+  store.saveBieden(bPersisted);
+  bRestored = null;
+  bSession = store.replayBieden(bPersisted);
+  biedenLog = [];
+  render();
+  scheduleBiedenBots();
+}
+
+function continueBieden(): void {
+  if (!bRestored) return;
+  bPersisted = bRestored.state;
+  bSession = bRestored.session;
+  botLevel = bPersisted.botLevel;
+  bRestored = null;
+  biedenLog = [];
+  render();
+  scheduleBiedenBots();
+}
+
+function biedenActor(): { player: number; human: boolean } | null {
+  const gift = bSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'bidding') {
+    return { player: gift.bidding.toAct, human: gift.bidding.toAct === HUMAN };
+  }
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playBiedenCard(gift: BiedenGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordB({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    const we = biedenTeamOf(HUMAN);
+    sfxScore((gift.score.points[we] ?? 0) >= 0);
+  }
+}
+
+function biedenBotStep(): boolean {
+  const gift = bSession?.gift;
+  const who = biedenActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'bidding') {
+    const bid = chooseBiedenBid(gift, who.player);
+    gift.bidding.act(who.player, bid);
+    recordB({ t: 'bid', p: who.player, bid });
+    biedenLog.push(
+      bid === null
+        ? { kind: 'pass', player: who.player }
+        : { kind: 'bid', player: who.player, points: bid },
+    );
+    if (gift.bidding.phase === 'done' && gift.declarer === null) gift.settle();
+    return true;
+  }
+  playBiedenCard(gift, who.player, chooseBiedenCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleBiedenBots(): void {
+  const gen = ++generation;
+  const who = biedenActor();
+  if (!who || who.human) return;
+  const gift = bSession?.gift;
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'bieden') return;
+      if (biedenBotStep()) {
+        render();
+        scheduleBiedenBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function biedenCloseAndNext(): void {
+  if (!bSession) return;
+  bSession.closeGift();
+  recordB({ t: 'close' });
+  if (!bSession.finished) {
+    bSession.nextGift();
+    biedenLog = [];
+  } else {
+    recordSessionStat('bieden', botLevel, bSession.totals, biedenTeamOf(HUMAN));
+    store.clearBieden();
+    bPersisted = null;
+  }
+  render();
+  scheduleBiedenBots();
+}
+
+function biedenStatusBar(gift: BiedenGift): HTMLElement {
+  const s = bSession as BiedenSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('manille.gift', { n: s.giftNumber })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.declarer !== null && gift.bidding.highBid !== null) {
+    bar.append(
+      el(
+        'span',
+        'chip strong',
+        t('bieden.declarer', { name: playerName(gift.declarer), points: gift.bidding.highBid }),
+      ),
+    );
+  }
+  if (gift.trumpSuit) {
+    bar.append(
+      el(
+        'span',
+        'chip',
+        t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
+      ),
+    );
+  } else if (gift.declarer !== null) {
+    bar.append(el('span', 'chip', t('bieden.trumpPending', { name: playerName(gift.declarer) })));
+  }
+  const we = biedenTeamOf(HUMAN);
+  bar.append(
+    el(
+      'span',
+      'chip strong',
+      `${t('team.we')} ${s.totals[we] ?? 0} — ${t('team.they')} ${s.totals[1 - we] ?? 0}`,
+    ),
+    el('span', 'chip', t('manille.target', { points: s.targetPoints })),
+  );
+  return bar;
+}
+
+function biedenSeat(gift: BiedenGift, player: number): HTMLElement {
+  const who = biedenActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}`));
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playBiedenCard(gift, HUMAN, card);
+            render();
+            scheduleBiedenBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function biedenTrickArea(gift: BiedenGift): HTMLElement {
+  const area = el('div', 'trick');
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function biedenLogView(): HTMLElement {
+  const list = el('div', 'bidlog');
+  for (const entry of biedenLog.slice(-6)) {
+    const name = playerName(entry.player);
+    list.append(
+      el(
+        'div',
+        'bidlog-line',
+        entry.kind === 'bid'
+          ? t('bieden.bids', { name, points: entry.points ?? 0 })
+          : t('bieden.passed', { name }),
+      ),
+    );
+  }
+  return list;
+}
+
+function biedenActionPanel(gift: BiedenGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = biedenActor();
+  switch (gift.phase) {
+    case 'bidding': {
+      panel.append(el('h2', undefined, t('bieden.title')));
+      panel.append(biedenLogView());
+      if (who?.human) {
+        const row = el('div', 'btn-row');
+        for (const bid of gift.bidding.legalBids(HUMAN)) {
+          row.append(
+            button(t('bieden.bidLabel', { points: bid }), 'btn', () => {
+              gift.bidding.act(HUMAN, bid);
+              recordB({ t: 'bid', p: HUMAN, bid });
+              biedenLog.push({ kind: 'bid', player: HUMAN, points: bid });
+              if (gift.bidding.phase === 'done' && gift.declarer === null) gift.settle();
+              render();
+              scheduleBiedenBots();
+            }),
+          );
+        }
+        row.append(
+          button(t('bieden.pass'), 'btn muted', () => {
+            gift.bidding.act(HUMAN, null);
+            recordB({ t: 'bid', p: HUMAN, bid: null });
+            biedenLog.push({ kind: 'pass', player: HUMAN });
+            if (gift.bidding.phase === 'done' && gift.declarer === null) gift.settle();
+            render();
+            scheduleBiedenBots();
+          }),
+        );
+        panel.append(row);
+      } else if (who) {
+        panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+      }
+      return panel;
+    }
+    case 'redeal': {
+      panel.append(el('p', undefined, t('bieden.redeal')));
+      panel.append(button(t('bidding.continue'), 'btn primary', biedenCloseAndNext));
+      return panel;
+    }
+    case 'play': {
+      if (gift.declarer !== null && gift.bidding.highBid !== null) {
+        panel.append(
+          el(
+            'p',
+            'hint',
+            t('bieden.goal', { name: playerName(gift.declarer), points: gift.bidding.highBid }),
+          ),
+        );
+      }
+      if (who?.human) panel.append(el('p', 'strong', t('play.yourTurn')));
+      return panel;
+    }
+    case 'scored': {
+      panel.append(el('h2', undefined, t('score.title')));
+      const score = gift.score;
+      if (score) {
+        panel.append(
+          el(
+            'p',
+            score.made ? 'made' : 'failed',
+            `${bTeamName(score.declaringTeam)} — ${score.bid}: ${score.made ? t('bieden.made') : t('bieden.failed')}`,
+          ),
+        );
+        const s = bSession as BiedenSession;
+        const we = biedenTeamOf(HUMAN);
+        const table = el('table', 'score-table');
+        const head = el('tr');
+        head.append(
+          el('th'),
+          el('th', undefined, t('team.we')),
+          el('th', undefined, t('team.they')),
+        );
+        table.append(head);
+        const rows: Array<[string, number, number]> = [
+          [t('manille.points'), score.teamPoints[we] ?? 0, score.teamPoints[1 - we] ?? 0],
+          [t('score.points'), score.points[we] ?? 0, score.points[1 - we] ?? 0],
+          [
+            t('score.total'),
+            (s.totals[we] ?? 0) + (score.points[we] ?? 0),
+            (s.totals[1 - we] ?? 0) + (score.points[1 - we] ?? 0),
+          ],
+        ];
+        for (const [label, a, b] of rows) {
+          const tr = el('tr');
+          tr.append(el('th', undefined, label));
+          tr.append(el('td', undefined, formatPoints(a)));
+          tr.append(el('td', undefined, formatPoints(b)));
+          table.append(tr);
+        }
+        panel.append(table);
+      }
+      panel.append(button(t('score.next'), 'btn primary', biedenCloseAndNext));
+      return panel;
+    }
+  }
+}
+
+function biedenEndScreen(): HTMLElement {
+  const s = bSession as BiedenSession;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  const winner = (s.totals[0] ?? 0) >= (s.totals[1] ?? 0) ? 0 : 1;
+  main.append(el('p', 'strong', t('manille.sessionWon', { team: bTeamName(winner) })));
+  const we = biedenTeamOf(HUMAN);
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  head.append(el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+  row.append(
+    el('td', undefined, formatPoints(s.totals[we] ?? 0)),
+    el('td', undefined, formatPoints(s.totals[1 - we] ?? 0)),
+  );
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startBieden));
+  return main;
+}
+
 /* ---------- opstart ---------- */
 
 initTheme();
@@ -1382,7 +1768,9 @@ try {
 }
 try {
   const storedGame = localStorage.getItem(GAME_KEY);
-  if (storedGame === 'manille' || storedGame === 'wiezen') game = storedGame;
+  if (storedGame === 'manille' || storedGame === 'wiezen' || storedGame === 'bieden') {
+    game = storedGame;
+  }
 } catch {
   /* ignore */
 }
@@ -1392,6 +1780,14 @@ if (savedManille) {
     mRestored = { state: savedManille, session: store.replayManille(savedManille) };
   } catch {
     store.clearManille();
+  }
+}
+const savedBieden = store.loadBieden();
+if (savedBieden) {
+  try {
+    bRestored = { state: savedBieden, session: store.replayBieden(savedBieden) };
+  } catch {
+    store.clearBieden();
   }
 }
 const savedState = store.load();
