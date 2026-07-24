@@ -8,6 +8,15 @@ import { Session } from './engine/game';
 import type { BidAction } from './engine/bidding';
 import type { Ruleset } from './ruleset';
 import type { BotLevel } from './bots';
+import {
+  buildWiezenRuleset,
+  DEFAULT_MANILLE_OPTIONS,
+  DEFAULT_WIEZEN_OPTIONS,
+  isManilleOptions,
+  isWiezenOptions,
+  type ManilleOptions,
+  type WiezenOptions,
+} from './options';
 
 const STORAGE_KEY = 'carts.session.v1';
 
@@ -23,6 +32,7 @@ export interface PersistedSession {
   rulesetId: string;
   seed: number;
   botLevel: BotLevel;
+  options: WiezenOptions;
   actions: SessionAction[];
 }
 
@@ -30,8 +40,9 @@ export function newPersisted(
   rulesetId: string,
   seed: number,
   botLevel: BotLevel,
+  options: WiezenOptions,
 ): PersistedSession {
-  return { v: 1, rulesetId, seed, botLevel, actions: [] };
+  return { v: 1, rulesetId, seed, botLevel, options, actions: [] };
 }
 
 export function save(state: PersistedSession): void {
@@ -48,6 +59,8 @@ export function load(): PersistedSession | null {
     if (!raw) return null;
     const state = JSON.parse(raw) as PersistedSession;
     if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    // Oudere opslag zonder opties: val terug op de defaults.
+    if (!isWiezenOptions(state.options)) state.options = { ...DEFAULT_WIEZEN_OPTIONS };
     return state;
   } catch {
     return null;
@@ -62,9 +75,11 @@ export function clear(): void {
   }
 }
 
-/** Herbouw een sessie door het actielog af te spelen. Gooit bij corrupt log. */
+/** Herbouw een sessie door het actielog af te spelen op de effectieve ruleset
+ *  (basis-ruleset + gekozen opties). Gooit bij corrupt log. */
 export function replay(ruleset: Ruleset, state: PersistedSession): Session {
-  const session = new Session(ruleset, mulberry32(state.seed));
+  const effective = buildWiezenRuleset(ruleset, state.options);
+  const session = new Session(effective, mulberry32(state.seed));
   session.nextGift();
   for (const action of state.actions) {
     const gift = session.gift;
@@ -101,17 +116,22 @@ export function replay(ruleset: Ruleset, state: PersistedSession): Session {
 const MANILLE_KEY = 'carts.manille.v1';
 
 export type ManilleAction =
-  { t: 'trump'; suit: Suit } | { t: 'play'; p: number; card: Card } | { t: 'close' };
+  { t: 'trump'; suit: Suit | null } | { t: 'play'; p: number; card: Card } | { t: 'close' };
 
 export interface PersistedManille {
   v: 1;
   seed: number;
   botLevel: BotLevel;
+  options: ManilleOptions;
   actions: ManilleAction[];
 }
 
-export function newManille(seed: number, botLevel: BotLevel): PersistedManille {
-  return { v: 1, seed, botLevel, actions: [] };
+export function newManille(
+  seed: number,
+  botLevel: BotLevel,
+  options: ManilleOptions,
+): PersistedManille {
+  return { v: 1, seed, botLevel, options, actions: [] };
 }
 
 export function saveManille(state: PersistedManille): void {
@@ -128,6 +148,7 @@ export function loadManille(): PersistedManille | null {
     if (!raw) return null;
     const state = JSON.parse(raw) as PersistedManille;
     if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!isManilleOptions(state.options)) state.options = { ...DEFAULT_MANILLE_OPTIONS };
     return state;
   } catch {
     return null;
@@ -143,7 +164,13 @@ export function clearManille(): void {
 }
 
 export function replayManille(state: PersistedManille): ManilleSession {
-  const session = new ManilleSession(mulberry32(state.seed));
+  const session = new ManilleSession(mulberry32(state.seed), 0, {
+    pointModel: state.options.pointModel,
+    trumpMode: state.options.trumpMode,
+    multipliers: state.options.multipliers,
+    maatLigt: state.options.maatLigt,
+    targetPoints: state.options.targetPoints,
+  });
   session.nextGift();
   for (const action of state.actions) {
     const gift = session.gift;

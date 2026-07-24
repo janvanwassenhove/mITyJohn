@@ -491,3 +491,24 @@ button.card:not(:disabled) {
     transition: none;
   }
 }
+
+/* Regelvarianten-paneel op het startscherm (Fase 4c) */
+.options {
+  margin: 1rem 0 0.5rem;
+  padding: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.options-title {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.options .control-group {
+  flex-wrap: wrap;
+  margin: 0.35rem 0;
+}

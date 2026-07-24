@@ -94,7 +94,8 @@ alleen `main` deployen.
 | 3 | Statistieken & historiek; sterke bots met kaartgeheugen. Restvragen (troel 8/9, overbieden, rangorde-details) blijven open | ✅ |
 | 4a | Kleurenwiezen-variant `vlaams-cafe` (piccolo + troefplicht) met rulesetkeuze in de app | ✅ |
 | 4b | Manillen speelbaar: eigen engine (10 boven aas, kaartpunten, vaste teams, troefkeuze deler, troefplicht, tot 101), spelkeuze in de app, persistentie — op de aannames uit [REGELS-MANILLEN.md](REGELS-MANILLEN.md) | ✅ |
-| 4c | Bieden (derde spel) | ◻ |
+| 4c | Regelvarianten als **sessie-opties** op het startscherm: wiezen (troel-doel 8/9, troel overbiedbaar/onoverbiedbaar, kleine+grote miserie) en manille (puntenmodel 60/68, troefbepaling deler/laatste-kaart/maat, multiplicators, "maat ligt", sessiedoel 101/61); opties in de persistentie | ✅ |
+| 4d | Bieden (vierde spel) | ◻ |
 | 5 | Online multiplayer (aparte beslissing: vereist backend/workers) | ◻ |
 
 ## §13 Open punten

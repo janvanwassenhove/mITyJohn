@@ -29,6 +29,14 @@ import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
+import {
+  DEFAULT_MANILLE_OPTIONS,
+  DEFAULT_WIEZEN_OPTIONS,
+  isManilleOptions,
+  isWiezenOptions,
+  type ManilleOptions,
+  type WiezenOptions,
+} from './options';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('#app ontbreekt');
@@ -54,10 +62,23 @@ let bidLog: BidLogEntry[] = [];
 let generation = 0;
 
 const GAME_KEY = 'carts.game';
+const WIEZEN_OPTS_KEY = 'carts.wiezenOptions';
+const MANILLE_OPTS_KEY = 'carts.manilleOptions';
 let game: 'wiezen' | 'manille' = 'wiezen';
 let mSession: ManilleSession | null = null;
 let mPersisted: store.PersistedManille | null = null;
 let mRestored: { state: store.PersistedManille; session: ManilleSession } | null = null;
+let wiezenOptions: WiezenOptions = { ...DEFAULT_WIEZEN_OPTIONS };
+let manilleOptions: ManilleOptions = { ...DEFAULT_MANILLE_OPTIONS };
+
+function saveOptions(): void {
+  try {
+    localStorage.setItem(WIEZEN_OPTS_KEY, JSON.stringify(wiezenOptions));
+    localStorage.setItem(MANILLE_OPTS_KEY, JSON.stringify(manilleOptions));
+  } catch {
+    /* ignore */
+  }
+}
 
 const SUIT_GLYPH: Record<Suit, string> = { S: '♠', H: '♥', D: '♦', C: '♣' };
 const RANK_LABEL: Record<number, string> = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' };
@@ -110,7 +131,7 @@ function rebuildBidLog(state: store.PersistedSession): void {
 
 function startSession(): void {
   const seed = (Math.random() * 2 ** 31) >>> 0;
-  persisted = store.newPersisted(ruleset.id, seed, botLevel);
+  persisted = store.newPersisted(ruleset.id, seed, botLevel, wiezenOptions);
   store.save(persisted);
   restored = null;
   session = store.replay(ruleset, persisted);
@@ -354,23 +375,167 @@ function topbar(): HTMLElement {
   return header;
 }
 
+function optionRow(
+  label: string,
+  choices: Array<{ label: string; active: boolean; onClick: () => void }>,
+): HTMLElement {
+  const group = el('div', 'control-group level-picker');
+  group.append(el('span', undefined, label));
+  const seg = el('div', 'seg');
+  seg.setAttribute('role', 'group');
+  for (const c of choices) seg.append(segButton(c.label, c.active, c.onClick));
+  group.append(seg);
+  return group;
+}
+
+function setWiezen<K extends keyof WiezenOptions>(key: K, value: WiezenOptions[K]): void {
+  wiezenOptions = { ...wiezenOptions, [key]: value };
+  saveOptions();
+  render();
+}
+
+function setManille<K extends keyof ManilleOptions>(key: K, value: ManilleOptions[K]): void {
+  manilleOptions = { ...manilleOptions, [key]: value };
+  saveOptions();
+  render();
+}
+
+function wiezenOptionsPanel(): HTMLElement {
+  const box = el('div', 'options');
+  box.append(el('div', 'options-title', t('options.title')));
+  box.append(
+    optionRow(t('opt.troelTarget'), [
+      {
+        label: '8',
+        active: wiezenOptions.troelTarget === 8,
+        onClick: () => setWiezen('troelTarget', 8),
+      },
+      {
+        label: '9',
+        active: wiezenOptions.troelTarget === 9,
+        onClick: () => setWiezen('troelTarget', 9),
+      },
+    ]),
+    optionRow(t('opt.troelOverbiddable'), [
+      {
+        label: t('opt.troelFromAb9'),
+        active: wiezenOptions.troelOverbiddable,
+        onClick: () => setWiezen('troelOverbiddable', true),
+      },
+      {
+        label: t('opt.troelUnbeatable'),
+        active: !wiezenOptions.troelOverbiddable,
+        onClick: () => setWiezen('troelOverbiddable', false),
+      },
+    ]),
+    optionRow(t('opt.kleineMiserie'), [
+      {
+        label: t('opt.off'),
+        active: !wiezenOptions.kleineMiserie,
+        onClick: () => setWiezen('kleineMiserie', false),
+      },
+      {
+        label: t('opt.on'),
+        active: wiezenOptions.kleineMiserie,
+        onClick: () => setWiezen('kleineMiserie', true),
+      },
+    ]),
+  );
+  return box;
+}
+
+function manilleOptionsPanel(): HTMLElement {
+  const box = el('div', 'options');
+  box.append(el('div', 'options-title', t('options.title')));
+  box.append(
+    optionRow(t('opt.pointModel'), [
+      {
+        label: '60',
+        active: manilleOptions.pointModel === 60,
+        onClick: () => setManille('pointModel', 60),
+      },
+      {
+        label: '68',
+        active: manilleOptions.pointModel === 68,
+        onClick: () => setManille('pointModel', 68),
+      },
+    ]),
+    optionRow(t('opt.trumpMode'), [
+      {
+        label: t('opt.trumpDealer'),
+        active: manilleOptions.trumpMode === 'dealer',
+        onClick: () => setManille('trumpMode', 'dealer'),
+      },
+      {
+        label: t('opt.trumpTurned'),
+        active: manilleOptions.trumpMode === 'turned',
+        onClick: () => setManille('trumpMode', 'turned'),
+      },
+      {
+        label: t('opt.trumpPartner'),
+        active: manilleOptions.trumpMode === 'partner',
+        onClick: () => setManille('trumpMode', 'partner'),
+      },
+    ]),
+    optionRow(t('opt.multipliers'), [
+      {
+        label: t('opt.off'),
+        active: !manilleOptions.multipliers,
+        onClick: () => setManille('multipliers', false),
+      },
+      {
+        label: t('opt.on'),
+        active: manilleOptions.multipliers,
+        onClick: () => setManille('multipliers', true),
+      },
+    ]),
+    optionRow(t('opt.maatLigt'), [
+      {
+        label: t('opt.off'),
+        active: !manilleOptions.maatLigt,
+        onClick: () => setManille('maatLigt', false),
+      },
+      {
+        label: t('opt.on'),
+        active: manilleOptions.maatLigt,
+        onClick: () => setManille('maatLigt', true),
+      },
+    ]),
+    optionRow(t('opt.targetPoints'), [
+      {
+        label: '101',
+        active: manilleOptions.targetPoints === 101,
+        onClick: () => setManille('targetPoints', 101),
+      },
+      {
+        label: '61',
+        active: manilleOptions.targetPoints === 61,
+        onClick: () => setManille('targetPoints', 61),
+      },
+    ]),
+  );
+  return box;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('span', 'phase', t('app.phase')));
-  main.append(el('h1', undefined, t('placeholder.heading')));
+  main.append(el('h1', undefined, t(game === 'manille' ? 'game.manillen' : 'placeholder.heading')));
   main.append(el('p', 'tagline', t('app.tagline')));
-  main.append(el('p', undefined, t('placeholder.body')));
-  main.append(
-    el(
-      'p',
-      'ruleset',
-      t('placeholder.ruleset', {
-        name: ruleset.name[getLocale()],
-        version: ruleset.version,
-        contracts: ruleset.contracts.length,
-      }),
-    ),
-  );
+  main.append(el('p', undefined, t(game === 'manille' ? 'manille.intro' : 'placeholder.body')));
+  if (game === 'wiezen') {
+    main.append(
+      el(
+        'p',
+        'ruleset',
+        t('placeholder.ruleset', {
+          name: ruleset.name[getLocale()],
+          version: ruleset.version,
+          contracts: ruleset.contracts.length,
+        }),
+      ),
+    );
+  }
 
   const gameGroup = el('div', 'control-group level-picker');
   gameGroup.append(el('span', undefined, t('game.picker')));
@@ -431,6 +596,16 @@ function startScreen(): HTMLElement {
   }
   levelGroup.append(levelSeg);
   main.append(levelGroup);
+
+  // Regelvarianten worden alleen getoond wanneer er geen te herstellen sessie
+  // klaarstaat (die heeft haar eigen, vastgelegde opties).
+  const hasRestore =
+    game === 'manille'
+      ? Boolean(mRestored && !mRestored.session.finished)
+      : Boolean(restored && !restored.session.finished);
+  if (!hasRestore) {
+    main.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
+  }
 
   const row = el('div', 'btn-row');
   if (game === 'manille') {
@@ -897,7 +1072,7 @@ function recordM(action: store.ManilleAction): void {
 
 function startManille(): void {
   const seed = (Math.random() * 2 ** 31) >>> 0;
-  mPersisted = store.newManille(seed, botLevel);
+  mPersisted = store.newManille(seed, botLevel, manilleOptions);
   store.saveManille(mPersisted);
   mRestored = null;
   mSession = store.replayManille(mPersisted);
@@ -918,7 +1093,9 @@ function continueManille(): void {
 function manilleActor(): { player: number; human: boolean } | null {
   const gift = mSession?.gift;
   if (!gift) return null;
-  if (gift.phase === 'trump-choice') return { player: gift.dealer, human: gift.dealer === HUMAN };
+  if (gift.phase === 'trump-choice') {
+    return { player: gift.trumpChooser, human: gift.trumpChooser === HUMAN };
+  }
   if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
   return null;
 }
@@ -995,8 +1172,13 @@ function manilleStatusBar(gift: ManilleGift): HTMLElement {
         t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
       ),
     );
+  } else if (gift.phase === 'trump-choice') {
+    bar.append(
+      el('span', 'chip', t('manille.trumpPending', { name: playerName(gift.trumpChooser) })),
+    );
   } else {
-    bar.append(el('span', 'chip', t('manille.trumpPending', { name: playerName(gift.dealer) })));
+    // Zonder troef gekozen (×2).
+    bar.append(el('span', 'chip strong', `${t('manille.noTrump')} ×${gift.multiplier}`));
   }
   const we = teamOf(HUMAN);
   bar.append(
@@ -1072,6 +1254,16 @@ function manilleActionPanel(gift: ManilleGift): HTMLElement {
             button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
               gift.chooseTrump(suit);
               recordM({ t: 'trump', suit });
+              render();
+              scheduleManilleBots();
+            }),
+          );
+        }
+        if (gift.config.multipliers) {
+          row.append(
+            button(t('manille.noTrump'), 'btn muted', () => {
+              gift.chooseTrump(null);
+              recordM({ t: 'trump', suit: null });
               render();
               scheduleManilleBots();
             }),
@@ -1177,6 +1369,14 @@ try {
 try {
   const storedRuleset = localStorage.getItem(RULESET_KEY);
   ruleset = getRuleset(storedRuleset ?? '') ?? ruleset;
+} catch {
+  /* ignore */
+}
+try {
+  const w = JSON.parse(localStorage.getItem(WIEZEN_OPTS_KEY) ?? 'null') as unknown;
+  if (isWiezenOptions(w)) wiezenOptions = w;
+  const m = JSON.parse(localStorage.getItem(MANILLE_OPTS_KEY) ?? 'null') as unknown;
+  if (isManilleOptions(m)) manilleOptions = m;
 } catch {
   /* ignore */
 }

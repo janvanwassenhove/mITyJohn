@@ -77,11 +77,18 @@ engine-bouw:
 5. **Troefkeuze door de deler** als aparte spelfase.
 6. Doorspelen tot een **puntendoel** i.p.v. een vast aantal giften.
 
-## Open vragen voor de opdrachtgever
+## Open vragen → sessie-opties
 
-1. Slagpunten meetellen (68-model) of enkel kaartpunten (60-model, huidige keuze)?
-2. Troefbepaling: deler kiest (huidige keuze), laatste kaart, of maat van de deler?
-3. Multiplicators ("zonder troef" ×2, "op tafel" ×4, …) meteen of later?
-4. Niet moeten troeven als je maat al ligt — ja/nee?
-5. Sessie tot 101 (huidige keuze), 61, of instelbaar?
-6. Speelrichting: klok mee (huidige keuze) of tegenwijzerzin?
+De opdrachtgever koos (2026-07-24): **speelrichting klok mee**, en de overige vragen
+**instelbaar op het startscherm** (huidige keuze als default). Deze opties gaan mee in de
+persistentie zodat een herstelde sessie exact dezelfde regels hanteert.
+
+1. ✅ **Puntenmodel:** sessie-optie **60 (default) / 68** (met 1 slagpunt per slag; helft 34).
+2. ✅ **Troefbepaling:** sessie-optie **deler kiest (default) / laatste kaart / maat van de deler**.
+3. ✅ **Multiplicators:** sessie-optie **uit (default) / aan**. Bij "aan" kan de troefkiezer
+   **"zonder troef" (×2)** aankondigen. *"Op tafel" (×4, open hand) is nog niet
+   geïmplementeerd — te bevestigen of gewenst.*
+4. ✅ **"Maat ligt":** sessie-optie **uit (default) / aan** — je hoeft niet te troeven als je
+   maat de slag al wint.
+5. ✅ **Sessiedoel:** sessie-optie **101 (default) / 61** punten.
+6. ✅ **Speelrichting:** met de klok mee (bevestigd).

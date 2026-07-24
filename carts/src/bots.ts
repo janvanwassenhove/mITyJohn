@@ -239,7 +239,7 @@ export function chooseManilleTrump(hand: Card[]): Suit {
 export function chooseManilleCard(gift: ManilleGift, player: number, level: BotLevel): Card {
   const legal = gift.legalCards(player);
   if (legal.length === 1) return legal[0] as Card;
-  const trumpSuit = gift.trumpSuit as Suit;
+  const trumpSuit = gift.trumpSuit; // null bij "zonder troef"
   const trick = gift.trick;
   const byStrengthAsc = [...legal].sort((a, b) => strength(a.rank) - strength(b.rank));
   const cheapest = [...legal].sort(
@@ -249,7 +249,7 @@ export function chooseManilleCard(gift: ManilleGift, player: number, level: BotL
 
   if (trick.length === 0) {
     // Uitkomen: sterkste kaart van de langste niet-troefkleur, anders troef.
-    const suit = longestSuit(legal.filter((c) => c.suit !== trumpSuit)) ?? trumpSuit;
+    const suit = longestSuit(legal.filter((c) => c.suit !== trumpSuit)) ?? trumpSuit ?? 'S';
     const inSuit = legal.filter((c) => c.suit === suit);
     const pool = inSuit.length > 0 ? inSuit : legal;
     return [...pool].sort((a, b) => strength(b.rank) - strength(a.rank))[0] as Card;
@@ -274,7 +274,7 @@ interface TrickRef {
   card: Card;
 }
 
-function manilleWinning(trick: TrickRef[], trumpSuit: Suit): TrickRef {
+function manilleWinning(trick: TrickRef[], trumpSuit: Suit | null): TrickRef {
   let best = trick[0] as TrickRef;
   for (const play of trick.slice(1)) {
     if (manilleBeats(play.card, best.card, trumpSuit, (trick[0] as TrickRef).card.suit)) {
@@ -284,9 +284,14 @@ function manilleWinning(trick: TrickRef[], trumpSuit: Suit): TrickRef {
   return best;
 }
 
-function manilleBeats(candidate: Card, target: Card, trumpSuit: Suit, ledSuit: Suit): boolean {
-  const cTrump = candidate.suit === trumpSuit;
-  const tTrump = target.suit === trumpSuit;
+function manilleBeats(
+  candidate: Card,
+  target: Card,
+  trumpSuit: Suit | null,
+  ledSuit: Suit,
+): boolean {
+  const cTrump = trumpSuit !== null && candidate.suit === trumpSuit;
+  const tTrump = trumpSuit !== null && target.suit === trumpSuit;
   if (cTrump && !tTrump) return true;
   if (!cTrump && tTrump) return false;
   if (candidate.suit === target.suit) return strength(candidate.rank) > strength(target.rank);

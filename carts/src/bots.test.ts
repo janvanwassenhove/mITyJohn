@@ -10,7 +10,7 @@ import {
   type BotLevel,
 } from './bots';
 import { getRuleset, type Ruleset } from './ruleset';
-import { ManilleSession } from './engine/manille';
+import { DEFAULT_MANILLE_CONFIG, ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
@@ -58,11 +58,14 @@ describe('manillen-bots', () => {
   it('spelen volledige sessies tot het puntendoel, op elk niveau', () => {
     for (const level of BOT_LEVELS) {
       for (let seed = 1; seed <= 5; seed++) {
-        const session = new ManilleSession(mulberry32(seed * 100), 0, 61);
+        const session = new ManilleSession(mulberry32(seed * 100), 0, {
+          ...DEFAULT_MANILLE_CONFIG,
+          targetPoints: 61,
+        });
         let safety = 500;
         while (!session.finished && safety-- > 0) {
           const gift = session.nextGift();
-          gift.chooseTrump(chooseManilleTrump(gift.hands[gift.dealer] as Card[]));
+          gift.chooseTrump(chooseManilleTrump(gift.hands[gift.trumpChooser] as Card[]));
           while (gift.phase === 'play') {
             const p = gift.toPlay;
             gift.playCard(p, chooseManilleCard(gift, p, level));

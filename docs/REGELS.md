@@ -178,14 +178,20 @@ troel: partner met de vierde aas komt uit en zijn eerste kaart bepaalt de troef;
 volgplicht (geen troefplicht); iedereen past → herdeel zonder gevolg; puntentabel
 akkoord; volgende spellen: kleurenwiezen-variant, manillen en bieden.
 
-Nog open voor Fase 3+:
+**Instelbaar gemaakt op het startscherm (2026-07-24, Fase 4c):** de drie hieronder gemerkte
+vragen zijn nu **sessie-opties** — de opdrachtgever koos "huidige keuze als default, maar
+kiesbaar bij sessiestart". De opties gaan mee in de persistentie zodat een herstelde sessie
+exact dezelfde regels hanteert.
 
-1. **Troel — doel:** samen 8 (huidige keuze) of 9 slagen?
-2. **Troel — overbieden:** vanaf welk contract mag troel overboden worden (huidige keuze:
-   abondance 9), of is troel onoverbiedbaar?
-3. **Rangorde biedladder:** klopt de positie van miserie (tussen abondance 9 en 10) en van
-   open miserie (boven abondance 12)? Bestaan kleine én grote miserie apart?
+1. ✅ **Troel — doel:** sessie-optie **8 (default) / 9** slagen.
+2. ✅ **Troel — overbieden:** sessie-optie **vanaf abondance 9 (default) / onoverbiedbaar**.
+3. ✅ **Kleine + grote miserie apart:** sessie-optie **uit (default) / aan** (kleine miserie =
+   0 slagen, geen troef, net onder de grote miserie, **⚠️ AANNAME** 5 punten). De exacte
+   positie van (open) miserie in de ladder blijft verder de gedocumenteerde default.
+
+Nog volledig open (geen instelbare keuze gevraagd):
+
 4. **Mislukt contract:** enkelvoudig (huidige keuze) of dubbel betalen?
-5. **Piccolo:** opnemen in de standaard of enkel als variant?
+5. **Piccolo:** enkel in de café-variant (huidig) of ook elders?
 6. **4 azen in één hand:** bevestig de partnerregel (hartenheer).
 7. **Meerdere miseries tegelijk:** toegelaten (huidige keuze) of maximaal één bieder?

@@ -5,12 +5,13 @@ import { chooseBid, chooseCard } from './bots';
 import * as store from './store';
 import { getRuleset, type Ruleset } from './ruleset';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
+import { DEFAULT_MANILLE_OPTIONS, DEFAULT_WIEZEN_OPTIONS } from './options';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
 /** Speel N giften uit met bots en registreer elke actie zoals de UI dat doet. */
 function playAndRecord(seed: number, giften: number): store.PersistedSession {
-  const state = store.newPersisted(ruleset.id, seed, 'normal');
+  const state = store.newPersisted(ruleset.id, seed, 'normal', { ...DEFAULT_WIEZEN_OPTIONS });
   const session = new Session(ruleset, mulberry32(seed));
   session.nextGift();
   let done = 0;
@@ -84,11 +85,11 @@ describe('sessiepersistentie (actielog-replay)', () => {
   });
 
   it('manillen: herbouwt exact dezelfde sessietoestand', () => {
-    const state = store.newManille(42, 'normal');
+    const state = store.newManille(42, 'normal', { ...DEFAULT_MANILLE_OPTIONS });
     const session = store.replayManille(state);
     // speel 1 gift en registreer
     const gift = session.gift as NonNullable<typeof session.gift>;
-    const suit = chooseManilleTrump(gift.hands[gift.dealer] as never);
+    const suit = chooseManilleTrump(gift.hands[gift.trumpChooser] as never);
     gift.chooseTrump(suit);
     state.actions.push({ t: 'trump', suit });
     while (gift.phase === 'play') {

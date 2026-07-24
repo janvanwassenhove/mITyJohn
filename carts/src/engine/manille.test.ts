@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { mulberry32, type Card, type Suit } from './cards';
 import {
   cardPoints,
+  DEFAULT_MANILLE_CONFIG,
   makeManilleDeck,
   manilleDeal,
   ManilleGift,
@@ -10,6 +11,7 @@ import {
   manilleTrickWinner,
   strength,
   teamOf,
+  type ManilleConfig,
 } from './manille';
 
 import manillenRuleset from '../../../rulesets/manillen.json';
@@ -109,7 +111,10 @@ describe('manillen: gift en sessie', () => {
   });
 
   it('sessie loopt tot het puntendoel en wijst een winnend team aan', () => {
-    const session = new ManilleSession(mulberry32(21), 0, 40);
+    const session = new ManilleSession(mulberry32(21), 0, {
+      ...DEFAULT_MANILLE_CONFIG,
+      targetPoints: 40,
+    });
     let safety = 200;
     while (!session.finished && safety-- > 0) {
       playOut(session.nextGift());
@@ -119,5 +124,79 @@ describe('manillen: gift en sessie', () => {
     expect(Math.max(...session.totals)).toBeGreaterThanOrEqual(40);
     expect(teamOf(0)).toBe(teamOf(2));
     expect(teamOf(1)).toBe(teamOf(3));
+  });
+});
+
+describe('manillen: instelbare opties (Fase 4c)', () => {
+  const cfg = (over: Partial<ManilleConfig>): ManilleConfig => ({
+    ...DEFAULT_MANILLE_CONFIG,
+    ...over,
+  });
+
+  it('68-model telt 1 slagpunt per slag (totaal 68, helft 34)', () => {
+    const gift = new ManilleGift(0, mulberry32(11), cfg({ pointModel: 68 }));
+    gift.chooseTrump('S');
+    while (gift.phase === 'play')
+      gift.playCard(gift.toPlay, gift.legalCards(gift.toPlay)[0] as Card);
+    const total = (gift.score?.teamPoints[0] ?? 0) + (gift.score?.teamPoints[1] ?? 0);
+    expect(total).toBe(68);
+    if (gift.score?.winner !== null) {
+      expect(gift.score?.score).toBe(Math.max(...(gift.score?.teamPoints ?? [])) - 34);
+    }
+  });
+
+  it('laatste-kaart-troefbepaling: geen keuzefase, troef = kleur laatste kaart', () => {
+    const gift = new ManilleGift(0, mulberry32(11), cfg({ trumpMode: 'turned' }));
+    expect(gift.phase).toBe('play');
+    expect(gift.turnedCard).not.toBeNull();
+    expect(gift.trumpSuit).toBe(gift.turnedCard?.suit);
+  });
+
+  it('maat-van-de-deler kiest de troef', () => {
+    const gift = new ManilleGift(1, mulberry32(11), cfg({ trumpMode: 'partner' }));
+    expect(gift.trumpChooser).toBe(3);
+  });
+
+  it('multiplicators: zonder troef verdubbelt de gift-score', () => {
+    const gift = new ManilleGift(0, mulberry32(11), cfg({ multipliers: true }));
+    gift.chooseTrump(null);
+    expect(gift.multiplier).toBe(2);
+    while (gift.phase === 'play')
+      gift.playCard(gift.toPlay, gift.legalCards(gift.toPlay)[0] as Card);
+    if (gift.score?.winner !== null) {
+      expect(gift.score?.score).toBe((Math.max(...(gift.score?.teamPoints ?? [])) - 30) * 2);
+    }
+  });
+
+  it('zonder troef is geweigerd als multiplicators uitstaan', () => {
+    const gift = new ManilleGift(0, mulberry32(11), DEFAULT_MANILLE_CONFIG);
+    expect(() => gift.chooseTrump(null)).toThrow();
+  });
+
+  it('"maat ligt": geen troefplicht als de maat de slag al wint', () => {
+    // Toets de kernfunctie rechtstreeks: speler 2 kan schoppen niet volgen,
+    // heeft wel troef (ruiten); met partnerWinning mag hij vrij afgooien.
+    const trick = [
+      { player: 0, card: card('S', 10) }, // maat van speler 2
+    ];
+    // speler 2 heeft geen schoppen maar wel troef ruiten → met maatLigt mag hij afgooien
+    const legalMet = manilleLegalPlays([card('D', 7), card('H', 9)], trick, 'D', {
+      partnerWinning: true,
+    });
+    expect(legalMet).toHaveLength(2);
+    const legalZonder = manilleLegalPlays([card('D', 7), card('H', 9)], trick, 'D', {
+      partnerWinning: false,
+    });
+    expect(legalZonder).toEqual([card('D', 7)]);
+  });
+
+  it('zonder troef: hoogste kaart in de gevraagde kleur wint', () => {
+    const trick = [
+      { player: 0, card: card('S', 14) },
+      { player: 1, card: card('S', 10) },
+      { player: 2, card: card('D', 10) },
+      { player: 3, card: card('S', 13) },
+    ];
+    expect(manilleTrickWinner(trick, null)).toBe(1); // schoppen 10 (manille) hoogste
   });
 });
