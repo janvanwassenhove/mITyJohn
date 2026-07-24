@@ -6,117 +6,583 @@ import {
   onLocaleChange,
   setLocale,
   t,
-  type Locale,
+  type MessageKey,
 } from './i18n';
 import { THEMES, applyTheme, getTheme, initTheme, type Theme } from './theme';
-import { getRuleset } from './ruleset';
+import { getRuleset, type Ruleset } from './ruleset';
+import { mulberry32, sortHand, type Card, type Suit } from './engine/cards';
+import { SUITS } from './engine/cards';
+import { PLAYER_COUNT } from './engine/deal';
+import { Session, type Gift } from './engine/game';
+import { chooseAlleen, chooseBid, chooseCard, chooseTrumpSuit } from './bots';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('#app ontbreekt');
 
-const ruleset = getRuleset('vlaams-standaard');
+const ruleset = getRuleset('vlaams-standaard') as Ruleset;
+const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
+const HUMAN = 0;
+const BOT_DELAY = 650;
+const TRICK_PAUSE = 1200;
 
-function segButton(label: string, pressed: boolean, onClick: () => void): HTMLButtonElement {
-  const btn = document.createElement('button');
+type BidLogEntry =
+  | { kind: 'pass' | 'join' | 'troel'; player: number }
+  | { kind: 'bid'; player: number; contractId: string };
+
+let session: Session | null = null;
+let bidLog: BidLogEntry[] = [];
+let generation = 0;
+
+const SUIT_GLYPH: Record<Suit, string> = { S: '♠', H: '♥', D: '♦', C: '♣' };
+const RANK_LABEL: Record<number, string> = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' };
+
+function playerName(p: number): string {
+  return p === HUMAN ? t('player.you') : (BOT_NAMES[p] as string);
+}
+
+function tContract(id: string): string {
+  return t(`contract.${id}` as MessageKey);
+}
+
+function tSuit(suit: Suit): string {
+  return t(`suit.${suit}` as MessageKey);
+}
+
+function rankLabel(rank: number): string {
+  return RANK_LABEL[rank] ?? String(rank);
+}
+
+function cardText(card: Card): string {
+  return `${SUIT_GLYPH[card.suit]}${rankLabel(card.rank)}`;
+}
+
+/* ---------- spelverloop ---------- */
+
+function startSession(): void {
+  session = new Session(ruleset, mulberry32((Math.random() * 2 ** 31) >>> 0));
+  session.nextGift();
+  bidLog = [];
+  seedTroelLog();
+  render();
+  scheduleBots();
+}
+
+function seedTroelLog(): void {
+  const troel = session?.gift?.bidding.troel;
+  if (troel) bidLog.push({ kind: 'troel', player: troel.holder });
+}
+
+function currentGift(): Gift | null {
+  return session?.gift ?? null;
+}
+
+/** Wie moet er nu handelen, en is dat de mens? */
+function actor(): { player: number; human: boolean } | null {
+  const gift = currentGift();
+  if (!gift) return null;
+  switch (gift.phase) {
+    case 'bidding':
+      return { player: gift.bidding.toAct, human: gift.bidding.toAct === HUMAN };
+    case 'alleen-choice': {
+      const p = gift.bidding.current?.declarers[0] as number;
+      return { player: p, human: p === HUMAN };
+    }
+    case 'trump-choice': {
+      const p = gift.trumpChooser as number;
+      return { player: p, human: p === HUMAN };
+    }
+    case 'play':
+      return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+    default:
+      return null;
+  }
+}
+
+function afterBidAction(gift: Gift): void {
+  if (gift.bidding.phase === 'done' && !gift.contract) gift.settleBidding();
+}
+
+function botStep(): boolean {
+  const gift = currentGift();
+  const who = actor();
+  if (!gift || !who || who.human) return false;
+  const p = who.player;
+  switch (gift.phase) {
+    case 'bidding': {
+      const action = chooseBid(gift.bidding, p, gift.deal.hands[p] as Card[]);
+      gift.bidding.act(p, action);
+      bidLog.push(
+        action.type === 'bid'
+          ? { kind: 'bid', player: p, contractId: action.contractId }
+          : { kind: action.type === 'join' ? 'join' : 'pass', player: p },
+      );
+      afterBidAction(gift);
+      return true;
+    }
+    case 'alleen-choice': {
+      const accept = chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit);
+      gift.bidding.chooseAlleen(accept);
+      afterBidAction(gift);
+      return true;
+    }
+    case 'trump-choice': {
+      gift.chooseTrump(chooseTrumpSuit(gift.deal.hands[p] as Card[]));
+      return true;
+    }
+    case 'play': {
+      gift.playCard(p, chooseCard(gift, p));
+      return true;
+    }
+    default:
+      return false;
+  }
+}
+
+function scheduleBots(): void {
+  const gen = ++generation;
+  const who = actor();
+  if (!who || who.human) return;
+  const gift = currentGift();
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation) return;
+      if (botStep()) {
+        render();
+        scheduleBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function closeAndNext(): void {
+  if (!session) return;
+  session.closeGift();
+  if (!session.finished) {
+    session.nextGift();
+    bidLog = [];
+    seedTroelLog();
+  }
+  render();
+  scheduleBots();
+}
+
+/* ---------- rendering ---------- */
+
+function el<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  className?: string,
+  text?: string,
+): HTMLElementTagNameMap[K] {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+function button(label: string, className: string, onClick: () => void): HTMLButtonElement {
+  const btn = el('button', className, label);
   btn.type = 'button';
-  btn.textContent = label;
-  btn.setAttribute('aria-pressed', String(pressed));
-  btn.addEventListener('click', onClick);
+  btn.addEventListener('click', () => {
+    onClick();
+  });
   return btn;
 }
 
-function render(): void {
-  if (!app) return;
-  app.replaceChildren();
+function segButton(label: string, pressed: boolean, onClick: () => void): HTMLButtonElement {
+  const btn = button(label, '', onClick);
+  btn.setAttribute('aria-pressed', String(pressed));
+  return btn;
+}
 
-  const wrap = document.createElement('div');
-  wrap.className = 'wrap';
+function cardEl(card: Card, opts?: { onClick?: () => void; disabled?: boolean }): HTMLElement {
+  const red = card.suit === 'H' || card.suit === 'D';
+  if (opts?.onClick) {
+    const btn = button(cardText(card), `card${red ? ' red' : ''}`, opts.onClick);
+    btn.disabled = opts.disabled ?? false;
+    btn.setAttribute('aria-label', `${tSuit(card.suit)} ${rankLabel(card.rank)}`);
+    return btn;
+  }
+  const span = el('span', `card static${red ? ' red' : ''}`, cardText(card));
+  span.setAttribute('aria-label', `${tSuit(card.suit)} ${rankLabel(card.rank)}`);
+  return span;
+}
 
-  // Topbar met taal- en themaswitch (§8-demonstratie)
-  const header = document.createElement('header');
-  header.className = 'topbar';
-  header.innerHTML =
-    '<div class="brand">Carts' +
-    '<span class="suits" aria-hidden="true">' +
-    '<span class="suit-black">♠</span><span class="suit-red">♥</span>' +
-    '<span class="suit-black">♣</span><span class="suit-red">♦</span>' +
-    '</span></div>';
+function topbar(): HTMLElement {
+  const header = el('header', 'topbar');
+  const brand = el('div', 'brand');
+  brand.innerHTML =
+    'Carts<span class="suits" aria-hidden="true"><span class="suit-black">♠</span>' +
+    '<span class="suit-red">♥</span><span class="suit-black">♣</span><span class="suit-red">♦</span></span>';
+  const controls = el('div', 'controls');
 
-  const controls = document.createElement('div');
-  controls.className = 'controls';
-
-  const langGroup = document.createElement('div');
-  langGroup.className = 'control-group';
-  langGroup.innerHTML = `<span>${t('controls.language')}</span>`;
-  const langSeg = document.createElement('div');
-  langSeg.className = 'seg';
+  const langGroup = el('div', 'control-group');
+  langGroup.append(el('span', undefined, t('controls.language')));
+  const langSeg = el('div', 'seg');
   langSeg.setAttribute('role', 'group');
-  langSeg.setAttribute('aria-label', t('controls.language'));
   for (const locale of LOCALES) {
     langSeg.append(
-      segButton(locale.toUpperCase(), getLocale() === locale, () => setLocale(locale as Locale)),
+      segButton(locale.toUpperCase(), getLocale() === locale, () => setLocale(locale)),
     );
   }
   langGroup.append(langSeg);
 
-  const themeGroup = document.createElement('div');
-  themeGroup.className = 'control-group';
-  themeGroup.innerHTML = `<span>${t('controls.theme')}</span>`;
-  const themeSeg = document.createElement('div');
-  themeSeg.className = 'seg';
+  const themeGroup = el('div', 'control-group');
+  themeGroup.append(el('span', undefined, t('controls.theme')));
+  const themeSeg = el('div', 'seg');
   themeSeg.setAttribute('role', 'group');
-  themeSeg.setAttribute('aria-label', t('controls.theme'));
-  const themeLabels: Record<Theme, string> = {
+  const labels: Record<Theme, string> = {
     light: t('theme.light'),
     dark: t('theme.dark'),
     system: t('theme.system'),
   };
   for (const theme of THEMES) {
     themeSeg.append(
-      segButton(themeLabels[theme], getTheme() === theme, () => {
+      segButton(labels[theme], getTheme() === theme, () => {
         applyTheme(theme);
         render();
       }),
     );
   }
   themeGroup.append(themeSeg);
-
   controls.append(langGroup, themeGroup);
-  header.append(controls);
+  header.append(brand, controls);
+  return header;
+}
 
-  // Placeholder-inhoud
-  const main = document.createElement('main');
-  main.className = 'card';
-  const phase = document.createElement('span');
-  phase.className = 'phase';
-  phase.textContent = t('app.phase');
-  const h1 = document.createElement('h1');
-  h1.textContent = t('placeholder.heading');
-  const tagline = document.createElement('p');
-  tagline.className = 'tagline';
-  tagline.textContent = t('app.tagline');
-  const body = document.createElement('p');
-  body.textContent = t('placeholder.body');
-  main.append(phase, h1, tagline, body);
+function startScreen(): HTMLElement {
+  const main = el('main', 'hero');
+  main.append(el('span', 'phase', t('app.phase')));
+  main.append(el('h1', undefined, t('placeholder.heading')));
+  main.append(el('p', 'tagline', t('app.tagline')));
+  main.append(el('p', undefined, t('placeholder.body')));
+  main.append(
+    el(
+      'p',
+      'ruleset',
+      t('placeholder.ruleset', {
+        name: ruleset.name[getLocale()],
+        version: ruleset.version,
+        contracts: ruleset.contracts.length,
+      }),
+    ),
+  );
+  main.append(button(t('game.start'), 'btn primary', startSession));
+  return main;
+}
 
-  if (ruleset) {
-    const info = document.createElement('p');
-    info.className = 'ruleset';
-    info.textContent = t('placeholder.ruleset', {
-      name: ruleset.name[getLocale()],
-      version: ruleset.version,
-      contracts: ruleset.contracts.length,
-    });
-    const rules = document.createElement('p');
-    rules.className = 'ruleset';
-    rules.innerHTML = t('placeholder.rules').replace(
-      'docs/REGELS.md',
-      '<code>docs/REGELS.md</code>',
+function statusBar(gift: Gift): HTMLElement {
+  const s = session as Session;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('game.gift', { n: s.giftNumber, total: s.totalGiften })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.deal.dealer) })),
+  );
+  const contract = gift.contract;
+  if (contract) {
+    bar.append(
+      el(
+        'span',
+        'chip strong',
+        t('play.contract', {
+          contract: tContract(contract.contract.id),
+          names: contract.declarers.map(playerName).join(' + '),
+        }),
+      ),
     );
-    main.append(info, rules);
+    bar.append(
+      el(
+        'span',
+        'chip',
+        contract.trumpSuit
+          ? t('game.trump', {
+              suit: `${SUIT_GLYPH[contract.trumpSuit]} ${tSuit(contract.trumpSuit)}`,
+            })
+          : t('game.noTrump'),
+      ),
+    );
+  } else {
+    bar.append(el('span', 'chip', t('game.turned', { card: cardText(gift.deal.turnedCard) })));
   }
+  return bar;
+}
 
-  wrap.append(header, main);
+function goalLine(gift: Gift): string | null {
+  const contract = gift.contract?.contract;
+  if (!contract) return null;
+  if (contract.target.tricks === 0) return t('play.goalZero');
+  if (contract.target.combined) return t('play.goalTogether', { tricks: contract.target.tricks });
+  return t('play.goal', { tricks: contract.target.tricks });
+}
+
+function seat(gift: Gift, player: number): HTMLElement {
+  const who = actor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}`));
+  box.append(head);
+
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.deal.hands[player] as Card[]);
+  const contract = gift.contract;
+  const openMiserie =
+    contract?.contract.openCardsAfterTrick !== undefined &&
+    gift.tricksPlayed >= contract.contract.openCardsAfterTrick &&
+    contract.declarers.includes(player);
+
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            gift.playCard(HUMAN, card);
+            render();
+            scheduleBots();
+          },
+        }),
+      );
+    }
+  } else if (openMiserie) {
+    for (const card of cards) hand.append(cardEl(card));
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function trickArea(gift: Gift): HTMLElement {
+  const area = el('div', 'trick');
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function bidLogView(): HTMLElement {
+  const list = el('div', 'bidlog');
+  for (const entry of bidLog.slice(-6)) {
+    const name = playerName(entry.player);
+    const line =
+      entry.kind === 'bid'
+        ? t('bidding.bids', { name, bid: tContract(entry.contractId) })
+        : entry.kind === 'join'
+          ? t('bidding.joins', { name })
+          : entry.kind === 'troel'
+            ? t('bidding.troel', { name })
+            : t('bidding.passed', { name });
+    list.append(el('div', 'bidlog-line', line));
+  }
+  return list;
+}
+
+function actionPanel(gift: Gift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = actor();
+
+  switch (gift.phase) {
+    case 'bidding': {
+      panel.append(el('h2', undefined, t('bidding.title')));
+      panel.append(bidLogView());
+      if (who?.human) {
+        const row = el('div', 'btn-row');
+        if (gift.bidding.canJoin(HUMAN)) {
+          row.append(
+            button(t('bidding.join'), 'btn primary', () => {
+              gift.bidding.act(HUMAN, { type: 'join' });
+              bidLog.push({ kind: 'join', player: HUMAN });
+              afterBidAction(gift);
+              render();
+              scheduleBots();
+            }),
+          );
+        }
+        for (const contract of gift.bidding.legalBids(HUMAN)) {
+          row.append(
+            button(tContract(contract.id), 'btn', () => {
+              gift.bidding.act(HUMAN, { type: 'bid', contractId: contract.id });
+              bidLog.push({ kind: 'bid', player: HUMAN, contractId: contract.id });
+              afterBidAction(gift);
+              render();
+              scheduleBots();
+            }),
+          );
+        }
+        row.append(
+          button(t('bidding.pass'), 'btn muted', () => {
+            gift.bidding.act(HUMAN, { type: 'pass' });
+            bidLog.push({ kind: 'pass', player: HUMAN });
+            afterBidAction(gift);
+            render();
+            scheduleBots();
+          }),
+        );
+        panel.append(row);
+      } else if (who) {
+        panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+      }
+      return panel;
+    }
+    case 'alleen-choice': {
+      if (who?.human) {
+        panel.append(el('p', undefined, t('bidding.alleenQuestion')));
+        const row = el('div', 'btn-row');
+        row.append(
+          button(t('bidding.accept'), 'btn primary', () => {
+            gift.bidding.chooseAlleen(true);
+            afterBidAction(gift);
+            render();
+            scheduleBots();
+          }),
+          button(t('bidding.decline'), 'btn muted', () => {
+            gift.bidding.chooseAlleen(false);
+            afterBidAction(gift);
+            render();
+            scheduleBots();
+          }),
+        );
+        panel.append(row);
+      } else if (who) {
+        panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+      }
+      return panel;
+    }
+    case 'trump-choice': {
+      if (who?.human) {
+        panel.append(el('p', undefined, t('trump.choose')));
+        const row = el('div', 'btn-row');
+        for (const suit of SUITS) {
+          const red = suit === 'H' || suit === 'D';
+          row.append(
+            button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
+              gift.chooseTrump(suit);
+              render();
+              scheduleBots();
+            }),
+          );
+        }
+        panel.append(row);
+      } else if (who) {
+        panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+      }
+      return panel;
+    }
+    case 'redeal': {
+      panel.append(el('p', undefined, t('bidding.redeal')));
+      panel.append(button(t('bidding.continue'), 'btn primary', closeAndNext));
+      return panel;
+    }
+    case 'play': {
+      const goal = goalLine(gift);
+      if (goal) panel.append(el('p', 'hint', goal));
+      if (who?.human) panel.append(el('p', 'strong', t('play.yourTurn')));
+      return panel;
+    }
+    case 'scored': {
+      panel.append(el('h2', undefined, t('score.title')));
+      const contract = gift.contract;
+      const score = gift.score;
+      if (contract && score) {
+        contract.declarers.forEach((d, i) => {
+          panel.append(
+            el(
+              'p',
+              score.success[i] ? 'made' : 'failed',
+              `${playerName(d)} — ${tContract(contract.contract.id)}: ${
+                score.success[i] ? t('score.made') : t('score.failed')
+              }`,
+            ),
+          );
+        });
+        panel.append(scoreTable(gift));
+      }
+      panel.append(button(t('score.next'), 'btn primary', closeAndNext));
+      return panel;
+    }
+  }
+}
+
+function scoreTable(gift: Gift): HTMLElement {
+  const s = session as Session;
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  head.append(el('th'));
+  for (let p = 0; p < PLAYER_COUNT; p++) head.append(el('th', undefined, playerName(p)));
+  table.append(head);
+  const rows: Array<[string, (p: number) => string]> = [
+    [t('score.tricks'), (p) => String(gift.tricksWon[p] ?? 0)],
+    [t('score.points'), (p) => formatPoints(gift.score?.points[p] ?? 0)],
+    [t('score.total'), (p) => formatPoints((s.totals[p] ?? 0) + (gift.score?.points[p] ?? 0))],
+  ];
+  for (const [label, value] of rows) {
+    const tr = el('tr');
+    tr.append(el('th', undefined, label));
+    for (let p = 0; p < PLAYER_COUNT; p++) tr.append(el('td', undefined, value(p)));
+    table.append(tr);
+  }
+  return table;
+}
+
+function formatPoints(points: number): string {
+  return points > 0 ? `+${points}` : String(points);
+}
+
+function endScreen(): HTMLElement {
+  const s = session as Session;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  const best = s.totals.indexOf(Math.max(...s.totals));
+  main.append(
+    el('p', 'strong', t('session.winner', { name: playerName(best), points: s.totals[best] ?? 0 })),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  for (let p = 0; p < PLAYER_COUNT; p++) {
+    head.append(el('th', undefined, playerName(p)));
+    row.append(el('td', undefined, formatPoints(s.totals[p] ?? 0)));
+  }
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startSession));
+  return main;
+}
+
+function render(): void {
+  if (!app) return;
+  app.replaceChildren();
+  const wrap = el('div', 'wrap game');
+  wrap.append(topbar());
+
+  const gift = currentGift();
+  if (!session || (!gift && !session.finished)) {
+    wrap.append(startScreen());
+  } else if (!gift && session.finished) {
+    wrap.append(endScreen());
+  } else if (gift) {
+    wrap.append(statusBar(gift));
+    const table = el('div', 'table-grid');
+    table.append(seat(gift, 2));
+    const middle = el('div', 'table-middle');
+    middle.append(seat(gift, 1), trickArea(gift), seat(gift, 3));
+    table.append(middle);
+    table.append(seat(gift, HUMAN));
+    wrap.append(table, actionPanel(gift));
+  }
   app.append(wrap);
 }
 

@@ -1,6 +1,6 @@
 # Carts
 
-Vlaamse kaartspellen (wiezen, …) in de browser. Onderdeel van de mityjohn.com-monorepo,
+Vlaamse kaartspellen (wiezen, …) in de browser — Fase 1: speelbaar wiezen tegen drie bots. Onderdeel van de mityjohn.com-monorepo,
 gedeployed als subpad **https://mityjohn.com/carts/** via de bestaande GitHub Pages-workflow.
 
 ## Structuur (§6)
@@ -9,11 +9,13 @@ gedeployed als subpad **https://mityjohn.com/carts/** via de bestaande GitHub Pa
 carts/                  # deze app (Vite + TypeScript, strict)
 ├── index.html          # placeholderpagina Fase 0 (taal- + themaswitch)
 ├── src/
-│   ├── main.ts         # entrypoint / rendering
+│   ├── main.ts         # spel-UI (tafel, biedronde, scorebord) + rendering
+│   ├── engine/         # DOM-vrije game-engine: delen, bieden, slagen, scoring
+│   ├── bots.ts         # heuristische botspelers
 │   ├── i18n/           # i18n-fundering (§8): nl / en / fr, nl = fallback
 │   ├── theme.ts        # themafundering (§8): licht / donker / systeem
 │   ├── ruleset.ts      # laadt rulesets/*.json (repo-niveau)
-│   └── *.test.ts       # Vitest-tests
+│   └── **/*.test.ts    # Vitest-tests (engine, bots-simulatie, i18n, thema, ruleset)
 ├── vite.config.ts      # base: /carts/
 └── eslint.config.js    # ESLint + typescript-eslint; Prettier voor formattering
 

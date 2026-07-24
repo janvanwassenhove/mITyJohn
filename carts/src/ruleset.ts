@@ -8,13 +8,24 @@ export interface ContractScore {
   voleBonus?: number;
 }
 
+export type TrumpRule = 'turned' | 'declarer-choice' | 'none' | 'fourth-ace-suit';
+export type OpeningLead = 'left-of-dealer' | 'declarer' | 'fourth-ace-holder';
+
 export interface Contract {
   id: string;
   rank: number;
   team: number;
   target: { tricks: number; combined?: boolean; exact?: boolean };
-  trump: string;
+  trump: TrumpRule;
   score: ContractScore;
+  mandatory?: string;
+  onlyIfNoPartner?: boolean;
+  multipleDeclarers?: boolean;
+  overbiddableFromRank?: number;
+  openingLead?: OpeningLead;
+  openCardsAfterTrick?: number;
+  inTrumpOutranksSameLevel?: boolean;
+  fourAcesPartnerRule?: string;
 }
 
 export interface Ruleset {
@@ -23,7 +34,18 @@ export interface Ruleset {
   name: Record<Locale, string>;
   version: string;
   players: number;
+  play: {
+    direction: string;
+    handSize: number;
+    dealPattern: number[];
+    trumpDetermination: string;
+    openingLead: string;
+    followSuit: string;
+    mustTrump: boolean;
+    mustOvertrump: boolean;
+  };
   contracts: Contract[];
+  session?: { giften: number };
 }
 
 export const rulesets: Ruleset[] = [vlaamsStandaard as unknown as Ruleset];

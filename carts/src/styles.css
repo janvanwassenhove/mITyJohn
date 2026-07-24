@@ -118,7 +118,7 @@ header.topbar {
   color: var(--accent-contrast);
 }
 
-main.card {
+main.hero {
   margin-top: 2rem;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -127,7 +127,7 @@ main.card {
   box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
 }
 
-main.card h1 {
+main.hero h1 {
   margin: 0 0 0.5rem;
   font-size: 1.6rem;
 }
@@ -157,4 +157,260 @@ main.card h1 {
 
 .ruleset code {
   color: var(--text);
+}
+
+/* ---------- speltafel (Fase 1) ---------- */
+
+.wrap.game {
+  max-width: 64rem;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  padding: 0.45rem 0.9rem;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.btn.muted {
+  color: var(--text-muted);
+}
+
+.btn.red {
+  color: var(--suit-red);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.chip {
+  font-size: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  background: var(--surface);
+}
+
+.chip.strong {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.table-grid {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background:
+    radial-gradient(ellipse at center, rgb(255 255 255 / 4%), transparent 70%), var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.table-middle {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.seat {
+  border: 1px dashed transparent;
+  border-radius: var(--radius);
+  padding: 0.4rem;
+}
+
+.seat.active {
+  border-color: var(--accent);
+}
+
+.seat-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.seat-name {
+  font-weight: 700;
+}
+
+.seat-tricks {
+  color: var(--text-muted);
+}
+
+.hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.3rem;
+  height: 3.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--suit-black);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 0.25rem;
+  cursor: default;
+}
+
+button.card:not(:disabled) {
+  cursor: pointer;
+  border-color: var(--accent);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+}
+
+button.card:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+
+button.card:disabled {
+  opacity: 0.55;
+}
+
+.card.red {
+  color: var(--suit-red);
+}
+
+.card.back {
+  min-width: 1.1rem;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--accent),
+      var(--accent) 3px,
+      transparent 3px,
+      transparent 6px
+    ),
+    var(--surface);
+  opacity: 0.6;
+}
+
+.trick {
+  min-height: 6.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.trick-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.trick-cards {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trick-cell {
+  text-align: center;
+}
+
+.trick-player {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.panel {
+  margin-top: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+
+.panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.hint {
+  color: var(--text-muted);
+  margin: 0.25rem 0;
+}
+
+.strong {
+  font-weight: 700;
+  margin: 0.25rem 0;
+}
+
+.made {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.failed {
+  color: var(--suit-red);
+  font-weight: 600;
+}
+
+.bidlog {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.score-table {
+  border-collapse: collapse;
+  margin: 0.75rem 0;
+  font-size: 0.9rem;
+}
+
+.score-table th,
+.score-table td {
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+  text-align: center;
+}
+
+.score-table th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  .table-middle {
+    grid-template-columns: 1fr;
+  }
 }
