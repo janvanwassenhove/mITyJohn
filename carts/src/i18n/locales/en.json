@@ -86,5 +86,19 @@
   "stats.declaredWon": "Made",
   "stats.empty": "No deals played yet — the table fills itself.",
   "stats.reset": "Clear statistics",
-  "stats.back": "Back"
+  "stats.back": "Back",
+  "game.picker": "Game",
+  "game.wiezen": "Wiezen",
+  "game.manillen": "Manille",
+  "manille.trumpChoose": "You deal — pick trump",
+  "manille.trumpPending": "{name} picks trump",
+  "manille.goal": "Take more than 30 card points with your team",
+  "manille.points": "Card points",
+  "manille.tied": "Tied (30–30) — nobody scores.",
+  "manille.giftWon": "{team} wins the deal: {points} card points (+{score})",
+  "manille.target": "First team to {points} points wins",
+  "manille.sessionWon": "{team} wins the session",
+  "team.we": "We",
+  "team.they": "They",
+  "manille.gift": "Deal {n}"
 }

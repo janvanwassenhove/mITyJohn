@@ -1,9 +1,9 @@
 # REGELS — Manillen (Fase 4-voorbereiding)
 
-> **Status:** onderzoeksdocument, nog **niet** geïmplementeerd. Manillen is het tweede
-> spel voor Carts (na de kleurenwiezen-variant, bevestigd 2026-07-24). Zoals bij wiezen
-> geldt: sterke regionale variatie, keuzes gemarkeerd met **⚠️ AANNAME**, te valideren
-> door de opdrachtgever vóór de engine gebouwd wordt.
+> **Status:** **geïmplementeerd** (Fase 4b) op de hieronder gemarkeerde aannames —
+> machineleesbaar in [`rulesets/manillen.json`](../rulesets/manillen.json), engine in
+> `carts/src/engine/manille.ts`. De zes open vragen onderaan blijven te valideren door
+> de opdrachtgever; antwoorden worden regels-eerst doorgevoerd (REGELS → ruleset → engine).
 >
 > Bronnen (via zoekresultaten; volledige pagina's binnen de sandbox-netwerkpolicy niet
 > ophaalbaar): whisthub.com/nl/manille/rules, nl.wikibooks.org (Kaartspel/Manillen),

@@ -24,6 +24,9 @@ import {
   type BotLevel,
 } from './bots';
 import * as store from './store';
+import { strength, teamOf, type ManilleGift } from './engine/manille';
+import type { ManilleSession } from './engine/manille';
+import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
 
@@ -49,6 +52,12 @@ let restored: { state: store.PersistedSession; session: Session } | null = null;
 let botLevel: BotLevel = 'normal';
 let bidLog: BidLogEntry[] = [];
 let generation = 0;
+
+const GAME_KEY = 'carts.game';
+let game: 'wiezen' | 'manille' = 'wiezen';
+let mSession: ManilleSession | null = null;
+let mPersisted: store.PersistedManille | null = null;
+let mRestored: { state: store.PersistedManille; session: ManilleSession } | null = null;
 
 const SUIT_GLYPH: Record<Suit, string> = { S: '♠', H: '♥', D: '♦', C: '♣' };
 const RANK_LABEL: Record<number, string> = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' };
@@ -227,7 +236,7 @@ function scheduleBots(): void {
   const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
   window.setTimeout(
     () => {
-      if (gen !== generation) return;
+      if (gen !== generation || game !== 'wiezen') return;
       if (botStep()) {
         render();
         scheduleBots();
@@ -363,6 +372,26 @@ function startScreen(): HTMLElement {
     ),
   );
 
+  const gameGroup = el('div', 'control-group level-picker');
+  gameGroup.append(el('span', undefined, t('game.picker')));
+  const gameSeg = el('div', 'seg');
+  gameSeg.setAttribute('role', 'group');
+  for (const g of ['wiezen', 'manille'] as const) {
+    gameSeg.append(
+      segButton(t(g === 'wiezen' ? 'game.wiezen' : 'game.manillen'), game === g, () => {
+        game = g;
+        try {
+          localStorage.setItem(GAME_KEY, g);
+        } catch {
+          /* ignore */
+        }
+        render();
+      }),
+    );
+  }
+  gameGroup.append(gameSeg);
+  main.append(gameGroup);
+
   const rulesetGroup = el('div', 'control-group level-picker');
   rulesetGroup.append(el('span', undefined, t('ruleset.picker')));
   const rulesetSeg = el('div', 'seg');
@@ -381,7 +410,7 @@ function startScreen(): HTMLElement {
     );
   }
   rulesetGroup.append(rulesetSeg);
-  main.append(rulesetGroup);
+  if (game === 'wiezen') main.append(rulesetGroup);
 
   const levelGroup = el('div', 'control-group level-picker');
   levelGroup.append(el('span', undefined, t('bots.level')));
@@ -404,7 +433,20 @@ function startScreen(): HTMLElement {
   main.append(levelGroup);
 
   const row = el('div', 'btn-row');
-  if (restored && !restored.session.finished) {
+  if (game === 'manille') {
+    if (mRestored && !mRestored.session.finished) {
+      row.append(button(t('start.continue'), 'btn primary', continueManille));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearManille();
+          mRestored = null;
+          startManille();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary', startManille));
+    }
+  } else if (restored && !restored.session.finished) {
     row.append(button(t('start.continue'), 'btn primary', continueSession));
     row.append(
       button(t('start.new'), 'btn', () => {
@@ -796,8 +838,24 @@ function render(): void {
   wrap.append(topbar());
 
   const gift = currentGift();
-  if (view === 'stats' && !session) {
+  const mGift = mSession?.gift ?? null;
+  if (view === 'stats' && !session && !mSession) {
     wrap.append(statsScreen());
+  } else if (game === 'manille') {
+    if (!mSession || (!mGift && !mSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!mGift && mSession.finished) {
+      wrap.append(manilleEndScreen());
+    } else if (mGift) {
+      wrap.append(manilleStatusBar(mGift));
+      const table = el('div', 'table-grid');
+      table.append(manilleSeat(mGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(manilleSeat(mGift, 1), manilleTrickArea(mGift), manilleSeat(mGift, 3));
+      table.append(middle);
+      table.append(manilleSeat(mGift, HUMAN));
+      wrap.append(table, manilleActionPanel(mGift));
+    }
   } else if (!session || (!gift && !session.finished)) {
     wrap.append(startScreen());
   } else if (!gift && session.finished) {
@@ -813,6 +871,294 @@ function render(): void {
     wrap.append(table, actionPanel(gift));
   }
   app.append(wrap);
+}
+
+/* ---------- manillen (Fase 4b) ---------- */
+
+const SUIT_DISPLAY_ORDER: Record<Suit, number> = { S: 0, H: 1, C: 2, D: 3 };
+
+function manilleSortHand(hand: Card[]): Card[] {
+  return [...hand].sort((a, b) =>
+    a.suit === b.suit
+      ? strength(b.rank) - strength(a.rank)
+      : SUIT_DISPLAY_ORDER[a.suit] - SUIT_DISPLAY_ORDER[b.suit],
+  );
+}
+
+function mTeamName(team: number): string {
+  return team === teamOf(HUMAN) ? t('team.we') : t('team.they');
+}
+
+function recordM(action: store.ManilleAction): void {
+  if (!mPersisted) return;
+  mPersisted.actions.push(action);
+  store.saveManille(mPersisted);
+}
+
+function startManille(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  mPersisted = store.newManille(seed, botLevel);
+  store.saveManille(mPersisted);
+  mRestored = null;
+  mSession = store.replayManille(mPersisted);
+  render();
+  scheduleManilleBots();
+}
+
+function continueManille(): void {
+  if (!mRestored) return;
+  mPersisted = mRestored.state;
+  mSession = mRestored.session;
+  botLevel = mPersisted.botLevel;
+  mRestored = null;
+  render();
+  scheduleManilleBots();
+}
+
+function manilleActor(): { player: number; human: boolean } | null {
+  const gift = mSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'trump-choice') return { player: gift.dealer, human: gift.dealer === HUMAN };
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playManilleCard(gift: ManilleGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordM({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    sfxScore(gift.score.winner === teamOf(HUMAN));
+  }
+}
+
+function manilleBotStep(): boolean {
+  const gift = mSession?.gift;
+  const who = manilleActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'trump-choice') {
+    const suit = chooseManilleTrump(gift.hands[who.player] as Card[]);
+    gift.chooseTrump(suit);
+    recordM({ t: 'trump', suit });
+    return true;
+  }
+  playManilleCard(gift, who.player, chooseManilleCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleManilleBots(): void {
+  const gen = ++generation;
+  const who = manilleActor();
+  if (!who || who.human) return;
+  const gift = mSession?.gift;
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'manille') return;
+      if (manilleBotStep()) {
+        render();
+        scheduleManilleBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function manilleCloseAndNext(): void {
+  if (!mSession) return;
+  mSession.closeGift();
+  recordM({ t: 'close' });
+  if (!mSession.finished) {
+    mSession.nextGift();
+  } else {
+    recordSessionStat('manillen', botLevel, mSession.totals, teamOf(HUMAN));
+    store.clearManille();
+    mPersisted = null;
+  }
+  render();
+  scheduleManilleBots();
+}
+
+function manilleStatusBar(gift: ManilleGift): HTMLElement {
+  const s = mSession as ManilleSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('manille.gift', { n: s.giftNumber })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.trumpSuit) {
+    bar.append(
+      el(
+        'span',
+        'chip',
+        t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
+      ),
+    );
+  } else {
+    bar.append(el('span', 'chip', t('manille.trumpPending', { name: playerName(gift.dealer) })));
+  }
+  const we = teamOf(HUMAN);
+  bar.append(
+    el(
+      'span',
+      'chip strong',
+      `${t('team.we')} ${s.totals[we] ?? 0} — ${t('team.they')} ${s.totals[1 - we] ?? 0}`,
+    ),
+    el('span', 'chip', t('manille.target', { points: s.targetPoints })),
+  );
+  return bar;
+}
+
+function manilleSeat(gift: ManilleGift, player: number): HTMLElement {
+  const who = manilleActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}`));
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = manilleSortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playManilleCard(gift, HUMAN, card);
+            render();
+            scheduleManilleBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function manilleTrickArea(gift: ManilleGift): HTMLElement {
+  const area = el('div', 'trick');
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function manilleActionPanel(gift: ManilleGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = manilleActor();
+  switch (gift.phase) {
+    case 'trump-choice': {
+      if (who?.human) {
+        panel.append(el('p', undefined, t('manille.trumpChoose')));
+        const row = el('div', 'btn-row');
+        for (const suit of SUITS) {
+          const red = suit === 'H' || suit === 'D';
+          row.append(
+            button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
+              gift.chooseTrump(suit);
+              recordM({ t: 'trump', suit });
+              render();
+              scheduleManilleBots();
+            }),
+          );
+        }
+        panel.append(row);
+      } else if (who) {
+        panel.append(el('p', 'hint', t('manille.trumpPending', { name: playerName(who.player) })));
+      }
+      return panel;
+    }
+    case 'play': {
+      panel.append(el('p', 'hint', t('manille.goal')));
+      if (who?.human) panel.append(el('p', 'strong', t('play.yourTurn')));
+      return panel;
+    }
+    case 'scored': {
+      panel.append(el('h2', undefined, t('score.title')));
+      const score = gift.score;
+      if (score) {
+        if (score.winner === null) {
+          panel.append(el('p', 'failed', t('manille.tied')));
+        } else {
+          panel.append(
+            el(
+              'p',
+              score.winner === teamOf(HUMAN) ? 'made' : 'failed',
+              t('manille.giftWon', {
+                team: mTeamName(score.winner),
+                points: score.teamPoints[score.winner] ?? 0,
+                score: score.score,
+              }),
+            ),
+          );
+        }
+        const s = mSession as ManilleSession;
+        const we = teamOf(HUMAN);
+        const table = el('table', 'score-table');
+        const head = el('tr');
+        head.append(
+          el('th'),
+          el('th', undefined, t('team.we')),
+          el('th', undefined, t('team.they')),
+        );
+        table.append(head);
+        const rows: Array<[string, number, number]> = [
+          [t('manille.points'), score.teamPoints[we] ?? 0, score.teamPoints[1 - we] ?? 0],
+          [
+            t('score.total'),
+            (s.totals[we] ?? 0) + (score.winner === we ? score.score : 0),
+            (s.totals[1 - we] ?? 0) + (score.winner === 1 - we ? score.score : 0),
+          ],
+        ];
+        for (const [label, a, b] of rows) {
+          const tr = el('tr');
+          tr.append(el('th', undefined, label));
+          tr.append(el('td', undefined, String(a)));
+          tr.append(el('td', undefined, String(b)));
+          table.append(tr);
+        }
+        panel.append(table);
+      }
+      panel.append(button(t('score.next'), 'btn primary', manilleCloseAndNext));
+      return panel;
+    }
+  }
+}
+
+function manilleEndScreen(): HTMLElement {
+  const s = mSession as ManilleSession;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  const winner = (s.totals[0] ?? 0) >= (s.totals[1] ?? 0) ? 0 : 1;
+  main.append(el('p', 'strong', t('manille.sessionWon', { team: mTeamName(winner) })));
+  const we = teamOf(HUMAN);
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  head.append(el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+  row.append(
+    el('td', undefined, String(s.totals[we] ?? 0)),
+    el('td', undefined, String(s.totals[1 - we] ?? 0)),
+  );
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startManille));
+  return main;
 }
 
 /* ---------- opstart ---------- */
@@ -833,6 +1179,20 @@ try {
   ruleset = getRuleset(storedRuleset ?? '') ?? ruleset;
 } catch {
   /* ignore */
+}
+try {
+  const storedGame = localStorage.getItem(GAME_KEY);
+  if (storedGame === 'manille' || storedGame === 'wiezen') game = storedGame;
+} catch {
+  /* ignore */
+}
+const savedManille = store.loadManille();
+if (savedManille) {
+  try {
+    mRestored = { state: savedManille, session: store.replayManille(savedManille) };
+  } catch {
+    store.clearManille();
+  }
 }
 const savedState = store.load();
 const savedRuleset = savedState ? getRuleset(savedState.rulesetId) : undefined;

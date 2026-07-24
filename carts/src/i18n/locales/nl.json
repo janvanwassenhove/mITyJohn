@@ -86,5 +86,19 @@
   "stats.declaredWon": "Gehaald",
   "stats.empty": "Nog geen giften gespeeld — de tabel vult zich vanzelf.",
   "stats.reset": "Wis statistieken",
-  "stats.back": "Terug"
+  "stats.back": "Terug",
+  "game.picker": "Spel",
+  "game.wiezen": "Wiezen",
+  "game.manillen": "Manillen",
+  "manille.trumpChoose": "Jij deelt — kies troef",
+  "manille.trumpPending": "{name} kiest troef",
+  "manille.goal": "Haal met je team meer dan 30 kaartpunten",
+  "manille.points": "Kaartpunten",
+  "manille.tied": "Gedeeld (30–30) — niemand scoort.",
+  "manille.giftWon": "{team} wint de gift: {points} kaartpunten (+{score})",
+  "manille.target": "Eerste ploeg aan {points} punten wint",
+  "manille.sessionWon": "{team} wint de sessie",
+  "team.we": "Wij",
+  "team.they": "Zij",
+  "manille.gift": "Gift {n}"
 }

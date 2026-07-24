@@ -4,6 +4,7 @@ import { Session } from './engine/game';
 import { chooseBid, chooseCard } from './bots';
 import * as store from './store';
 import { getRuleset, type Ruleset } from './ruleset';
+import { chooseManilleCard, chooseManilleTrump } from './bots';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -80,6 +81,34 @@ describe('sessiepersistentie (actielog-replay)', () => {
     expect(loaded).toEqual(state);
     store.clear();
     expect(store.load()).toBeNull();
+  });
+
+  it('manillen: herbouwt exact dezelfde sessietoestand', () => {
+    const state = store.newManille(42, 'normal');
+    const session = store.replayManille(state);
+    // speel 1 gift en registreer
+    const gift = session.gift as NonNullable<typeof session.gift>;
+    const suit = chooseManilleTrump(gift.hands[gift.dealer] as never);
+    gift.chooseTrump(suit);
+    state.actions.push({ t: 'trump', suit });
+    while (gift.phase === 'play') {
+      const p = gift.toPlay;
+      const card = chooseManilleCard(gift, p, 'normal');
+      gift.playCard(p, card);
+      state.actions.push({ t: 'play', p, card });
+    }
+    session.closeGift();
+    state.actions.push({ t: 'close' });
+    if (!session.finished) session.nextGift();
+
+    const replayed = store.replayManille(state);
+    expect(replayed.giftNumber).toBe(session.giftNumber);
+    expect(replayed.totals).toEqual(session.totals);
+    expect(replayed.gift?.hands).toEqual(session.gift?.hands);
+    store.saveManille(state);
+    expect(store.loadManille()).toEqual(state);
+    store.clearManille();
+    expect(store.loadManille()).toBeNull();
   });
 
   it('weigert corrupte opslag', () => {

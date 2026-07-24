@@ -86,5 +86,19 @@
   "stats.declaredWon": "Réussi",
   "stats.empty": "Aucune donne jouée — le tableau se remplit tout seul.",
   "stats.reset": "Effacer les statistiques",
-  "stats.back": "Retour"
+  "stats.back": "Retour",
+  "game.picker": "Jeu",
+  "game.wiezen": "Wiezen",
+  "game.manillen": "Manille",
+  "manille.trumpChoose": "Vous distribuez — choisissez l'atout",
+  "manille.trumpPending": "{name} choisit l'atout",
+  "manille.goal": "Prenez plus de 30 points de cartes avec votre équipe",
+  "manille.points": "Points de cartes",
+  "manille.tied": "Égalité (30–30) — personne ne marque.",
+  "manille.giftWon": "{team} gagne la donne : {points} points (+{score})",
+  "manille.target": "La première équipe à {points} points gagne",
+  "manille.sessionWon": "{team} gagne la session",
+  "team.we": "Nous",
+  "team.they": "Eux",
+  "manille.gift": "Donne {n}"
 }

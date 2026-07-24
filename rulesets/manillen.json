@@ -1,0 +1,48 @@
+{
+  "id": "manillen",
+  "game": "manillen",
+  "name": {
+    "nl": "Manillen — Vlaams standaard",
+    "en": "Manille — Flemish standard",
+    "fr": "Manille — standard flamand"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-MANILLEN.md",
+  "players": 4,
+  "teams": [
+    [0, 2],
+    [1, 3]
+  ],
+  "deck": {
+    "cards": 32,
+    "jokers": false,
+    "rankOrder": ["10", "A", "K", "Q", "J", "9", "8", "7"],
+    "cardPoints": { "10": 5, "A": 4, "K": 3, "Q": 2, "J": 1 }
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 8,
+    "dealPattern": [3, 3, 2],
+    "trumpDetermination": "dealer-choice",
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": true,
+    "mustOvertrump": true
+  },
+  "scoring": {
+    "unit": "card-points",
+    "totalPoints": 60,
+    "giftScore": "winner-points-minus-30",
+    "tiedGift": "no-score"
+  },
+  "session": {
+    "targetPoints": 101
+  },
+  "assumptions": [
+    "Enkel kaartpunten (60-model), geen slagpunten (REGELS-MANILLEN §2)",
+    "Deler kiest troef, geen multiplicators (REGELS-MANILLEN §3)",
+    "Overtroeven verplicht, anders ondertroeven; geen maat-ligt-uitzondering (REGELS-MANILLEN §4)",
+    "Sessie tot 101 punten (REGELS-MANILLEN §5)",
+    "Speelrichting met de klok mee, delen 3-3-2 (REGELS-MANILLEN §1)"
+  ]
+}

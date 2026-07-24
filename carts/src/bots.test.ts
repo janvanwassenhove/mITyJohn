@@ -10,6 +10,8 @@ import {
   type BotLevel,
 } from './bots';
 import { getRuleset, type Ruleset } from './ruleset';
+import { ManilleSession } from './engine/manille';
+import { chooseManilleCard, chooseManilleTrump } from './bots';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -51,6 +53,28 @@ function simulateSession(seed: number, level: BotLevel = 'normal'): Session {
   }
   return session;
 }
+
+describe('manillen-bots', () => {
+  it('spelen volledige sessies tot het puntendoel, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 5; seed++) {
+        const session = new ManilleSession(mulberry32(seed * 100), 0, 61);
+        let safety = 500;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          gift.chooseTrump(chooseManilleTrump(gift.hands[gift.dealer] as Card[]));
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseManilleCard(gift, p, level));
+          }
+          session.closeGift();
+        }
+        expect(session.finished).toBe(true);
+        expect(Math.max(...session.totals)).toBeGreaterThanOrEqual(61);
+      }
+    }
+  });
+});
 
 describe('bots', () => {
   it('spelen tientallen volledige sessies zonder illegale zetten, zero-sum, op elk niveau', () => {

@@ -5,6 +5,7 @@
 import { ACE, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
+import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import { SUITS } from './engine/cards';
 
 export const BOT_LEVELS = ['easy', 'normal', 'strong'] as const;
@@ -215,5 +216,79 @@ function beats(candidate: Card, target: Card, trumpSuit: Suit | null, ledSuit: S
   if (cTrump && !tTrump) return true;
   if (!cTrump && tTrump) return false;
   if (candidate.suit === target.suit) return candidate.rank > target.rank;
+  return candidate.suit === ledSuit && target.suit !== ledSuit;
+}
+
+/* ---------- manillen (REGELS-MANILLEN.md) ---------- */
+
+/** Deler kiest troef: langste kleur, bij gelijke lengte de sterkste. */
+export function chooseManilleTrump(hand: Card[]): Suit {
+  let best: Suit = 'S';
+  let bestScore = -1;
+  for (const suit of SUITS) {
+    const cards = hand.filter((c) => c.suit === suit);
+    const score = cards.length * 10 + cards.reduce((sum, c) => sum + strength(c.rank), 0);
+    if (score > bestScore) {
+      bestScore = score;
+      best = suit;
+    }
+  }
+  return best;
+}
+
+export function chooseManilleCard(gift: ManilleGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const trumpSuit = gift.trumpSuit as Suit;
+  const trick = gift.trick;
+  const byStrengthAsc = [...legal].sort((a, b) => strength(a.rank) - strength(b.rank));
+  const cheapest = [...legal].sort(
+    (a, b) => cardPoints(a) - cardPoints(b) || strength(a.rank) - strength(b.rank),
+  )[0] as Card;
+  if (level === 'easy') return byStrengthAsc[0] as Card;
+
+  if (trick.length === 0) {
+    // Uitkomen: sterkste kaart van de langste niet-troefkleur, anders troef.
+    const suit = longestSuit(legal.filter((c) => c.suit !== trumpSuit)) ?? trumpSuit;
+    const inSuit = legal.filter((c) => c.suit === suit);
+    const pool = inSuit.length > 0 ? inSuit : legal;
+    return [...pool].sort((a, b) => strength(b.rank) - strength(a.rank))[0] as Card;
+  }
+
+  const winning = manilleWinning(trick, trumpSuit);
+  const partnerWinning = teamOf(winning.player) === teamOf(player);
+  const winners = legal
+    .filter((c) => manilleBeats(c, winning.card, trumpSuit, (trick[0] as TrickRef).card.suit))
+    .sort((a, b) => strength(a.rank) - strength(b.rank));
+  if (partnerWinning && level !== 'normal') {
+    // Sterk: maat ligt — smeer punten of gooi goedkoop af.
+    const smear = [...legal].sort((a, b) => cardPoints(b) - cardPoints(a))[0] as Card;
+    return trick.length === 3 && cardPoints(smear) > 0 ? smear : cheapest;
+  }
+  if (winners.length > 0) return winners[0] as Card;
+  return cheapest;
+}
+
+interface TrickRef {
+  player: number;
+  card: Card;
+}
+
+function manilleWinning(trick: TrickRef[], trumpSuit: Suit): TrickRef {
+  let best = trick[0] as TrickRef;
+  for (const play of trick.slice(1)) {
+    if (manilleBeats(play.card, best.card, trumpSuit, (trick[0] as TrickRef).card.suit)) {
+      best = play;
+    }
+  }
+  return best;
+}
+
+function manilleBeats(candidate: Card, target: Card, trumpSuit: Suit, ledSuit: Suit): boolean {
+  const cTrump = candidate.suit === trumpSuit;
+  const tTrump = target.suit === trumpSuit;
+  if (cTrump && !tTrump) return true;
+  if (!cTrump && tTrump) return false;
+  if (candidate.suit === target.suit) return strength(candidate.rank) > strength(target.rank);
   return candidate.suit === ledSuit && target.suit !== ledSuit;
 }
