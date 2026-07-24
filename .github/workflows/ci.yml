@@ -30,6 +30,10 @@ jobs:
       - run: npm run build
       - run: node scripts/check-dist.mjs # legacy query links + internal refs
       - name: Link check (external)
+        # `continue-on-error` én `fail: false`: externe flakiness — inclusief een
+        # mislukte lychee-binary-download (infra) — mag CI nooit blokkeren;
+        # check-dist.mjs dekt de interne links.
+        continue-on-error: true
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
           args: >-
