@@ -96,7 +96,7 @@ alleen `main` deployen.
 | 4b | Manillen speelbaar: eigen engine (10 boven aas, kaartpunten, vaste teams, troefkeuze deler, troefplicht, tot 101), spelkeuze in de app, persistentie — op de aannames uit [REGELS-MANILLEN.md](REGELS-MANILLEN.md) | ✅ |
 | 4c | Regelvarianten als **sessie-opties** op het startscherm: wiezen (troel-doel 8/9, troel overbiedbaar/onoverbiedbaar, kleine+grote miserie) en manille (puntenmodel 60/68, troefbepaling deler/laatste-kaart/maat, multiplicators, "maat ligt", sessiedoel 101/61); opties in de persistentie | ✅ |
 | 4d | Bieden speelbaar: eigen engine (32 kaarten, troef-/niet-troefwaarden, biedveiling om punten, hoogste bieder komt uit en bepaalt troef, troefvrijheid, 151 punten, zero-sum ±bod tot 500), spelkeuze in de app, persistentie — op de aannames uit [REGELS-BIEDEN.md](REGELS-BIEDEN.md) | ✅ |
-| 5 | ~~Online multiplayer~~ — door de opdrachtgever afgewezen (app blijft serverloos). In de plaats: **scorebord voor een fysiek kaartspel** — houd handmatig per ronde de punten bij (2–4 deelnemers, optioneel doel, hoogste/laagste wint), persistent in localStorage | ✅ |
+| 5 | ~~Online multiplayer~~ — door de opdrachtgever afgewezen (app blijft serverloos). In de plaats: **scorebord voor een fysiek kaartspel** — houd per ronde de punten bij. Twee modi: **manueel** (2–4 deelnemers, vrije punten) en **wiezen (auto)** — duid contract (incl. troel), speler + maat en aantal slagen aan, de app berekent de punten via de scoring-engine. Persistent in localStorage | ✅ |
 
 ## §13 Open punten
 

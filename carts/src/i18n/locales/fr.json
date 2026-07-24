@@ -154,5 +154,13 @@
   "scorebord.back": "Retour",
   "scorebord.winner": "{name} gagne avec {points} points",
   "scorebord.leader": "En tête : {name}",
-  "scorebord.deleteRound": "Supprimer la manche"
+  "scorebord.deleteRound": "Supprimer la manche",
+  "scorebord.mode": "Mode",
+  "scorebord.modeManual": "Manuel",
+  "scorebord.modeWiezen": "Wiezen (auto)",
+  "scorebord.wiezenHint": "Choisissez le contrat, le joueur (+ partenaire) et le nombre de plis — l'app calcule les points.",
+  "scorebord.contract": "Contrat",
+  "scorebord.declarer": "Joueur",
+  "scorebord.partner": "Partenaire",
+  "scorebord.tricks": "Plis"
 }

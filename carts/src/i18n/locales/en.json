@@ -154,5 +154,13 @@
   "scorebord.back": "Back",
   "scorebord.winner": "{name} wins with {points} points",
   "scorebord.leader": "Leading: {name}",
-  "scorebord.deleteRound": "Delete round"
+  "scorebord.deleteRound": "Delete round",
+  "scorebord.mode": "Mode",
+  "scorebord.modeManual": "Manual",
+  "scorebord.modeWiezen": "Wiezen (auto)",
+  "scorebord.wiezenHint": "Pick the contract, the player (+ partner) and the number of tricks — the app computes the points.",
+  "scorebord.contract": "Contract",
+  "scorebord.declarer": "Player",
+  "scorebord.partner": "Partner",
+  "scorebord.tricks": "Tricks"
 }

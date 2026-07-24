@@ -5,8 +5,13 @@
 
 const STORAGE_KEY = 'carts.scorebord.v1';
 
+/** 'manueel' = zelf punten intypen; 'wiezen' = contract + slagen + team ingeven,
+ *  de app berekent de punten via de wiezen-scoring (zie main.ts). */
+export type ScorebordMode = 'manueel' | 'wiezen';
+
 export interface Scorebord {
   v: 1;
+  mode: ScorebordMode;
   participants: string[];
   /** Optioneel puntendoel; null = geen doel. */
   target: number | null;
@@ -14,14 +19,17 @@ export interface Scorebord {
   lowWins: boolean;
   /** Eén rij per ronde: punten per deelnemer (zelfde lengte als participants). */
   rounds: number[][];
+  /** Optioneel label per ronde (bv. "Troel — Jan + Rita"), parallel aan rounds. */
+  labels: string[];
 }
 
 export function newScorebord(
   participants: string[],
   target: number | null = null,
   lowWins = false,
+  mode: ScorebordMode = 'manueel',
 ): Scorebord {
-  return { v: 1, participants: [...participants], target, lowWins, rounds: [] };
+  return { v: 1, mode, participants: [...participants], target, lowWins, rounds: [], labels: [] };
 }
 
 export function totals(sb: Scorebord): number[] {
@@ -53,17 +61,21 @@ export function winner(sb: Scorebord): number | null {
   return winners.length === 1 ? (winners[0] as { i: number }).i : null;
 }
 
-export function addRound(sb: Scorebord, points: number[]): Scorebord {
+export function addRound(sb: Scorebord, points: number[], label = ''): Scorebord {
   const row = sb.participants.map((_, i) => points[i] ?? 0);
-  return { ...sb, rounds: [...sb.rounds, row] };
+  return { ...sb, rounds: [...sb.rounds, row], labels: [...sb.labels, label] };
 }
 
 export function removeRound(sb: Scorebord, index: number): Scorebord {
-  return { ...sb, rounds: sb.rounds.filter((_, i) => i !== index) };
+  return {
+    ...sb,
+    rounds: sb.rounds.filter((_, i) => i !== index),
+    labels: sb.labels.filter((_, i) => i !== index),
+  };
 }
 
 export function resetRounds(sb: Scorebord): Scorebord {
-  return { ...sb, rounds: [] };
+  return { ...sb, rounds: [], labels: [] };
 }
 
 /* ---------- persistentie ---------- */
@@ -88,6 +100,11 @@ export function load(): Scorebord | null {
       !Array.isArray(sb.rounds)
     ) {
       return null;
+    }
+    // Migratie van oudere borden zonder mode/labels.
+    if (sb.mode !== 'wiezen') sb.mode = 'manueel';
+    if (!Array.isArray(sb.labels) || sb.labels.length !== sb.rounds.length) {
+      sb.labels = sb.rounds.map(() => '');
     }
     return sb;
   } catch {

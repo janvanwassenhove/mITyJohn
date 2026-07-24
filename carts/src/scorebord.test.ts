@@ -52,14 +52,22 @@ describe('scorebord', () => {
     expect(winner(sb)).toBe(0); // 22 ≥ 20
   });
 
-  it('verwijdert en reset rondes', () => {
+  it('verwijdert en reset rondes, met bijhorende labels', () => {
     let sb = newScorebord(['A', 'B']);
-    sb = addRound(sb, [1, 2]);
-    sb = addRound(sb, [3, 4]);
+    sb = addRound(sb, [1, 2], 'ronde 1');
+    sb = addRound(sb, [3, 4], 'ronde 2');
+    expect(sb.labels).toEqual(['ronde 1', 'ronde 2']);
     sb = removeRound(sb, 0);
     expect(sb.rounds).toEqual([[3, 4]]);
+    expect(sb.labels).toEqual(['ronde 2']);
     sb = resetRounds(sb);
     expect(sb.rounds).toEqual([]);
+    expect(sb.labels).toEqual([]);
+  });
+
+  it('wiezen-modus wordt bewaard', () => {
+    const sb = newScorebord(['A', 'B', 'C', 'D'], null, false, 'wiezen');
+    expect(sb.mode).toBe('wiezen');
   });
 
   it('bewaart en laadt via localStorage, weigert corrupte opslag', () => {

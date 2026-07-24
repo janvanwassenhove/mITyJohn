@@ -154,5 +154,13 @@
   "scorebord.back": "Terug",
   "scorebord.winner": "{name} wint met {points} punten",
   "scorebord.leader": "Aan de leiding: {name}",
-  "scorebord.deleteRound": "Ronde verwijderen"
+  "scorebord.deleteRound": "Ronde verwijderen",
+  "scorebord.mode": "Modus",
+  "scorebord.modeManual": "Manueel",
+  "scorebord.modeWiezen": "Wiezen (auto)",
+  "scorebord.wiezenHint": "Duid het contract, de speler (+ maat) en het aantal slagen aan — de app rekent de punten uit.",
+  "scorebord.contract": "Contract",
+  "scorebord.declarer": "Speler",
+  "scorebord.partner": "Maat",
+  "scorebord.tricks": "Slagen"
 }

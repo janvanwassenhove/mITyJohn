@@ -24,6 +24,7 @@ import {
   type BotLevel,
 } from './bots';
 import * as store from './store';
+import { scoreGift } from './engine/scoring';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
@@ -50,10 +51,16 @@ let view: 'home' | 'stats' | 'scorebord' = 'home';
 
 // Scorebord (fysiek spel): actief bord + setup-invoer.
 let sbBoard: scorebord.Scorebord | null = null;
+let sbMode: scorebord.ScorebordMode = 'manueel';
 let sbCount = 4;
 let sbNames: string[] = [];
 let sbTarget = '';
 let sbLowWins = false;
+// Wiezen-automodus: huidige invoer voor de volgende gift.
+let sbWContract = 'vraag-en-mee';
+let sbWDeclarer = 0;
+let sbWPartner = 1;
+let sbWTricks = '';
 const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
@@ -1775,24 +1782,86 @@ function numberInput(value: string, placeholder = ''): HTMLInputElement {
   return input;
 }
 
+function selectInput(
+  options: Array<{ value: string; label: string }>,
+  selected: string,
+  onChange: (value: string) => void,
+): HTMLSelectElement {
+  const sel = document.createElement('select');
+  sel.className = 'sb-input sb-select';
+  for (const o of options) {
+    const opt = document.createElement('option');
+    opt.value = o.value;
+    opt.textContent = o.label;
+    if (o.value === selected) opt.selected = true;
+    sel.append(opt);
+  }
+  sel.addEventListener('change', () => onChange(sel.value));
+  return sel;
+}
+
+// De wiezen-automodus hergebruikt de scoring-engine: je duidt het contract,
+// de speler (+ maat bij een teamcontract) en het aantal slagen aan.
+const WIEZEN_SB_RULESET = getRuleset('vlaams-standaard') as Ruleset;
+
+function wiezenSbContract(id: string) {
+  return WIEZEN_SB_RULESET.contracts.find((c) => c.id === id) ?? WIEZEN_SB_RULESET.contracts[0]!;
+}
+
+/** Bereken de puntenmutatie per speler + een label voor een handmatig ingegeven gift. */
+function computeWiezenRound(
+  contractId: string,
+  declarer: number,
+  partner: number,
+  tricks: number,
+): { points: number[]; label: string } {
+  const contract = wiezenSbContract(contractId);
+  const declarers = contract.team === 2 && partner !== declarer ? [declarer, partner] : [declarer];
+  const tricksWon = [0, 0, 0, 0];
+  tricksWon[declarer] = tricks; // teamcontracten sommeren de slagen van de spelers
+  const score = scoreGift({ contract, declarers, tricksWon });
+  const names = declarers.map((d) => sbParticipantName(d)).join(' + ');
+  return { points: score.points, label: `${tContract(contract.id)} — ${names}` };
+}
+
 function scorebordSetup(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('h1', undefined, t('scorebord.title')));
   main.append(el('p', undefined, t('scorebord.intro')));
 
   if (sbNames.length === 0) sbNames = ['', '', '', ''];
+  const wiezenMode = sbMode === 'wiezen';
+  if (wiezenMode) sbCount = 4; // wiezen = altijd 4 spelers
+
+  const modeGroup = el('div', 'control-group level-picker');
+  modeGroup.append(el('span', undefined, t('scorebord.mode')));
+  const modeSeg = el('div', 'seg');
+  modeSeg.setAttribute('role', 'group');
+  modeSeg.append(
+    segButton(t('scorebord.modeManual'), sbMode === 'manueel', () => {
+      sbMode = 'manueel';
+      render();
+    }),
+    segButton(t('scorebord.modeWiezen'), sbMode === 'wiezen', () => {
+      sbMode = 'wiezen';
+      render();
+    }),
+  );
+  modeGroup.append(modeSeg);
+  main.append(modeGroup);
+  if (wiezenMode) main.append(el('p', 'hint', t('scorebord.wiezenHint')));
 
   const countGroup = el('div', 'control-group level-picker');
   countGroup.append(el('span', undefined, t('scorebord.participants')));
   const countSeg = el('div', 'seg');
   countSeg.setAttribute('role', 'group');
   for (const n of [2, 3, 4]) {
-    countSeg.append(
-      segButton(String(n), sbCount === n, () => {
-        sbCount = n;
-        render();
-      }),
-    );
+    const btn = segButton(String(n), sbCount === n, () => {
+      sbCount = n;
+      render();
+    });
+    if (wiezenMode) btn.disabled = true;
+    countSeg.append(btn);
   }
   countGroup.append(countSeg);
   main.append(countGroup);
@@ -1845,7 +1914,12 @@ function scorebordSetup(): HTMLElement {
     button(t('scorebord.start'), 'btn primary', () => {
       const names = Array.from({ length: sbCount }, (_, i) => sbNames[i] ?? '');
       const target = sbTarget.trim() === '' ? null : Number(sbTarget);
-      sbBoard = scorebord.newScorebord(names, Number.isFinite(target) ? target : null, sbLowWins);
+      sbBoard = scorebord.newScorebord(
+        names,
+        Number.isFinite(target) ? target : null,
+        sbLowWins,
+        sbMode,
+      );
       scorebord.save(sbBoard);
       render();
     }),
@@ -1856,6 +1930,118 @@ function scorebordSetup(): HTMLElement {
   );
   main.append(row);
   return main;
+}
+
+function manualRoundForm(board: scorebord.Scorebord): HTMLElement {
+  const form = el('div', 'sb-newround');
+  form.append(el('div', 'options-title', t('scorebord.newRound')));
+  const inputs: HTMLInputElement[] = [];
+  const inputRow = el('div', 'sb-inputs');
+  for (let i = 0; i < board.participants.length; i++) {
+    const cell = el('div', 'sb-inputcell');
+    cell.append(el('div', 'trick-player', sbParticipantName(i)));
+    const input = numberInput('', '0');
+    inputs.push(input);
+    cell.append(input);
+    inputRow.append(cell);
+  }
+  form.append(inputRow);
+  form.append(
+    button(t('scorebord.add'), 'btn primary', () => {
+      const points = inputs.map((inp) => {
+        const n = Number(inp.value);
+        return Number.isFinite(n) ? n : 0;
+      });
+      sbBoard = scorebord.addRound(board, points);
+      scorebord.save(sbBoard);
+      sfxCard();
+      render();
+    }),
+  );
+  return form;
+}
+
+function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
+  const form = el('div', 'sb-newround');
+  form.append(el('div', 'options-title', t('scorebord.newRound')));
+  const contract = wiezenSbContract(sbWContract);
+  const isTeam = contract.team === 2;
+  const playerOptions = board.participants.map((_, i) => ({
+    value: String(i),
+    label: sbParticipantName(i),
+  }));
+
+  const rows = el('div', 'sb-wiezen');
+
+  const cGroup = el('div', 'control-group');
+  cGroup.append(el('span', undefined, t('scorebord.contract')));
+  cGroup.append(
+    selectInput(
+      WIEZEN_SB_RULESET.contracts.map((c) => ({ value: c.id, label: tContract(c.id) })),
+      sbWContract,
+      (v) => {
+        sbWContract = v;
+        render();
+      },
+    ),
+  );
+  rows.append(cGroup);
+
+  const dGroup = el('div', 'control-group');
+  dGroup.append(el('span', undefined, t('scorebord.declarer')));
+  dGroup.append(
+    selectInput(playerOptions, String(sbWDeclarer), (v) => {
+      sbWDeclarer = Number(v);
+      if (sbWPartner === sbWDeclarer) sbWPartner = (sbWDeclarer + 2) % 4;
+      render();
+    }),
+  );
+  rows.append(dGroup);
+
+  if (isTeam) {
+    const pGroup = el('div', 'control-group');
+    pGroup.append(el('span', undefined, t('scorebord.partner')));
+    pGroup.append(
+      selectInput(
+        playerOptions.filter((o) => Number(o.value) !== sbWDeclarer),
+        String(sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner),
+        (v) => {
+          sbWPartner = Number(v);
+          render();
+        },
+      ),
+    );
+    rows.append(pGroup);
+  }
+
+  const tGroup = el('div', 'control-group');
+  tGroup.append(el('span', undefined, t('scorebord.tricks')));
+  const tricksInput = numberInput(sbWTricks, '0');
+  tricksInput.addEventListener('input', () => {
+    sbWTricks = tricksInput.value;
+  });
+  tGroup.append(tricksInput);
+  rows.append(tGroup);
+
+  form.append(rows);
+  form.append(
+    button(t('scorebord.add'), 'btn primary', () => {
+      const tricks = Number(sbWTricks);
+      const partner = sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner;
+      const { points, label } = computeWiezenRound(
+        sbWContract,
+        sbWDeclarer,
+        partner,
+        Number.isFinite(tricks) ? tricks : 0,
+      );
+      sbBoard = scorebord.addRound(board, points, label);
+      scorebord.save(sbBoard);
+      sbWTricks = '';
+      sfxCard();
+      render();
+    }),
+  );
+  return form;
 }
 
 function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
@@ -1888,7 +2074,8 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
 
   board.rounds.forEach((r, idx) => {
     const tr = el('tr');
-    tr.append(el('th', undefined, String(idx + 1)));
+    const label = board.labels[idx];
+    tr.append(el('th', 'sb-roundlabel', label && label.length > 0 ? label : String(idx + 1)));
     for (let i = 0; i < board.participants.length; i++) {
       tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));
     }
@@ -1915,33 +2102,7 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
 
   if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
 
-  // Nieuwe ronde invoeren
-  const form = el('div', 'sb-newround');
-  form.append(el('div', 'options-title', t('scorebord.newRound')));
-  const inputs: HTMLInputElement[] = [];
-  const inputRow = el('div', 'sb-inputs');
-  for (let i = 0; i < board.participants.length; i++) {
-    const cell = el('div', 'sb-inputcell');
-    cell.append(el('div', 'trick-player', sbParticipantName(i)));
-    const input = numberInput('', '0');
-    inputs.push(input);
-    cell.append(input);
-    inputRow.append(cell);
-  }
-  form.append(inputRow);
-  form.append(
-    button(t('scorebord.add'), 'btn primary', () => {
-      const points = inputs.map((inp) => {
-        const n = Number(inp.value);
-        return Number.isFinite(n) ? n : 0;
-      });
-      sbBoard = scorebord.addRound(board, points);
-      scorebord.save(sbBoard);
-      sfxCard();
-      render();
-    }),
-  );
-  main.append(form);
+  main.append(board.mode === 'wiezen' ? wiezenRoundForm(board) : manualRoundForm(board));
 
   const row = el('div', 'btn-row');
   row.append(
