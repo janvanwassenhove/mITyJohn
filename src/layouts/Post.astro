@@ -17,7 +17,7 @@ const fmt = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', d
 const suffix = cover?.match(/-(\d+)x(\d+)\.\w+$/);
 const coverDims = suffix
   ? [suffix[1], suffix[2]]
-  : (cover ? imageDims[cover.split('?')[0]] : undefined);
+  : (cover ? (imageDims as Record<string, number[] | undefined>)[cover.split('?')[0]] : undefined);
 ---
 
 <Base title={`${title} — mITy.John`} ogImage={ogImage ?? cover} ogType="article">
