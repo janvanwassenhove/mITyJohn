@@ -17,4 +17,4 @@ De volledige Vlaamse biedladder zit erin: vraag & mee, alleen, troel, abondance,
 
 Geen account, geen backend: je sessie wordt lokaal bewaard, en je kunt de app op je telefoon installeren om offline verder te spelen. Drie botniveaus, drie talen (NL/EN/FR), licht en donker thema.
 
-Sinds kort schuiven ook **manillen** (32 kaarten, de tien boven de aas, spelen tot 101) én **bieden** (bied op je punten, hoogste bieder komt uit en bepaalt de troef) mee aan tafel — samen met instelbare regelvarianten per spel.
+Sinds kort schuiven ook **manillen** (32 kaarten, de tien boven de aas, spelen tot 101) én **bieden** (bied op je punten, hoogste bieder komt uit en bepaalt de troef) mee aan tafel — samen met instelbare regelvarianten per spel. En speel je liever met échte kaarten? Er is een **scorebord** om aan tafel de punten bij te houden.

@@ -512,3 +512,56 @@ button.card:not(:disabled) {
   flex-wrap: wrap;
   margin: 0.35rem 0;
 }
+
+/* Scorebord — fysiek spel (Fase 5) */
+.sb-input {
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: var(--text);
+  width: 6rem;
+}
+
+.sb-name {
+  width: 10rem;
+}
+
+.sb-table td,
+.sb-table th {
+  min-width: 3rem;
+}
+
+tr.sb-total th,
+tr.sb-total td {
+  font-weight: 700;
+  border-top: 2px solid var(--accent);
+}
+
+.sb-del {
+  padding: 0.1rem 0.45rem;
+  font-size: 0.85rem;
+}
+
+.sb-newround {
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.sb-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.sb-inputcell {
+  text-align: center;
+}
+
+.sb-inputcell .sb-input {
+  width: 4.5rem;
+}

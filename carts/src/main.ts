@@ -31,6 +31,7 @@ import { teamOf as biedenTeamOf, type BiedenGift, type BiedenSession } from './e
 import { chooseBiedenBid, chooseBiedenCard } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
+import * as scorebord from './scorebord';
 import {
   DEFAULT_MANILLE_OPTIONS,
   DEFAULT_WIEZEN_OPTIONS,
@@ -45,7 +46,14 @@ if (!app) throw new Error('#app ontbreekt');
 
 const RULESET_KEY = 'carts.ruleset';
 let ruleset = getRuleset('vlaams-standaard') as Ruleset;
-let view: 'home' | 'stats' = 'home';
+let view: 'home' | 'stats' | 'scorebord' = 'home';
+
+// Scorebord (fysiek spel): actief bord + setup-invoer.
+let sbBoard: scorebord.Scorebord | null = null;
+let sbCount = 4;
+let sbNames: string[] = [];
+let sbTarget = '';
+let sbLowWins = false;
 const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
@@ -674,6 +682,15 @@ function startScreen(): HTMLElement {
     }),
   );
   main.append(row);
+
+  const sbRow = el('div', 'btn-row');
+  sbRow.append(
+    button(t('scorebord.button'), 'btn', () => {
+      view = 'scorebord';
+      render();
+    }),
+  );
+  main.append(sbRow);
   return main;
 }
 
@@ -1049,7 +1066,9 @@ function render(): void {
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
   const bGift = bSession?.gift ?? null;
-  if (view === 'stats' && !session && !mSession && !bSession) {
+  if (view === 'scorebord') {
+    wrap.append(scorebordScreen());
+  } else if (view === 'stats' && !session && !mSession && !bSession) {
     wrap.append(statsScreen());
   } else if (game === 'bieden') {
     if (!bSession || (!bGift && !bSession.finished)) {
@@ -1739,6 +1758,216 @@ function biedenEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- scorebord (Fase 5: fysiek spel) ---------- */
+
+function sbParticipantName(i: number): string {
+  const name = sbBoard?.participants[i]?.trim();
+  return name && name.length > 0 ? name : t('scorebord.defaultName', { n: i + 1 });
+}
+
+function numberInput(value: string, placeholder = ''): HTMLInputElement {
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.inputMode = 'numeric';
+  input.className = 'sb-input';
+  input.value = value;
+  if (placeholder) input.placeholder = placeholder;
+  return input;
+}
+
+function scorebordSetup(): HTMLElement {
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('scorebord.title')));
+  main.append(el('p', undefined, t('scorebord.intro')));
+
+  if (sbNames.length === 0) sbNames = ['', '', '', ''];
+
+  const countGroup = el('div', 'control-group level-picker');
+  countGroup.append(el('span', undefined, t('scorebord.participants')));
+  const countSeg = el('div', 'seg');
+  countSeg.setAttribute('role', 'group');
+  for (const n of [2, 3, 4]) {
+    countSeg.append(
+      segButton(String(n), sbCount === n, () => {
+        sbCount = n;
+        render();
+      }),
+    );
+  }
+  countGroup.append(countSeg);
+  main.append(countGroup);
+
+  const nameBox = el('div', 'options');
+  for (let i = 0; i < sbCount; i++) {
+    const row = el('div', 'control-group');
+    row.append(el('span', undefined, t('scorebord.name', { n: i + 1 })));
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'sb-input sb-name';
+    input.value = sbNames[i] ?? '';
+    input.placeholder = t('scorebord.defaultName', { n: i + 1 });
+    input.addEventListener('input', () => {
+      sbNames[i] = input.value;
+    });
+    row.append(input);
+    nameBox.append(row);
+  }
+  main.append(nameBox);
+
+  const targetGroup = el('div', 'control-group level-picker');
+  targetGroup.append(el('span', undefined, t('scorebord.target')));
+  const targetInput = numberInput(sbTarget);
+  targetInput.addEventListener('input', () => {
+    sbTarget = targetInput.value;
+  });
+  targetGroup.append(targetInput);
+  main.append(targetGroup);
+
+  const dirGroup = el('div', 'control-group level-picker');
+  dirGroup.append(el('span', undefined, t('scorebord.direction')));
+  const dirSeg = el('div', 'seg');
+  dirSeg.setAttribute('role', 'group');
+  dirSeg.append(
+    segButton(t('scorebord.highWins'), !sbLowWins, () => {
+      sbLowWins = false;
+      render();
+    }),
+    segButton(t('scorebord.lowWins'), sbLowWins, () => {
+      sbLowWins = true;
+      render();
+    }),
+  );
+  dirGroup.append(dirSeg);
+  main.append(dirGroup);
+
+  const row = el('div', 'btn-row');
+  row.append(
+    button(t('scorebord.start'), 'btn primary', () => {
+      const names = Array.from({ length: sbCount }, (_, i) => sbNames[i] ?? '');
+      const target = sbTarget.trim() === '' ? null : Number(sbTarget);
+      sbBoard = scorebord.newScorebord(names, Number.isFinite(target) ? target : null, sbLowWins);
+      scorebord.save(sbBoard);
+      render();
+    }),
+    button(t('scorebord.back'), 'btn muted', () => {
+      view = 'home';
+      render();
+    }),
+  );
+  main.append(row);
+  return main;
+}
+
+function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('scorebord.title')));
+
+  const totals = scorebord.totals(board);
+  const win = scorebord.winner(board);
+  const lead = scorebord.leader(board);
+  if (win !== null) {
+    main.append(
+      el(
+        'p',
+        'strong made',
+        t('scorebord.winner', { name: sbParticipantName(win), points: totals[win] ?? 0 }),
+      ),
+    );
+  } else if (lead >= 0) {
+    main.append(el('p', 'hint', t('scorebord.leader', { name: sbParticipantName(lead) })));
+  }
+
+  const table = el('table', 'score-table sb-table');
+  const head = el('tr');
+  head.append(el('th', undefined, '#'));
+  for (let i = 0; i < board.participants.length; i++) {
+    head.append(el('th', undefined, sbParticipantName(i)));
+  }
+  head.append(el('th'));
+  table.append(head);
+
+  board.rounds.forEach((r, idx) => {
+    const tr = el('tr');
+    tr.append(el('th', undefined, String(idx + 1)));
+    for (let i = 0; i < board.participants.length; i++) {
+      tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));
+    }
+    const del = el('td');
+    const btn = button('✕', 'btn muted sb-del', () => {
+      sbBoard = scorebord.removeRound(board, idx);
+      scorebord.save(sbBoard);
+      render();
+    });
+    btn.setAttribute('aria-label', t('scorebord.deleteRound'));
+    del.append(btn);
+    tr.append(del);
+    table.append(tr);
+  });
+
+  const totalRow = el('tr', 'sb-total');
+  totalRow.append(el('th', undefined, t('scorebord.total')));
+  for (let i = 0; i < board.participants.length; i++) {
+    totalRow.append(el('td', undefined, formatPoints(totals[i] ?? 0)));
+  }
+  totalRow.append(el('td'));
+  table.append(totalRow);
+  main.append(table);
+
+  if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
+
+  // Nieuwe ronde invoeren
+  const form = el('div', 'sb-newround');
+  form.append(el('div', 'options-title', t('scorebord.newRound')));
+  const inputs: HTMLInputElement[] = [];
+  const inputRow = el('div', 'sb-inputs');
+  for (let i = 0; i < board.participants.length; i++) {
+    const cell = el('div', 'sb-inputcell');
+    cell.append(el('div', 'trick-player', sbParticipantName(i)));
+    const input = numberInput('', '0');
+    inputs.push(input);
+    cell.append(input);
+    inputRow.append(cell);
+  }
+  form.append(inputRow);
+  form.append(
+    button(t('scorebord.add'), 'btn primary', () => {
+      const points = inputs.map((inp) => {
+        const n = Number(inp.value);
+        return Number.isFinite(n) ? n : 0;
+      });
+      sbBoard = scorebord.addRound(board, points);
+      scorebord.save(sbBoard);
+      sfxCard();
+      render();
+    }),
+  );
+  main.append(form);
+
+  const row = el('div', 'btn-row');
+  row.append(
+    button(t('scorebord.reset'), 'btn', () => {
+      sbBoard = scorebord.resetRounds(board);
+      scorebord.save(sbBoard);
+      render();
+    }),
+    button(t('scorebord.new'), 'btn muted', () => {
+      scorebord.clear();
+      sbBoard = null;
+      render();
+    }),
+    button(t('scorebord.back'), 'btn muted', () => {
+      view = 'home';
+      render();
+    }),
+  );
+  main.append(row);
+  return main;
+}
+
+function scorebordScreen(): HTMLElement {
+  return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
+}
+
 /* ---------- opstart ---------- */
 
 initTheme();
@@ -1790,6 +2019,7 @@ if (savedBieden) {
     store.clearBieden();
   }
 }
+sbBoard = scorebord.load();
 const savedState = store.load();
 const savedRuleset = savedState ? getRuleset(savedState.rulesetId) : undefined;
 if (savedState && savedRuleset) {
