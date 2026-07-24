@@ -1,0 +1,14 @@
+{
+  "app.title": "Carts",
+  "app.tagline": "Vlaamse kaartspellen, aan tafel of online.",
+  "app.phase": "Fase 0 — fundering",
+  "placeholder.heading": "Binnenkort: wiezen",
+  "placeholder.body": "Dit is de placeholderpagina van Fase 0. De taal- en themaswitch hierboven werken al; het spel zelf volgt in de volgende fases.",
+  "placeholder.ruleset": "Geladen ruleset: {name} (v{version}, {contracts} contracten)",
+  "placeholder.rules": "Spelregels & aannames staan in docs/REGELS.md",
+  "controls.language": "Taal",
+  "controls.theme": "Thema",
+  "theme.light": "Licht",
+  "theme.dark": "Donker",
+  "theme.system": "Systeem"
+}

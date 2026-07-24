@@ -1,0 +1,163 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "vlaams-standaard",
+  "game": "wiezen",
+  "name": {
+    "nl": "Wiezen — Vlaams standaard",
+    "en": "Wiezen — Flemish standard",
+    "fr": "Wiezen — standard flamand"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS.md",
+  "players": 4,
+  "deck": {
+    "cards": 52,
+    "jokers": false,
+    "rankOrder": ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 13,
+    "dealPattern": [4, 4, 5],
+    "trumpDetermination": "last-card-turned",
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": false,
+    "mustOvertrump": false
+  },
+  "bidding": {
+    "startsAt": "left-of-dealer",
+    "passAndOut": true,
+    "allPassed": "redeal-next-dealer"
+  },
+  "contracts": [
+    {
+      "id": "vraag-en-mee",
+      "rank": 1,
+      "team": 2,
+      "target": { "tricks": 8, "combined": true },
+      "trump": "turned",
+      "score": { "base": 2, "perOvertrick": 1, "perUndertrick": 1, "voleBonus": 3 }
+    },
+    {
+      "id": "alleen",
+      "rank": 2,
+      "team": 1,
+      "target": { "tricks": 5 },
+      "trump": "turned",
+      "onlyIfNoPartner": true,
+      "score": { "base": 3, "perOvertrick": 1, "perUndertrick": 1 }
+    },
+    {
+      "id": "troel",
+      "rank": 3,
+      "team": 2,
+      "mandatory": "three-aces",
+      "target": { "tricks": 8, "combined": true },
+      "trump": "fourth-ace-suit",
+      "openingLead": "fourth-ace-holder",
+      "overbiddableFromRank": 4,
+      "fourAcesPartnerRule": "king-of-hearts",
+      "score": { "base": 4, "perOvertrick": 2, "perUndertrick": 2 }
+    },
+    {
+      "id": "abondance-9",
+      "rank": 4,
+      "team": 1,
+      "target": { "tricks": 9 },
+      "trump": "declarer-choice",
+      "openingLead": "declarer",
+      "inTrumpOutranksSameLevel": true,
+      "score": { "base": 6 }
+    },
+    {
+      "id": "miserie",
+      "rank": 5,
+      "team": 1,
+      "target": { "tricks": 0, "exact": true },
+      "trump": "none",
+      "multipleDeclarers": true,
+      "score": { "base": 7 }
+    },
+    {
+      "id": "abondance-10",
+      "rank": 6,
+      "team": 1,
+      "target": { "tricks": 10 },
+      "trump": "declarer-choice",
+      "openingLead": "declarer",
+      "inTrumpOutranksSameLevel": true,
+      "score": { "base": 7 }
+    },
+    {
+      "id": "abondance-11",
+      "rank": 7,
+      "team": 1,
+      "target": { "tricks": 11 },
+      "trump": "declarer-choice",
+      "openingLead": "declarer",
+      "inTrumpOutranksSameLevel": true,
+      "score": { "base": 8 }
+    },
+    {
+      "id": "abondance-12",
+      "rank": 8,
+      "team": 1,
+      "target": { "tricks": 12 },
+      "trump": "declarer-choice",
+      "openingLead": "declarer",
+      "inTrumpOutranksSameLevel": true,
+      "score": { "base": 9 }
+    },
+    {
+      "id": "open-miserie",
+      "rank": 9,
+      "team": 1,
+      "target": { "tricks": 0, "exact": true },
+      "trump": "none",
+      "openCardsAfterTrick": 1,
+      "multipleDeclarers": true,
+      "score": { "base": 14 }
+    },
+    {
+      "id": "solo",
+      "rank": 10,
+      "team": 1,
+      "target": { "tricks": 13 },
+      "trump": "declarer-choice",
+      "openingLead": "declarer",
+      "score": { "base": 20 }
+    },
+    {
+      "id": "soloslim",
+      "rank": 11,
+      "team": 1,
+      "target": { "tricks": 13 },
+      "trump": "none",
+      "openingLead": "declarer",
+      "score": { "base": 30 }
+    }
+  ],
+  "scoring": {
+    "unit": "points",
+    "zeroSum": true,
+    "soloSettlement": "each-opponent",
+    "teamSettlement": "one-opponent-each",
+    "failedContract": "symmetric"
+  },
+  "session": {
+    "giften": 16
+  },
+  "variants": {
+    "piccolo": false,
+    "verplichtTroeven": false
+  },
+  "assumptions": [
+    "Speelrichting met de klok mee (REGELS.md §2)",
+    "Deelpatroon 4-4-5 (REGELS.md §3)",
+    "Troel: doel 8 slagen, troef = kleur vierde aas, overbiedbaar vanaf abondance 9 (REGELS.md §5.4)",
+    "Puntentabel en rangorde biedladder (REGELS.md §5)",
+    "Mislukt contract betaalt symmetrisch (REGELS.md §7)",
+    "Iedereen past: herdeel zonder score (REGELS.md §4)"
+  ]
+}

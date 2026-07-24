@@ -1,0 +1,160 @@
+/* Themafundering (§8): alle kleuren via custom properties op :root[data-theme]. */
+:root {
+  --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --radius: 0.75rem;
+}
+
+:root[data-theme='light'] {
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --text: #1c1b1a;
+  --text-muted: #6b6660;
+  --accent: #0a6e4f; /* tapijtgroen */
+  --accent-contrast: #ffffff;
+  --suit-red: #b3262a;
+  --suit-black: #1c1b1a;
+  --border: #dcd7cd;
+}
+
+:root[data-theme='dark'] {
+  --bg: #14201b;
+  --surface: #1e2d26;
+  --text: #ece9e2;
+  --text-muted: #a4aca5;
+  --accent: #3fae85;
+  --accent-contrast: #0e1713;
+  --suit-red: #e06c70;
+  --suit-black: #ece9e2;
+  --border: #32423a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+.wrap {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+header.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand .suits {
+  margin-left: 0.35rem;
+  font-size: 1.1rem;
+}
+
+.suit-red {
+  color: var(--suit-red);
+}
+
+.suit-black {
+  color: var(--suit-black);
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.control-group > span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.seg button {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+}
+
+.seg button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+main.card {
+  margin-top: 2rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 8%);
+}
+
+main.card h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.tagline {
+  color: var(--text-muted);
+  margin: 0 0 1.5rem;
+}
+
+.phase {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.ruleset {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.ruleset code {
+  color: var(--text);
+}

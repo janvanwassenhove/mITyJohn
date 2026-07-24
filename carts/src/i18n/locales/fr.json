@@ -1,0 +1,14 @@
+{
+  "app.title": "Carts",
+  "app.tagline": "Jeux de cartes flamands, à table ou en ligne.",
+  "app.phase": "Phase 0 — fondation",
+  "placeholder.heading": "Bientôt : le wiezen",
+  "placeholder.body": "Ceci est la page provisoire de la phase 0. Les sélecteurs de langue et de thème ci-dessus fonctionnent déjà ; le jeu arrive dans les phases suivantes.",
+  "placeholder.ruleset": "Règles chargées : {name} (v{version}, {contracts} contrats)",
+  "placeholder.rules": "Les règles et hypothèses se trouvent dans docs/REGELS.md",
+  "controls.language": "Langue",
+  "controls.theme": "Thème",
+  "theme.light": "Clair",
+  "theme.dark": "Sombre",
+  "theme.system": "Système"
+}

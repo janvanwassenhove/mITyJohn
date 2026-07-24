@@ -1,0 +1,14 @@
+{
+  "app.title": "Carts",
+  "app.tagline": "Flemish card games, at the table or online.",
+  "app.phase": "Phase 0 — foundation",
+  "placeholder.heading": "Coming soon: wiezen",
+  "placeholder.body": "This is the Phase 0 placeholder page. The language and theme switches above already work; the game itself arrives in the next phases.",
+  "placeholder.ruleset": "Loaded ruleset: {name} (v{version}, {contracts} contracts)",
+  "placeholder.rules": "Game rules & assumptions live in docs/REGELS.md",
+  "controls.language": "Language",
+  "controls.theme": "Theme",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.system": "System"
+}
