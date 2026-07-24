@@ -21,6 +21,8 @@ export class Gift {
   tricksWon: number[] = new Array<number>(PLAYER_COUNT).fill(0);
   tricksPlayed = 0;
   lastTrick: TrickPlay[] | null = null;
+  /** Alle voltooide slagen, in volgorde — o.a. voor botten met kaartgeheugen. */
+  readonly history: TrickPlay[][] = [];
   score: GiftScore | null = null;
 
   constructor(ruleset: Ruleset, dealer: number, rng: () => number) {
@@ -81,7 +83,10 @@ export class Gift {
 
   legalCards(player: number): Card[] {
     if (!this.contract || player !== this.toPlay) return [];
-    return legalPlays(this.deal.hands[player] as Card[], this.trick);
+    return legalPlays(this.deal.hands[player] as Card[], this.trick, this.contract.trumpSuit, {
+      mustTrump: this.ruleset.play.mustTrump,
+      mustOvertrump: this.ruleset.play.mustOvertrump,
+    });
   }
 
   playCard(player: number, card: Card): void {
@@ -106,6 +111,7 @@ export class Gift {
       this.tricksWon[winner] = (this.tricksWon[winner] ?? 0) + 1;
       this.tricksPlayed++;
       this.lastTrick = this.trick;
+      this.history.push(this.trick);
       this.trick = [];
       this.trickLeader = winner;
       if (this.tricksPlayed === 13 && this.contract) {

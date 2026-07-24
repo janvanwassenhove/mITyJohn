@@ -91,8 +91,10 @@ alleen `main` deployen.
 | 0 | Regels onderzoeken (REGELS.md), ruleset-JSON, repo/tooling, i18n- & themafundering, Pages-deploy met placeholder | ✅ |
 | 1 | Speelbare wiezen: engine, bots, spel-UI, browser-smoketest | ✅ |
 | 2 | Regelbevestiging verwerkt (klok mee, troel via eerste kaart, volgplicht, herdeel, punten); botniveaus; sessiepersistentie (localStorage, actielog-replay); PWA-installatie; animaties & geluid; vermelding op de homepage | ✅ |
-| 3 | Restvragen (troel 8/9, overbieden, rangorde-details); statistieken & historiek; slimmere bots (kaartgeheugen) | ◻ |
-| 4 | Volgende spellen op hetzelfde ruleset-formaat: kleurenwiezen-variant, manillen, bieden | ◻ |
+| 3 | Statistieken & historiek; sterke bots met kaartgeheugen. Restvragen (troel 8/9, overbieden, rangorde-details) blijven open | ✅ |
+| 4a | Kleurenwiezen-variant `vlaams-cafe` (piccolo + troefplicht) met rulesetkeuze in de app | ✅ |
+| 4b | Manillen: regels onderzocht ([REGELS-MANILLEN.md](REGELS-MANILLEN.md)); ruleset-formaat generiek maken (rangorde, kaartpunten, vaste teams) en engine bouwen | ◻ |
+| 4c | Bieden (derde spel) | ◻ |
 | 5 | Online multiplayer (aparte beslissing: vereist backend/workers) | ◻ |
 
 ## §13 Open punten

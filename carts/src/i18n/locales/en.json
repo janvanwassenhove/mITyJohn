@@ -70,5 +70,21 @@
   "bots.level": "Bot level",
   "bots.easy": "Easy",
   "bots.normal": "Normal",
-  "bots.strong": "Strong"
+  "bots.strong": "Strong",
+  "ruleset.picker": "Game variant",
+  "ruleset.vlaams-standaard": "Standard",
+  "ruleset.vlaams-cafe": "Café",
+  "contract.piccolo": "Piccolo",
+  "stats.button": "Statistics",
+  "stats.title": "Statistics",
+  "stats.sessions": "Sessions played",
+  "stats.won": "Sessions won",
+  "stats.points": "Total points",
+  "stats.contract": "Contract",
+  "stats.played": "Played",
+  "stats.declared": "By you",
+  "stats.declaredWon": "Made",
+  "stats.empty": "No deals played yet — the table fills itself.",
+  "stats.reset": "Clear statistics",
+  "stats.back": "Back"
 }

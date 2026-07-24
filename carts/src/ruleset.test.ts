@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { getRuleset, rulesets } from './ruleset';
 import { LOCALES } from './i18n';
 
-describe('ruleset vlaams-standaard', () => {
-  const ruleset = getRuleset('vlaams-standaard');
+describe.each(rulesets.map((r) => [r.id] as const))('ruleset %s', (id) => {
+  const ruleset = getRuleset(id);
 
   it('is geladen en geregistreerd', () => {
     expect(ruleset).toBeDefined();

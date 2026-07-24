@@ -70,5 +70,21 @@
   "bots.level": "Botniveau",
   "bots.easy": "Makkelijk",
   "bots.normal": "Normaal",
-  "bots.strong": "Sterk"
+  "bots.strong": "Sterk",
+  "ruleset.picker": "Spelvariant",
+  "ruleset.vlaams-standaard": "Standaard",
+  "ruleset.vlaams-cafe": "Café",
+  "contract.piccolo": "Piccolo",
+  "stats.button": "Statistieken",
+  "stats.title": "Statistieken",
+  "stats.sessions": "Sessies gespeeld",
+  "stats.won": "Sessies gewonnen",
+  "stats.points": "Totaal punten",
+  "stats.contract": "Contract",
+  "stats.played": "Gespeeld",
+  "stats.declared": "Door jou",
+  "stats.declaredWon": "Gehaald",
+  "stats.empty": "Nog geen giften gespeeld — de tabel vult zich vanzelf.",
+  "stats.reset": "Wis statistieken",
+  "stats.back": "Terug"
 }

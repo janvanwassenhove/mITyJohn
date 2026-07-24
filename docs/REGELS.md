@@ -129,6 +129,14 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 
 - Exact **1 slag**, geen troef. Komt niet in alle reglementen voor; in `vlaams-standaard`
   **uitgeschakeld** via variantvlag (`variants.piccolo = false`).
+- In de variant-ruleset [`vlaams-cafe`](../rulesets/vlaams-cafe.json) staat piccolo **aan**:
+  rang tussen alleen en troel, **3 punten** per tegenspeler. **⚠️ AANNAME** (rang en punten).
+
+## 5bis. Variant-rulesets
+
+| Ruleset | Verschillen t.o.v. `vlaams-standaard` |
+|---|---|
+| `vlaams-cafe` | Piccolo speelbaar (§5.6); **troefplicht**: wie niet kan volgen moet troeven — overtroeven verplicht indien mogelijk, anders ondertroeven. **⚠️ AANNAME** — regionale invulling; ook een variant zonder ondertroefplicht komt voor. |
 
 ## 6. Het spel (slagen)
 

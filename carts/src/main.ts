@@ -9,7 +9,7 @@ import {
   type MessageKey,
 } from './i18n';
 import { THEMES, applyTheme, getTheme, initTheme, type Theme } from './theme';
-import { getRuleset, type Ruleset } from './ruleset';
+import { getRuleset, rulesets, type Ruleset } from './ruleset';
 import { sortHand, type Card, type Suit } from './engine/cards';
 import { SUITS } from './engine/cards';
 import { PLAYER_COUNT } from './engine/deal';
@@ -25,11 +25,14 @@ import {
 } from './bots';
 import * as store from './store';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
+import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('#app ontbreekt');
 
-const ruleset = getRuleset('vlaams-standaard') as Ruleset;
+const RULESET_KEY = 'carts.ruleset';
+let ruleset = getRuleset('vlaams-standaard') as Ruleset;
+let view: 'home' | 'stats' = 'home';
 const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
@@ -110,6 +113,7 @@ function startSession(): void {
 
 function continueSession(): void {
   if (!restored) return;
+  ruleset = getRuleset(restored.state.rulesetId) ?? ruleset;
   persisted = restored.state;
   session = restored.session;
   botLevel = persisted.botLevel;
@@ -162,9 +166,16 @@ function playCard(gift: Gift, player: number, card: Card): void {
   record({ t: 'play', p: player, card });
   sfxCard();
   if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
-  if (gift.phase === 'scored') {
-    const points = gift.score?.points[HUMAN] ?? 0;
+  if (gift.phase === 'scored' && gift.contract && gift.score) {
+    const points = gift.score.points[HUMAN] ?? 0;
     sfxScore(points >= 0);
+    const declarerIdx = gift.contract.declarers.indexOf(HUMAN);
+    recordGiftStat(
+      gift.contract.contract.id,
+      declarerIdx >= 0,
+      declarerIdx >= 0 && (gift.score.success[declarerIdx] ?? false),
+      points,
+    );
   }
 }
 
@@ -235,6 +246,7 @@ function closeAndNext(): void {
     bidLog = [];
     seedTroelLog(false);
   } else {
+    recordSessionStat(ruleset.id, botLevel, session.totals, HUMAN);
     store.clear();
     persisted = null;
   }
@@ -351,6 +363,26 @@ function startScreen(): HTMLElement {
     ),
   );
 
+  const rulesetGroup = el('div', 'control-group level-picker');
+  rulesetGroup.append(el('span', undefined, t('ruleset.picker')));
+  const rulesetSeg = el('div', 'seg');
+  rulesetSeg.setAttribute('role', 'group');
+  for (const r of rulesets) {
+    rulesetSeg.append(
+      segButton(t(`ruleset.${r.id}` as MessageKey), ruleset.id === r.id, () => {
+        ruleset = r;
+        try {
+          localStorage.setItem(RULESET_KEY, r.id);
+        } catch {
+          /* ignore */
+        }
+        render();
+      }),
+    );
+  }
+  rulesetGroup.append(rulesetSeg);
+  main.append(rulesetGroup);
+
   const levelGroup = el('div', 'control-group level-picker');
   levelGroup.append(el('span', undefined, t('bots.level')));
   const levelSeg = el('div', 'seg');
@@ -384,6 +416,75 @@ function startScreen(): HTMLElement {
   } else {
     row.append(button(t('game.start'), 'btn primary', startSession));
   }
+  row.append(
+    button(t('stats.button'), 'btn muted', () => {
+      view = 'stats';
+      render();
+    }),
+  );
+  main.append(row);
+  return main;
+}
+
+function statsScreen(): HTMLElement {
+  const stats = loadStats();
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('stats.title')));
+
+  const sessions = stats.sessions.length;
+  const won = stats.sessions.filter((s) => s.won).length;
+  const points = Object.values(stats.contracts).reduce((sum, c) => sum + c.points, 0);
+  const summary = el('div', 'status');
+  summary.append(
+    el('span', 'chip', `${t('stats.sessions')}: ${sessions}`),
+    el('span', 'chip', `${t('stats.won')}: ${won}`),
+    el('span', 'chip strong', `${t('stats.points')}: ${formatPoints(points)}`),
+  );
+  main.append(summary);
+
+  const entries = Object.entries(stats.contracts);
+  if (entries.length === 0) {
+    main.append(el('p', 'hint', t('stats.empty')));
+  } else {
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    for (const label of [
+      t('stats.contract'),
+      t('stats.played'),
+      t('stats.declared'),
+      t('stats.declaredWon'),
+      t('score.points'),
+    ]) {
+      head.append(el('th', undefined, label));
+    }
+    table.append(head);
+    const order = new Map(ruleset.contracts.map((c, i) => [c.id, i]));
+    entries.sort((a, b) => (order.get(a[0]) ?? 99) - (order.get(b[0]) ?? 99));
+    for (const [id, c] of entries) {
+      const tr = el('tr');
+      tr.append(el('th', undefined, tContract(id)));
+      tr.append(el('td', undefined, String(c.played)));
+      tr.append(el('td', undefined, String(c.declared)));
+      tr.append(el('td', undefined, String(c.declaredWon)));
+      tr.append(el('td', undefined, formatPoints(c.points)));
+      table.append(tr);
+    }
+    main.append(table);
+  }
+
+  const row = el('div', 'btn-row');
+  row.append(
+    button(t('stats.back'), 'btn primary', () => {
+      view = 'home';
+      render();
+    }),
+  );
+  row.append(
+    button(t('stats.reset'), 'btn muted', () => {
+      clearStats();
+      render();
+    }),
+  );
   main.append(row);
   return main;
 }
@@ -695,7 +796,9 @@ function render(): void {
   wrap.append(topbar());
 
   const gift = currentGift();
-  if (!session || (!gift && !session.finished)) {
+  if (view === 'stats' && !session) {
+    wrap.append(statsScreen());
+  } else if (!session || (!gift && !session.finished)) {
     wrap.append(startScreen());
   } else if (!gift && session.finished) {
     wrap.append(endScreen());
@@ -725,10 +828,17 @@ try {
 } catch {
   /* ignore */
 }
+try {
+  const storedRuleset = localStorage.getItem(RULESET_KEY);
+  ruleset = getRuleset(storedRuleset ?? '') ?? ruleset;
+} catch {
+  /* ignore */
+}
 const savedState = store.load();
-if (savedState && savedState.rulesetId === ruleset.id) {
+const savedRuleset = savedState ? getRuleset(savedState.rulesetId) : undefined;
+if (savedState && savedRuleset) {
   try {
-    restored = { state: savedState, session: store.replay(ruleset, savedState) };
+    restored = { state: savedState, session: store.replay(savedRuleset, savedState) };
   } catch {
     store.clear();
   }

@@ -1,5 +1,6 @@
-// Heuristische bots met drie niveaus (Fase 2). Geen kaartgeheugen of
-// partnersignalen — de engine bewaakt de legaliteit van elke zet.
+// Heuristische bots met drie niveaus. Niveau 'sterk' gebruikt de
+// slaghistoriek van de gift als kaartgeheugen (Fase 3); de engine bewaakt
+// de legaliteit van elke zet.
 
 import { ACE, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
@@ -157,6 +158,14 @@ export function chooseCard(gift: Gift, player: number, level: BotLevel = 'normal
   if (level === 'easy') return lowest;
 
   if (trick.length === 0) {
+    // Sterk niveau: kaartgeheugen — kom uit met een 'master' (hoogste nog
+    // uitstaande kaart van een kleur) als die er is.
+    if (level === 'strong') {
+      const master = legal
+        .filter((c) => isMaster(gift, player, c, trumpSuit))
+        .sort((a, b) => b.rank - a.rank)[0];
+      if (master) return master;
+    }
     // Uitkomen: hoogste van de langste kleur (aas eerst als die er is).
     const ace = legal.find((c) => c.rank === ACE && (trumpSuit === null || c.suit !== trumpSuit));
     if (ace) return ace;
@@ -175,6 +184,19 @@ export function chooseCard(gift: Gift, player: number, level: BotLevel = 'normal
     return winners[0] as Card;
   }
   return lowest;
+}
+
+/** Kaartgeheugen: is deze kaart de hoogste die in haar kleur nog uitstaat? */
+function isMaster(gift: Gift, player: number, card: Card, trumpSuit: Suit | null): boolean {
+  if (trumpSuit !== null && card.suit === trumpSuit) return false; // troef apart houden
+  const seen = new Set<string>();
+  for (const play of gift.history.flat()) seen.add(`${play.card.suit}${play.card.rank}`);
+  for (const play of gift.trick) seen.add(`${play.card.suit}${play.card.rank}`);
+  for (const own of gift.deal.hands[player] ?? []) seen.add(`${own.suit}${own.rank}`);
+  for (let rank = card.rank + 1; rank <= 14; rank++) {
+    if (!seen.has(`${card.suit}${rank}`)) return false;
+  }
+  return true;
 }
 
 function currentWinning(gift: Gift, trumpSuit: Suit | null): Card {

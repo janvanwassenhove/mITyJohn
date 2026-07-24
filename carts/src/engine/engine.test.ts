@@ -83,6 +83,51 @@ describe('slagen', () => {
   });
 });
 
+describe('troefplicht-variant (vlaams-cafe)', () => {
+  const cafe = getRuleset('vlaams-cafe') as Ruleset;
+  const rules = { mustTrump: cafe.play.mustTrump, mustOvertrump: cafe.play.mustOvertrump };
+
+  it('verplicht troeven wie niet kan volgen', () => {
+    const hand = [card('D', 3), card('H', 7), card('H', 2)];
+    const trick = [{ player: 0, card: card('S', 12) }];
+    expect(legalPlays(hand, trick, 'H', rules)).toEqual([card('H', 7), card('H', 2)]);
+  });
+
+  it('verplicht overtroeven indien mogelijk', () => {
+    const hand = [card('H', 7), card('H', 12), card('D', 3)];
+    const trick = [
+      { player: 0, card: card('S', 12) },
+      { player: 1, card: card('H', 9) },
+    ];
+    expect(legalPlays(hand, trick, 'H', rules)).toEqual([card('H', 12)]);
+  });
+
+  it('laat ondertroeven toe als overtroeven niet kan', () => {
+    const hand = [card('H', 7), card('D', 3)];
+    const trick = [
+      { player: 0, card: card('S', 12) },
+      { player: 1, card: card('H', 9) },
+    ];
+    expect(legalPlays(hand, trick, 'H', rules)).toEqual([card('H', 7)]);
+  });
+
+  it('zonder troef in de hand mag alles', () => {
+    const hand = [card('D', 3), card('C', 9)];
+    const trick = [{ player: 0, card: card('S', 12) }];
+    expect(legalPlays(hand, trick, 'H', rules)).toHaveLength(2);
+  });
+
+  it('piccolo scoort exact 1 slag', () => {
+    const piccolo = cafe.contracts.find((c) => c.id === 'piccolo') as Contract;
+    expect(
+      scoreGift({ contract: piccolo, declarers: [1], tricksWon: [4, 1, 4, 4] }).success,
+    ).toEqual([true]);
+    const fail = scoreGift({ contract: piccolo, declarers: [1], tricksWon: [4, 2, 4, 3] });
+    expect(fail.success).toEqual([false]);
+    expect(fail.points[1]).toBe(-9);
+  });
+});
+
 describe('troel-detectie (§5.4)', () => {
   it('vindt houder, partner en troef via de vierde aas', () => {
     const hands = handsWith({

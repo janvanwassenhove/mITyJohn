@@ -1,4 +1,5 @@
 import vlaamsStandaard from '../../rulesets/vlaams-standaard.json';
+import vlaamsCafe from '../../rulesets/vlaams-cafe.json';
 import type { Locale } from './i18n';
 
 export interface ContractScore {
@@ -48,7 +49,10 @@ export interface Ruleset {
   session?: { giften: number };
 }
 
-export const rulesets: Ruleset[] = [vlaamsStandaard as unknown as Ruleset];
+export const rulesets: Ruleset[] = [
+  vlaamsStandaard as unknown as Ruleset,
+  vlaamsCafe as unknown as Ruleset,
+];
 
 export function getRuleset(id: string): Ruleset | undefined {
   return rulesets.find((r) => r.id === id);

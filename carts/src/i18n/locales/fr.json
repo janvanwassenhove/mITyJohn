@@ -70,5 +70,21 @@
   "bots.level": "Niveau des bots",
   "bots.easy": "Facile",
   "bots.normal": "Normal",
-  "bots.strong": "Fort"
+  "bots.strong": "Fort",
+  "ruleset.picker": "Variante",
+  "ruleset.vlaams-standaard": "Standard",
+  "ruleset.vlaams-cafe": "Café",
+  "contract.piccolo": "Piccolo",
+  "stats.button": "Statistiques",
+  "stats.title": "Statistiques",
+  "stats.sessions": "Sessions jouées",
+  "stats.won": "Sessions gagnées",
+  "stats.points": "Points au total",
+  "stats.contract": "Contrat",
+  "stats.played": "Joué",
+  "stats.declared": "Par vous",
+  "stats.declaredWon": "Réussi",
+  "stats.empty": "Aucune donne jouée — le tableau se remplit tout seul.",
+  "stats.reset": "Effacer les statistiques",
+  "stats.back": "Retour"
 }
