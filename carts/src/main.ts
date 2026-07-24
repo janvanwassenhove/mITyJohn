@@ -10,11 +10,21 @@ import {
 } from './i18n';
 import { THEMES, applyTheme, getTheme, initTheme, type Theme } from './theme';
 import { getRuleset, type Ruleset } from './ruleset';
-import { mulberry32, sortHand, type Card, type Suit } from './engine/cards';
+import { sortHand, type Card, type Suit } from './engine/cards';
 import { SUITS } from './engine/cards';
 import { PLAYER_COUNT } from './engine/deal';
-import { Session, type Gift } from './engine/game';
-import { chooseAlleen, chooseBid, chooseCard, chooseTrumpSuit } from './bots';
+import type { Session } from './engine/game';
+import { type Gift } from './engine/game';
+import {
+  BOT_LEVELS,
+  chooseAlleen,
+  chooseBid,
+  chooseCard,
+  chooseTrumpSuit,
+  type BotLevel,
+} from './bots';
+import * as store from './store';
+import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('#app ontbreekt');
@@ -24,12 +34,16 @@ const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
 const TRICK_PAUSE = 1200;
+const LEVEL_KEY = 'carts.botLevel';
 
 type BidLogEntry =
   | { kind: 'pass' | 'join' | 'troel'; player: number }
   | { kind: 'bid'; player: number; contractId: string };
 
 let session: Session | null = null;
+let persisted: store.PersistedSession | null = null;
+let restored: { state: store.PersistedSession; session: Session } | null = null;
+let botLevel: BotLevel = 'normal';
 let bidLog: BidLogEntry[] = [];
 let generation = 0;
 
@@ -56,20 +70,61 @@ function cardText(card: Card): string {
   return `${SUIT_GLYPH[card.suit]}${rankLabel(card.rank)}`;
 }
 
+/* ---------- persistentie ---------- */
+
+function record(action: store.SessionAction): void {
+  if (!persisted) return;
+  persisted.actions.push(action);
+  store.save(persisted);
+}
+
+/** Biedlog van de lopende gift heropbouwen uit het actielog (na herstel). */
+function rebuildBidLog(state: store.PersistedSession): void {
+  bidLog = [];
+  const lastClose = state.actions.map((a) => a.t).lastIndexOf('close');
+  for (const action of state.actions.slice(lastClose + 1)) {
+    if (action.t === 'bid') {
+      bidLog.push(
+        action.a.type === 'bid'
+          ? { kind: 'bid', player: action.p, contractId: action.a.contractId }
+          : { kind: action.a.type === 'join' ? 'join' : 'pass', player: action.p },
+      );
+    }
+  }
+  seedTroelLog(true);
+}
+
 /* ---------- spelverloop ---------- */
 
 function startSession(): void {
-  session = new Session(ruleset, mulberry32((Math.random() * 2 ** 31) >>> 0));
-  session.nextGift();
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  persisted = store.newPersisted(ruleset.id, seed, botLevel);
+  store.save(persisted);
+  restored = null;
+  session = store.replay(ruleset, persisted);
   bidLog = [];
-  seedTroelLog();
+  seedTroelLog(false);
   render();
   scheduleBots();
 }
 
-function seedTroelLog(): void {
+function continueSession(): void {
+  if (!restored) return;
+  persisted = restored.state;
+  session = restored.session;
+  botLevel = persisted.botLevel;
+  restored = null;
+  rebuildBidLog(persisted);
+  render();
+  scheduleBots();
+}
+
+function seedTroelLog(prepend: boolean): void {
   const troel = session?.gift?.bidding.troel;
-  if (troel) bidLog.push({ kind: 'troel', player: troel.holder });
+  if (!troel) return;
+  const entry: BidLogEntry = { kind: 'troel', player: troel.holder };
+  if (prepend) bidLog.unshift(entry);
+  else bidLog.push(entry);
 }
 
 function currentGift(): Gift | null {
@@ -102,6 +157,17 @@ function afterBidAction(gift: Gift): void {
   if (gift.bidding.phase === 'done' && !gift.contract) gift.settleBidding();
 }
 
+function playCard(gift: Gift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  record({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored') {
+    const points = gift.score?.points[HUMAN] ?? 0;
+    sfxScore(points >= 0);
+  }
+}
+
 function botStep(): boolean {
   const gift = currentGift();
   const who = actor();
@@ -109,8 +175,9 @@ function botStep(): boolean {
   const p = who.player;
   switch (gift.phase) {
     case 'bidding': {
-      const action = chooseBid(gift.bidding, p, gift.deal.hands[p] as Card[]);
+      const action = chooseBid(gift.bidding, p, gift.deal.hands[p] as Card[], botLevel);
       gift.bidding.act(p, action);
+      record({ t: 'bid', p, a: action });
       bidLog.push(
         action.type === 'bid'
           ? { kind: 'bid', player: p, contractId: action.contractId }
@@ -120,17 +187,20 @@ function botStep(): boolean {
       return true;
     }
     case 'alleen-choice': {
-      const accept = chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit);
+      const accept = chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit, botLevel);
       gift.bidding.chooseAlleen(accept);
+      record({ t: 'alleen', accept });
       afterBidAction(gift);
       return true;
     }
     case 'trump-choice': {
-      gift.chooseTrump(chooseTrumpSuit(gift.deal.hands[p] as Card[]));
+      const suit = chooseTrumpSuit(gift.deal.hands[p] as Card[]);
+      gift.chooseTrump(suit);
+      record({ t: 'trump', suit });
       return true;
     }
     case 'play': {
-      gift.playCard(p, chooseCard(gift, p));
+      playCard(gift, p, chooseCard(gift, p, botLevel));
       return true;
     }
     default:
@@ -159,10 +229,14 @@ function scheduleBots(): void {
 function closeAndNext(): void {
   if (!session) return;
   session.closeGift();
+  record({ t: 'close' });
   if (!session.finished) {
     session.nextGift();
     bidLog = [];
-    seedTroelLog();
+    seedTroelLog(false);
+  } else {
+    store.clear();
+    persisted = null;
   }
   render();
   scheduleBots();
@@ -246,7 +320,15 @@ function topbar(): HTMLElement {
     );
   }
   themeGroup.append(themeSeg);
-  controls.append(langGroup, themeGroup);
+
+  const soundBtn = button(soundEnabled() ? '🔊' : '🔇', 'btn sound', () => {
+    toggleSound();
+    render();
+  });
+  soundBtn.setAttribute('aria-label', t('controls.sound'));
+  soundBtn.setAttribute('aria-pressed', String(soundEnabled()));
+
+  controls.append(langGroup, themeGroup, soundBtn);
   header.append(brand, controls);
   return header;
 }
@@ -268,7 +350,41 @@ function startScreen(): HTMLElement {
       }),
     ),
   );
-  main.append(button(t('game.start'), 'btn primary', startSession));
+
+  const levelGroup = el('div', 'control-group level-picker');
+  levelGroup.append(el('span', undefined, t('bots.level')));
+  const levelSeg = el('div', 'seg');
+  levelSeg.setAttribute('role', 'group');
+  for (const level of BOT_LEVELS) {
+    levelSeg.append(
+      segButton(t(`bots.${level}` as MessageKey), botLevel === level, () => {
+        botLevel = level;
+        try {
+          localStorage.setItem(LEVEL_KEY, level);
+        } catch {
+          /* ignore */
+        }
+        render();
+      }),
+    );
+  }
+  levelGroup.append(levelSeg);
+  main.append(levelGroup);
+
+  const row = el('div', 'btn-row');
+  if (restored && !restored.session.finished) {
+    row.append(button(t('start.continue'), 'btn primary', continueSession));
+    row.append(
+      button(t('start.new'), 'btn', () => {
+        store.clear();
+        restored = null;
+        startSession();
+      }),
+    );
+  } else {
+    row.append(button(t('game.start'), 'btn primary', startSession));
+  }
+  main.append(row);
   return main;
 }
 
@@ -291,17 +407,21 @@ function statusBar(gift: Gift): HTMLElement {
         }),
       ),
     );
-    bar.append(
-      el(
-        'span',
-        'chip',
-        contract.trumpSuit
-          ? t('game.trump', {
-              suit: `${SUIT_GLYPH[contract.trumpSuit]} ${tSuit(contract.trumpSuit)}`,
-            })
-          : t('game.noTrump'),
-      ),
-    );
+    if (contract.trumpSuit) {
+      bar.append(
+        el(
+          'span',
+          'chip',
+          t('game.trump', {
+            suit: `${SUIT_GLYPH[contract.trumpSuit]} ${tSuit(contract.trumpSuit)}`,
+          }),
+        ),
+      );
+    } else if (contract.contract.trump === 'first-card-led') {
+      bar.append(el('span', 'chip', t('game.trumpPending', { name: playerName(contract.leader) })));
+    } else {
+      bar.append(el('span', 'chip', t('game.noTrump')));
+    }
   } else {
     bar.append(el('span', 'chip', t('game.turned', { card: cardText(gift.deal.turnedCard) })));
   }
@@ -341,7 +461,7 @@ function seat(gift: Gift, player: number): HTMLElement {
           disabled: !isLegal,
           onClick: () => {
             if (!isLegal) return;
-            gift.playCard(HUMAN, card);
+            playCard(gift, HUMAN, card);
             render();
             scheduleBots();
           },
@@ -404,6 +524,7 @@ function actionPanel(gift: Gift): HTMLElement {
           row.append(
             button(t('bidding.join'), 'btn primary', () => {
               gift.bidding.act(HUMAN, { type: 'join' });
+              record({ t: 'bid', p: HUMAN, a: { type: 'join' } });
               bidLog.push({ kind: 'join', player: HUMAN });
               afterBidAction(gift);
               render();
@@ -415,6 +536,7 @@ function actionPanel(gift: Gift): HTMLElement {
           row.append(
             button(tContract(contract.id), 'btn', () => {
               gift.bidding.act(HUMAN, { type: 'bid', contractId: contract.id });
+              record({ t: 'bid', p: HUMAN, a: { type: 'bid', contractId: contract.id } });
               bidLog.push({ kind: 'bid', player: HUMAN, contractId: contract.id });
               afterBidAction(gift);
               render();
@@ -425,6 +547,7 @@ function actionPanel(gift: Gift): HTMLElement {
         row.append(
           button(t('bidding.pass'), 'btn muted', () => {
             gift.bidding.act(HUMAN, { type: 'pass' });
+            record({ t: 'bid', p: HUMAN, a: { type: 'pass' } });
             bidLog.push({ kind: 'pass', player: HUMAN });
             afterBidAction(gift);
             render();
@@ -444,12 +567,14 @@ function actionPanel(gift: Gift): HTMLElement {
         row.append(
           button(t('bidding.accept'), 'btn primary', () => {
             gift.bidding.chooseAlleen(true);
+            record({ t: 'alleen', accept: true });
             afterBidAction(gift);
             render();
             scheduleBots();
           }),
           button(t('bidding.decline'), 'btn muted', () => {
             gift.bidding.chooseAlleen(false);
+            record({ t: 'alleen', accept: false });
             afterBidAction(gift);
             render();
             scheduleBots();
@@ -470,6 +595,7 @@ function actionPanel(gift: Gift): HTMLElement {
           row.append(
             button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
               gift.chooseTrump(suit);
+              record({ t: 'trump', suit });
               render();
               scheduleBots();
             }),
@@ -586,7 +712,35 @@ function render(): void {
   app.append(wrap);
 }
 
+/* ---------- opstart ---------- */
+
 initTheme();
+initSound();
 setLocale(detectLocale());
+try {
+  const storedLevel = localStorage.getItem(LEVEL_KEY);
+  if ((BOT_LEVELS as readonly string[]).includes(storedLevel ?? '')) {
+    botLevel = storedLevel as BotLevel;
+  }
+} catch {
+  /* ignore */
+}
+const savedState = store.load();
+if (savedState && savedState.rulesetId === ruleset.id) {
+  try {
+    restored = { state: savedState, session: store.replay(ruleset, savedState) };
+  } catch {
+    store.clear();
+  }
+}
 onLocaleChange(render);
 render();
+
+// PWA: service worker voor offline gebruik / installatie op gsm.
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
+      /* offline-modus is nice-to-have */
+    });
+  });
+}

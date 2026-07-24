@@ -22,7 +22,6 @@ export class Gift {
   tricksPlayed = 0;
   lastTrick: TrickPlay[] | null = null;
   score: GiftScore | null = null;
-  private forcedLeadPending = false;
 
   constructor(ruleset: Ruleset, dealer: number, rng: () => number) {
     this.ruleset = ruleset;
@@ -72,7 +71,6 @@ export class Gift {
   private start(result: BidResult): void {
     this.contract = result;
     this.trickLeader = result.leader;
-    this.forcedLeadPending = Boolean(result.forcedLeadCard);
   }
 
   get toPlay(): number {
@@ -83,12 +81,7 @@ export class Gift {
 
   legalCards(player: number): Card[] {
     if (!this.contract || player !== this.toPlay) return [];
-    const hand = this.deal.hands[player] as Card[];
-    const forced =
-      this.forcedLeadPending && this.trick.length === 0 && player === this.trickLeader
-        ? this.contract.forcedLeadCard
-        : undefined;
-    return legalPlays(hand, this.trick, forced);
+    return legalPlays(this.deal.hands[player] as Card[], this.trick);
   }
 
   playCard(player: number, card: Card): void {
@@ -97,6 +90,16 @@ export class Gift {
     }
     const hand = this.deal.hands[player] as Card[];
     this.deal.hands[player] = hand.filter((c) => !sameCard(c, card));
+    // Troel (§5.4, bevestigd): de eerste kaart van de uitkomer bepaalt de troef.
+    if (
+      this.contract &&
+      this.contract.contract.trump === 'first-card-led' &&
+      this.contract.trumpSuit === null &&
+      this.tricksPlayed === 0 &&
+      this.trick.length === 0
+    ) {
+      this.contract = { ...this.contract, trumpSuit: card.suit };
+    }
     this.trick.push({ player, card });
     if (this.trick.length === PLAYER_COUNT) {
       const winner = trickWinner(this.trick, this.contract?.trumpSuit ?? null);
@@ -105,7 +108,6 @@ export class Gift {
       this.lastTrick = this.trick;
       this.trick = [];
       this.trickLeader = winner;
-      this.forcedLeadPending = false;
       if (this.tricksPlayed === 13 && this.contract) {
         this.score = scoreGift({
           contract: this.contract.contract,

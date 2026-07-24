@@ -28,7 +28,7 @@
 | Spelers | 4, elk voor zich; per spel (gift) ontstaan tijdelijke bondgenootschappen via het bieden. |
 | Kaarten | Standaard 52 kaarten, geen jokers. |
 | Kaartrangorde | A (hoog) – K – Q – J – 10 – … – 2 (laag), in elke kleur. |
-| Speelrichting | **Met de klok mee** (delen, bieden en spelen). **⚠️ AANNAME** — sommige gezelschappen spelen in tegenwijzerzin; bronnen zijn niet eenduidig. |
+| Speelrichting | **Met de klok mee** (delen, bieden en spelen). ✅ *Bevestigd door de opdrachtgever (2026-07-24).* |
 | Deler | Wisselt elke gift, met de klok mee. |
 
 ## 3. Delen en troefbepaling
@@ -50,8 +50,7 @@
   *"meegaan"* (samen 8 slagen). Gaat niemand mee, dan kan de vrager **alleen** spelen (§5.2)
   of alsnog passen.
 - **Iedereen past:** de kaarten worden binnengegooid en de volgende deler deelt een nieuwe gift.
-  Er wordt niet gescoord. **⚠️ AANNAME** — varianten: verplicht spel voor de deler, of een pot
-  die aangroeit; zie open vragen.
+  Er wordt niet gescoord. ✅ *Bevestigd door de opdrachtgever (2026-07-24).*
 
 ## 5. Contracten (biedladder)
 
@@ -61,7 +60,7 @@ Van laag naar hoog. "Punten" = basispunten per tegenspeler; verrekening in §7.
 |---|---|---|---|---|---|---|
 | 1 | **Vraag & mee** | 2 (vrager + meegaander) | ≥ 8 samen | gedraaide kleur | 2 | +1 per overslag / −1 per onderslag |
 | 2 | **Alleen** | 1 | ≥ 5 | gedraaide kleur | 3 | +1 / −1 |
-| 3 | **Troel** (verplicht) | 2 | ≥ 8 samen | kleur 4e aas (§5.4) | 4 | +2 / −2 |
+| 3 | **Troel** (verplicht) | 2 | ≥ 8 samen | eerste kaart partner (§5.4) | 4 | +2 / −2 |
 | 4 | **Abondance 9** | 1 | ≥ 9 | eigen keuze | 6 | vast |
 | 5 | **Miserie** | 1 (meerdere mogelijk) | 0 | geen | 7 | vast |
 | 6 | **Abondance 10** | 1 | ≥ 10 | eigen keuze | 7 | vast |
@@ -71,8 +70,9 @@ Van laag naar hoog. "Punten" = basispunten per tegenspeler; verrekening in §7.
 | 10 | **Solo** | 1 | 13 | eigen keuze | 20 | vast |
 | 11 | **Soloslim** | 1 | 13 | geen | 30 | vast |
 
-**⚠️ AANNAME** — zowel de exacte rangorde (vooral de positie van miserie tussen de abondances,
-en abondance 12 t.o.v. open miserie) als de puntenwaarden verschillen per bron. De
+✅ *Puntenwaarden bevestigd door de opdrachtgever (2026-07-24).* **⚠️ AANNAME** blijft voor
+de exacte rangorde (vooral de positie van miserie tussen de abondances, en abondance 12
+t.o.v. open miserie). De
 abondance-reeks volgt hier de progressie 9→6, 10→7, 11→8, 12→9 punten (cf. gerapporteerde
 tabellen "elf slagen 8 punten, twaalf slagen 9 punten"); troel = dubbele vraag; miserie 7 en
 open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zonder troef,
@@ -104,13 +104,15 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 ### 5.4 Troel (verplicht bod)
 
 - Wie **exact 3 azen** in de hand heeft, **moet** *"troel"* roepen.
-- De houder van de **vierde aas** is automatisch partner en maakt zich bekend doordat
-  de **kleur van de vierde aas troef wordt**; de partner **komt uit met die aas** in de
-  eerste slag. **⚠️ AANNAME** — grote variatie: elders blijft de gedraaide kleur troef,
-  of kiest de partner de troef.
+- De houder van de **vierde aas** is automatisch partner en **komt uit** in de eerste
+  slag. **De kleur van zijn eerste (vrij gekozen) kaart wordt troef.**
+  ✅ *Bevestigd door de opdrachtgever (2026-07-24); vervangt de eerdere aanname
+  "vierde aas wordt troef en moet uitgespeeld worden".*
 - Doel: **samen ≥ 8 slagen**. **⚠️ AANNAME** — veel gezelschappen spelen 9.
 - **4 azen in één hand:** de houder van de **hartenheer** is partner (heeft de troelbieder
-  die zelf, dan de hoogste harten buiten zijn hand); harten wordt troef. **⚠️ AANNAME**.
+  die zelf, dan de hoogste harten buiten zijn hand); ook die partner komt uit en bepaalt
+  met zijn eerste kaart de troef. **⚠️ AANNAME** (enkel de partnerregel; de
+  troefbepaling volgt de bevestigde regel hierboven).
 - Troel kan enkel **overboden** worden door contracten vanaf **abondance 9** (nr. 4 en hoger).
   **⚠️ AANNAME** — elders is troel onoverbiedbaar of enkel door soloslim te overbieden.
 
@@ -134,8 +136,8 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
    §5.3 en troel §5.4).
 2. **Kleur bekennen is verplicht.** Wie niet kan volgen, mag **naar keuze** troeven of een
    andere kleur bijgooien — er is **geen troefplicht en geen overtroefplicht**.
-   **⚠️ AANNAME** — in sommige streken geldt verplicht (over)troeven; als variantvlag voorzien
-   (`variants.verplichtTroeven = false`).
+   ✅ *Bevestigd door de opdrachtgever (2026-07-24)*; verplicht (over)troeven blijft als
+   variantvlag beschikbaar (`variants.verplichtTroeven = false`).
 3. De slag gaat naar de hoogste troef, of zonder troef naar de hoogste kaart in de
    gevraagde kleur. De winnaar van de slag komt uit in de volgende slag.
 
@@ -163,23 +165,19 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 
 ## Open regelvragen
 
-Te beantwoorden door de opdrachtgever / testgroep vóór Fase 1 (game-engine):
+**Beantwoord door de opdrachtgever (2026-07-24):** speelrichting met de klok mee;
+troel: partner met de vierde aas komt uit en zijn eerste kaart bepaalt de troef; enkel
+volgplicht (geen troefplicht); iedereen past → herdeel zonder gevolg; puntentabel
+akkoord; volgende spellen: kleurenwiezen-variant, manillen en bieden.
 
-1. **Speelrichting:** met de klok mee of in tegenwijzerzin?
-2. **Troel — doel:** samen 8 of 9 slagen?
-3. **Troel — troefbepaling:** wordt de kleur van de vierde aas troef (huidige keuze),
-   blijft de gedraaide kleur troef, of kiest de partner?
-4. **Troel — overbieden:** vanaf welk contract mag troel overboden worden (huidige keuze:
+Nog open voor Fase 3+:
+
+1. **Troel — doel:** samen 8 (huidige keuze) of 9 slagen?
+2. **Troel — overbieden:** vanaf welk contract mag troel overboden worden (huidige keuze:
    abondance 9), of is troel onoverbiedbaar?
-5. **Rangorde biedladder:** klopt de positie van miserie (tussen abondance 9 en 10) en van
+3. **Rangorde biedladder:** klopt de positie van miserie (tussen abondance 9 en 10) en van
    open miserie (boven abondance 12)? Bestaan kleine én grote miserie apart?
-6. **Puntentabel:** bevestig de waarden per contract (vooral abondance-reeks, solo 20,
-   soloslim 30) en of een mislukt contract enkelvoudig dan wel dubbel betaalt.
-7. **Vole:** telt 13 slagen bij vraag & mee een bonus, en hoeveel?
-8. **Iedereen past:** herdeel zonder gevolg, verplicht spel voor de deler, of pot/dender?
-9. **Troefplicht:** geldt ergens verplicht (over)troeven bij niet kunnen volgen?
-10. **Piccolo:** opnemen in de standaard of enkel als variant?
-11. **4 azen in één hand:** bevestig de partnerregel (hartenheer).
-12. **Meerdere miseries tegelijk:** toegelaten (huidige keuze) of maximaal één bieder?
-13. **Welke andere spellen** moeten na wiezen volgen in de Carts-app (manillen, kleurwhist,
-    solo whist, …)? Dit bepaalt hoe generiek het ruleset-formaat moet blijven.
+4. **Mislukt contract:** enkelvoudig (huidige keuze) of dubbel betalen?
+5. **Piccolo:** opnemen in de standaard of enkel als variant?
+6. **4 azen in één hand:** bevestig de partnerregel (hartenheer).
+7. **Meerdere miseries tegelijk:** toegelaten (huidige keuze) of maximaal één bieder?

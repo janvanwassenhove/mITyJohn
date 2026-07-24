@@ -1,7 +1,7 @@
 // Slagen spelen — REGELS.md §6: kleur bekennen verplicht, geen (over)troefplicht;
 // hoogste troef wint, anders hoogste kaart in de gevraagde kleur.
 
-import { sameCard, type Card, type Suit } from './cards';
+import { type Card, type Suit } from './cards';
 import { nextPlayer, PLAYER_COUNT } from './deal';
 
 export interface TrickPlay {
@@ -9,18 +9,8 @@ export interface TrickPlay {
   card: Card;
 }
 
-export function legalPlays(
-  hand: Card[],
-  trick: TrickPlay[],
-  forcedLead?: Card | undefined,
-): Card[] {
-  if (trick.length === 0) {
-    if (forcedLead) {
-      const forced = hand.filter((c) => sameCard(c, forcedLead));
-      if (forced.length > 0) return forced;
-    }
-    return hand;
-  }
+export function legalPlays(hand: Card[], trick: TrickPlay[]): Card[] {
+  if (trick.length === 0) return hand;
   const ledSuit = (trick[0] as TrickPlay).card.suit;
   const follow = hand.filter((c) => c.suit === ledSuit);
   return follow.length > 0 ? follow : hand;

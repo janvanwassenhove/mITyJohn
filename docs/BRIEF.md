@@ -20,8 +20,8 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 ## §3 Spellen & scope
 
 1. **Wiezen** (kleurenwiezen, Vlaams standaard) — eerst.
-2. Kandidaten daarna: manillen, solo whist, … — beslissing via open vraag 13 in
-   [REGELS.md](REGELS.md).
+2. Daarna, in volgorde (bevestigd 2026-07-24): een **kleurenwiezen-variant**,
+   **manillen** en **bieden**.
 
 ## §4 Regels & rulesets
 
@@ -90,9 +90,9 @@ alleen `main` deployen.
 |---|---|---|
 | 0 | Regels onderzoeken (REGELS.md), ruleset-JSON, repo/tooling, i18n- & themafundering, Pages-deploy met placeholder | ✅ |
 | 1 | Speelbare wiezen: engine, bots, spel-UI, browser-smoketest | ✅ |
-| 2 | Regelvalidatie met echte spelers; antwoorden op open vragen verwerken; varianten als vlaggen | ◻ |
-| 3 | Verfijning: animaties, geluid, statistieken, opgeslagen sessies, bot-niveaus | ◻ |
-| 4 | Tweede spel (manillen?) op hetzelfde ruleset-formaat | ◻ |
+| 2 | Regelbevestiging verwerkt (klok mee, troel via eerste kaart, volgplicht, herdeel, punten); botniveaus; sessiepersistentie (localStorage, actielog-replay); PWA-installatie; animaties & geluid; vermelding op de homepage | ✅ |
+| 3 | Restvragen (troel 8/9, overbieden, rangorde-details); statistieken & historiek; slimmere bots (kaartgeheugen) | ◻ |
+| 4 | Volgende spellen op hetzelfde ruleset-formaat: kleurenwiezen-variant, manillen, bieden | ◻ |
 | 5 | Online multiplayer (aparte beslissing: vereist backend/workers) | ◻ |
 
 ## §13 Open punten

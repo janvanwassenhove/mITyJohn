@@ -8,25 +8,22 @@ import type { Contract, Ruleset } from '../ruleset';
 export interface TroelInfo {
   holder: number;
   partner: number;
-  trumpSuit: Suit;
-  /** Kaart waarmee de partner verplicht uitkomt (de vierde aas / hoogste harten). */
-  leadCard: Card;
 }
 
 export interface BidResult {
   contract: Contract;
   declarers: number[];
-  /** null zolang de bieder de troef nog moet kiezen (abondance/solo). */
+  /** null zolang de troef nog niet vastligt (abondance-keuze of troel-eerste-kaart). */
   trumpSuit: Suit | null;
   leader: number;
-  forcedLeadCard?: Card;
 }
 
 export type BidAction = { type: 'pass' } | { type: 'bid'; contractId: string } | { type: 'join' };
 
 export type BidPhase = 'bidding' | 'alleen-choice' | 'trump-choice' | 'done' | 'redeal';
 
-/** Zoek troel: exact 3 azen (of 4 — dan partnerregel hartenheer, §5.4 ⚠️ AANNAME). */
+/** Zoek troel: exact 3 azen (of 4 — dan partnerregel hartenheer, §5.4 ⚠️ AANNAME).
+ *  De partner komt uit; zijn eerste kaart bepaalt de troef (§5.4, bevestigd). */
 export function detectTroel(hands: Card[][]): TroelInfo | null {
   for (let p = 0; p < PLAYER_COUNT; p++) {
     const hand = hands[p] as Card[];
@@ -36,12 +33,7 @@ export function detectTroel(hands: Card[][]): TroelInfo | null {
         (s) => !aces.some((a) => a.suit === s),
       ) as Suit;
       const partner = hands.findIndex((h) => h.some((c) => c.rank === ACE && c.suit === missing));
-      return {
-        holder: p,
-        partner,
-        trumpSuit: missing,
-        leadCard: { suit: missing, rank: ACE },
-      };
+      return { holder: p, partner };
     }
     if (aces.length === 4) {
       // Partner = houder hartenheer; heeft niemand anders die, dan hoogste harten buiten de hand.
@@ -49,14 +41,7 @@ export function detectTroel(hands: Card[][]): TroelInfo | null {
         const partner = hands.findIndex(
           (h, idx) => idx !== p && h.some((c) => c.suit === 'H' && c.rank === rank),
         );
-        if (partner >= 0) {
-          return {
-            holder: p,
-            partner,
-            trumpSuit: 'H',
-            leadCard: { suit: 'H', rank: rank as Card['rank'] },
-          };
-        }
+        if (partner >= 0) return { holder: p, partner };
       }
     }
   }
@@ -184,8 +169,8 @@ export class Bidding {
       case 'turned':
         trumpSuit = this.turnedSuit;
         break;
-      case 'fourth-ace-suit':
-        trumpSuit = this.troel?.trumpSuit ?? this.turnedSuit;
+      case 'first-card-led':
+        trumpSuit = null; // wordt bepaald door de eerste kaart van de uitkomer
         break;
       case 'none':
         trumpSuit = null;
@@ -197,10 +182,6 @@ export class Bidding {
     let leader = nextPlayer(this.dealer);
     if (contract.openingLead === 'declarer') leader = declarers[0] as number;
     if (contract.openingLead === 'fourth-ace-holder' && this.troel) leader = this.troel.partner;
-    const result: BidResult = { contract, declarers: [...declarers], trumpSuit, leader };
-    if (contract.openingLead === 'fourth-ace-holder' && this.troel) {
-      result.forcedLeadCard = this.troel.leadCard;
-    }
-    return result;
+    return { contract, declarers: [...declarers], trumpSuit, leader };
   }
 }

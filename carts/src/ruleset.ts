@@ -8,7 +8,7 @@ export interface ContractScore {
   voleBonus?: number;
 }
 
-export type TrumpRule = 'turned' | 'declarer-choice' | 'none' | 'fourth-ace-suit';
+export type TrumpRule = 'turned' | 'declarer-choice' | 'none' | 'first-card-led';
 export type OpeningLead = 'left-of-dealer' | 'declarer' | 'fourth-ace-holder';
 
 export interface Contract {

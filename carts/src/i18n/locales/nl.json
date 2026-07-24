@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Vlaamse kaartspellen, aan tafel of online.",
-  "app.phase": "Fase 1 — speelbaar prototype",
+  "app.phase": "Fase 2 — regels bevestigd",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Speel een sessie wiezen tegen drie botspelers. De taal- en themaswitch hierboven werken; regels en aannames staan in docs/REGELS.md.",
   "placeholder.ruleset": "Geladen ruleset: {name} (v{version}, {contracts} contracten)",
@@ -62,5 +62,13 @@
   "contract.miserie": "Miserie",
   "contract.open-miserie": "Open miserie",
   "contract.solo": "Solo",
-  "contract.soloslim": "Soloslim"
+  "contract.soloslim": "Soloslim",
+  "game.trumpPending": "Troef: eerste kaart van {name}",
+  "start.continue": "Doorgaan met vorige sessie",
+  "start.new": "Nieuwe sessie",
+  "controls.sound": "Geluid",
+  "bots.level": "Botniveau",
+  "bots.easy": "Makkelijk",
+  "bots.normal": "Normaal",
+  "bots.strong": "Sterk"
 }

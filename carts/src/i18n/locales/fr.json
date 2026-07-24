@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Jeux de cartes flamands, à table ou en ligne.",
-  "app.phase": "Phase 1 — prototype jouable",
+  "app.phase": "Phase 2 — règles confirmées",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Jouez une session de wiezen (whist flamand) contre trois bots. Les sélecteurs de langue et de thème ci-dessus fonctionnent ; règles et hypothèses dans docs/REGELS.md.",
   "placeholder.ruleset": "Règles chargées : {name} (v{version}, {contracts} contrats)",
@@ -62,5 +62,13 @@
   "contract.miserie": "Misère",
   "contract.open-miserie": "Misère sur table",
   "contract.solo": "Solo",
-  "contract.soloslim": "Chelem"
+  "contract.soloslim": "Chelem",
+  "game.trumpPending": "Atout : première carte de {name}",
+  "start.continue": "Reprendre la session précédente",
+  "start.new": "Nouvelle session",
+  "controls.sound": "Son",
+  "bots.level": "Niveau des bots",
+  "bots.easy": "Facile",
+  "bots.normal": "Normal",
+  "bots.strong": "Fort"
 }

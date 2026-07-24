@@ -1,11 +1,13 @@
-// Eenvoudige heuristische bots voor Fase 1: conservatief bieden,
-// pragmatisch spelen. Geen kaartgeheugen of partnersignalen — dat is
-// latere-fase-werk; de engine bewaakt de legaliteit.
+// Heuristische bots met drie niveaus (Fase 2). Geen kaartgeheugen of
+// partnersignalen — de engine bewaakt de legaliteit van elke zet.
 
 import { ACE, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
 import { SUITS } from './engine/cards';
+
+export const BOT_LEVELS = ['easy', 'normal', 'strong'] as const;
+export type BotLevel = (typeof BOT_LEVELS)[number];
 
 /** Ruwe handsterkte: honneurs + lengte in de (kandidaat-)troefkleur. */
 function honourPoints(hand: Card[]): number {
@@ -29,7 +31,49 @@ function miserieScore(hand: Card[]): number {
   return hand.filter((c) => c.rank <= 7).length - hand.filter((c) => c.rank >= 13).length * 2;
 }
 
-export function chooseBid(bidding: Bidding, player: number, hand: Card[]): BidAction {
+interface BidThresholds {
+  vraagHp: number;
+  vraagTrumpHp: number;
+  joinHp: number;
+  joinTrumpHp: number;
+  abondance: boolean;
+  miserie: boolean;
+}
+
+const BID_THRESHOLDS: Record<BotLevel, BidThresholds> = {
+  easy: {
+    vraagHp: 12,
+    vraagTrumpHp: 9,
+    joinHp: 9,
+    joinTrumpHp: 7,
+    abondance: false,
+    miserie: false,
+  },
+  normal: {
+    vraagHp: 9,
+    vraagTrumpHp: 6,
+    joinHp: 7,
+    joinTrumpHp: 5,
+    abondance: true,
+    miserie: true,
+  },
+  strong: {
+    vraagHp: 8,
+    vraagTrumpHp: 6,
+    joinHp: 6,
+    joinTrumpHp: 5,
+    abondance: true,
+    miserie: true,
+  },
+};
+
+export function chooseBid(
+  bidding: Bidding,
+  player: number,
+  hand: Card[],
+  level: BotLevel = 'normal',
+): BidAction {
+  const th = BID_THRESHOLDS[level];
   const bids = bidding.legalBids(player);
   const trump = bidding.turnedSuit;
   const hp = honourPoints(hand);
@@ -39,44 +83,49 @@ export function chooseBid(bidding: Bidding, player: number, hand: Card[]): BidAc
 
   // Abondance: zeer sterke lange kleur.
   if (
+    th.abondance &&
     bids.some((c) => c.id === 'abondance-9') &&
     longestLen >= 7 &&
-    hp >= 12 &&
+    hp >= (level === 'strong' ? 11 : 12) &&
     hand.filter((c) => c.suit === longest && c.rank >= 12).length >= 3
   ) {
     return { type: 'bid', contractId: 'abondance-9' };
   }
   // Miserie: uitgesproken zwakke hand.
-  if (bids.some((c) => c.id === 'miserie') && miserieScore(hand) >= 8 && hp <= 1) {
+  if (th.miserie && bids.some((c) => c.id === 'miserie') && miserieScore(hand) >= 8 && hp <= 1) {
     return { type: 'bid', contractId: 'miserie' };
   }
   // Meegaan of mede-miserie.
   if (bidding.canJoin(player)) {
     const current = bidding.current?.contract.id;
-    if (current === 'vraag-en-mee' && (hp >= 7 || (trumps >= 3 && hp >= 5))) {
+    if (current === 'vraag-en-mee' && (hp >= th.joinHp || (trumps >= 3 && hp >= th.joinTrumpHp))) {
       return { type: 'join' };
     }
-    if (current === 'miserie' && miserieScore(hand) >= 8 && hp <= 1) {
+    if (th.miserie && current === 'miserie' && miserieScore(hand) >= 8 && hp <= 1) {
       return { type: 'join' };
     }
   }
   // Vragen: degelijke hand met troefsteun.
-  if (bids.some((c) => c.id === 'vraag-en-mee') && (hp >= 9 || (trumps >= 4 && hp >= 6))) {
+  if (
+    bids.some((c) => c.id === 'vraag-en-mee') &&
+    (hp >= th.vraagHp || (trumps >= 4 && hp >= th.vraagTrumpHp))
+  ) {
     return { type: 'bid', contractId: 'vraag-en-mee' };
   }
   return { type: 'pass' };
 }
 
 /** §5.2: alleen doorspelen met een stevige hand. */
-export function chooseAlleen(hand: Card[], trump: Suit): boolean {
-  return honourPoints(hand) >= 11 && suitCount(hand, trump) >= 4;
+export function chooseAlleen(hand: Card[], trump: Suit, level: BotLevel = 'normal'): boolean {
+  const need = level === 'easy' ? 13 : level === 'strong' ? 10 : 11;
+  return honourPoints(hand) >= need && suitCount(hand, trump) >= 4;
 }
 
 export function chooseTrumpSuit(hand: Card[]): Suit {
   return longestSuit(hand);
 }
 
-export function chooseCard(gift: Gift, player: number): Card {
+export function chooseCard(gift: Gift, player: number, level: BotLevel = 'normal'): Card {
   const legal = gift.legalCards(player);
   if (legal.length === 1) return legal[0] as Card;
   const contract = gift.contract;
@@ -87,6 +136,13 @@ export function chooseCard(gift: Gift, player: number): Card {
 
   const lowest = [...legal].sort((a, b) => a.rank - b.rank)[0] as Card;
 
+  // Troel (§5.4): de uitkomer bepaalt met zijn eerste kaart de troef —
+  // kies de langste kleur en kom hoog uit.
+  if (contract?.contract.trump === 'first-card-led' && trumpSuit === null && trick.length === 0) {
+    const suit = longestSuit(legal);
+    return legal.filter((c) => c.suit === suit).sort((a, b) => b.rank - a.rank)[0] as Card;
+  }
+
   // Miserie-bieder: blijf zo laag mogelijk onder de slag.
   if (isMiserie && isDeclarer) {
     if (trick.length === 0) return lowest;
@@ -96,6 +152,9 @@ export function chooseCard(gift: Gift, player: number): Card {
       .sort((a, b) => b.rank - a.rank)[0];
     return under ?? lowest;
   }
+
+  // Makkelijk niveau: speelt gewoon de laagste legale kaart.
+  if (level === 'easy') return lowest;
 
   if (trick.length === 0) {
     // Uitkomen: hoogste van de langste kleur (aas eerst als die er is).
@@ -111,7 +170,8 @@ export function chooseCard(gift: Gift, player: number): Card {
     .filter((c) => beats(c, winning, trumpSuit, (trick[0] as { card: Card }).card.suit))
     .sort((a, b) => a.rank - b.rank);
   const lastToPlay = trick.length === 3;
-  if (winners.length > 0 && (lastToPlay || (winners[0] as Card).rank >= 11)) {
+  const eager = level === 'strong';
+  if (winners.length > 0 && (lastToPlay || eager || (winners[0] as Card).rank >= 11)) {
     return winners[0] as Card;
   }
   return lowest;

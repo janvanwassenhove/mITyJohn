@@ -1,13 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { mulberry32, type Card } from './engine/cards';
 import { Session } from './engine/game';
-import { chooseAlleen, chooseBid, chooseCard, chooseTrumpSuit } from './bots';
+import {
+  BOT_LEVELS,
+  chooseAlleen,
+  chooseBid,
+  chooseCard,
+  chooseTrumpSuit,
+  type BotLevel,
+} from './bots';
 import { getRuleset, type Ruleset } from './ruleset';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
 /** Speel een volledige sessie met vier bots; elke stap moet legaal zijn. */
-function simulateSession(seed: number): Session {
+function simulateSession(seed: number, level: BotLevel = 'normal'): Session {
   const session = new Session(ruleset, mulberry32(seed));
   let safety = 100_000;
   while (!session.finished) {
@@ -17,13 +24,13 @@ function simulateSession(seed: number): Session {
       switch (gift.phase) {
         case 'bidding': {
           const p = gift.bidding.toAct;
-          gift.bidding.act(p, chooseBid(gift.bidding, p, gift.deal.hands[p] as Card[]));
+          gift.bidding.act(p, chooseBid(gift.bidding, p, gift.deal.hands[p] as Card[], level));
           break;
         }
         case 'alleen-choice': {
           const p = gift.bidding.current?.declarers[0] as number;
           gift.bidding.chooseAlleen(
-            chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit),
+            chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit, level),
           );
           break;
         }
@@ -34,7 +41,7 @@ function simulateSession(seed: number): Session {
         }
         case 'play': {
           const p = gift.toPlay;
-          gift.playCard(p, chooseCard(gift, p));
+          gift.playCard(p, chooseCard(gift, p, level));
           break;
         }
       }
@@ -46,11 +53,13 @@ function simulateSession(seed: number): Session {
 }
 
 describe('bots', () => {
-  it('spelen tientallen volledige sessies zonder illegale zetten, zero-sum', () => {
-    for (let seed = 1; seed <= 25; seed++) {
-      const session = simulateSession(seed);
-      expect(session.giftNumber).toBe(session.totalGiften);
-      expect(session.totals.reduce((a, b) => a + b, 0)).toBe(0);
+  it('spelen tientallen volledige sessies zonder illegale zetten, zero-sum, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 10; seed++) {
+        const session = simulateSession(seed, level);
+        expect(session.giftNumber).toBe(session.totalGiften);
+        expect(session.totals.reduce((a, b) => a + b, 0)).toBe(0);
+      }
     }
   });
 });

@@ -414,3 +414,80 @@ button.card:disabled {
     grid-template-columns: 1fr;
   }
 }
+
+/* ---------- animaties (Fase 2) ---------- */
+
+.btn.sound {
+  padding: 0.35rem 0.6rem;
+  font-size: 1rem;
+}
+
+.level-picker {
+  margin: 1rem 0 0.25rem;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.4rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.trick-cell {
+  animation: card-in 0.25s ease-out both;
+}
+
+.hand .card {
+  animation: card-in 0.3s ease-out both;
+}
+
+.hand .card:nth-child(2n) {
+  animation-duration: 0.36s;
+}
+
+.hand .card:nth-child(3n) {
+  animation-duration: 0.42s;
+}
+
+.panel,
+main.hero {
+  animation: panel-in 0.25s ease-out both;
+}
+
+button.card:not(:disabled) {
+  transition: transform 0.12s ease-out;
+}
+
+.seat.active {
+  transition: border-color 0.2s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trick-cell,
+  .hand .card,
+  .panel,
+  main.hero {
+    animation: none;
+  }
+
+  button.card:not(:disabled) {
+    transition: none;
+  }
+}

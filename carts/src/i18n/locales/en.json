@@ -1,7 +1,7 @@
 {
   "app.title": "Carts",
   "app.tagline": "Flemish card games, at the table or online.",
-  "app.phase": "Phase 1 — playable prototype",
+  "app.phase": "Phase 2 — rules confirmed",
   "placeholder.heading": "Wiezen",
   "placeholder.body": "Play a session of wiezen (Flemish whist) against three bot players. The language and theme switches above work; rules and assumptions live in docs/REGELS.md.",
   "placeholder.ruleset": "Loaded ruleset: {name} (v{version}, {contracts} contracts)",
@@ -62,5 +62,13 @@
   "contract.miserie": "Misère",
   "contract.open-miserie": "Open misère",
   "contract.solo": "Solo",
-  "contract.soloslim": "Solo slam"
+  "contract.soloslim": "Solo slam",
+  "game.trumpPending": "Trump: {name}'s first card",
+  "start.continue": "Continue previous session",
+  "start.new": "New session",
+  "controls.sound": "Sound",
+  "bots.level": "Bot level",
+  "bots.easy": "Easy",
+  "bots.normal": "Normal",
+  "bots.strong": "Strong"
 }

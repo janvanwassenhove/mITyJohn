@@ -90,8 +90,7 @@ describe('troel-detectie (§5.4)', () => {
       2: [card('C', ACE)],
     });
     const troel = detectTroel(hands);
-    expect(troel).toMatchObject({ holder: 0, partner: 2, trumpSuit: 'C' });
-    expect(troel?.leadCard).toEqual(card('C', ACE));
+    expect(troel).toMatchObject({ holder: 0, partner: 2 });
   });
 
   it('4 azen: partner is houder van de hoogste harten (hartenheer)', () => {
@@ -100,7 +99,7 @@ describe('troel-detectie (§5.4)', () => {
       3: [card('H', 13)],
     });
     const troel = detectTroel(hands);
-    expect(troel).toMatchObject({ holder: 1, partner: 3, trumpSuit: 'H' });
+    expect(troel).toMatchObject({ holder: 1, partner: 3 });
   });
 });
 
@@ -196,9 +195,8 @@ describe('biedronde', () => {
     const result = b.result();
     expect(result?.contract.id).toBe('troel');
     expect(result?.declarers).toEqual([0, 2]);
-    expect(result?.trumpSuit).toBe('C');
+    expect(result?.trumpSuit).toBeNull(); // troef pas bekend na de eerste kaart (§5.4)
     expect(result?.leader).toBe(2); // houder vierde aas komt uit
-    expect(result?.forcedLeadCard).toEqual(card('C', ACE));
   });
 });
 
@@ -274,6 +272,29 @@ describe('scoring (§5, §7)', () => {
     });
     // 9 slagen = 4 + 2·1 = 6
     expect(win.points).toEqual([6, -6, 6, -6]);
+  });
+});
+
+describe('troel via Gift: eerste kaart bepaalt troef', () => {
+  it('zet de troef op de kleur van de eerste uitgekomen kaart', () => {
+    // Zoek een seed waarin troel valt
+    for (let seed = 1; seed < 400; seed++) {
+      const session = new Session(ruleset, mulberry32(seed));
+      const gift = session.nextGift();
+      const b = gift.bidding;
+      if (!b.troel) continue;
+      while (b.phase === 'bidding') b.act(b.toAct, { type: 'pass' });
+      expect(b.phase).toBe('done');
+      gift.settleBidding();
+      expect(gift.contract?.trumpSuit).toBeNull();
+      const leader = gift.toPlay;
+      expect(leader).toBe(b.troel.partner);
+      const lead = gift.legalCards(leader)[0] as Card;
+      gift.playCard(leader, lead);
+      expect(gift.contract?.trumpSuit).toBe(lead.suit);
+      return;
+    }
+    throw new Error('geen troel-seed gevonden');
   });
 });
 
