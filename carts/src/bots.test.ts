@@ -18,8 +18,12 @@ import { chooseBiedenBid, chooseBiedenCard } from './bots';
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
 /** Speel een volledige sessie met vier bots; elke stap moet legaal zijn. */
-function simulateSession(seed: number, level: BotLevel = 'normal'): Session {
-  const session = new Session(ruleset, mulberry32(seed));
+function simulateSession(
+  seed: number,
+  level: BotLevel = 'normal',
+  rules: Ruleset = ruleset,
+): Session {
+  const session = new Session(rules, mulberry32(seed));
   let safety = 100_000;
   while (!session.finished) {
     const gift = session.gift ?? session.nextGift();
@@ -33,9 +37,8 @@ function simulateSession(seed: number, level: BotLevel = 'normal'): Session {
         }
         case 'alleen-choice': {
           const p = gift.bidding.current?.declarers[0] as number;
-          gift.bidding.chooseAlleen(
-            chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit, level),
-          );
+          const alleenTrump = gift.bidding.announcedSuit ?? gift.bidding.turnedSuit;
+          gift.bidding.chooseAlleen(chooseAlleen(gift.deal.hands[p] as Card[], alleenTrump, level));
           break;
         }
         case 'trump-choice': {
@@ -117,6 +120,15 @@ describe('bots', () => {
         expect(session.giftNumber).toBe(session.totalGiften);
         expect(session.totals.reduce((a, b) => a + b, 0)).toBe(0);
       }
+    }
+  });
+
+  it('spelen ook kleurenwiezen volledig uit — daar noemen ze zelf de troefkleur', () => {
+    const kleuren = getRuleset('kleurenwiezen') as Ruleset;
+    for (let seed = 1; seed <= 10; seed++) {
+      const session = simulateSession(seed, 'normal', kleuren);
+      expect(session.giftNumber).toBe(session.totalGiften);
+      expect(session.totals.reduce((a, b) => a + b, 0)).toBe(0);
     }
   });
 });

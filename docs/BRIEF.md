@@ -28,8 +28,8 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 - [`docs/REGELS.md`](REGELS.md) is de canonieke regelbeschrijving; aannames staan er
   gemarkeerd met **⚠️ AANNAME**, open punten onderaan.
 - [`rulesets/*.json`](../rulesets/) is de machineleesbare vertaling; de engine voert
-  uitsluitend uit wat daar staat. Eén ruleset = één coherente variant
-  (nu: `vlaams-standaard`).
+  uitsluitend uit wat daar staat. Eén ruleset = één coherente variant:
+  `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`.
 
 ## §5 Architectuur
 
@@ -98,6 +98,7 @@ alleen `main` deployen.
 | 4d | Bieden speelbaar: eigen engine (32 kaarten, troef-/niet-troefwaarden, biedveiling om punten, hoogste bieder komt uit en bepaalt troef, troefvrijheid, 151 punten, zero-sum ±bod tot 500), spelkeuze in de app, persistentie — op de aannames uit [REGELS-BIEDEN.md](REGELS-BIEDEN.md) | ✅ |
 | 5 | ~~Online multiplayer~~ — door de opdrachtgever afgewezen (app blijft serverloos). In de plaats: **scorebord voor een fysiek kaartspel** — houd per ronde de punten bij. Twee modi: **manueel** (2–4 deelnemers, vrije punten) en **wiezen (auto)** — duid contract (incl. troel), speler + maat en aantal slagen aan, de app berekent de punten via de scoring-engine. Persistent in localStorage | ✅ |
 | 6 | **GUI-redesign + onboarding**: mobile-first designsysteem (spelkeuze als tegels, één primaire CTA, ingeklapte instellingen, echte kaartgezichten, actiepaneel als bottom sheet), **starterswizard** per spel en een **coach** die tijdens het spel contextuele tips geeft; screenshotgenerator (`carts/scripts/screenshots.mjs`) met beelden in de README en, als vaste werkafspraak, in elke release note ([RELEASING.md](../RELEASING.md)) | ✅ |
+| 7 | **Speeltypes en regelgids**: wiezen splitst in **gewoon wiezen** (troef = omgedraaide kaart) en **kleurenwiezen** (de vrager noemt de kleur bij zijn bod) — nieuwe ruleset `kleurenwiezen`, biedactie met kleur, bots die zelf een kleur kiezen, en een zichtbare speeltypekeuze op het startscherm ([REGELS.md §3bis](REGELS.md#3bis-gewoon-wiezen-vs-kleurenwiezen)). Daarnaast een **regelgids**: zes hoofdstukken (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, scorebord) die je in wizardstijl stap voor stap door de regels loodsen | ✅ |
 
 ## §13 Open punten
 

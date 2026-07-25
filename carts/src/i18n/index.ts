@@ -8,7 +8,8 @@ export const DEFAULT_LOCALE: Locale = 'nl';
 
 export type MessageKey = keyof typeof nl;
 
-const messages: Record<Locale, Record<string, string>> = { nl, en, fr };
+/** Alle bundels; geëxporteerd zodat tests sleutelvolledigheid kunnen nakijken. */
+export const messages: Record<Locale, Record<string, string>> = { nl, en, fr };
 
 const STORAGE_KEY = 'carts.lang';
 let current: Locale = DEFAULT_LOCALE;

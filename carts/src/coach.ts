@@ -50,6 +50,12 @@ function suitCount(hand: Card[], suit: Card['suit']): number {
   return hand.filter((c) => c.suit === suit).length;
 }
 
+/** Kleur waarvan je er het meeste hebt — waar je bij kleurenwiezen in vraagt. */
+function longestSuit(hand: Card[]): Card['suit'] {
+  const suits: Card['suit'][] = ['S', 'H', 'D', 'C'];
+  return suits.reduce((best, s) => (suitCount(hand, s) > suitCount(hand, best) ? s : best), 'S');
+}
+
 /** Tip voor wiezen, op basis van de fase en de hand van de speler. */
 export function wiezenTip(gift: Gift, player: number): CoachTip | null {
   const hand = gift.deal.hands[player] ?? [];
@@ -57,12 +63,23 @@ export function wiezenTip(gift: Gift, player: number): CoachTip | null {
     case 'bidding': {
       if (gift.bidding.toAct !== player) return null;
       if (gift.bidding.troel) return { id: 'troel' };
+      // Kleurenwiezen: geen open troef — je rekent op de aangekondigde kleur, of bij
+      // een eigen vraag op je langste kleur (REGELS.md §3bis).
+      const announces = gift.bidding.ruleset.contracts.some(
+        (c) => c.id === 'vraag-en-mee' && c.trump === 'announced',
+      );
       if (gift.bidding.canJoin(player)) {
         const hp = handStrength(hand);
         return hp >= 7 ? { id: 'joinYes' } : { id: 'joinNo' };
       }
       const hp = handStrength(hand);
-      const trumps = suitCount(hand, gift.bidding.turnedSuit);
+      const askSuit = announces ? longestSuit(hand) : gift.bidding.turnedSuit;
+      const trumps = suitCount(hand, askSuit);
+      if (announces) {
+        return hp >= 9 || (trumps >= 4 && hp >= 6)
+          ? { id: 'askColourStrong', params: { hp, trumps } }
+          : { id: 'askColourWeak', params: { hp } };
+      }
       if (hp >= 9 || (trumps >= 4 && hp >= 6)) {
         return { id: 'askStrong', params: { hp, trumps } };
       }

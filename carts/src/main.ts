@@ -15,6 +15,7 @@ import { SUITS } from './engine/cards';
 import { PLAYER_COUNT } from './engine/deal';
 import type { Session } from './engine/game';
 import { type Gift } from './engine/game';
+import type { BidAction } from './engine/bidding';
 import {
   BOT_LEVELS,
   chooseAlleen,
@@ -33,6 +34,13 @@ import { chooseBiedenBid, chooseBiedenCard } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
 import * as scorebord from './scorebord';
+import {
+  GUIDE_CHAPTERS,
+  chapterForGame,
+  getChapter,
+  nextChapter,
+  type GuideChapterId,
+} from './guide';
 import {
   WIZARD_STEPS,
   biedenTip,
@@ -56,11 +64,22 @@ if (!app) throw new Error('#app ontbreekt');
 
 const RULESET_KEY = 'carts.ruleset';
 let ruleset = getRuleset('vlaams-standaard') as Ruleset;
-let view: 'home' | 'stats' | 'scorebord' | 'wizard' = 'home';
+let view: 'home' | 'stats' | 'scorebord' | 'wizard' | 'guide' = 'home';
 
 // Coach & starterswizard.
 let coachOn = loadCoachEnabled();
 let wizardStep = 0;
+
+// Regelgids: null = inhoudsopgave, anders het geopende hoofdstuk.
+let guideChapter: GuideChapterId | null = null;
+let guideStep = 0;
+
+function openGuide(chapter: GuideChapterId | null): void {
+  guideChapter = chapter;
+  guideStep = 0;
+  view = 'guide';
+  render();
+}
 
 function setCoach(on: boolean): void {
   coachOn = on;
@@ -88,7 +107,7 @@ const LEVEL_KEY = 'carts.botLevel';
 
 type BidLogEntry =
   | { kind: 'pass' | 'join' | 'troel'; player: number }
-  | { kind: 'bid'; player: number; contractId: string };
+  | { kind: 'bid'; player: number; contractId: string; suit?: Suit };
 
 let session: Session | null = null;
 let persisted: store.PersistedSession | null = null;
@@ -163,7 +182,12 @@ function rebuildBidLog(state: store.PersistedSession): void {
     if (action.t === 'bid') {
       bidLog.push(
         action.a.type === 'bid'
-          ? { kind: 'bid', player: action.p, contractId: action.a.contractId }
+          ? {
+              kind: 'bid',
+              player: action.p,
+              contractId: action.a.contractId,
+              ...(action.a.suit ? { suit: action.a.suit } : {}),
+            }
           : { kind: action.a.type === 'join' ? 'join' : 'pass', player: action.p },
       );
     }
@@ -265,14 +289,21 @@ function botStep(): boolean {
       record({ t: 'bid', p, a: action });
       bidLog.push(
         action.type === 'bid'
-          ? { kind: 'bid', player: p, contractId: action.contractId }
+          ? {
+              kind: 'bid',
+              player: p,
+              contractId: action.contractId,
+              ...(action.suit ? { suit: action.suit } : {}),
+            }
           : { kind: action.type === 'join' ? 'join' : 'pass', player: p },
       );
       afterBidAction(gift);
       return true;
     }
     case 'alleen-choice': {
-      const accept = chooseAlleen(gift.deal.hands[p] as Card[], gift.bidding.turnedSuit, botLevel);
+      // Bij kleurenwiezen telt de kleur die hij zelf aankondigde, niet de gedraaide kaart.
+      const alleenTrump = gift.bidding.announcedSuit ?? gift.bidding.turnedSuit;
+      const accept = chooseAlleen(gift.deal.hands[p] as Card[], alleenTrump, botLevel);
       gift.bidding.chooseAlleen(accept);
       record({ t: 'alleen', accept });
       afterBidAction(gift);
@@ -595,6 +626,31 @@ function gameTile(
   return tile;
 }
 
+/** Zichtbare keuze tussen gewoon wiezen, kleurenwiezen en de cafévariant. */
+function rulesetPicker(): HTMLElement {
+  const box = el('div', 'type-picker');
+  box.append(el('span', 'type-label', t('ruleset.picker')));
+  const seg = el('div', 'seg wide');
+  seg.setAttribute('role', 'group');
+  seg.setAttribute('aria-label', t('ruleset.picker'));
+  for (const r of rulesets) {
+    seg.append(
+      segButton(t(`ruleset.${r.id}` as MessageKey), ruleset.id === r.id, () => {
+        ruleset = r;
+        try {
+          localStorage.setItem(RULESET_KEY, r.id);
+        } catch {
+          /* ignore */
+        }
+        render();
+      }),
+    );
+  }
+  box.append(seg);
+  box.append(el('p', 'type-hint', t(`ruleset.hint.${ruleset.id}` as MessageKey)));
+  return box;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('span', 'phase', t('app.phase')));
@@ -611,6 +667,10 @@ function startScreen(): HTMLElement {
     gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
   );
   main.append(tiles);
+
+  // Speeltype staat bewust níét in de ingeklapte instellingen: gewoon wiezen en
+  // kleurenwiezen zijn twee verschillende spellen, geen detailinstelling (REGELS.md §3bis).
+  if (game === 'wiezen') main.append(rulesetPicker());
 
   const bodyKey =
     game === 'manille' ? 'manille.intro' : game === 'bieden' ? 'bieden.intro' : 'wiezen.intro';
@@ -673,6 +733,7 @@ function startScreen(): HTMLElement {
       view = 'wizard';
       render();
     }),
+    button(`\u{1F4D6} ${t('guide.button')}`, 'btn', () => openGuide(null)),
     button(t('scorebord.button'), 'btn', () => {
       view = 'scorebord';
       render();
@@ -691,27 +752,6 @@ function startScreen(): HTMLElement {
   summary.textContent = t('settings.title');
   settings.append(summary);
   const body = el('div', 'settings-body');
-
-  if (game === 'wiezen') {
-    const rulesetSeg = el('div', 'seg');
-    rulesetSeg.setAttribute('role', 'group');
-    for (const r of rulesets) {
-      rulesetSeg.append(
-        segButton(t(`ruleset.${r.id}` as MessageKey), ruleset.id === r.id, () => {
-          ruleset = r;
-          try {
-            localStorage.setItem(RULESET_KEY, r.id);
-          } catch {
-            /* ignore */
-          }
-          render();
-        }),
-      );
-    }
-    const rulesetGroup = el('div', 'control-group');
-    rulesetGroup.append(el('span', undefined, t('ruleset.picker')), rulesetSeg);
-    body.append(rulesetGroup);
-  }
 
   const levelSeg = el('div', 'seg');
   levelSeg.setAttribute('role', 'group');
@@ -800,6 +840,111 @@ function coachBox(tip: CoachTip | null): HTMLElement | null {
 }
 
 /** Starterswizard: korte uitleg in stappen, per spel. */
+/** Regelgids: inhoudsopgave, of één hoofdstuk in wizardstijl doorlopen. */
+function guideScreen(): HTMLElement {
+  const chapter = guideChapter ? getChapter(guideChapter) : undefined;
+  return chapter ? guideChapterScreen(chapter) : guideIndexScreen();
+}
+
+function guideIndexScreen(): HTMLElement {
+  const main = el('main', 'hero');
+  main.append(el('span', 'phase', t('guide.toc')));
+  main.append(el('h1', undefined, t('guide.title')));
+  main.append(el('p', 'tagline', t('guide.intro')));
+
+  const list = el('div', 'guide-list');
+  for (const chapter of GUIDE_CHAPTERS) {
+    const item = el('button', 'guide-item');
+    item.type = 'button';
+    item.append(el('span', 'tile-icon', chapter.icon));
+    const body = el('span', 'tile-text');
+    body.append(
+      el('span', 'tile-name', t(`guide.${chapter.id}.title` as MessageKey)),
+      el('span', 'tile-desc', t(`guide.${chapter.id}.summary` as MessageKey)),
+      el('span', 'guide-count', t('guide.steps', { n: chapter.steps.length })),
+    );
+    item.append(body);
+    item.addEventListener('click', () => openGuide(chapter.id));
+    list.append(item);
+  }
+  main.append(list);
+
+  const row = el('div', 'btn-row');
+  row.append(
+    button(t('wizard.close'), 'btn muted', () => {
+      view = 'home';
+      render();
+    }),
+  );
+  main.append(row);
+  return main;
+}
+
+function guideChapterScreen(chapter: { id: GuideChapterId; steps: string[] }): HTMLElement {
+  const total = chapter.steps.length;
+  const step = Math.min(Math.max(guideStep, 0), total - 1);
+  const key = chapter.steps[step] as string;
+  const main = el('main', 'hero wizard');
+  main.append(el('span', 'phase', t('wizard.step', { n: step + 1, total })));
+  main.append(el('h1', undefined, t(`guide.${chapter.id}.title` as MessageKey)));
+
+  const dots = el('div', 'wizard-progress');
+  dots.setAttribute('role', 'img');
+  dots.setAttribute('aria-label', t('wizard.step', { n: step + 1, total }));
+  for (let i = 0; i < total; i += 1) {
+    dots.append(el('span', i <= step ? 'wizard-dot done' : 'wizard-dot'));
+  }
+  main.append(dots);
+
+  const card = el('section', 'wizard-step');
+  card.append(el('h2', undefined, t(`guide.${chapter.id}.${key}.title` as MessageKey)));
+  card.append(el('p', undefined, t(`guide.${chapter.id}.${key}.body` as MessageKey)));
+  main.append(card);
+
+  const row = el('div', 'btn-row stack');
+  if (step < total - 1) {
+    row.append(
+      button(t('wizard.next'), 'btn primary big', () => {
+        guideStep = step + 1;
+        render();
+      }),
+    );
+  } else {
+    const next = nextChapter(chapter.id);
+    if (next) {
+      row.append(
+        button(
+          t('guide.nextChapter', { name: t(`guide.${next.id}.title` as MessageKey) }),
+          'btn primary big',
+          () => openGuide(next.id),
+        ),
+      );
+    } else {
+      row.append(el('p', 'hint', t('guide.done')));
+    }
+  }
+
+  const nav = el('div', 'btn-row');
+  if (step > 0) {
+    nav.append(
+      button(t('wizard.prev'), 'btn', () => {
+        guideStep = step - 1;
+        render();
+      }),
+    );
+  }
+  nav.append(button(t('guide.toc'), 'btn', () => openGuide(null)));
+  nav.append(
+    button(t('wizard.close'), 'btn muted', () => {
+      view = 'home';
+      render();
+    }),
+  );
+  row.append(nav);
+  main.append(row);
+  return main;
+}
+
 function wizardScreen(): HTMLElement {
   const total = WIZARD_STEPS[game];
   const step = Math.min(Math.max(wizardStep, 0), total - 1);
@@ -838,6 +983,12 @@ function wizardScreen(): HTMLElement {
     );
   }
   const nav = el('div', 'btn-row');
+  if (step === total - 1) {
+    // Wie meer wil: door naar het volledige hoofdstuk over dit speltype.
+    nav.append(
+      button(t('guide.readMore'), 'btn', () => openGuide(chapterForGame(game, ruleset.id))),
+    );
+  }
   if (step > 0) {
     nav.append(
       button(t('wizard.prev'), 'btn', () => {
@@ -954,10 +1105,29 @@ function statusBar(gift: Gift): HTMLElement {
     } else {
       bar.append(el('span', 'chip', t('game.noTrump')));
     }
+  } else if (announcesTrump(gift)) {
+    // Kleurenwiezen: er ligt geen kaart open; de vrager noemt de kleur (§3bis).
+    const announced = gift.bidding.announcedSuit;
+    bar.append(
+      el(
+        'span',
+        'chip',
+        announced
+          ? t('game.announced', { suit: `${SUIT_GLYPH[announced]} ${tSuit(announced)}` })
+          : t('game.noTurned'),
+      ),
+    );
   } else {
     bar.append(el('span', 'chip', t('game.turned', { card: cardText(gift.deal.turnedCard) })));
   }
   return bar;
+}
+
+/** Kleurenwiezen? Dan wordt de troefkleur aangekondigd i.p.v. omgedraaid (REGELS.md §3bis). */
+function announcesTrump(gift: Gift): boolean {
+  return gift.bidding.ruleset.contracts.some(
+    (c) => c.id === 'vraag-en-mee' && c.trump === 'announced',
+  );
 }
 
 function goalLine(gift: Gift): string | null {
@@ -1031,7 +1201,13 @@ function bidLogView(): HTMLElement {
     const name = playerName(entry.player);
     const line =
       entry.kind === 'bid'
-        ? t('bidding.bids', { name, bid: tContract(entry.contractId) })
+        ? entry.suit
+          ? t('bidding.bidsInSuit', {
+              name,
+              bid: tContract(entry.contractId),
+              suit: `${SUIT_GLYPH[entry.suit]} ${tSuit(entry.suit)}`,
+            })
+          : t('bidding.bids', { name, bid: tContract(entry.contractId) })
         : entry.kind === 'join'
           ? t('bidding.joins', { name })
           : entry.kind === 'troel'
@@ -1066,17 +1242,38 @@ function actionPanel(gift: Gift): HTMLElement {
             }),
           );
         }
+        const placeBid = (contractId: string, suit?: Suit): void => {
+          const action: BidAction = suit
+            ? { type: 'bid', contractId, suit }
+            : { type: 'bid', contractId };
+          gift.bidding.act(HUMAN, action);
+          record({ t: 'bid', p: HUMAN, a: action });
+          bidLog.push({
+            kind: 'bid',
+            player: HUMAN,
+            contractId,
+            ...(suit ? { suit } : {}),
+          });
+          afterBidAction(gift);
+          render();
+          scheduleBots();
+        };
         for (const contract of gift.bidding.legalBids(HUMAN)) {
-          row.append(
-            button(tContract(contract.id), 'btn', () => {
-              gift.bidding.act(HUMAN, { type: 'bid', contractId: contract.id });
-              record({ t: 'bid', p: HUMAN, a: { type: 'bid', contractId: contract.id } });
-              bidLog.push({ kind: 'bid', player: HUMAN, contractId: contract.id });
-              afterBidAction(gift);
-              render();
-              scheduleBots();
-            }),
-          );
+          if (contract.trump === 'announced') {
+            // Kleurenwiezen: je vraagt in een kleur, dus één knop per kleur (§3bis).
+            for (const suit of SUITS) {
+              const red = suit === 'H' || suit === 'D';
+              row.append(
+                button(
+                  `${tContract(contract.id)} ${SUIT_GLYPH[suit]}`,
+                  `btn${red ? ' red' : ''}`,
+                  () => placeBid(contract.id, suit),
+                ),
+              );
+            }
+          } else {
+            row.append(button(tContract(contract.id), 'btn', () => placeBid(contract.id)));
+          }
         }
         row.append(
           button(t('bidding.pass'), 'btn muted', () => {
@@ -1231,7 +1428,9 @@ function render(): void {
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
   const bGift = bSession?.gift ?? null;
-  if (view === 'wizard') {
+  if (view === 'guide') {
+    wrap.append(guideScreen());
+  } else if (view === 'wizard') {
     wrap.append(wizardScreen());
   } else if (view === 'scorebord') {
     wrap.append(scorebordScreen());

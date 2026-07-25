@@ -10,9 +10,13 @@ reclame, werkt offline en is installeerbaar op je gsm.
 | :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
 | <img src="docs/screenshots/start-mobile-light.png" alt="Startscherm met de drie spellen, op gsm in lichte modus" width="260"> | <img src="docs/screenshots/spel-mobile-dark.png" alt="Een gift wiezen op gsm in donkere modus" width="260"> |
 
-|                                           Starterswizard                                            |                                                   Scorebord                                                   |
-| :-------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
-| <img src="docs/screenshots/wizard-mobile-light.png" alt="Stap 1 van de starterswizard" width="260"> | <img src="docs/screenshots/scorebord-mobile-light.png" alt="Scorebord voor een fysiek kaartspel" width="260"> |
+|                                           Starterswizard                                            |                                                 Regels & uitleg                                                  |
+| :-------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: |
+| <img src="docs/screenshots/wizard-mobile-light.png" alt="Stap 1 van de starterswizard" width="260"> | <img src="docs/screenshots/gids-mobile-light.png" alt="De regelgids met een hoofdstuk per speltype" width="260"> |
+
+|                                                   Scorebord                                                   |                                       Aan tafel op desktop                                       |
+| :-----------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------: |
+| <img src="docs/screenshots/scorebord-mobile-light.png" alt="Scorebord voor een fysiek kaartspel" width="260"> | <img src="docs/screenshots/spel-desktop-light.png" alt="Een gift wiezen op desktop" width="260"> |
 
 <details>
 <summary>Meer beelden (desktop, licht &amp; donker)</summary>
@@ -25,15 +29,18 @@ reclame, werkt offline en is installeerbaar op je gsm.
 
 ## Wat zit erin
 
-- **Drie spellen** — wiezen (13 kaarten, bieden, troel, miserie, abondance …),
-  manillen (vaste ploegen, de tien is de baas) en bieden (bod in punten, hoogste
-  bieder bepaalt de troef).
+- **Drie spellen, vier speeltypes** — wiezen in twee vormen: **gewoon wiezen** (de
+  omgedraaide laatste kaart is troef) en **kleurenwiezen** (wie vraagt, noemt zelf de
+  troefkleur); daarnaast manillen (vaste ploegen, de tien is de baas) en bieden (bod in
+  punten, hoogste bieder bepaalt de troef).
 - **Regelvarianten kies je bij de start** — troel op 8 of 9 slagen, manille op 60 of
   68 punten, enzovoort. De regels staan gedocumenteerd in
   [`../docs/REGELS.md`](../docs/REGELS.md) en machineleesbaar in
   [`../rulesets/`](../rulesets).
-- **Coach & starterswizard** — ken je het spel niet? De wizard legt het in vier à vijf
-  schermen uit, en de coach geeft tijdens het spel tips bij wat je nu moet doen.
+- **Coach, starterswizard én regelgids** — ken je het spel niet? De wizard legt het in
+  vier à vijf schermen uit, de **regelgids** loodst je in zes hoofdstukken stap voor stap
+  door álle regels (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, scorebord), en
+  de coach geeft tijdens het spel tips bij wat je nu moet doen.
 - **Scorebord voor een fysiek spel** — hou de stand bij aan tafel, met een automodus
   voor wiezen die uit contract, teams en aantal slagen zelf de punten berekent.
 - **Drie botniveaus**, statistieken, animaties en geluid.
@@ -53,6 +60,7 @@ carts/                  # deze app (Vite + TypeScript, strict)
 │   ├── engine/         # DOM-vrije engines: wiezen, manillen, bieden
 │   ├── bots.ts         # heuristische botspelers (drie niveaus)
 │   ├── coach.ts        # starterswizard-stappen + contextuele tips
+│   ├── guide.ts        # regelgids: hoofdstukken en stappen per speltype
 │   ├── scorebord*.ts   # scorebord voor fysiek spel (incl. wiezen-automodus)
 │   ├── options.ts      # regelvarianten per sessie
 │   ├── store.ts        # persistentie via actielog + replay
@@ -86,8 +94,8 @@ carts/                  # deze app (Vite + TypeScript, strict)
 
 ## Screenshots & releases
 
-`npm run screenshots` start de gebouwde app in een lokale Chromium en legt vier scènes
-vast (startscherm, wizard, spel, scorebord) × mobiel/desktop × licht/donker. De beelden
+`npm run screenshots` start de gebouwde app in een lokale Chromium en legt vijf scènes
+vast (startscherm, wizard, spel, regelgids, scorebord) × mobiel/desktop × licht/donker. De beelden
 in deze README komen daar rechtstreeks uit, en horen ook in elke release note — zie
 [`../RELEASING.md`](../RELEASING.md).
 

@@ -85,11 +85,18 @@ export function chooseBid(
 ): BidAction {
   const th = BID_THRESHOLDS[level];
   const bids = bidding.legalBids(player);
-  const trump = bidding.turnedSuit;
   const hp = honourPoints(hand);
-  const trumps = suitCount(hand, trump);
   const longest = longestSuit(hand);
   const longestLen = suitCount(hand, longest);
+  // Kleurenwiezen (REGELS.md §3bis): er ligt geen troef open. Meegaan beoordeel je op
+  // de kleur die de vrager noemde; zelf vragen doe je in je eigen langste kleur.
+  const announces = bidding.ruleset.contracts.some(
+    (c) => c.id === 'vraag-en-mee' && c.trump === 'announced',
+  );
+  const askSuit = announces ? longest : bidding.turnedSuit;
+  const joinSuit = announces ? (bidding.announcedSuit ?? longest) : bidding.turnedSuit;
+  const trumps = suitCount(hand, joinSuit);
+  const askTrumps = suitCount(hand, askSuit);
 
   // Abondance: zeer sterke lange kleur.
   if (
@@ -118,9 +125,11 @@ export function chooseBid(
   // Vragen: degelijke hand met troefsteun.
   if (
     bids.some((c) => c.id === 'vraag-en-mee') &&
-    (hp >= th.vraagHp || (trumps >= 4 && hp >= th.vraagTrumpHp))
+    (hp >= th.vraagHp || (askTrumps >= 4 && hp >= th.vraagTrumpHp))
   ) {
-    return { type: 'bid', contractId: 'vraag-en-mee' };
+    return announces
+      ? { type: 'bid', contractId: 'vraag-en-mee', suit: askSuit }
+      : { type: 'bid', contractId: 'vraag-en-mee' };
   }
   return { type: 'pass' };
 }

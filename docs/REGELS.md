@@ -1,4 +1,4 @@
-# REGELS — Wiezen (kleurenwiezen), Vlaams standaard
+# REGELS — Wiezen (gewoon wiezen én kleurenwiezen), Vlaams
 
 > **Status:** Fase 0 — onderzoeksdocument. Dit is de regelbasis voor de Carts-app.
 > De machineleesbare vertaling staat in [`rulesets/vlaams-standaard.json`](../rulesets/vlaams-standaard.json).
@@ -16,9 +16,11 @@
 
 ## 1. Scope
 
-- **Spel:** kleurenwiezen (de in Vlaanderen gangbare vorm van wiezen).
-- **Ruleset-id:** `vlaams-standaard` — één coherente, speelbare standaard.
-  Regionale varianten worden later als aparte rulesets of variantvlaggen toegevoegd.
+- **Spel:** wiezen in de Vlaamse vorm, in twee speeltypes die de app allebei aanbiedt:
+  **gewoon wiezen** (troef = de omgedraaide laatste kaart) en **kleurenwiezen**
+  (de vrager noemt zelf de troefkleur). Zie [§3bis](#3bis-gewoon-wiezen-vs-kleurenwiezen).
+- **Ruleset-id's:** `vlaams-standaard` (gewoon wiezen) en `kleurenwiezen`; daarnaast de
+  regionale variant `vlaams-cafe` (§5bis).
 - Andere kaartspellen (manillen, …) volgen in latere fases; dit document dekt enkel wiezen.
 
 ## 2. Basis
@@ -39,6 +41,33 @@
 3. De **laatste kaart** (die aan de deler toekomt) wordt **open gedraaid**: die kleur is **troef**
    voor de gift. De deler neemt de kaart daarna in de hand op.
 4. Bij **troel** wordt de troefkleur anders bepaald (zie §5.4).
+
+## 3bis. Gewoon wiezen vs. kleurenwiezen
+
+Beide vormen zijn in Vlaanderen gangbaar en delen alles behalve **hoe de troefkleur van
+een gevraagd contract tot stand komt**. Elke andere regel — biedladder, punten, volgplicht,
+troel, miserie, abondance — is identiek.
+
+| | **Gewoon wiezen** | **Kleurenwiezen** |
+|---|---|---|
+| Ruleset | `vlaams-standaard` | `kleurenwiezen` |
+| Troef bij *vraag & mee* / *alleen* | De **omgedraaide laatste kaart** bepaalt de troef, vóór het bieden. Iedereen kent de troefkleur al terwijl hij biedt. | Er wordt **geen kaart omgedraaid**. Wie vraagt, **noemt zelf de kleur**: *"ik vraag in harten"*. Die kleur is troef. |
+| Wat weet je als je meegaat | Je kent de troef, maar niet de hand van de vrager. | Je kent de kleur die de vrager aankondigde — dat is net de informatie waarop je beslist. |
+| Troef bij abondance / solo | Vrager kiest de kleur ná de biedronde (ongewijzigd). | Idem. |
+| Troef bij troel | Eerste kaart van de speler met de vierde aas (ongewijzigd). | Idem. |
+| Troef bij miserie / soloslim | Geen troef (ongewijzigd). | Idem. |
+
+**⚠️ AANNAME** — de exacte naamgeving verschilt per streek: sommige kringen noemen de
+kleurgebonden vorm gewoon "wiezen" en de omgedraaide-kaartvorm "boerenwiezen" of
+"gewoon whist". De app hanteert de twee namen hierboven.
+
+**⚠️ AANNAME** — bij kleurenwiezen kan in sommige reglementen een tweede speler een
+*vraag* in een andere kleur overbieden. De app doet dat **niet**: een vraag kan enkel
+overboden worden door een **hoger contract** op de biedladder, precies zoals bij gewoon
+wiezen. Wie de aangekondigde kleur niet ziet zitten, gaat gewoon niet mee.
+
+**⚠️ AANNAME** — gaat niemand mee en kiest de vrager om **alleen** te spelen, dan blijft
+de eerder aangekondigde kleur troef; hij mag ze niet wijzigen.
 
 ## 4. Biedronde
 
@@ -136,7 +165,8 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 
 | Ruleset | Verschillen t.o.v. `vlaams-standaard` |
 |---|---|
-| `vlaams-cafe` | Piccolo speelbaar (§5.6); **troefplicht**: wie niet kan volgen moet troeven — overtroeven verplicht indien mogelijk, anders ondertroeven. **⚠️ AANNAME** — regionale invulling; ook een variant zonder ondertroefplicht komt voor. |
+| `kleurenwiezen` | De vrager **noemt de troefkleur** bij zijn bod in plaats van de omgedraaide kaart te volgen (§3bis). Verder identiek. |
+| `vlaams-cafe` | Piccolo speelbaar (§5.6); **troefplicht**: wie niet kan volgen moet troeven — overtroeven verplicht indien mogelijk, anders ondertroeven. **⚠️ AANNAME** — regionale invulling; ook een variant zonder ondertroefplicht komt voor. Troefbepaling zoals gewoon wiezen. |
 
 ## 6. Het spel (slagen)
 

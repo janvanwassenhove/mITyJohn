@@ -1,4 +1,5 @@
 import vlaamsStandaard from '../../rulesets/vlaams-standaard.json';
+import kleurenwiezen from '../../rulesets/kleurenwiezen.json';
 import vlaamsCafe from '../../rulesets/vlaams-cafe.json';
 import type { Locale } from './i18n';
 
@@ -9,7 +10,9 @@ export interface ContractScore {
   voleBonus?: number;
 }
 
-export type TrumpRule = 'turned' | 'declarer-choice' | 'none' | 'first-card-led';
+// 'announced' = de vrager noemt de kleur bij zijn bod (kleurenwiezen, REGELS.md §3bis);
+// 'declarer-choice' = de kleur wordt pas ná de biedronde gekozen (abondance, solo).
+export type TrumpRule = 'turned' | 'announced' | 'declarer-choice' | 'none' | 'first-card-led';
 export type OpeningLead = 'left-of-dealer' | 'declarer' | 'fourth-ace-holder';
 
 export interface Contract {
@@ -51,6 +54,7 @@ export interface Ruleset {
 
 export const rulesets: Ruleset[] = [
   vlaamsStandaard as unknown as Ruleset,
+  kleurenwiezen as unknown as Ruleset,
   vlaamsCafe as unknown as Ruleset,
 ];
 

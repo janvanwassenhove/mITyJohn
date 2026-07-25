@@ -98,6 +98,13 @@ const SCENES = [
     },
   },
   {
+    id: 'gids',
+    setup: async (page) => {
+      await click(page, 'Regels & uitleg');
+      await page.waitForTimeout(200);
+    },
+  },
+  {
     id: 'scorebord',
     setup: async (page) => {
       await click(page, 'Scorebord');

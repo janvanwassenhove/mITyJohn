@@ -18,7 +18,11 @@ export interface BidResult {
   leader: number;
 }
 
-export type BidAction = { type: 'pass' } | { type: 'bid'; contractId: string } | { type: 'join' };
+export type BidAction =
+  | { type: 'pass' }
+  /** `suit` is verplicht bij kleurenwiezen-contracten (trump: 'announced', REGELS.md §3bis). */
+  | { type: 'bid'; contractId: string; suit?: Suit }
+  | { type: 'join' };
 
 export type BidPhase = 'bidding' | 'alleen-choice' | 'trump-choice' | 'done' | 'redeal';
 
@@ -56,6 +60,8 @@ export class Bidding {
 
   phase: BidPhase = 'bidding';
   current: { contract: Contract; declarers: number[] } | null = null;
+  /** Kleur die de vrager bij zijn bod noemde (kleurenwiezen); anders null. */
+  announcedSuit: Suit | null = null;
   private passed = new Set<number>();
   toAct: number;
 
@@ -130,6 +136,12 @@ export class Bidding {
       if (!this.legalBids(player).some((c) => c.id === contract.id)) {
         throw new Error(`Bod ${contract.id} is niet toegelaten`);
       }
+      if (contract.trump === 'announced') {
+        if (!action.suit) throw new Error(`Bod ${contract.id} vereist een troefkleur`);
+        this.announcedSuit = action.suit;
+      } else {
+        this.announcedSuit = null;
+      }
       this.current = { contract, declarers: [player] };
     }
     this.toAct = nextPlayer(this.toAct);
@@ -168,6 +180,11 @@ export class Bidding {
     switch (contract.trump) {
       case 'turned':
         trumpSuit = this.turnedSuit;
+        break;
+      case 'announced':
+        // Kleurenwiezen: de kleur die de vrager noemde blijft ook gelden als hij
+        // uiteindelijk alleen speelt (REGELS.md §3bis).
+        trumpSuit = this.announcedSuit;
         break;
       case 'first-card-led':
         trumpSuit = null; // wordt bepaald door de eerste kaart van de uitkomer
