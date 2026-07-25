@@ -34,6 +34,15 @@ import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } fro
 import { clearStats, loadStats, recordGiftStat, recordSessionStat } from './stats';
 import * as scorebord from './scorebord';
 import {
+  WIZARD_STEPS,
+  biedenTip,
+  loadCoachEnabled,
+  manilleTip,
+  saveCoachEnabled,
+  wiezenTip,
+  type CoachTip,
+} from './coach';
+import {
   DEFAULT_MANILLE_OPTIONS,
   DEFAULT_WIEZEN_OPTIONS,
   isManilleOptions,
@@ -47,7 +56,17 @@ if (!app) throw new Error('#app ontbreekt');
 
 const RULESET_KEY = 'carts.ruleset';
 let ruleset = getRuleset('vlaams-standaard') as Ruleset;
-let view: 'home' | 'stats' | 'scorebord' = 'home';
+let view: 'home' | 'stats' | 'scorebord' | 'wizard' = 'home';
+
+// Coach & starterswizard.
+let coachOn = loadCoachEnabled();
+let wizardStep = 0;
+
+function setCoach(on: boolean): void {
+  coachOn = on;
+  saveCoachEnabled(on);
+  render();
+}
 
 // Scorebord (fysiek spel): actief bord + setup-invoer.
 let sbBoard: scorebord.Scorebord | null = null;
@@ -105,6 +124,11 @@ const RANK_LABEL: Record<number, string> = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' 
 
 function playerName(p: number): string {
   return p === HUMAN ? t('player.you') : (BOT_NAMES[p] as string);
+}
+
+/** i18n-naam van het actieve spel ('manille' heet in de teksten 'manillen'). */
+function gameLabel(): string {
+  return t(game === 'manille' ? 'game.manillen' : (`game.${game}` as MessageKey));
 }
 
 function tContract(id: string): string {
@@ -332,16 +356,25 @@ function segButton(label: string, pressed: boolean, onClick: () => void): HTMLBu
   return btn;
 }
 
+/** Speelkaart: rang boven, kleursymbool eronder — leesbaar op kleine schermen. */
+function cardFace(node: HTMLElement, card: Card): void {
+  node.append(
+    el('span', 'card-rank', rankLabel(card.rank)),
+    el('span', 'card-suit', SUIT_GLYPH[card.suit]),
+  );
+  node.setAttribute('aria-label', `${tSuit(card.suit)} ${rankLabel(card.rank)}`);
+}
+
 function cardEl(card: Card, opts?: { onClick?: () => void; disabled?: boolean }): HTMLElement {
   const red = card.suit === 'H' || card.suit === 'D';
   if (opts?.onClick) {
-    const btn = button(cardText(card), `card${red ? ' red' : ''}`, opts.onClick);
+    const btn = button('', `card${red ? ' red' : ''}`, opts.onClick);
     btn.disabled = opts.disabled ?? false;
-    btn.setAttribute('aria-label', `${tSuit(card.suit)} ${rankLabel(card.rank)}`);
+    cardFace(btn, card);
     return btn;
   }
-  const span = el('span', `card static${red ? ' red' : ''}`, cardText(card));
-  span.setAttribute('aria-label', `${tSuit(card.suit)} ${rankLabel(card.rank)}`);
+  const span = el('span', `card static${red ? ' red' : ''}`);
+  cardFace(span, card);
   return span;
 }
 
@@ -537,81 +570,149 @@ function manilleOptionsPanel(): HTMLElement {
   return box;
 }
 
+function gameTile(
+  id: 'wiezen' | 'manille' | 'bieden',
+  icon: string,
+  nameKey: MessageKey,
+  descKey: MessageKey,
+): HTMLElement {
+  const tile = el('button', 'game-tile');
+  tile.type = 'button';
+  tile.setAttribute('aria-pressed', String(game === id));
+  tile.append(el('span', 'tile-icon', icon));
+  const body = el('span', 'tile-text');
+  body.append(el('span', 'tile-name', t(nameKey)), el('span', 'tile-desc', t(descKey)));
+  tile.append(body);
+  tile.addEventListener('click', () => {
+    game = id;
+    try {
+      localStorage.setItem(GAME_KEY, id);
+    } catch {
+      /* ignore */
+    }
+    render();
+  });
+  return tile;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('span', 'phase', t('app.phase')));
-  const headingKey =
-    game === 'manille'
-      ? 'game.manillen'
-      : game === 'bieden'
-        ? 'game.bieden'
-        : 'placeholder.heading';
-  const bodyKey =
-    game === 'manille' ? 'manille.intro' : game === 'bieden' ? 'bieden.intro' : 'placeholder.body';
-  main.append(el('h1', undefined, t(headingKey)));
+  main.append(el('h1', undefined, t('app.title')));
   main.append(el('p', 'tagline', t('app.tagline')));
-  main.append(el('p', undefined, t(bodyKey)));
-  if (game === 'wiezen') {
-    main.append(
-      el(
-        'p',
-        'ruleset',
-        t('placeholder.ruleset', {
-          name: ruleset.name[getLocale()],
-          version: ruleset.version,
-          contracts: ruleset.contracts.length,
+
+  // Spelkeuze als grote, tapbare tegels — meteen duidelijk wat je kan spelen.
+  const tiles = el('div', 'game-tiles');
+  tiles.setAttribute('role', 'group');
+  tiles.setAttribute('aria-label', t('game.picker'));
+  tiles.append(
+    gameTile('wiezen', '\u2660', 'game.wiezen', 'tile.wiezen'),
+    gameTile('manille', '\u2665', 'game.manillen', 'tile.manillen'),
+    gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
+  );
+  main.append(tiles);
+
+  const bodyKey =
+    game === 'manille' ? 'manille.intro' : game === 'bieden' ? 'bieden.intro' : 'wiezen.intro';
+  main.append(el('p', 'hint', t(bodyKey)));
+
+  const hasRestore =
+    game === 'manille'
+      ? Boolean(mRestored && !mRestored.session.finished)
+      : game === 'bieden'
+        ? Boolean(bRestored && !bRestored.session.finished)
+        : Boolean(restored && !restored.session.finished);
+
+  // Primaire actie: groot en als eerste bereikbaar met de duim.
+  const row = el('div', 'btn-row stack');
+  if (game === 'bieden') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueBieden));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearBieden();
+          bRestored = null;
+          startBieden();
         }),
-      ),
-    );
-  }
-
-  const gameGroup = el('div', 'control-group level-picker');
-  gameGroup.append(el('span', undefined, t('game.picker')));
-  const gameSeg = el('div', 'seg');
-  gameSeg.setAttribute('role', 'group');
-  const gameLabels = {
-    wiezen: 'game.wiezen',
-    manille: 'game.manillen',
-    bieden: 'game.bieden',
-  } as const;
-  for (const g of ['wiezen', 'manille', 'bieden'] as const) {
-    gameSeg.append(
-      segButton(t(gameLabels[g]), game === g, () => {
-        game = g;
-        try {
-          localStorage.setItem(GAME_KEY, g);
-        } catch {
-          /* ignore */
-        }
-        render();
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startBieden));
+    }
+  } else if (game === 'manille') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueManille));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearManille();
+          mRestored = null;
+          startManille();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startManille));
+    }
+  } else if (hasRestore) {
+    row.append(button(t('start.continue'), 'btn primary big', continueSession));
+    row.append(
+      button(t('start.new'), 'btn', () => {
+        store.clear();
+        restored = null;
+        startSession();
       }),
     );
+  } else {
+    row.append(button(t('game.start'), 'btn primary big', startSession));
   }
-  gameGroup.append(gameSeg);
-  main.append(gameGroup);
+  main.append(row);
 
-  const rulesetGroup = el('div', 'control-group level-picker');
-  rulesetGroup.append(el('span', undefined, t('ruleset.picker')));
-  const rulesetSeg = el('div', 'seg');
-  rulesetSeg.setAttribute('role', 'group');
-  for (const r of rulesets) {
-    rulesetSeg.append(
-      segButton(t(`ruleset.${r.id}` as MessageKey), ruleset.id === r.id, () => {
-        ruleset = r;
-        try {
-          localStorage.setItem(RULESET_KEY, r.id);
-        } catch {
-          /* ignore */
-        }
-        render();
-      }),
-    );
+  // Nieuw? Leer het spel — prominent voor wie het spel niet kent.
+  const learnRow = el('div', 'btn-row stack');
+  learnRow.append(
+    button(`\u{1F393} ${t('coach.learnButton')}`, 'btn', () => {
+      wizardStep = 0;
+      view = 'wizard';
+      render();
+    }),
+    button(t('scorebord.button'), 'btn', () => {
+      view = 'scorebord';
+      render();
+    }),
+    button(t('stats.button'), 'btn muted', () => {
+      view = 'stats';
+      render();
+    }),
+  );
+  main.append(learnRow);
+
+  // Instellingen en regelvarianten ingeklapt: rustig startscherm, alles
+  // blijft bereikbaar voor wie het wil.
+  const settings = el('details', 'settings');
+  const summary = document.createElement('summary');
+  summary.textContent = t('settings.title');
+  settings.append(summary);
+  const body = el('div', 'settings-body');
+
+  if (game === 'wiezen') {
+    const rulesetSeg = el('div', 'seg');
+    rulesetSeg.setAttribute('role', 'group');
+    for (const r of rulesets) {
+      rulesetSeg.append(
+        segButton(t(`ruleset.${r.id}` as MessageKey), ruleset.id === r.id, () => {
+          ruleset = r;
+          try {
+            localStorage.setItem(RULESET_KEY, r.id);
+          } catch {
+            /* ignore */
+          }
+          render();
+        }),
+      );
+    }
+    const rulesetGroup = el('div', 'control-group');
+    rulesetGroup.append(el('span', undefined, t('ruleset.picker')), rulesetSeg);
+    body.append(rulesetGroup);
   }
-  rulesetGroup.append(rulesetSeg);
-  if (game === 'wiezen') main.append(rulesetGroup);
 
-  const levelGroup = el('div', 'control-group level-picker');
-  levelGroup.append(el('span', undefined, t('bots.level')));
   const levelSeg = el('div', 'seg');
   levelSeg.setAttribute('role', 'group');
   for (const level of BOT_LEVELS) {
@@ -627,77 +728,132 @@ function startScreen(): HTMLElement {
       }),
     );
   }
-  levelGroup.append(levelSeg);
-  main.append(levelGroup);
+  const levelGroup = el('div', 'control-group');
+  levelGroup.append(el('span', undefined, t('bots.level')), levelSeg);
+  body.append(levelGroup);
 
-  // Regelvarianten worden alleen getoond wanneer er geen te herstellen sessie
-  // klaarstaat (die heeft haar eigen, vastgelegde opties). Bieden heeft (nog)
-  // geen sessie-opties.
-  const hasRestore =
-    game === 'manille'
-      ? Boolean(mRestored && !mRestored.session.finished)
-      : game === 'bieden'
-        ? Boolean(bRestored && !bRestored.session.finished)
-        : Boolean(restored && !restored.session.finished);
+  const coachSeg = el('div', 'seg');
+  coachSeg.setAttribute('role', 'group');
+  coachSeg.append(
+    segButton(t('opt.on'), coachOn, () => setCoach(true)),
+    segButton(t('opt.off'), !coachOn, () => setCoach(false)),
+  );
+  const coachGroup = el('div', 'control-group');
+  coachGroup.append(el('span', undefined, t('coach.setting')), coachSeg);
+  body.append(coachGroup);
+
+  // Regelvarianten horen bij een nieuwe sessie; een hersteld spel heeft de
+  // zijne al vastgelegd.
   if (!hasRestore && game !== 'bieden') {
-    main.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
+    body.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
 
-  const row = el('div', 'btn-row');
-  if (game === 'bieden') {
-    if (bRestored && !bRestored.session.finished) {
-      row.append(button(t('start.continue'), 'btn primary', continueBieden));
-      row.append(
-        button(t('start.new'), 'btn', () => {
-          store.clearBieden();
-          bRestored = null;
-          startBieden();
+  settings.append(body);
+  main.append(settings);
+
+  if (game === 'wiezen') {
+    main.append(
+      el(
+        'p',
+        'ruleset',
+        t('placeholder.ruleset', {
+          name: ruleset.name[getLocale()],
+          version: ruleset.version,
+          contracts: ruleset.contracts.length,
         }),
-      );
-    } else {
-      row.append(button(t('game.start'), 'btn primary', startBieden));
-    }
-  } else if (game === 'manille') {
-    if (mRestored && !mRestored.session.finished) {
-      row.append(button(t('start.continue'), 'btn primary', continueManille));
-      row.append(
-        button(t('start.new'), 'btn', () => {
-          store.clearManille();
-          mRestored = null;
-          startManille();
-        }),
-      );
-    } else {
-      row.append(button(t('game.start'), 'btn primary', startManille));
-    }
-  } else if (restored && !restored.session.finished) {
-    row.append(button(t('start.continue'), 'btn primary', continueSession));
+      ),
+    );
+  }
+  return main;
+}
+
+// De deelanimatie mag maar één keer per gift lopen: render() bouwt de tafel bij
+// elke botzet opnieuw op, en zonder deze rem flikkert de hele hand telkens weer.
+let dealtKey = '';
+
+function tableGrid(): HTMLElement {
+  const n =
+    game === 'manille'
+      ? (mSession?.giftNumber ?? 0)
+      : game === 'bieden'
+        ? (bSession?.giftNumber ?? 0)
+        : (session?.giftNumber ?? 0);
+  const key = `${game}:${n}`;
+  const table = el('div', 'table-grid');
+  if (key !== dealtKey) {
+    dealtKey = key;
+    table.classList.add('dealing');
+  }
+  return table;
+}
+
+/** Coachtip als blokje boven de actieknoppen; alleen zichtbaar als de coach aanstaat. */
+function coachBox(tip: CoachTip | null): HTMLElement | null {
+  if (!coachOn || !tip) return null;
+  const box = el('div', 'coach');
+  box.append(el('span', 'coach-icon', '\u{1F393}'));
+  const body = el('div', 'coach-body');
+  body.append(el('strong', undefined, t('coach.title')));
+  body.append(el('span', undefined, t(`coach.tip.${tip.id}` as MessageKey, tip.params)));
+  box.append(body);
+  return box;
+}
+
+/** Starterswizard: korte uitleg in stappen, per spel. */
+function wizardScreen(): HTMLElement {
+  const total = WIZARD_STEPS[game];
+  const step = Math.min(Math.max(wizardStep, 0), total - 1);
+  const n = step + 1;
+  const main = el('main', 'hero wizard');
+  main.append(el('span', 'phase', t('wizard.step', { n, total })));
+  main.append(el('h1', undefined, t('wizard.title', { game: gameLabel() })));
+
+  const dots = el('div', 'wizard-progress');
+  dots.setAttribute('role', 'img');
+  dots.setAttribute('aria-label', t('wizard.step', { n, total }));
+  for (let i = 0; i < total; i += 1) {
+    dots.append(el('span', i <= step ? 'wizard-dot done' : 'wizard-dot'));
+  }
+  main.append(dots);
+
+  const card = el('section', 'wizard-step');
+  card.append(el('h2', undefined, t(`wizard.${game}.${n}.title` as MessageKey)));
+  card.append(el('p', undefined, t(`wizard.${game}.${n}.body` as MessageKey)));
+  main.append(card);
+
+  const row = el('div', 'btn-row stack');
+  if (step < total - 1) {
     row.append(
-      button(t('start.new'), 'btn', () => {
-        store.clear();
-        restored = null;
-        startSession();
+      button(t('wizard.next'), 'btn primary big', () => {
+        wizardStep = step + 1;
+        render();
       }),
     );
   } else {
-    row.append(button(t('game.start'), 'btn primary', startSession));
+    row.append(
+      button(t('wizard.startPlaying'), 'btn primary big', () => {
+        view = 'home';
+        render();
+      }),
+    );
   }
-  row.append(
-    button(t('stats.button'), 'btn muted', () => {
-      view = 'stats';
+  const nav = el('div', 'btn-row');
+  if (step > 0) {
+    nav.append(
+      button(t('wizard.prev'), 'btn', () => {
+        wizardStep = step - 1;
+        render();
+      }),
+    );
+  }
+  nav.append(
+    button(t('wizard.close'), 'btn muted', () => {
+      view = 'home';
       render();
     }),
   );
+  row.append(nav);
   main.append(row);
-
-  const sbRow = el('div', 'btn-row');
-  sbRow.append(
-    button(t('scorebord.button'), 'btn', () => {
-      view = 'scorebord';
-      render();
-    }),
-  );
-  main.append(sbRow);
   return main;
 }
 
@@ -889,6 +1045,8 @@ function bidLogView(): HTMLElement {
 function actionPanel(gift: Gift): HTMLElement {
   const panel = el('div', 'panel');
   const who = actor();
+  const tip = coachBox(who?.human ? wiezenTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
 
   switch (gift.phase) {
     case 'bidding': {
@@ -1073,7 +1231,9 @@ function render(): void {
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
   const bGift = bSession?.gift ?? null;
-  if (view === 'scorebord') {
+  if (view === 'wizard') {
+    wrap.append(wizardScreen());
+  } else if (view === 'scorebord') {
     wrap.append(scorebordScreen());
   } else if (view === 'stats' && !session && !mSession && !bSession) {
     wrap.append(statsScreen());
@@ -1084,7 +1244,7 @@ function render(): void {
       wrap.append(biedenEndScreen());
     } else if (bGift) {
       wrap.append(biedenStatusBar(bGift));
-      const table = el('div', 'table-grid');
+      const table = tableGrid();
       table.append(biedenSeat(bGift, 2));
       const middle = el('div', 'table-middle');
       middle.append(biedenSeat(bGift, 1), biedenTrickArea(bGift), biedenSeat(bGift, 3));
@@ -1099,7 +1259,7 @@ function render(): void {
       wrap.append(manilleEndScreen());
     } else if (mGift) {
       wrap.append(manilleStatusBar(mGift));
-      const table = el('div', 'table-grid');
+      const table = tableGrid();
       table.append(manilleSeat(mGift, 2));
       const middle = el('div', 'table-middle');
       middle.append(manilleSeat(mGift, 1), manilleTrickArea(mGift), manilleSeat(mGift, 3));
@@ -1113,7 +1273,7 @@ function render(): void {
     wrap.append(endScreen());
   } else if (gift) {
     wrap.append(statusBar(gift));
-    const table = el('div', 'table-grid');
+    const table = tableGrid();
     table.append(seat(gift, 2));
     const middle = el('div', 'table-middle');
     middle.append(seat(gift, 1), trickArea(gift), seat(gift, 3));
@@ -1319,6 +1479,8 @@ function manilleTrickArea(gift: ManilleGift): HTMLElement {
 function manilleActionPanel(gift: ManilleGift): HTMLElement {
   const panel = el('div', 'panel');
   const who = manilleActor();
+  const tip = coachBox(who?.human ? manilleTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
   switch (gift.phase) {
     case 'trump-choice': {
       if (who?.human) {
@@ -1647,6 +1809,8 @@ function biedenLogView(): HTMLElement {
 function biedenActionPanel(gift: BiedenGift): HTMLElement {
   const panel = el('div', 'panel');
   const who = biedenActor();
+  const tip = coachBox(who?.human ? biedenTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
   switch (gift.phase) {
     case 'bidding': {
       panel.append(el('h2', undefined, t('bieden.title')));
@@ -1848,7 +2012,7 @@ function scorebordSetup(): HTMLElement {
   countGroup.append(countSeg);
   main.append(countGroup);
 
-  const nameBox = el('div', 'options');
+  const nameBox = el('div', 'sb-names');
   for (let i = 0; i < sbCount; i++) {
     const row = el('div', 'control-group');
     row.append(el('span', undefined, t('scorebord.name', { n: i + 1 })));

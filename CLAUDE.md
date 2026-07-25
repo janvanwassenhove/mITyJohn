@@ -34,6 +34,9 @@ Vóór elke push: de checks van elk aangeraakt subproject lokaal groen draaien.
   uiteenlopen.
 - UI-teksten in `carts/` altijd via i18n (`nl`/`en`/`fr` alle drie aanvullen; een test
   dwingt sleutelpariteit af).
+- Bij een UI-wijziging in `carts/`: `npm run build && npm run screenshots` en de
+  vernieuwde `carts/docs/screenshots/**` mee committen. Elke release note krijgt
+  screenshots — zie `RELEASING.md`.
 
 ## Deploy
 

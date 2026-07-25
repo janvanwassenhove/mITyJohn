@@ -10,4 +10,17 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
+  {
+    // Node-scripts (screenshotgenerator) draaien buiten de browser.
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        console: 'readonly',
+        process: 'readonly',
+        URL: 'readonly',
+        // Loopt binnen page.addInitScript() in de browser:
+        localStorage: 'readonly',
+      },
+    },
+  },
 );

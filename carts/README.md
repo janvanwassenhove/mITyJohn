@@ -1,48 +1,97 @@
 # Carts
 
-Vlaamse kaartspellen (wiezen, …) in de browser — Fase 1: speelbaar wiezen tegen drie bots. Onderdeel van de mityjohn.com-monorepo,
-gedeployed als subpad **https://mityjohn.com/carts/** via de bestaande GitHub Pages-workflow.
+**Vlaamse kaartspellen in je browser.** Wiezen, manillen en bieden tegen drie bots —
+plus een scorebord voor als je aan tafel met echte kaarten speelt. Geen account, geen
+reclame, werkt offline en is installeerbaar op je gsm.
 
-## Structuur (§6)
+▶️ **Speel op [mityjohn.com/carts](https://mityjohn.com/carts/)**
+
+|                                                          Startscherm                                                          |                                                  Aan tafel                                                  |
+| :---------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
+| <img src="docs/screenshots/start-mobile-light.png" alt="Startscherm met de drie spellen, op gsm in lichte modus" width="260"> | <img src="docs/screenshots/spel-mobile-dark.png" alt="Een gift wiezen op gsm in donkere modus" width="260"> |
+
+|                                           Starterswizard                                            |                                                   Scorebord                                                   |
+| :-------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+| <img src="docs/screenshots/wizard-mobile-light.png" alt="Stap 1 van de starterswizard" width="260"> | <img src="docs/screenshots/scorebord-mobile-light.png" alt="Scorebord voor een fysiek kaartspel" width="260"> |
+
+<details>
+<summary>Meer beelden (desktop, licht &amp; donker)</summary>
+
+![Startscherm op desktop](docs/screenshots/start-desktop-light.png)
+
+![Een gift wiezen op desktop in donkere modus](docs/screenshots/spel-desktop-dark.png)
+
+</details>
+
+## Wat zit erin
+
+- **Drie spellen** — wiezen (13 kaarten, bieden, troel, miserie, abondance …),
+  manillen (vaste ploegen, de tien is de baas) en bieden (bod in punten, hoogste
+  bieder bepaalt de troef).
+- **Regelvarianten kies je bij de start** — troel op 8 of 9 slagen, manille op 60 of
+  68 punten, enzovoort. De regels staan gedocumenteerd in
+  [`../docs/REGELS.md`](../docs/REGELS.md) en machineleesbaar in
+  [`../rulesets/`](../rulesets).
+- **Coach & starterswizard** — ken je het spel niet? De wizard legt het in vier à vijf
+  schermen uit, en de coach geeft tijdens het spel tips bij wat je nu moet doen.
+- **Scorebord voor een fysiek spel** — hou de stand bij aan tafel, met een automodus
+  voor wiezen die uit contract, teams en aantal slagen zelf de punten berekent.
+- **Drie botniveaus**, statistieken, animaties en geluid.
+- **Nederlands, Engels en Frans**, licht/donker/systeemthema, en alles blijft lokaal
+  in `localStorage` — er vertrekt geen data naar een server.
+
+## Structuur
 
 ```
 carts/                  # deze app (Vite + TypeScript, strict)
-├── index.html          # placeholderpagina Fase 0 (taal- + themaswitch)
+├── index.html          # app-shell (anti-flits themascript)
+├── scripts/
+│   └── screenshots.mjs # genereert docs/screenshots/ voor README en release notes
+├── docs/screenshots/   # gegenereerde beelden (mobiel + desktop, licht + donker)
 ├── src/
-│   ├── main.ts         # spel-UI (tafel, biedronde, scorebord) + rendering
-│   ├── engine/         # DOM-vrije game-engine: delen, bieden, slagen, scoring
-│   ├── bots.ts         # heuristische botspelers
-│   ├── i18n/           # i18n-fundering (§8): nl / en / fr, nl = fallback
-│   ├── theme.ts        # themafundering (§8): licht / donker / systeem
+│   ├── main.ts         # UI: tafel, biedronde, wizard, scorebord, rendering
+│   ├── engine/         # DOM-vrije engines: wiezen, manillen, bieden
+│   ├── bots.ts         # heuristische botspelers (drie niveaus)
+│   ├── coach.ts        # starterswizard-stappen + contextuele tips
+│   ├── scorebord*.ts   # scorebord voor fysiek spel (incl. wiezen-automodus)
+│   ├── options.ts      # regelvarianten per sessie
+│   ├── store.ts        # persistentie via actielog + replay
+│   ├── i18n/           # nl / en / fr, nl = fallback
+│   ├── theme.ts        # licht / donker / systeem
 │   ├── ruleset.ts      # laadt rulesets/*.json (repo-niveau)
-│   └── **/*.test.ts    # Vitest-tests (engine, bots-simulatie, i18n, thema, ruleset)
+│   └── **/*.test.ts    # Vitest
 ├── vite.config.ts      # base: /carts/
 └── eslint.config.js    # ESLint + typescript-eslint; Prettier voor formattering
-
-../docs/REGELS.md               # spelregels + gemarkeerde aannames (Fase 0)
-../rulesets/vlaams-standaard.json  # machineleesbare ruleset
 ```
 
 ## Commando's
 
-| Commando         | Doel                                    |
-| ---------------- | --------------------------------------- |
-| `npm run dev`    | dev-server                              |
-| `npm run build`  | typecheck + productiebuild naar `dist/` |
-| `npm run test`   | Vitest (i18n, thema, ruleset-validatie) |
-| `npm run lint`   | ESLint + Prettier-check                 |
-| `npm run format` | Prettier write                          |
+| Commando              | Doel                                                      |
+| --------------------- | --------------------------------------------------------- |
+| `npm run dev`         | dev-server                                                |
+| `npm run build`       | typecheck + productiebuild naar `dist/`                   |
+| `npm run test`        | Vitest (engines, bots, i18n, thema, ruleset, scorebord)   |
+| `npm run lint`        | ESLint + Prettier-check                                   |
+| `npm run format`      | Prettier write                                            |
+| `npm run screenshots` | vernieuwt `docs/screenshots/` (vereist een verse `dist/`) |
 
-## i18n & thema (§8)
+## i18n & thema
 
 - **Talen:** `nl` (standaard/fallback), `en`, `fr`. Berichten in `src/i18n/locales/*.json`;
-  sleutelpariteit wordt door een test afgedwongen. Keuze persistente in `localStorage`
+  sleutelpariteit wordt door een test afgedwongen. Keuze persistent in `localStorage`
   (`carts.lang`), `<html lang>` volgt.
 - **Thema:** licht / donker / systeem via `data-theme` op `<html>` en CSS custom properties;
-  persistent in `localStorage` (`carts.theme`), inline script in `index.html` voorkomt
+  persistent in `localStorage` (`carts.theme`), een inline script in `index.html` voorkomt
   een themaflits bij het laden.
 
-## Deploy (§11)
+## Screenshots & releases
+
+`npm run screenshots` start de gebouwde app in een lokale Chromium en legt vier scènes
+vast (startscherm, wizard, spel, scorebord) × mobiel/desktop × licht/donker. De beelden
+in deze README komen daar rechtstreeks uit, en horen ook in elke release note — zie
+[`../RELEASING.md`](../RELEASING.md).
+
+## Deploy
 
 De workflow `.github/workflows/deploy.yml` bouwt de Astro-site én deze app en kopieert
 `carts/dist` naar `dist/carts`, zodat alles in één GitHub Pages-deploy live gaat.
