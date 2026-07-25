@@ -16,6 +16,11 @@ const htmlFiles = [];
   }
 })(DIST);
 
+// Paden die pas bij het deployen ontstaan: deploy.yml kopieert cards/dist naar
+// dist/cards, dus die map bestaat niet in een kale sitebuild. Links ernaartoe
+// zijn wel degelijk geldig in productie.
+const MOUNTED_AT_DEPLOY = ['/cards/'];
+
 let legacy = 0, broken = 0, checked = 0;
 const missing = new Map();
 
@@ -36,6 +41,7 @@ for (const file of htmlFiles) {
     let u = m[1].split('#')[0].split('?')[0];
     if (!u || u.startsWith('//')) continue;
     u = decodeURIComponent(u);
+    if (MOUNTED_AT_DEPLOY.some((prefix) => u.startsWith(prefix))) continue;
     checked++;
     const candidates = [
       path.join(DIST, u),
