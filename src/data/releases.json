@@ -8,28 +8,28 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 19,
+        "downloads": 28,
         "platform": "Windows"
       },
       {
         "name": "LoveFlix-1.0.0.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
         "size": 101216735,
-        "downloads": 11,
+        "downloads": 20,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 1,
+        "downloads": 10,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix.Setup.1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix.Setup.1.0.0.exe",
         "size": 77399924,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "Windows"
       }
     ]
@@ -43,14 +43,14 @@
         "name": "mITyGuitar_0.0.1_x64-setup.exe",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
         "size": 113233473,
-        "downloads": 2,
+        "downloads": 11,
         "platform": "Windows"
       },
       {
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
-        "downloads": 2,
+        "downloads": 11,
         "platform": "Windows"
       }
     ]
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.18.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.18/mITyStudio-Setup-1.1.18.exe",
         "size": 153063771,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "Windows"
       }
     ]
@@ -84,49 +84,49 @@
         "name": "pibeat-0.2.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat-0.2.1-1.x86_64.rpm",
         "size": 5175700,
-        "downloads": 1,
+        "downloads": 10,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.2.1_amd64.AppImage",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.AppImage",
         "size": 82516472,
-        "downloads": 1,
+        "downloads": 10,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.2.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64_en-US.msi",
         "size": 3981312,
-        "downloads": 1,
+        "downloads": 10,
         "platform": "Windows"
       },
       {
         "name": "pibeat_0.2.1_amd64.deb",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.deb",
         "size": 5175636,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.2.1_universal.dmg",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_universal.dmg",
         "size": 8024119,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "macOS"
       },
       {
         "name": "pibeat_0.2.1_x64-setup.exe",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64-setup.exe",
         "size": 2676977,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "Windows"
       },
       {
         "name": "pibeat_universal.app.tar.gz",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_universal.app.tar.gz",
         "size": 7949711,
-        "downloads": 0
+        "downloads": 9
       }
     ]
   },
@@ -139,52 +139,52 @@
         "name": "GhostsInTheMachine-1.0.5-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg",
         "size": 134457974,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg",
         "size": 136227827,
-        "downloads": 0,
+        "downloads": 9,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.5-win-x64.exe",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-win-x64.exe",
         "size": 114125603,
-        "downloads": 0,
+        "downloads": 8,
         "platform": "Windows"
       },
       {
         "name": "01-main-menu.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
         "size": 867069,
-        "downloads": 5
+        "downloads": 14
       },
       {
         "name": "02-campaign.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
         "size": 60247,
-        "downloads": 5
+        "downloads": 14
       },
       {
         "name": "03-gameplay.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
         "size": 239706,
-        "downloads": 5
-      },
-      {
-        "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.zip",
-        "size": 134372890,
-        "downloads": 0
+        "downloads": 14
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-x64.zip",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.zip",
         "size": 136209268,
-        "downloads": 0
+        "downloads": 9
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.zip",
+        "size": 134372890,
+        "downloads": 8
       }
     ]
   },
@@ -197,13 +197,13 @@
         "name": "scrum-language-2.0.0-sdk.zip",
         "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.zip",
         "size": 1082091,
-        "downloads": 4
+        "downloads": 13
       },
       {
         "name": "scrum-language-2.0.0-sdk.tar.gz",
         "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.tar.gz",
         "size": 1069463,
-        "downloads": 1
+        "downloads": 10
       }
     ]
   }
