@@ -299,5 +299,8 @@
   "guide.scorebord.manueel.title": "Manual mode",
   "guide.scorebord.manueel.body": "In manual mode you simply type the points each player took that round — for any game at all. Handy for a game the app does not know, or when you use your own scoring. You can delete a round if you slip up, and choose whether the highest or the lowest score wins.",
   "guide.scorebord.auto.title": "Wiezen automatically",
-  "guide.scorebord.auto.body": "Playing wiezen? Pick the auto mode: you indicate which contract was played (troel included), who played it, who their partner was — or that they went alone — and how many tricks were taken. The app works out the points for all four players with the same rules as the game itself, overtricks and undertricks included. No more arguments at the table."
+  "guide.scorebord.auto.body": "Playing wiezen? Pick the auto mode: you indicate which contract was played (troel included), who played it, who their partner was — or that they went alone — and how many tricks were taken. The app works out the points for all four players with the same rules as the game itself, overtricks and undertricks included. No more arguments at the table.",
+  "controls.menu": "Menu",
+  "start.resume": "Resume",
+  "wizard.pickGame": "Which game do you want to learn?"
 }

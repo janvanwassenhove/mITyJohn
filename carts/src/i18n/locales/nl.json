@@ -299,5 +299,8 @@
   "guide.scorebord.manueel.title": "Manuele modus",
   "guide.scorebord.manueel.body": "In de manuele modus typ je gewoon de punten in die elke speler die ronde heeft gehaald — voor welk spel dan ook. Handig als je een spel speelt dat de app niet kent, of als jullie een eigen puntentelling gebruiken. Je kan een ronde weer verwijderen als je je vergist, en kiezen of de hoogste of de laagste score wint.",
   "guide.scorebord.auto.title": "Wiezen automatisch",
-  "guide.scorebord.auto.body": "Speel je wiezen, kies dan de automodus: je duidt aan wélk contract er gespeeld werd (ook troel), wie het speelde, wie zijn maat was — of dat hij alleen ging — en hoeveel slagen er gehaald zijn. De app rekent de punten voor alle vier de spelers uit met dezelfde regels als het spel zelf, inclusief overslagen en onderslagen. Discussie aan tafel is daarmee van de baan."
+  "guide.scorebord.auto.body": "Speel je wiezen, kies dan de automodus: je duidt aan wélk contract er gespeeld werd (ook troel), wie het speelde, wie zijn maat was — of dat hij alleen ging — en hoeveel slagen er gehaald zijn. De app rekent de punten voor alle vier de spelers uit met dezelfde regels als het spel zelf, inclusief overslagen en onderslagen. Discussie aan tafel is daarmee van de baan.",
+  "controls.menu": "Menu",
+  "start.resume": "Verder spelen",
+  "wizard.pickGame": "Welk spel wil je leren?"
 }

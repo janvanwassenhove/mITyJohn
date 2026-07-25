@@ -299,5 +299,8 @@
   "guide.scorebord.manueel.title": "Mode manuel",
   "guide.scorebord.manueel.body": "En mode manuel vous tapez simplement les points obtenus par chaque joueur — pour n’importe quel jeu. Pratique pour un jeu que l’app ne connaît pas, ou si vous utilisez votre propre décompte. Vous pouvez supprimer une manche en cas d’erreur et choisir si le score le plus haut ou le plus bas l’emporte.",
   "guide.scorebord.auto.title": "Wiezen automatique",
-  "guide.scorebord.auto.body": "Vous jouez au wiezen ? Choisissez le mode auto : indiquez quel contrat a été joué (troel compris), qui l’a joué, qui était son partenaire — ou qu’il jouait seul — et combien de plis ont été faits. L’app calcule les points des quatre joueurs avec les règles du jeu lui-même, plis en plus ou en moins compris. Fini les discussions à table."
+  "guide.scorebord.auto.body": "Vous jouez au wiezen ? Choisissez le mode auto : indiquez quel contrat a été joué (troel compris), qui l’a joué, qui était son partenaire — ou qu’il jouait seul — et combien de plis ont été faits. L’app calcule les points des quatre joueurs avec les règles du jeu lui-même, plis en plus ou en moins compris. Fini les discussions à table.",
+  "controls.menu": "Menu",
+  "start.resume": "Reprendre",
+  "wizard.pickGame": "Quel jeu voulez-vous apprendre ?"
 }

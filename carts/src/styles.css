@@ -111,6 +111,21 @@ header.topbar {
   border-bottom: 1px solid var(--border);
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+/* Menuknop: klein maar altijd raakbaar, zodat je nooit in een spel vastzit. */
+.btn.back {
+  min-height: 2.1rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: 999px;
+}
+
 .brand {
   display: flex;
   align-items: baseline;

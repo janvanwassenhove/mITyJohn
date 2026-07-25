@@ -64,7 +64,7 @@ if (!app) throw new Error('#app ontbreekt');
 
 const RULESET_KEY = 'carts.ruleset';
 let ruleset = getRuleset('vlaams-standaard') as Ruleset;
-let view: 'home' | 'stats' | 'scorebord' | 'wizard' | 'guide' = 'home';
+let view: 'home' | 'game' | 'stats' | 'scorebord' | 'wizard' | 'guide' = 'home';
 
 // Coach & starterswizard.
 let coachOn = loadCoachEnabled();
@@ -205,6 +205,7 @@ function startSession(): void {
   session = store.replay(ruleset, persisted);
   bidLog = [];
   seedTroelLog(false);
+  view = 'game';
   render();
   scheduleBots();
 }
@@ -217,6 +218,7 @@ function continueSession(): void {
   botLevel = persisted.botLevel;
   restored = null;
   rebuildBidLog(persisted);
+  view = 'game';
   render();
   scheduleBots();
 }
@@ -332,7 +334,7 @@ function scheduleBots(): void {
   const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
   window.setTimeout(
     () => {
-      if (gen !== generation || game !== 'wiezen') return;
+      if (gen !== generation || game !== 'wiezen' || view !== 'game') return;
       if (botStep()) {
         render();
         scheduleBots();
@@ -409,8 +411,36 @@ function cardEl(card: Card, opts?: { onClick?: () => void; disabled?: boolean })
   return span;
 }
 
+/** Loopt er een spel in het geheugen dat je kan hervatten? */
+function liveSession(): boolean {
+  if (game === 'manille') return Boolean(mSession && !mSession.finished);
+  if (game === 'bieden') return Boolean(bSession && !bSession.finished);
+  return Boolean(session && !session.finished);
+}
+
+/** Terug naar het startscherm. Het spel blijft staan — botbeurten pauzeren. */
+function goHome(): void {
+  generation += 1; // hangende bottimers annuleren (alle drie de spellen delen de teller)
+  view = 'home';
+  render();
+}
+
+/** Verder waar je gebleven was, inclusief de botbeurt die aan de gang was. */
+function resumeGame(): void {
+  view = 'game';
+  render();
+  if (game === 'manille') scheduleManilleBots();
+  else if (game === 'bieden') scheduleBiedenBots();
+  else scheduleBots();
+}
+
 function topbar(): HTMLElement {
   const header = el('header', 'topbar');
+  const left = el('div', 'topbar-left');
+  // Zonder deze knop zit je in een spel of scherm vast: er was geen weg terug.
+  if (view !== 'home') {
+    left.append(button(`\u2039 ${t('controls.menu')}`, 'btn back', () => goHome()));
+  }
   const brand = el('div', 'brand');
   brand.innerHTML =
     'Carts<span class="suits" aria-hidden="true"><span class="suit-black">♠</span>' +
@@ -455,7 +485,8 @@ function topbar(): HTMLElement {
   soundBtn.setAttribute('aria-pressed', String(soundEnabled()));
 
   controls.append(langGroup, themeGroup, soundBtn);
-  header.append(brand, controls);
+  left.append(brand);
+  header.append(left, controls);
   return header;
 }
 
@@ -685,7 +716,28 @@ function startScreen(): HTMLElement {
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
-  if (game === 'bieden') {
+  if (liveSession()) {
+    // Je stapte via de menuknop uit een lopend spel: hervatten mag niet
+    // betekenen dat je die partij per ongeluk weggooit.
+    row.append(button(t('start.resume'), 'btn primary big', resumeGame));
+    row.append(
+      button(t('start.new'), 'btn', () => {
+        if (game === 'manille') {
+          store.clearManille();
+          mRestored = null;
+          startManille();
+        } else if (game === 'bieden') {
+          store.clearBieden();
+          bRestored = null;
+          startBieden();
+        } else {
+          store.clear();
+          restored = null;
+          startSession();
+        }
+      }),
+    );
+  } else if (game === 'bieden') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueBieden));
       row.append(
@@ -952,6 +1004,32 @@ function wizardScreen(): HTMLElement {
   const main = el('main', 'hero wizard');
   main.append(el('span', 'phase', t('wizard.step', { n, total })));
   main.append(el('h1', undefined, t('wizard.title', { game: gameLabel() })));
+
+  // Je moest hiervoor eerst terug naar het startscherm om een ander spel te
+  // leren; nu wissel je gewoon hier van spel.
+  const games: ['wiezen' | 'manille' | 'bieden', MessageKey][] = [
+    ['wiezen', 'game.wiezen'],
+    ['manille', 'game.manillen'],
+    ['bieden', 'game.bieden'],
+  ];
+  const picker = el('div', 'seg wide');
+  picker.setAttribute('role', 'group');
+  picker.setAttribute('aria-label', t('wizard.pickGame'));
+  for (const [id, key] of games) {
+    picker.append(
+      segButton(t(key), game === id, () => {
+        game = id;
+        try {
+          localStorage.setItem(GAME_KEY, id);
+        } catch {
+          /* ignore */
+        }
+        wizardStep = 0;
+        render();
+      }),
+    );
+  }
+  main.append(picker);
 
   const dots = el('div', 'wizard-progress');
   dots.setAttribute('role', 'img');
@@ -1434,8 +1512,10 @@ function render(): void {
     wrap.append(wizardScreen());
   } else if (view === 'scorebord') {
     wrap.append(scorebordScreen());
-  } else if (view === 'stats' && !session && !mSession && !bSession) {
+  } else if (view === 'stats') {
     wrap.append(statsScreen());
+  } else if (view === 'home') {
+    wrap.append(startScreen());
   } else if (game === 'bieden') {
     if (!bSession || (!bGift && !bSession.finished)) {
       wrap.append(startScreen());
@@ -1511,6 +1591,7 @@ function startManille(): void {
   store.saveManille(mPersisted);
   mRestored = null;
   mSession = store.replayManille(mPersisted);
+  view = 'game';
   render();
   scheduleManilleBots();
 }
@@ -1521,6 +1602,7 @@ function continueManille(): void {
   mSession = mRestored.session;
   botLevel = mPersisted.botLevel;
   mRestored = null;
+  view = 'game';
   render();
   scheduleManilleBots();
 }
@@ -1567,7 +1649,7 @@ function scheduleManilleBots(): void {
   const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
   window.setTimeout(
     () => {
-      if (gen !== generation || game !== 'manille') return;
+      if (gen !== generation || game !== 'manille' || view !== 'game') return;
       if (manilleBotStep()) {
         render();
         scheduleManilleBots();
@@ -1811,6 +1893,7 @@ function startBieden(): void {
   bRestored = null;
   bSession = store.replayBieden(bPersisted);
   biedenLog = [];
+  view = 'game';
   render();
   scheduleBiedenBots();
 }
@@ -1822,6 +1905,7 @@ function continueBieden(): void {
   botLevel = bPersisted.botLevel;
   bRestored = null;
   biedenLog = [];
+  view = 'game';
   render();
   scheduleBiedenBots();
 }
@@ -1875,7 +1959,7 @@ function scheduleBiedenBots(): void {
   const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
   window.setTimeout(
     () => {
-      if (gen !== generation || game !== 'bieden') return;
+      if (gen !== generation || game !== 'bieden' || view !== 'game') return;
       if (biedenBotStep()) {
         render();
         scheduleBiedenBots();
