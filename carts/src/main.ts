@@ -24,7 +24,7 @@ import {
   type BotLevel,
 } from './bots';
 import * as store from './store';
-import { scoreGift } from './engine/scoring';
+import * as sbw from './scorebord-wiezen';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
@@ -1800,28 +1800,10 @@ function selectInput(
   return sel;
 }
 
-// De wiezen-automodus hergebruikt de scoring-engine: je duidt het contract,
-// de speler (+ maat bij een teamcontract) en het aantal slagen aan.
-const WIEZEN_SB_RULESET = getRuleset('vlaams-standaard') as Ruleset;
-
-function wiezenSbContract(id: string) {
-  return WIEZEN_SB_RULESET.contracts.find((c) => c.id === id) ?? WIEZEN_SB_RULESET.contracts[0]!;
-}
-
-/** Bereken de puntenmutatie per speler + een label voor een handmatig ingegeven gift. */
-function computeWiezenRound(
-  contractId: string,
-  declarer: number,
-  partner: number,
-  tricks: number,
-): { points: number[]; label: string } {
-  const contract = wiezenSbContract(contractId);
-  const declarers = contract.team === 2 && partner !== declarer ? [declarer, partner] : [declarer];
-  const tricksWon = [0, 0, 0, 0];
-  tricksWon[declarer] = tricks; // teamcontracten sommeren de slagen van de spelers
-  const score = scoreGift({ contract, declarers, tricksWon });
-  const names = declarers.map((d) => sbParticipantName(d)).join(' + ');
-  return { points: score.points, label: `${tContract(contract.id)} — ${names}` };
+/** Label voor een ingegeven gift, bv. "Troel — Jan + Miel" of "Alleen — Rita". */
+function wiezenRoundLabel(result: sbw.WiezenRoundResult): string {
+  const names = result.declarers.map((d) => sbParticipantName(d)).join(' + ');
+  return `${tContract(result.contract.id)} — ${names}`;
 }
 
 function scorebordSetup(): HTMLElement {
@@ -1961,11 +1943,19 @@ function manualRoundForm(board: scorebord.Scorebord): HTMLElement {
   return form;
 }
 
+/** Huidige maatkeuze, gecorrigeerd voor het gekozen contract. */
+function currentPartner(): number {
+  if (sbWPartner === sbw.ALONE) {
+    // "Alleen" bestaat enkel na een vraag; elders valt hij terug op de overbuur.
+    return sbw.canGoAlone(sbWContract) ? sbw.ALONE : (sbWDeclarer + 2) % 4;
+  }
+  return sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner;
+}
+
 function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
   const form = el('div', 'sb-newround');
   form.append(el('div', 'options-title', t('scorebord.newRound')));
-  const contract = wiezenSbContract(sbWContract);
-  const isTeam = contract.team === 2;
+  const isTeam = sbw.needsPartner(sbWContract);
   const playerOptions = board.participants.map((_, i) => ({
     value: String(i),
     label: sbParticipantName(i),
@@ -1977,7 +1967,7 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
   cGroup.append(el('span', undefined, t('scorebord.contract')));
   cGroup.append(
     selectInput(
-      WIEZEN_SB_RULESET.contracts.map((c) => ({ value: c.id, label: tContract(c.id) })),
+      sbw.scorebordContracts().map((c) => ({ value: c.id, label: tContract(c.id) })),
       sbWContract,
       (v) => {
         sbWContract = v;
@@ -1992,24 +1982,25 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
   dGroup.append(
     selectInput(playerOptions, String(sbWDeclarer), (v) => {
       sbWDeclarer = Number(v);
-      if (sbWPartner === sbWDeclarer) sbWPartner = (sbWDeclarer + 2) % 4;
       render();
     }),
   );
   rows.append(dGroup);
 
+  const partner = currentPartner();
   if (isTeam) {
+    // Na een vraag kan niemand meegaan: dan speelt de vrager alleen (§5.2).
+    const options = playerOptions.filter((o) => Number(o.value) !== sbWDeclarer);
+    if (sbw.canGoAlone(sbWContract)) {
+      options.unshift({ value: String(sbw.ALONE), label: t('scorebord.alone') });
+    }
     const pGroup = el('div', 'control-group');
     pGroup.append(el('span', undefined, t('scorebord.partner')));
     pGroup.append(
-      selectInput(
-        playerOptions.filter((o) => Number(o.value) !== sbWDeclarer),
-        String(sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner),
-        (v) => {
-          sbWPartner = Number(v);
-          render();
-        },
-      ),
+      selectInput(options, String(partner), (v) => {
+        sbWPartner = Number(v);
+        render();
+      }),
     );
     rows.append(pGroup);
   }
@@ -2024,17 +2015,39 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
   rows.append(tGroup);
 
   form.append(rows);
+
+  // Toon meteen welk contract er gerekend wordt en wat het doel is.
+  const preview = sbw.computeWiezenRound({
+    contractId: sbWContract,
+    declarer: sbWDeclarer,
+    partner,
+    tricks: Number(sbWTricks) || 0,
+  });
+  const target = preview.contract.target;
+  form.append(
+    el(
+      'p',
+      'hint',
+      target.tricks === 0
+        ? `${tContract(preview.contract.id)} — ${t('play.goalZero')}`
+        : `${tContract(preview.contract.id)} — ${
+            target.combined
+              ? t('play.goalTogether', { tricks: target.tricks })
+              : t('play.goal', { tricks: target.tricks })
+          }`,
+    ),
+  );
+
   form.append(
     button(t('scorebord.add'), 'btn primary', () => {
       const tricks = Number(sbWTricks);
-      const partner = sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner;
-      const { points, label } = computeWiezenRound(
-        sbWContract,
-        sbWDeclarer,
-        partner,
-        Number.isFinite(tricks) ? tricks : 0,
-      );
-      sbBoard = scorebord.addRound(board, points, label);
+      const result = sbw.computeWiezenRound({
+        contractId: sbWContract,
+        declarer: sbWDeclarer,
+        partner: currentPartner(),
+        tricks: Number.isFinite(tricks) ? tricks : 0,
+      });
+      sbBoard = scorebord.addRound(board, result.points, wiezenRoundLabel(result));
       scorebord.save(sbBoard);
       sbWTricks = '';
       sfxCard();

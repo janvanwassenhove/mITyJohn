@@ -162,5 +162,6 @@
   "scorebord.contract": "Contract",
   "scorebord.declarer": "Player",
   "scorebord.partner": "Partner",
-  "scorebord.tricks": "Tricks"
+  "scorebord.tricks": "Tricks",
+  "scorebord.alone": "Alone (nobody joined)"
 }

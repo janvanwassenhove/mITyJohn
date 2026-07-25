@@ -162,5 +162,6 @@
   "scorebord.contract": "Contrat",
   "scorebord.declarer": "Joueur",
   "scorebord.partner": "Partenaire",
-  "scorebord.tricks": "Plis"
+  "scorebord.tricks": "Plis",
+  "scorebord.alone": "Seul (personne ne suit)"
 }

@@ -162,5 +162,6 @@
   "scorebord.contract": "Contract",
   "scorebord.declarer": "Speler",
   "scorebord.partner": "Maat",
-  "scorebord.tricks": "Slagen"
+  "scorebord.tricks": "Slagen",
+  "scorebord.alone": "Alleen (niemand mee)"
 }
