@@ -2,7 +2,7 @@
 
 > **Status:** **geïmplementeerd** (Fase 4b) op de hieronder gemarkeerde aannames —
 > machineleesbaar in [`rulesets/manillen.json`](../rulesets/manillen.json), engine in
-> `carts/src/engine/manille.ts`. De zes open vragen onderaan blijven te valideren door
+> `cards/src/engine/manille.ts`. De zes open vragen onderaan blijven te valideren door
 > de opdrachtgever; antwoorden worden regels-eerst doorgevoerd (REGELS → ruleset → engine).
 >
 > Bronnen (via zoekresultaten; volledige pagina's binnen de sandbox-netwerkpolicy niet

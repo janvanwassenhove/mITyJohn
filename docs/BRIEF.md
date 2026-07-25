@@ -1,4 +1,4 @@
-# BRIEF — Carts (Vlaamse kaartspellen)
+# BRIEF — Cards (Vlaamse kaartspellen)
 
 > **⚠️ Statuswaarschuwing:** de oorspronkelijke, besproken projectbrief stond **niet** in deze
 > repository. Dit document is een **gereconstrueerd voorstel**, opgesteld tijdens Fase 0/1 op
@@ -33,38 +33,38 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 
 ## §5 Architectuur
 
-- **Engine** (`carts/src/engine/`): framework-agnostische TypeScript, geen DOM. Delen,
+- **Engine** (`cards/src/engine/`): framework-agnostische TypeScript, geen DOM. Delen,
   bieden, slagen, scoring; deterministisch via injecteerbare PRNG (reproduceerbaar & testbaar).
-- **Bots** (`carts/src/bots.ts`): heuristieken bovenop de engine; de engine bewaakt legaliteit.
-- **UI** (`carts/src/main.ts` + `styles.css`): lichtgewicht vanilla-TS rendering. Een
+- **Bots** (`cards/src/bots.ts`): heuristieken bovenop de engine; de engine bewaakt legaliteit.
+- **UI** (`cards/src/main.ts` + `styles.css`): lichtgewicht vanilla-TS rendering. Een
   framework wordt pas overwogen als de UI-complexiteit dat afdwingt.
 
 ## §6 Repo-structuur & tooling
 
-De carts-app leeft als subproject in de mityjohn.com-monorepo:
+De cards-app leeft als subproject in de mityjohn.com-monorepo:
 
 ```
-carts/            Vite + TypeScript (strict), Vitest, ESLint (flat + typescript-eslint), Prettier
+cards/            Vite + TypeScript (strict), Vitest, ESLint (flat + typescript-eslint), Prettier
 docs/REGELS.md    canonieke spelregels + aannames
 rulesets/*.json   machineleesbare rulesets (gedeeld repo-niveau)
 ```
 
-Commando's in `carts/`: `dev` / `build` (typecheck + bundel) / `test` / `lint` / `format`.
+Commando's in `cards/`: `dev` / `build` (typecheck + bundel) / `test` / `lint` / `format`.
 
 ## §7 Testen & kwaliteit
 
 - Vitest: engine-gedrag (delen, volgplicht, slagwinnaar, troel, biedladder, scoretabellen),
   ruleset-validatie, i18n-sleutelpariteit, themapersistentie.
 - Bots-simulatie: tientallen volledige sessies zonder illegale zetten, zero-sum-invariant.
-- CI (`ci.yml`, job `carts`): lint + test + build op elke PR.
+- CI (`ci.yml`, job `cards`): lint + test + build op elke PR.
 
 ## §8 i18n & thema
 
 - **Talen:** `nl` (standaard én fallback), `en`, `fr`. Alle UI-teksten via
-  `carts/src/i18n/locales/*.json`; sleutelpariteit wordt door een test afgedwongen. Keuze
-  persistent (`localStorage: carts.lang`), `<html lang>` volgt.
+  `cards/src/i18n/locales/*.json`; sleutelpariteit wordt door een test afgedwongen. Keuze
+  persistent (`localStorage: cards.lang`), `<html lang>` volgt.
 - **Thema:** licht / donker / systeem via `data-theme` op `<html>` en CSS custom properties;
-  persistent (`carts.theme`); inline script voorkomt een themaflits bij het laden.
+  persistent (`cards.theme`); inline script voorkomt een themaflits bij het laden.
 
 ## §9 UX-principes
 
@@ -80,7 +80,7 @@ miserie-ontwijkgedrag). Later: niveaus, kaartgeheugen, partnersignalen.
 ## §11 Deploy
 
 Meegebouwd in de bestaande GitHub Pages-deploy van mityjohn.com (`deploy.yml`): Vite-build
-met `base: '/carts/'`, gekopieerd naar `dist/carts` → live op **https://mityjohn.com/carts/**
+met `base: '/cards/'`, gekopieerd naar `dist/cards` → live op **https://mityjohn.com/cards/**
 bij elke push naar `main` (plus de nachtelijke rebuild). De `github-pages`-omgeving laat
 alleen `main` deployen.
 
@@ -97,7 +97,7 @@ alleen `main` deployen.
 | 4c | Regelvarianten als **sessie-opties** op het startscherm: wiezen (troel-doel 8/9, troel overbiedbaar/onoverbiedbaar, kleine+grote miserie) en manille (puntenmodel 60/68, troefbepaling deler/laatste-kaart/maat, multiplicators, "maat ligt", sessiedoel 101/61); opties in de persistentie | ✅ |
 | 4d | Bieden speelbaar: eigen engine (32 kaarten, troef-/niet-troefwaarden, biedveiling om punten, hoogste bieder komt uit en bepaalt troef, troefvrijheid, 151 punten, zero-sum ±bod tot 500), spelkeuze in de app, persistentie — op de aannames uit [REGELS-BIEDEN.md](REGELS-BIEDEN.md) | ✅ |
 | 5 | ~~Online multiplayer~~ — door de opdrachtgever afgewezen (app blijft serverloos). In de plaats: **scorebord voor een fysiek kaartspel** — houd per ronde de punten bij. Twee modi: **manueel** (2–4 deelnemers, vrije punten) en **wiezen (auto)** — duid contract (incl. troel), speler + maat en aantal slagen aan, de app berekent de punten via de scoring-engine. Persistent in localStorage | ✅ |
-| 6 | **GUI-redesign + onboarding**: mobile-first designsysteem (spelkeuze als tegels, één primaire CTA, ingeklapte instellingen, echte kaartgezichten, actiepaneel als bottom sheet), **starterswizard** per spel en een **coach** die tijdens het spel contextuele tips geeft; screenshotgenerator (`carts/scripts/screenshots.mjs`) met beelden in de README en, als vaste werkafspraak, in elke release note ([RELEASING.md](../RELEASING.md)) | ✅ |
+| 6 | **GUI-redesign + onboarding**: mobile-first designsysteem (spelkeuze als tegels, één primaire CTA, ingeklapte instellingen, echte kaartgezichten, actiepaneel als bottom sheet), **starterswizard** per spel en een **coach** die tijdens het spel contextuele tips geeft; screenshotgenerator (`cards/scripts/screenshots.mjs`) met beelden in de README en, als vaste werkafspraak, in elke release note ([RELEASING.md](../RELEASING.md)) | ✅ |
 | 7 | **Speeltypes en regelgids**: wiezen splitst in **gewoon wiezen** (troef = omgedraaide kaart) en **kleurenwiezen** (de vrager noemt de kleur bij zijn bod) — nieuwe ruleset `kleurenwiezen`, biedactie met kleur, bots die zelf een kleur kiezen, en een zichtbare speeltypekeuze op het startscherm ([REGELS.md §3bis](REGELS.md#3bis-gewoon-wiezen-vs-kleurenwiezen)). Daarnaast een **regelgids**: zes hoofdstukken (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, scorebord) die je in wizardstijl stap voor stap door de regels loodsen | ✅ |
 
 ## §13 Open punten

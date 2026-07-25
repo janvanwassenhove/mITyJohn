@@ -8,9 +8,9 @@ en screenshots horen daar altijd bij.**
 Een release note zonder beeld dwingt de lezer om de app te openen om te zien wat er nieuw
 is. Daarom:
 
-1. Bij elke release van `carts/` **altijd minstens één screenshot** in de release note,
+1. Bij elke release van `cards/` **altijd minstens één screenshot** in de release note,
    en bij UI-wijzigingen een **voor/na**-paar.
-2. Dezelfde beelden staan in `carts/README.md`, zodat de repo-pagina meteen laat zien
+2. Dezelfde beelden staan in `cards/README.md`, zodat de repo-pagina meteen laat zien
    waar het over gaat.
 3. De beelden zijn **gegenereerd, niet met de hand geknipt** — zo blijven ze consistent
    in formaat, taal en thema, en zijn ze reproduceerbaar.
@@ -18,28 +18,28 @@ is. Daarom:
 ## Screenshots vernieuwen
 
 ```bash
-cd carts
+cd cards
 npm ci
 npm run build        # de screenshots draaien tegen dist/, niet tegen de dev-server
-npm run screenshots  # schrijft naar carts/docs/screenshots/
+npm run screenshots  # schrijft naar cards/docs/screenshots/
 ```
 
 Dat levert vier scènes — `start`, `wizard`, `spel`, `scorebord` — telkens als
 `mobile`/`desktop` × `light`/`dark`, in het Nederlands. De generator
-(`carts/scripts/screenshots.mjs`) serveert `dist/` op `/carts/` en stuurt een lokale
+(`cards/scripts/screenshots.mjs`) serveert `dist/` op `/cards/` en stuurt een lokale
 Chromium; er wordt nooit een browser gedownload (`PLAYWRIGHT_BROWSERS_PATH` of
 `CHROMIUM_PATH` wijst naar de bestaande installatie).
 
 Een nieuwe scène toevoegen: één entry bijzetten in de `SCENES`-lijst in dat script.
 
-Commit de vernieuwde `carts/docs/screenshots/**` mee met de wijziging die ze toont.
+Commit de vernieuwde `cards/docs/screenshots/**` mee met de wijziging die ze toont.
 
 ## Release note schrijven
 
 Structuur die we aanhouden:
 
 ```markdown
-## Carts <versie> — <korte titel>
+## Cards <versie> — <korte titel>
 
 <één alinea: wat kan je nu dat je daarvoor niet kon>
 
@@ -65,9 +65,9 @@ GitHub-release-notes.
 
 ## Vóór je release
 
-- [ ] `carts/`: `npm run lint`, `npm run test`, `npm run build` groen
+- [ ] `cards/`: `npm run lint`, `npm run test`, `npm run build` groen
 - [ ] root: `npm run check`, `npm run build` groen
 - [ ] screenshots vernieuwd en mee gecommit
-- [ ] `carts/README.md` toont de actuele beelden
+- [ ] `cards/README.md` toont de actuele beelden
 - [ ] regelwijzigingen staan in `docs/REGELS*.md` **vóór** ze in `rulesets/*.json` en de
       engine zitten (zie `CLAUDE.md`)

@@ -22,12 +22,12 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run build
-      # Carts-app (wiezen, …) — meegebouwd en geserveerd onder /carts/ (carts BRIEF §11)
+      # Cards-app (wiezen, …) — meegebouwd en geserveerd onder /cards/ (cards BRIEF §11)
       - run: npm ci
-        working-directory: carts
+        working-directory: cards
       - run: npm run build
-        working-directory: carts
-      - run: cp -r carts/dist dist/carts
+        working-directory: cards
+      - run: cp -r cards/dist dist/cards
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with: { path: ./dist }
   deploy:

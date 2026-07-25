@@ -2,7 +2,7 @@
 
 > **Status:** **geïmplementeerd** (Fase 4d) op de hieronder gemarkeerde aannames —
 > machineleesbaar in [`rulesets/bieden.json`](../rulesets/bieden.json), engine in
-> `carts/src/engine/bieden.ts`. De open vragen onderaan blijven te valideren door de
+> `cards/src/engine/bieden.ts`. De open vragen onderaan blijven te valideren door de
 > opdrachtgever; antwoorden worden regels-eerst doorgevoerd (REGELS → ruleset → engine).
 >
 > Bronnen (via zoekresultaten; volledige pagina's binnen de sandbox-netwerkpolicy niet

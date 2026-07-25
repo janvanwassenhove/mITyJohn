@@ -1,6 +1,6 @@
 # REGELS — Wiezen (gewoon wiezen én kleurenwiezen), Vlaams
 
-> **Status:** Fase 0 — onderzoeksdocument. Dit is de regelbasis voor de Carts-app.
+> **Status:** Fase 0 — onderzoeksdocument. Dit is de regelbasis voor de Cards-app.
 > De machineleesbare vertaling staat in [`rulesets/vlaams-standaard.json`](../rulesets/vlaams-standaard.json).
 >
 > **Belangrijk:** wiezen kent sterke regionale variatie (per café, club en familie).
