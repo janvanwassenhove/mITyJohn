@@ -12,7 +12,12 @@ is. Daarom:
    en bij UI-wijzigingen een **voor/na**-paar.
 2. Dezelfde beelden staan in `cards/README.md`, zodat de repo-pagina meteen laat zien
    waar het over gaat.
-3. De beelden zijn **gegenereerd, niet met de hand geknipt** — zo blijven ze consistent
+3. Ze staan ook op **mityjohn.com**: `node scripts/fetch-screenshots.mjs` schaalt
+   `cards/docs/screenshots/**` naar kaartformaat (de storetegel op de homepage) en
+   paginaformaat (de app-detailpagina). Draai daarna
+   `node scripts/build-image-dims.mjs`, anders rendert markdown de nieuwe beelden
+   zonder afmetingen en schuift de pagina bij het laden.
+4. De beelden zijn **gegenereerd, niet met de hand geknipt** — zo blijven ze consistent
    in formaat, taal en thema, en zijn ze reproduceerbaar.
 
 ## Screenshots vernieuwen
@@ -69,5 +74,7 @@ GitHub-release-notes.
 - [ ] root: `npm run check`, `npm run build` groen
 - [ ] screenshots vernieuwd en mee gecommit
 - [ ] `cards/README.md` toont de actuele beelden
+- [ ] site-beelden vernieuwd (`scripts/fetch-screenshots.mjs` + `build-image-dims.mjs`)
+      en `src/content/apps/cards.md` beschrijft nog wat de app nú doet
 - [ ] regelwijzigingen staan in `docs/REGELS*.md` **vóór** ze in `rulesets/*.json` en de
       engine zitten (zie `CLAUDE.md`)

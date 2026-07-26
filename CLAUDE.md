@@ -35,7 +35,9 @@ Vóór elke push: de checks van elk aangeraakt subproject lokaal groen draaien.
 - UI-teksten in `cards/` altijd via i18n (`nl`/`en`/`fr` alle drie aanvullen; een test
   dwingt sleutelpariteit af).
 - Bij een UI-wijziging in `cards/`: `npm run build && npm run screenshots` en de
-  vernieuwde `cards/docs/screenshots/**` mee committen. Elke release note krijgt
+  vernieuwde `cards/docs/screenshots/**` mee committen. Daarna in de root
+  `node scripts/fetch-screenshots.mjs && node scripts/build-image-dims.mjs`, zodat
+  de storetegel en de app-pagina op mityjohn.com meelopen. Elke release note krijgt
   screenshots — zie `RELEASING.md`.
 
 ## Deploy

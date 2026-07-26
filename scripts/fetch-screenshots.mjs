@@ -46,6 +46,27 @@ const LOCAL = {
   sportsmadness: ['wp-content/uploads/2025/11/51781271-e481-4a68-83ed-36a438f791fd-1-1024x768.jpg'],
 };
 
+// Subprojecten in deze monorepo genereren hun eigen screenshots
+// (cards/scripts/screenshots.mjs). Die hoeven we niet op te halen — we schalen ze
+// hier alleen naar kaartformaat, en naar paginaformaat voor de app-detailpagina.
+const MONOREPO = {
+  cards: {
+    dir: 'cards/docs/screenshots/',
+    card: [
+      'start-desktop-light.png',
+      'spel-desktop-dark.png',
+      'gids-desktop-light.png',
+      'scorebord-desktop-light.png',
+    ],
+    // Paginabeelden: gsm-shots blijven smal (ze zijn hoog), desktop mag breed.
+    page: [
+      ['start-mobile-light.png', 360],
+      ['spel-desktop-dark.png', 900],
+      ['gids-desktop-light.png', 900],
+    ],
+  },
+};
+
 // Mascot art for the Scrum level (asset/ in the scrum repo).
 const MASCOTS = [
   { repo: 'scrum', path: 'asset/scrummy_transparant.png', out: 'scrummy.png' },
@@ -119,6 +140,45 @@ for (const [slug, paths] of Object.entries(LOCAL)) {
     } catch (e) {
       failed++;
       console.error(`  ${slug} <- ${rel}: ${e.message}`);
+    }
+  }
+  if (shots.length) index[slug] = shots;
+}
+
+// Monorepo-subprojecten: kaartformaat (560) + paginaformaat (900) uit dezelfde bron.
+for (const [slug, { dir, card, page }] of Object.entries(MONOREPO)) {
+  const encode = async (rel, name, width) => {
+    const dest = fileURLToPath(new URL(name, SHOT_DIR));
+    if (await stat(dest).catch(() => null)) {
+      cached++;
+      return;
+    }
+    const img = sharp(await readFile(fileURLToPath(new URL(dir + rel, ROOT))));
+    const meta = await img.metadata();
+    const out = await (meta.width > width ? img.resize({ width }) : img)
+      .webp({ quality: 76 })
+      .toBuffer();
+    await writeFile(dest, out);
+    fetched++;
+  };
+
+  const shots = [];
+  for (const [i, rel] of card.entries()) {
+    const name = `${slug}-${i + 1}.webp`;
+    try {
+      await encode(rel, name, 560);
+      shots.push({ src: `/screenshots/${name}`, alt: `${slug} screenshot ${i + 1}` });
+    } catch (e) {
+      failed++;
+      console.error(`  ${slug} <- ${dir}${rel}: ${e.message}`);
+    }
+  }
+  for (const [i, [rel, width]] of (page ?? []).entries()) {
+    try {
+      await encode(rel, `${slug}-page-${i + 1}.webp`, width);
+    } catch (e) {
+      failed++;
+      console.error(`  ${slug} page <- ${dir}${rel}: ${e.message}`);
     }
   }
   if (shots.length) index[slug] = shots;

@@ -162,5 +162,23 @@
       "src": "/screenshots/spritelab-4.webp",
       "alt": "spritelab screenshot 4"
     }
+  ],
+  "cards": [
+    {
+      "src": "/screenshots/cards-1.webp",
+      "alt": "cards screenshot 1"
+    },
+    {
+      "src": "/screenshots/cards-2.webp",
+      "alt": "cards screenshot 2"
+    },
+    {
+      "src": "/screenshots/cards-3.webp",
+      "alt": "cards screenshot 3"
+    },
+    {
+      "src": "/screenshots/cards-4.webp",
+      "alt": "cards screenshot 4"
+    }
   ]
 }
