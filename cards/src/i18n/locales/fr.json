@@ -182,7 +182,7 @@
   "wizard.wiezen.2.title": "Cartes et atout",
   "wizard.wiezen.2.body": "L'as est la carte la plus forte, puis roi, dame, valet, dix … jusqu'au deux. La dernière carte distribuée est retournée : cette couleur devient l'atout. Un atout bat toujours une carte ordinaire.",
   "wizard.wiezen.3.title": "Les enchères",
-  "wizard.wiezen.3.body": "Vous choisissez ce que vous promettez. « Demande & suivi » : je cherche un partenaire et ensemble nous faisons 8 plis. Si personne ne suit, vous pouvez jouer seul (5 plis). Les mains fortes annoncent plus haut : abondance (9 plis ou plus en solo) ou misère (aucun pli). Avec exactement trois as, le trôle est obligatoire : le joueur au quatrième as devient votre partenaire.",
+  "wizard.wiezen.3.body": "Vous choisissez ce que vous promettez. « Demander & suivre » : je cherche un partenaire et ensemble nous faisons 8 plis. Si personne ne suit, vous pouvez jouer seul (5 plis). Les mains fortes enchérissent plus haut : abondance (9 plis ou plus en solo) ou misère (aucun pli). Avec exactement trois as, vous devez annoncer troel : le joueur au quatrième as devient votre partenaire, entame cet as, et cette couleur est atout.",
   "wizard.wiezen.4.title": "Jouer les plis",
   "wizard.wiezen.4.body": "L'entameur pose une carte ; les autres suivent dans le sens des aiguilles. Vous devez fournir la couleur demandée si vous l'avez. Sinon, vous êtes libre : couper ou se défausser. Le plus haut atout remporte le pli, sinon la plus haute carte de la couleur demandée. Le gagnant entame le pli suivant.",
   "wizard.wiezen.5.title": "Les points",
@@ -259,7 +259,7 @@
   "guide.gewoon-wiezen.alleen.title": "Jouer seul",
   "guide.gewoon-wiezen.alleen.body": "Si personne ne suit, vous avez le choix : passer malgré tout, ou jouer seul. Seul signifie vous contre trois, avec au moins 5 plis à réaliser. Cela rapporte davantage que demander & suivre, mais sans aide. En cas d’échec, vous payez les trois adversaires.",
   "guide.gewoon-wiezen.troel.title": "Le troel",
-  "guide.gewoon-wiezen.troel.body": "Avec exactement trois as en main, vous devez annoncer « troel » — ce n’est pas un choix. Le joueur au quatrième as devient automatiquement votre partenaire, sans le savoir encore. Il entame, et la couleur de cette première carte devient l’atout. Ensemble il vous faut 8 plis, mais cela compte double : gain comme perte pèsent plus lourd qu’une demande ordinaire.",
+  "guide.gewoon-wiezen.troel.body": "Avec exactement trois as en main, vous devez annoncer « troel » — ce n’est pas un choix. Le joueur au quatrième as devient automatiquement votre partenaire, sans le savoir encore. Il entame, et il est censé entamer précisément cet as : sa couleur devient l’atout. S’il entame autre chose, c’est la couleur de cette carte qui devient atout, mais il vous faut alors un pli de plus — 9 au lieu de 8. Si l’annonceur détient les quatre as, le détenteur du roi de cœur est le partenaire et la même règle vaut pour ce roi. Le troel compte double : gain comme perte pèsent plus lourd qu’une demande ordinaire.",
   "guide.gewoon-wiezen.hoog.title": "Les contrats élevés",
   "guide.gewoon-wiezen.hoog.body": "Très fort — ou très faible — vous enchérissez plus haut. Abondance : vous jouez seul, choisissez vous-même l’atout et promettez 9, 10, 11 ou 12 plis. Misère : vous promettez de ne prendre aucun pli — un seul et c’est perdu. La misère ouverte est identique, cartes sur table. Le solo (les 13 avec atout) et le soloslim (les 13 sans atout) trônent au sommet.",
   "guide.gewoon-wiezen.punten.title": "Les points",
@@ -302,5 +302,12 @@
   "guide.scorebord.auto.body": "Vous jouez au wiezen ? Choisissez le mode auto : indiquez quel contrat a été joué (troel compris), qui l’a joué, qui était son partenaire — ou qu’il jouait seul — et combien de plis ont été faits. L’app calcule les points des quatre joueurs avec les règles du jeu lui-même, plis en plus ou en moins compris. Fini les discussions à table.",
   "controls.menu": "Menu",
   "start.resume": "Reprendre",
-  "wizard.pickGame": "Quel jeu voulez-vous apprendre ?"
+  "wizard.pickGame": "Quel jeu voulez-vous apprendre ?",
+  "play.troelPenalty": "un pli de plus : l’as n’a pas été entamé",
+  "coach.tip.troelLead": "Vous avez le quatrième as, donc vous entamez — avec cet as. Entamez autre chose et cette carte fixe l’atout, mais votre équipe devra un pli de plus.",
+  "scorebord.troelAce": "As entamé ?",
+  "scorebord.tricksOf": "{tricks}/{target} plis",
+  "scorebord.tricksOfZero": "{tricks} plis",
+  "opt.yes": "Oui",
+  "opt.no": "Non"
 }

@@ -24,6 +24,11 @@ export function needsPartner(contractId: string): boolean {
   return scorebordContract(contractId).team === 2;
 }
 
+/** Vraagt dit contract of de troel-aas uitkwam? (REGELS.md §5.4) */
+export function asksAceLed(contractId: string): boolean {
+  return scorebordContract(contractId).leadCard === 'fourth-ace';
+}
+
 /** Mag je bij dit contract "alleen" kiezen? Enkel na een vraag: gaat niemand
  *  mee, dan speelt de vrager alleen (REGELS.md §5.2). Troel houdt altijd een
  *  maat (de houder van de vierde aas). */
@@ -37,22 +42,37 @@ export interface WiezenRoundInput {
   /** Maat, of ALONE wanneer niemand meeging (enkel bij vraag & mee). */
   partner: number;
   tricks: number;
+  /** Troel: kwam de uitkomer zijn vierde aas uit? Zo niet, dan schuift het doel
+   *  één slag op (REGELS.md §5.4). Default true. */
+  aceLed?: boolean;
 }
 
 export interface WiezenRoundResult {
   /** Puntenmutatie per speler (zero-sum, index 0..3). */
   points: number[];
-  /** Het contract waarop uiteindelijk gerekend is — 'alleen' als niemand meeging. */
+  /** Het contract waarop uiteindelijk gerekend is — 'alleen' als niemand meeging,
+   *  en met een opgeschoven doel wanneer de troel-aas niet uitkwam. */
   contract: Contract;
   /** Spelers die het contract speelden. */
   declarers: number[];
+  /** Aantal slagen dat is ingegeven — hoort in het rondelabel, anders valt een
+   *  rij achteraf niet meer na te rekenen. */
+  tricks: number;
 }
 
 export function computeWiezenRound(input: WiezenRoundInput): WiezenRoundResult {
   const alone = input.partner === ALONE || input.partner === input.declarer;
   // Vraag & mee zonder maat = alleen spelen (5 slagen i.p.v. samen 8).
   const contractId = alone && canGoAlone(input.contractId) ? 'alleen' : input.contractId;
-  const contract = scorebordContract(contractId);
+  const base = scorebordContract(contractId);
+  // Troel zonder aas als uitkomst: één slag méér (REGELS.md §5.4).
+  const penalty =
+    base.leadCard === 'fourth-ace' && input.aceLed === false
+      ? (base.targetPenaltyOtherLead ?? 0)
+      : 0;
+  const contract: Contract = penalty
+    ? { ...base, target: { ...base.target, tricks: base.target.tricks + penalty } }
+    : base;
   const declarers =
     contract.team === 2 && !alone ? [input.declarer, input.partner] : [input.declarer];
 
@@ -62,5 +82,5 @@ export function computeWiezenRound(input: WiezenRoundInput): WiezenRoundResult {
   tricksWon[input.declarer] = input.tricks;
 
   const score = scoreGift({ contract, declarers, tricksWon });
-  return { points: score.points, contract, declarers };
+  return { points: score.points, contract, declarers, tricks: input.tricks };
 }

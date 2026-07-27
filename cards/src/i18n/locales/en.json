@@ -182,7 +182,7 @@
   "wizard.wiezen.2.title": "Cards and trump",
   "wizard.wiezen.2.body": "Ace is the highest card, then king, queen, jack, ten … down to the two. The last card dealt is turned face up: that suit is trump. A trump card always beats a plain card.",
   "wizard.wiezen.3.title": "Bidding",
-  "wizard.wiezen.3.body": "You choose what to promise. 'Ask & join' means: I look for a partner and together we take 8 tricks. If nobody joins, you may play alone (5 tricks). Stronger hands bid higher: abundance (9+ tricks on your own) or misère (not a single trick). Hold exactly three aces and you must call troel: the player with the fourth ace becomes your partner.",
+  "wizard.wiezen.3.body": "You choose what you promise. 'Ask & join' means: I want a partner and together we take 8 tricks. If nobody joins you may play alone (5 tricks). Stronger hands bid higher: abondance (9 or more tricks alone) or misère (not a single trick). Hold exactly three aces and you must call troel: the player with the fourth ace becomes your partner, leads that ace, and its suit is trump.",
   "wizard.wiezen.4.title": "Playing tricks",
   "wizard.wiezen.4.body": "The leader plays a card; the others follow clockwise. You must follow suit if you can. If you cannot, you are free to trump or throw something away. The highest trump wins the trick, otherwise the highest card of the suit led. The winner leads the next trick.",
   "wizard.wiezen.5.title": "Scoring",
@@ -259,7 +259,7 @@
   "guide.gewoon-wiezen.alleen.title": "Going alone",
   "guide.gewoon-wiezen.alleen.body": "If nobody joins, you face a choice: pass after all, or play alone. Alone means you against three, and you need at least 5 tricks. It pays more than ask & join, but you get no help. Fail and you pay all three opponents.",
   "guide.gewoon-wiezen.troel.title": "Troel",
-  "guide.gewoon-wiezen.troel.body": "Hold exactly three aces and you must call 'troel' — it is not a choice. The player with the fourth ace automatically becomes your partner, even though they do not know it yet. They lead, and the suit of that first card becomes trump. Together you need 8 tricks, but it counts double: both the win and the loss weigh more than an ordinary ask.",
+  "guide.gewoon-wiezen.troel.body": "Hold exactly three aces and you must call 'troel' — it is not a choice. The player with the fourth ace automatically becomes your partner, even though they do not know it yet. They lead, and they are meant to lead that very ace: its suit becomes trump. Lead anything else and that card's suit becomes trump instead, but you need one more trick — 9 rather than 8. If the caller holds all four aces, the king of hearts holder is the partner and the same rule applies to that king. Troel counts double: both the win and the loss weigh more than an ordinary ask.",
   "guide.gewoon-wiezen.hoog.title": "The high contracts",
   "guide.gewoon-wiezen.hoog.body": "When you are very strong — or very weak — you bid higher. Abondance: you play alone, choose the trump suit yourself and promise 9, 10, 11 or 12 tricks. Misère: you promise to take no trick at all — one trick and you are out. Open misère is the same, with your cards face up. Solo (all 13 with trumps) and soloslim (all 13 without) sit at the top.",
   "guide.gewoon-wiezen.punten.title": "Scoring",
@@ -302,5 +302,12 @@
   "guide.scorebord.auto.body": "Playing wiezen? Pick the auto mode: you indicate which contract was played (troel included), who played it, who their partner was — or that they went alone — and how many tricks were taken. The app works out the points for all four players with the same rules as the game itself, overtricks and undertricks included. No more arguments at the table.",
   "controls.menu": "Menu",
   "start.resume": "Resume",
-  "wizard.pickGame": "Which game do you want to learn?"
+  "wizard.pickGame": "Which game do you want to learn?",
+  "play.troelPenalty": "one extra trick: the ace was not led",
+  "coach.tip.troelLead": "You hold the fourth ace, so you lead — and you lead that ace. Lead anything else and that card sets the trump, but your team needs one more trick.",
+  "scorebord.troelAce": "Ace led?",
+  "scorebord.tricksOf": "{tricks}/{target} tricks",
+  "scorebord.tricksOfZero": "{tricks} tricks",
+  "opt.yes": "Yes",
+  "opt.no": "No"
 }

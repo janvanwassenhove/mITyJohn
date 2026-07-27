@@ -6,7 +6,7 @@ import { deal, nextPlayer, PLAYER_COUNT, type Deal } from './deal';
 import { Bidding, type BidResult } from './bidding';
 import { legalPlays, trickWinner, type TrickPlay } from './play';
 import { scoreGift, type GiftScore } from './scoring';
-import type { Ruleset } from '../ruleset';
+import type { Contract, Ruleset } from '../ruleset';
 
 export type GiftPhase = 'bidding' | 'alleen-choice' | 'trump-choice' | 'play' | 'scored' | 'redeal';
 
@@ -23,6 +23,8 @@ export class Gift {
   lastTrick: TrickPlay[] | null = null;
   /** Alle voltooide slagen, in volgorde — o.a. voor botten met kaartgeheugen. */
   readonly history: TrickPlay[][] = [];
+  /** Troel (§5.4): extra slagen omdat de uitkomer zijn aas niet uitkwam. */
+  troelPenalty = 0;
   score: GiftScore | null = null;
 
   constructor(ruleset: Ruleset, dealer: number, rng: () => number) {
@@ -75,6 +77,23 @@ export class Gift {
     this.trickLeader = result.leader;
   }
 
+  /** Kaart die de troel-uitkomer hoort te leggen, of null als dat niet speelt. */
+  get requiredLeadCard(): Card | null {
+    if (this.contract?.contract.leadCard !== 'fourth-ace') return null;
+    return this.bidding.troel?.leadCard ?? null;
+  }
+
+  /** Het contract zoals het écht geldt: bij troel schuift het doel op wanneer de
+   *  uitkomer zijn aas niet legde (§5.4). */
+  get effectiveContract(): Contract {
+    const contract = this.contract?.contract as Contract;
+    if (!this.troelPenalty) return contract;
+    return {
+      ...contract,
+      target: { ...contract.target, tricks: contract.target.tricks + this.troelPenalty },
+    };
+  }
+
   get toPlay(): number {
     return this.trick.length === 0
       ? this.trickLeader
@@ -95,7 +114,9 @@ export class Gift {
     }
     const hand = this.deal.hands[player] as Card[];
     this.deal.hands[player] = hand.filter((c) => !sameCard(c, card));
-    // Troel (§5.4, bevestigd): de eerste kaart van de uitkomer bepaalt de troef.
+    // Troel (§5.4): de eerste kaart van de uitkomer bepaalt de troef. Hij hoort
+    // daar zijn vierde aas (of de hartenheer) voor te leggen; doet hij dat niet,
+    // dan moet het team één slag méér halen.
     if (
       this.contract &&
       this.contract.contract.trump === 'first-card-led' &&
@@ -104,6 +125,10 @@ export class Gift {
       this.trick.length === 0
     ) {
       this.contract = { ...this.contract, trumpSuit: card.suit };
+      const required = this.requiredLeadCard;
+      if (required && !sameCard(required, card)) {
+        this.troelPenalty = this.contract.contract.targetPenaltyOtherLead ?? 0;
+      }
     }
     this.trick.push({ player, card });
     if (this.trick.length === PLAYER_COUNT) {
@@ -116,7 +141,7 @@ export class Gift {
       this.trickLeader = winner;
       if (this.tricksPlayed === 13 && this.contract) {
         this.score = scoreGift({
-          contract: this.contract.contract,
+          contract: this.effectiveContract,
           declarers: this.contract.declarers,
           tricksWon: this.tricksWon,
         });

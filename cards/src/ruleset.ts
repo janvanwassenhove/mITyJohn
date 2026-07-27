@@ -28,6 +28,10 @@ export interface Contract {
   overbiddableFromRank?: number;
   openingLead?: OpeningLead;
   openCardsAfterTrick?: number;
+  /** Kaart die de uitkomer hoort te leggen (troel: zijn vierde aas). */
+  leadCard?: 'fourth-ace';
+  /** Extra slagen die het doel opschuift als hij iets anders uitkomt (§5.4). */
+  targetPenaltyOtherLead?: number;
   inTrumpOutranksSameLevel?: boolean;
   fourAcesPartnerRule?: string;
 }

@@ -101,3 +101,58 @@ describe('scorebord — wiezen-automodus', () => {
     expect(ids).toContain('soloslim');
   });
 });
+
+describe('scorebord — troel en de vierde aas', () => {
+  it('aas uitgekomen: doel blijft 8', () => {
+    const r = computeWiezenRound({
+      contractId: 'troel',
+      declarer: 0,
+      partner: 2,
+      tricks: 8,
+      aceLed: true,
+    });
+    expect(r.contract.target.tricks).toBe(8);
+    expect(r.points).toEqual([4, -4, 4, -4]);
+  });
+
+  it('aas niet uitgekomen: doel wordt 9, dus 8 slagen is nu verloren', () => {
+    const r = computeWiezenRound({
+      contractId: 'troel',
+      declarer: 0,
+      partner: 2,
+      tricks: 8,
+      aceLed: false,
+    });
+    expect(r.contract.target.tricks).toBe(9);
+    expect(r.points).toEqual([-6, 6, -6, 6]); // 1 slag te kort: −(4 + 2)
+  });
+
+  it('geeft het ingegeven aantal slagen terug, voor in het rondelabel', () => {
+    const r = computeWiezenRound({
+      contractId: 'vraag-en-mee',
+      declarer: 0,
+      partner: 2,
+      tricks: 11,
+    });
+    expect(r.tricks).toBe(11);
+  });
+});
+
+// De puntensprong die aan tafel voor verwarring zorgt: één extra slag boven 12
+// is een vole en levert de bonus op (REGELS.md §5.1 — ⚠️ AANNAME).
+describe('scorebord — vraag & mee per aantal slagen', () => {
+  const points = (tricks: number) =>
+    computeWiezenRound({ contractId: 'vraag-en-mee', declarer: 0, partner: 2, tricks }).points[0];
+
+  it('loopt monotoon op met het aantal slagen', () => {
+    const reeks = [8, 9, 10, 11, 12, 13].map(points) as number[];
+    expect(reeks).toEqual([2, 3, 4, 5, 6, 10]);
+    for (let i = 1; i < reeks.length; i++) {
+      expect(reeks[i] as number).toBeGreaterThan(reeks[i - 1] as number);
+    }
+  });
+
+  it('onder het doel betaal je, en dieper onder kost meer', () => {
+    expect([7, 6, 5].map(points)).toEqual([-3, -4, -5]);
+  });
+});

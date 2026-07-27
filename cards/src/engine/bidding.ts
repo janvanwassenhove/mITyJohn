@@ -8,6 +8,9 @@ import type { Contract, Ruleset } from '../ruleset';
 export interface TroelInfo {
   holder: number;
   partner: number;
+  /** De kaart die de partner hoort uit te komen: zijn vierde aas, of de
+   *  hartenheer wanneer de troelbieder alle vier de azen heeft (§5.4). */
+  leadCard: Card;
 }
 
 export interface BidResult {
@@ -37,7 +40,7 @@ export function detectTroel(hands: Card[][]): TroelInfo | null {
         (s) => !aces.some((a) => a.suit === s),
       ) as Suit;
       const partner = hands.findIndex((h) => h.some((c) => c.rank === ACE && c.suit === missing));
-      return { holder: p, partner };
+      return { holder: p, partner, leadCard: { suit: missing, rank: ACE } };
     }
     if (aces.length === 4) {
       // Partner = houder hartenheer; heeft niemand anders die, dan hoogste harten buiten de hand.
@@ -45,7 +48,9 @@ export function detectTroel(hands: Card[][]): TroelInfo | null {
         const partner = hands.findIndex(
           (h, idx) => idx !== p && h.some((c) => c.suit === 'H' && c.rank === rank),
         );
-        if (partner >= 0) return { holder: p, partner };
+        if (partner >= 0) {
+          return { holder: p, partner, leadCard: { suit: 'H', rank: rank as Card['rank'] } };
+        }
       }
     }
   }

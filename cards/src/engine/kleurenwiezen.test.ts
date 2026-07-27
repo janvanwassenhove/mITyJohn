@@ -2,7 +2,7 @@
 // er wordt geen kaart omgedraaid. Alle andere regels zijn die van gewoon wiezen.
 
 import { describe, expect, it } from 'vitest';
-import { mulberry32 } from './cards';
+import { mulberry32, type Card } from './cards';
 import { Session } from './game';
 import { getRuleset, type Ruleset } from '../ruleset';
 
@@ -83,5 +83,55 @@ describe('kleurenwiezen', () => {
     while (b.phase === 'bidding') b.act(b.toAct, { type: 'pass' });
     gift.settleBidding();
     expect(gift.contract?.trumpSuit).toBe(gift.deal.trumpSuit);
+  });
+});
+
+// Troel (REGELS.md §5.4): de uitkomer hoort zijn vierde aas te leggen. Doet hij
+// dat niet, dan bepaalt zijn kaart nog steeds de troef maar stijgt het doel.
+describe('troel — de aas moet vallen', () => {
+  /** Eerste gift met een verplichte troel, met het bieden afgerond. */
+  function troelGift() {
+    for (let seed = 1; seed < 400; seed++) {
+      const gift = new Session(gewoon, mulberry32(seed)).nextGift();
+      if (!gift.bidding.troel) continue;
+      const b = gift.bidding;
+      while (b.phase === 'bidding') b.act(b.toAct, { type: 'pass' });
+      gift.settleBidding();
+      if (gift.phase === 'play') return gift;
+    }
+    throw new Error('geen troelgift gevonden');
+  }
+
+  it('kent de kaart die de uitkomer hoort te leggen', () => {
+    const gift = troelGift();
+    const required = gift.requiredLeadCard;
+    expect(required).not.toBeNull();
+    // De partner heeft die kaart ook echt in de hand.
+    const partner = gift.bidding.troel?.partner as number;
+    expect(
+      gift.deal.hands[partner]?.some((c) => c.suit === required?.suit && c.rank === required?.rank),
+    ).toBe(true);
+    expect(gift.toPlay).toBe(partner);
+  });
+
+  it('komt de aas uit: doel blijft 8 en die kleur wordt troef', () => {
+    const gift = troelGift();
+    const required = gift.requiredLeadCard as Card;
+    gift.playCard(gift.toPlay, required);
+    expect(gift.troelPenalty).toBe(0);
+    expect(gift.contract?.trumpSuit).toBe(required.suit);
+    expect(gift.effectiveContract.target.tricks).toBe(8);
+  });
+
+  it('komt hij iets anders uit: doel wordt 9, en die kleur is troef', () => {
+    const gift = troelGift();
+    const required = gift.requiredLeadCard as Card;
+    const other = gift
+      .legalCards(gift.toPlay)
+      .find((c) => c.suit !== required.suit || c.rank !== required.rank) as Card;
+    gift.playCard(gift.toPlay, other);
+    expect(gift.troelPenalty).toBe(1);
+    expect(gift.contract?.trumpSuit).toBe(other.suit);
+    expect(gift.effectiveContract.target.tricks).toBe(9);
   });
 });

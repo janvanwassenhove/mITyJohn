@@ -182,7 +182,7 @@
   "wizard.wiezen.2.title": "Kaarten en troef",
   "wizard.wiezen.2.body": "Aas is de hoogste kaart, dan heer, dame, boer, tien … tot de twee. De laatste kaart die gedeeld wordt, komt open te liggen: die kleur is troef. Een troefkaart wint altijd van een gewone kaart.",
   "wizard.wiezen.3.title": "Bieden",
-  "wizard.wiezen.3.body": "Je kiest wat je belooft. 'Vraag & mee' betekent: ik zoek een maat en samen halen we 8 slagen. Gaat niemand mee, dan mag je alleen spelen (5 slagen). Wie sterker zit, biedt hoger: abondance (9 of meer slagen alleen) of miserie (net géén enkele slag). Heb je precies drie azen, dan moet je troel roepen: de speler met de vierde aas wordt je maat.",
+  "wizard.wiezen.3.body": "Je kiest wat je belooft. 'Vraag & mee' betekent: ik zoek een maat en samen halen we 8 slagen. Gaat niemand mee, dan mag je alleen spelen (5 slagen). Wie sterker zit, biedt hoger: abondance (9 of meer slagen alleen) of miserie (net géén enkele slag). Heb je precies drie azen, dan moet je troel roepen: de speler met de vierde aas wordt je maat, komt uit met die aas, en die kleur is troef.",
   "wizard.wiezen.4.title": "Slagen spelen",
   "wizard.wiezen.4.body": "De uitkomer legt een kaart; de anderen volgen met de klok mee. Je moet dezelfde kleur leggen als je die hebt. Kan je niet volgen, dan mag je vrij kiezen: troeven of iets weggooien. De hoogste troef wint de slag, of anders de hoogste kaart in de gevraagde kleur. Wie de slag wint, komt uit voor de volgende.",
   "wizard.wiezen.5.title": "Punten",
@@ -259,7 +259,7 @@
   "guide.gewoon-wiezen.alleen.title": "Alleen spelen",
   "guide.gewoon-wiezen.alleen.body": "Gaat er niemand mee, dan sta je voor de keuze: alsnog passen, of alleen spelen. Alleen betekent: jij tegen drie, en je moet minstens 5 slagen halen. Het levert meer op dan vraag & mee, maar je krijgt geen hulp. Lukt het niet, dan betaal je aan alle drie de tegenstanders.",
   "guide.gewoon-wiezen.troel.title": "Troel",
-  "guide.gewoon-wiezen.troel.body": "Heb je precies drie azen in de hand, dan moet je 'troel' roepen — dat is geen keuze. De speler met de vierde aas wordt automatisch je maat, ook al weet hij dat zelf nog niet. Hij komt uit, en de kleur van zijn eerste kaart wordt de troef. Samen moeten jullie 8 slagen halen, maar het telt dubbel: winst én verlies wegen zwaarder dan bij een gewone vraag.",
+  "guide.gewoon-wiezen.troel.body": "Heb je precies drie azen in de hand, dan moet je 'troel' roepen — dat is geen keuze. De speler met de vierde aas wordt automatisch je maat, ook al weet hij dat zelf nog niet. Hij komt uit, en hij hoort daarvoor díé aas te leggen: de kleur ervan wordt de troef. Komt hij iets anders uit, dan wordt de kleur van díé kaart troef, maar moeten jullie één slag méér halen — 9 in plaats van 8. Heeft de troelroeper alle vier de azen zelf, dan is de houder van de hartenheer zijn maat en geldt dezelfde regel voor die heer. Troel telt dubbel: winst én verlies wegen zwaarder dan bij een gewone vraag.",
   "guide.gewoon-wiezen.hoog.title": "De hoge contracten",
   "guide.gewoon-wiezen.hoog.body": "Zit je heel sterk of net heel zwak, dan bied je hoger. Abondance: je speelt alleen, kiest zelf de troefkleur en belooft 9, 10, 11 of 12 slagen. Miserie: je belooft géén enkele slag te halen — één slag en je bent eraf. Open miserie is hetzelfde, maar met je kaarten open op tafel. Solo (alle 13 met troef) en soloslim (alle 13 zonder troef) staan bovenaan.",
   "guide.gewoon-wiezen.punten.title": "Punten",
@@ -302,5 +302,12 @@
   "guide.scorebord.auto.body": "Speel je wiezen, kies dan de automodus: je duidt aan wélk contract er gespeeld werd (ook troel), wie het speelde, wie zijn maat was — of dat hij alleen ging — en hoeveel slagen er gehaald zijn. De app rekent de punten voor alle vier de spelers uit met dezelfde regels als het spel zelf, inclusief overslagen en onderslagen. Discussie aan tafel is daarmee van de baan.",
   "controls.menu": "Menu",
   "start.resume": "Verder spelen",
-  "wizard.pickGame": "Welk spel wil je leren?"
+  "wizard.pickGame": "Welk spel wil je leren?",
+  "play.troelPenalty": "één slag extra: de aas kwam niet uit",
+  "coach.tip.troelLead": "Jij hebt de vierde aas, dus jij komt uit — en je legt die aas. Kom je iets anders uit, dan wordt de kleur van díé kaart troef en moet je team één slag méér halen.",
+  "scorebord.troelAce": "Aas uitgekomen?",
+  "scorebord.tricksOf": "{tricks}/{target} slagen",
+  "scorebord.tricksOfZero": "{tricks} slagen",
+  "opt.yes": "Ja",
+  "opt.no": "Nee"
 }

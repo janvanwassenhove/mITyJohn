@@ -110,7 +110,9 @@
         "base": 4,
         "perOvertrick": 2,
         "perUndertrick": 2
-      }
+      },
+      "leadCard": "fourth-ace",
+      "targetPenaltyOtherLead": 1
     },
     {
       "id": "abondance-9",

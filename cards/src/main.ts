@@ -100,6 +100,7 @@ let sbWContract = 'vraag-en-mee';
 let sbWDeclarer = 0;
 let sbWPartner = 1;
 let sbWTricks = '';
+let sbWAceLed = true;
 const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
@@ -1210,11 +1211,14 @@ function announcesTrump(gift: Gift): boolean {
 }
 
 function goalLine(gift: Gift): string | null {
-  const contract = gift.contract?.contract;
-  if (!contract) return null;
+  if (!gift.contract) return null;
+  // Het doel dat écht geldt: bij troel schuift het op als de uitkomer zijn aas
+  // niet legde (REGELS.md §5.4).
+  const contract = gift.effectiveContract;
   if (contract.target.tricks === 0) return t('play.goalZero');
-  if (contract.target.combined) return t('play.goalTogether', { tricks: contract.target.tricks });
-  return t('play.goal', { tricks: contract.target.tricks });
+  const key = contract.target.combined ? 'play.goalTogether' : 'play.goal';
+  const line = t(key, { tricks: contract.target.tricks });
+  return gift.troelPenalty > 0 ? `${line} — ${t('play.troelPenalty')}` : line;
 }
 
 function seat(gift: Gift, player: number): HTMLElement {
@@ -2248,10 +2252,17 @@ function selectInput(
   return sel;
 }
 
-/** Label voor een ingegeven gift, bv. "Troel — Jan + Miel" of "Alleen — Rita". */
+/** Label voor een ingegeven gift, bv. "Troel — Jan + Miel · 9/8 slagen".
+ *  Het aantal slagen hoort erbij: zonder dat valt een rij achteraf niet meer na
+ *  te rekenen, en dan lijkt een vole (+10) op een fout. */
 function wiezenRoundLabel(result: sbw.WiezenRoundResult): string {
   const names = result.declarers.map((d) => sbParticipantName(d)).join(' + ');
-  return `${tContract(result.contract.id)} — ${names}`;
+  const target = result.contract.target;
+  const tricks =
+    target.tricks === 0
+      ? t('scorebord.tricksOfZero', { tricks: result.tricks })
+      : t('scorebord.tricksOf', { tricks: result.tricks, target: target.tricks });
+  return `${tContract(result.contract.id)} — ${names} · ${tricks}`;
 }
 
 function scorebordSetup(): HTMLElement {
@@ -2453,6 +2464,26 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
     rows.append(pGroup);
   }
 
+  if (sbw.asksAceLed(sbWContract)) {
+    // Troel: kwam de vierde aas uit? Zo niet, dan ligt het doel een slag hoger.
+    const aceGroup = el('div', 'control-group');
+    aceGroup.append(el('span', undefined, t('scorebord.troelAce')));
+    const aceSeg = el('div', 'seg');
+    aceSeg.setAttribute('role', 'group');
+    aceSeg.append(
+      segButton(t('opt.yes'), sbWAceLed, () => {
+        sbWAceLed = true;
+        render();
+      }),
+      segButton(t('opt.no'), !sbWAceLed, () => {
+        sbWAceLed = false;
+        render();
+      }),
+    );
+    aceGroup.append(aceSeg);
+    rows.append(aceGroup);
+  }
+
   const tGroup = el('div', 'control-group');
   tGroup.append(el('span', undefined, t('scorebord.tricks')));
   const tricksInput = numberInput(sbWTricks, '0');
@@ -2470,6 +2501,7 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
     declarer: sbWDeclarer,
     partner,
     tricks: Number(sbWTricks) || 0,
+    aceLed: sbWAceLed,
   });
   const target = preview.contract.target;
   form.append(
@@ -2494,10 +2526,12 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
         declarer: sbWDeclarer,
         partner: currentPartner(),
         tricks: Number.isFinite(tricks) ? tricks : 0,
+        aceLed: sbWAceLed,
       });
       sbBoard = scorebord.addRound(board, result.points, wiezenRoundLabel(result));
       scorebord.save(sbBoard);
       sbWTricks = '';
+      sbWAceLed = true;
       sfxCard();
       render();
     }),

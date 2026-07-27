@@ -134,14 +134,21 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 
 - Wie **exact 3 azen** in de hand heeft, **moet** *"troel"* roepen.
 - De houder van de **vierde aas** is automatisch partner en **komt uit** in de eerste
-  slag. **De kleur van zijn eerste (vrij gekozen) kaart wordt troef.**
-  ✅ *Bevestigd door de opdrachtgever (2026-07-24); vervangt de eerdere aanname
-  "vierde aas wordt troef en moet uitgespeeld worden".*
-- Doel: **samen ≥ 8 slagen**. **⚠️ AANNAME** — veel gezelschappen spelen 9.
+  slag. **De kleur van zijn eerste kaart wordt troef.**
+- **Hij hoort die aas uit te komen.** De aas moet in de eerste slag vallen — dat is
+  net de kaart die de troef bepaalt.
+  ✅ *Bevestigd door de opdrachtgever (2026-07-26).*
+- **Komt hij iets anders uit**, dan mag dat: de kleur van die kaart wordt gewoon troef,
+  maar het team moet dan **één slag méér** halen (9 in plaats van 8).
+  ✅ *Bevestigd door de opdrachtgever (2026-07-26).*
+- Doel: **samen ≥ 8 slagen** (9 na een andere uitkomst, zie hierboven).
+  **⚠️ AANNAME** — veel gezelschappen spelen sowieso 9; instelbaar bij de start.
 - **4 azen in één hand:** de houder van de **hartenheer** is partner (heeft de troelbieder
-  die zelf, dan de hoogste harten buiten zijn hand); ook die partner komt uit en bepaalt
-  met zijn eerste kaart de troef. **⚠️ AANNAME** (enkel de partnerregel; de
-  troefbepaling volgt de bevestigde regel hierboven).
+  die zelf, dan de hoogste harten buiten zijn hand). Ook hij komt uit, en voor hem geldt
+  dezelfde regel met de **hartenheer** in de plaats van de aas: komt hij die uit, dan
+  blijft het doel 8; iets anders, dan wordt het 9.
+  ✅ *Bevestigd door de opdrachtgever (2026-07-26)* (de partnerregel zelf blijft
+  **⚠️ AANNAME**).
 - Troel kan enkel **overboden** worden door contracten vanaf **abondance 9** (nr. 4 en hoger).
   **⚠️ AANNAME** — elders is troel onoverbiedbaar of enkel door soloslim te overbieden.
 

@@ -2,7 +2,7 @@
 // slaghistoriek van de gift als kaartgeheugen (Fase 3); de engine bewaakt
 // de legaliteit van elke zet.
 
-import { ACE, type Card, type Suit } from './engine/cards';
+import { ACE, sameCard, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
@@ -155,9 +155,12 @@ export function chooseCard(gift: Gift, player: number, level: BotLevel = 'normal
 
   const lowest = [...legal].sort((a, b) => a.rank - b.rank)[0] as Card;
 
-  // Troel (§5.4): de uitkomer bepaalt met zijn eerste kaart de troef —
-  // kies de langste kleur en kom hoog uit.
+  // Troel (§5.4): de uitkomer hoort zijn vierde aas te leggen — die bepaalt de
+  // troef. Iets anders uitkomen kost een slag, dus dat doet een bot niet.
   if (contract?.contract.trump === 'first-card-led' && trumpSuit === null && trick.length === 0) {
+    const required = gift.requiredLeadCard;
+    const match = required && legal.find((c) => sameCard(c, required));
+    if (match) return match;
     const suit = longestSuit(legal);
     return legal.filter((c) => c.suit === suit).sort((a, b) => b.rank - a.rank)[0] as Card;
   }
