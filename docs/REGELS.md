@@ -112,9 +112,10 @@ open miserie 14 (dubbel). Solo (13 met eigen troef, 20 ptn) en soloslim (13 zond
 - Vrager en meegaander vormen een team en moeten **samen minstens 8** slagen halen.
 - Meerdere spelers kunnen willen meegaan: de **eerste in biedvolgorde** krijgt voorrang.
   **⚠️ AANNAME**.
-- Alle 13 slagen samen halen ("**vole**") levert een bonus op — waarde nog te bepalen
-  (open vraag); in deze standaard: 13 slagen = basispunten + 5 overslagen + **vole-bonus 3**.
-  **⚠️ AANNAME**.
+- Alle 13 slagen samen halen ("**vole**") levert **geen aparte bonus** op: elke slag boven
+  het doel telt gewoon één punt, ook de dertiende. 13 slagen = 2 + 5 = **7 punten**.
+  ✅ *Bevestigd door de opdrachtgever (2026-07-26); vervangt de eerdere aanname van een
+  vole-bonus van 3, die 12 → 13 slagen liet springen van 6 naar 10 punten.*
 
 ### 5.2 Alleen
 

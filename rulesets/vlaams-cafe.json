@@ -61,8 +61,7 @@
       "score": {
         "base": 2,
         "perOvertrick": 1,
-        "perUndertrick": 1,
-        "voleBonus": 3
+        "perUndertrick": 1
       }
     },
     {

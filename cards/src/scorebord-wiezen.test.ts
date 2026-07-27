@@ -138,15 +138,16 @@ describe('scorebord — troel en de vierde aas', () => {
   });
 });
 
-// De puntensprong die aan tafel voor verwarring zorgt: één extra slag boven 12
-// is een vole en levert de bonus op (REGELS.md §5.1 — ⚠️ AANNAME).
+// Geen vole-bonus (REGELS.md §5.1, bevestigd): elke slag boven het doel telt één
+// punt, ook de dertiende. Zonder deze test sloop een sprong van 6 naar 10 er ooit
+// weer in, en dan lijkt een rij met méér slagen minder waard.
 describe('scorebord — vraag & mee per aantal slagen', () => {
   const points = (tricks: number) =>
     computeWiezenRound({ contractId: 'vraag-en-mee', declarer: 0, partner: 2, tricks }).points[0];
 
   it('loopt monotoon op met het aantal slagen', () => {
     const reeks = [8, 9, 10, 11, 12, 13].map(points) as number[];
-    expect(reeks).toEqual([2, 3, 4, 5, 6, 10]);
+    expect(reeks).toEqual([2, 3, 4, 5, 6, 7]);
     for (let i = 1; i < reeks.length; i++) {
       expect(reeks[i] as number).toBeGreaterThan(reeks[i - 1] as number);
     }

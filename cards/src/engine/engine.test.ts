@@ -257,14 +257,14 @@ describe('scoring (§5, §7)', () => {
     expect(score.success).toEqual([true, true]);
   });
 
-  it('vraag & mee met vole-bonus bij 13 slagen', () => {
+  it('vraag & mee bij 13 slagen: gewoon overslagen, geen vole-bonus', () => {
     const score = scoreGift({
       contract: byId('vraag-en-mee'),
       declarers: [0, 1],
       tricksWon: [7, 6, 0, 0],
     });
-    // 2 + 5 overslagen + 3 vole = 10
-    expect(score.points).toEqual([10, 10, -10, -10]);
+    // 2 + 5 overslagen = 7 (REGELS.md §5.1, bevestigd: geen aparte vole-bonus)
+    expect(score.points).toEqual([7, 7, -7, -7]);
   });
 
   it('vraag & mee niet gehaald: symmetrisch met onderslagen', () => {
