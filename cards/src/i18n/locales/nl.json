@@ -309,5 +309,6 @@
   "scorebord.tricksOf": "{tricks}/{target} slagen",
   "scorebord.tricksOfZero": "{tricks} slagen",
   "opt.yes": "Ja",
-  "opt.no": "Nee"
+  "opt.no": "Nee",
+  "scorebord.wiezenNeedsFour": "De wiezen-automodus rekent met vier spelers; dit bord heeft er minder."
 }

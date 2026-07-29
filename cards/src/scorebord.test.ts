@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   addRound,
+  canUseWiezenMode,
   clear,
   leader,
   load,
@@ -8,6 +9,7 @@ import {
   removeRound,
   resetRounds,
   save,
+  setMode,
   totals,
   winner,
 } from './scorebord';
@@ -78,5 +80,30 @@ describe('scorebord', () => {
     expect(load()).toBeNull();
     localStorage.setItem('cards.scorebord.v1', '{"v":1,"participants":["A"]}');
     expect(load()).toBeNull(); // te weinig deelnemers
+  });
+});
+
+describe('modus wisselen op een lopend bord', () => {
+  it('houdt namen en rondes bij het wisselen', () => {
+    let sb = newScorebord(['Limme', 'Jan', 'Jappe', 'Elke'], null, false, 'manueel');
+    sb = addRound(sb, [1, 2, 3, 4], 'handmatig');
+    const wiezen = setMode(sb, 'wiezen');
+    expect(wiezen.mode).toBe('wiezen');
+    expect(wiezen.participants).toEqual(['Limme', 'Jan', 'Jappe', 'Elke']);
+    expect(wiezen.rounds).toEqual([[1, 2, 3, 4]]);
+    expect(wiezen.labels).toEqual(['handmatig']);
+    // en terug
+    expect(setMode(wiezen, 'manueel').mode).toBe('manueel');
+  });
+
+  it('weigert wiezen-automodus bij minder dan vier spelers', () => {
+    const sb = newScorebord(['Jan', 'Elke'], null, false, 'manueel');
+    expect(canUseWiezenMode(sb)).toBe(false);
+    expect(setMode(sb, 'wiezen').mode).toBe('manueel');
+  });
+
+  it('laat vier spelers wel toe', () => {
+    const sb = newScorebord(['a', 'b', 'c', 'd']);
+    expect(canUseWiezenMode(sb)).toBe(true);
   });
 });

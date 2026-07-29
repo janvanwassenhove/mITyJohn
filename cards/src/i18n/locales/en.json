@@ -309,5 +309,6 @@
   "scorebord.tricksOf": "{tricks}/{target} tricks",
   "scorebord.tricksOfZero": "{tricks} tricks",
   "opt.yes": "Yes",
-  "opt.no": "No"
+  "opt.no": "No",
+  "scorebord.wiezenNeedsFour": "Wiezen auto mode needs four players; this board has fewer."
 }

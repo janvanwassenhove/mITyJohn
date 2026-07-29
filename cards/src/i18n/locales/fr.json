@@ -309,5 +309,6 @@
   "scorebord.tricksOf": "{tricks}/{target} plis",
   "scorebord.tricksOfZero": "{tricks} plis",
   "opt.yes": "Oui",
-  "opt.no": "Non"
+  "opt.no": "Non",
+  "scorebord.wiezenNeedsFour": "Le mode auto wiezen exige quatre joueurs ; ce tableau en a moins."
 }

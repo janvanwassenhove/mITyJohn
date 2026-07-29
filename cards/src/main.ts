@@ -90,7 +90,16 @@ function setCoach(on: boolean): void {
 
 // Scorebord (fysiek spel): actief bord + setup-invoer.
 let sbBoard: scorebord.Scorebord | null = null;
+const SB_MODE_KEY = 'cards.scorebordMode';
 let sbMode: scorebord.ScorebordMode = 'manueel';
+
+function saveScorebordMode(): void {
+  try {
+    localStorage.setItem(SB_MODE_KEY, sbMode);
+  } catch {
+    /* ignore */
+  }
+}
 let sbCount = 4;
 let sbNames: string[] = [];
 let sbTarget = '';
@@ -2281,10 +2290,12 @@ function scorebordSetup(): HTMLElement {
   modeSeg.append(
     segButton(t('scorebord.modeManual'), sbMode === 'manueel', () => {
       sbMode = 'manueel';
+      saveScorebordMode();
       render();
     }),
     segButton(t('scorebord.modeWiezen'), sbMode === 'wiezen', () => {
       sbMode = 'wiezen';
+      saveScorebordMode();
       render();
     }),
   );
@@ -2597,6 +2608,36 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
 
   if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
 
+  // Modus wisselen op een lopend bord: koos je bij de start de verkeerde, dan
+  // moest je vroeger opnieuw beginnen en was je stand weg.
+  const modeGroup = el('div', 'control-group');
+  modeGroup.append(el('span', undefined, t('scorebord.mode')));
+  const modeSeg = el('div', 'seg');
+  modeSeg.setAttribute('role', 'group');
+  modeSeg.append(
+    segButton(t('scorebord.modeManual'), board.mode === 'manueel', () => {
+      sbBoard = scorebord.setMode(board, 'manueel');
+      sbMode = 'manueel';
+      saveScorebordMode();
+      scorebord.save(sbBoard);
+      render();
+    }),
+  );
+  const wiezenBtn = segButton(t('scorebord.modeWiezen'), board.mode === 'wiezen', () => {
+    sbBoard = scorebord.setMode(board, 'wiezen');
+    sbMode = 'wiezen';
+    saveScorebordMode();
+    scorebord.save(sbBoard);
+    render();
+  });
+  if (!scorebord.canUseWiezenMode(board)) wiezenBtn.disabled = true;
+  modeSeg.append(wiezenBtn);
+  modeGroup.append(modeSeg);
+  main.append(modeGroup);
+  if (!scorebord.canUseWiezenMode(board)) {
+    main.append(el('p', 'hint', t('scorebord.wiezenNeedsFour')));
+  }
+
   main.append(board.mode === 'wiezen' ? wiezenRoundForm(board) : manualRoundForm(board));
 
   const row = el('div', 'btn-row');
@@ -2637,6 +2678,12 @@ try {
   if ((BOT_LEVELS as readonly string[]).includes(storedLevel ?? '')) {
     botLevel = storedLevel as BotLevel;
   }
+} catch {
+  /* ignore */
+}
+try {
+  const storedMode = localStorage.getItem(SB_MODE_KEY);
+  if (storedMode === 'wiezen' || storedMode === 'manueel') sbMode = storedMode;
 } catch {
   /* ignore */
 }

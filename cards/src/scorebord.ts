@@ -32,6 +32,18 @@ export function newScorebord(
   return { v: 1, mode, participants: [...participants], target, lowWins, rounds: [], labels: [] };
 }
 
+/** Kan dit bord in wiezen-automodus? Die rekent met vier vaste zitplaatsen. */
+export function canUseWiezenMode(sb: Scorebord): boolean {
+  return sb.participants.length === 4;
+}
+
+/** Wissel de modus van een lopend bord, met behoud van namen en rondes. Zonder
+ *  dit moest je een nieuw bord beginnen — en dus je stand weggooien. */
+export function setMode(sb: Scorebord, mode: ScorebordMode): Scorebord {
+  if (mode === 'wiezen' && !canUseWiezenMode(sb)) return sb;
+  return { ...sb, mode };
+}
+
 export function totals(sb: Scorebord): number[] {
   return sb.participants.map((_, i) => sb.rounds.reduce((sum, r) => sum + (r[i] ?? 0), 0));
 }
