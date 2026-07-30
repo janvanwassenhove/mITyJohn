@@ -51,6 +51,18 @@ describe('i18n', () => {
     'klaverjas.roemTotal',
     'klaverjas.roemLine',
     'klaverjas.roem.stuk',
+    // Belotetermen zijn Frans en blijven in de drie talen staan.
+    'game.belote',
+    'guide.belote.title',
+    'guide.belote.annonces.title',
+    'wizard.belote.4.title',
+    'belote.annonceTotal',
+    'belote.beloteTotal',
+    'belote.annonceLine',
+    'belote.annonce.tierce',
+    'belote.annonce.cinquante',
+    'belote.annonce.cent',
+    'belote.annonce.carreOther',
   ]);
 
   it.each([

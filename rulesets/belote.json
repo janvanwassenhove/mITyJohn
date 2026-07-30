@@ -1,0 +1,112 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "belote",
+  "game": "belote",
+  "name": {
+    "nl": "Belote (Frans)",
+    "en": "Belote (French)",
+    "fr": "Belote"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-BELOTE.md",
+  "players": 4,
+  "teams": 2,
+  "deck": {
+    "cards": 32,
+    "jokers": false,
+    "rankOrder": [
+      "A",
+      "10",
+      "K",
+      "Q",
+      "J",
+      "9",
+      "8",
+      "7"
+    ],
+    "trumpRankOrder": [
+      "J",
+      "9",
+      "A",
+      "10",
+      "K",
+      "Q",
+      "8",
+      "7"
+    ]
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 8,
+    "dealPattern": [
+      3,
+      2,
+      3
+    ],
+    "trumpDetermination": "turned-card-two-rounds",
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": true,
+    "mustOvertrump": true,
+    "mustUndertrump": true,
+    "freeWhenPartnerWins": true
+  },
+  "points": {
+    "trump": {
+      "J": 20,
+      "9": 14,
+      "A": 11,
+      "10": 10,
+      "K": 4,
+      "Q": 3,
+      "8": 0,
+      "7": 0
+    },
+    "plain": {
+      "A": 11,
+      "10": 10,
+      "K": 4,
+      "Q": 3,
+      "J": 2,
+      "9": 0,
+      "8": 0,
+      "7": 0
+    },
+    "lastTrick": 10,
+    "total": 162
+  },
+  "annonces": {
+    "tierce": 20,
+    "cinquante": 50,
+    "cent": 100,
+    "carreJacks": 200,
+    "carreNines": 150,
+    "carreOther": 100,
+    "beloteRebelote": 20,
+    "onlyBestTeamCounts": true,
+    "sequenceUsesPlainOrder": true
+  },
+  "scoring": {
+    "winCondition": "more-than-opponents",
+    "dedansGivesAllToOpponents": true,
+    "capotBonus": 100
+  },
+  "session": {
+    "targetPoints": 501
+  },
+  "assumptions": [
+    "Speelrichting met de klok mee, terwijl belote traditioneel tegen de klok in gaat (REGELS-BELOTE.md §2) — AANNAME, gekozen voor consistentie met de andere spellen",
+    "De nemer neemt de open kaart ook op wanneer hij in de tweede ronde een andere kleur noemt (§4) — AANNAME",
+    "Belote-rebelote telt altijd, ook bij verlies (§6) — AANNAME",
+    "Enkel de ploeg met de hoogste annonce telt haar annonces (§7) — AANNAME",
+    "Capot-bonus 100 (§8) — AANNAME",
+    "Geen litige bij gelijkstand: de punten gaan naar de tegenpartij (§8) — AANNAME",
+    "Partij tot 501 punten (§2) — AANNAME, 1000 komt ook voor"
+  ],
+  "confirmed": [
+    "Kaartwaarden identiek aan klaverjassen, 162 punten per ronde (§3)",
+    "Troef via omgedraaide kaart in twee biedronden; neemt niemand, dan opnieuw delen (§4)",
+    "Ondertroeven verplicht, behalve wanneer de maat de slag al heeft (§5)",
+    "Coinche/contrée zit niet in deze versie (§1)"
+  ]
+}

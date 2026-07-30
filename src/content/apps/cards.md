@@ -3,7 +3,7 @@ name: "Cards"
 code: "CARDS"
 tag: "game"
 cat: "games"
-blurb: "Traditionele kaartspellen in je browser: wiezen (gewoon én kleurenwiezen), manillen, bieden en klaverjassen tegen drie bots — met een coach die meekijkt en een scorebord voor aan tafel."
+blurb: "Traditionele kaartspellen in je browser: wiezen, manillen, bieden, klaverjassen en belote tegen drie bots — met een coach die meekijkt en een scorebord voor aan tafel."
 demoUrl: "https://mityjohn.com/cards/"
 order: 1
 isNew: true
@@ -15,11 +15,11 @@ isNew: true
 
 ![Het startscherm van Cards op gsm: drie speltegels en één grote startknop](/screenshots/cards-page-1.webp)
 
-## Vijf speeltypes
+## Zes speeltypes
 
 **Wiezen** in twee vormen. Bij **gewoon wiezen** wordt de laatste kaart omgedraaid en bepaalt die de troef. Bij **kleurenwiezen** ligt er niets open: wie vraagt, noemt zelf de kleur — *"ik vraag in harten"* — en dat verklapt meteen iets over zijn hand. Verder zijn de regels identiek, dus je kiest gewoon de vorm die bij jouw tafel hoort.
 
-Daarnaast **manillen** (32 kaarten, de tien boven de aas, vaste ploegen tot 101), **bieden** (je belooft punten, de hoogste bieder komt uit en de kleur van die eerste kaart wordt de troef) en — nieuw — **klaverjassen**, het Nederlandse ploegenspel: één speler kiest de troef, combinaties in één slag leveren roem op, en je kiest zelf of je Rotterdams of Amsterdams telt.
+Daarnaast **manillen** (32 kaarten, de tien boven de aas, vaste ploegen tot 101), **bieden** (je belooft punten, de hoogste bieder komt uit en de kleur van die eerste kaart wordt de troef) en — nieuw — **klaverjassen**, het Nederlandse ploegenspel: één speler kiest de troef, combinaties in één slag leveren roem op, en je kiest zelf of je Rotterdams of Amsterdams telt. En sinds kort ook **belote**, het Franse ploegenspel: de troef wordt aangeboden met een omgedraaide kaart, en combinaties in je hand — tierce, cinquante, carré — leveren annonces op.
 
 De volledige Vlaamse biedladder zit erin: vraag & mee, alleen, troel, abondance, miserie, open miserie, solo en soloslim — met de puntentelling die je van op café kent. Regels en regionale aannames zijn netjes gedocumenteerd, want geen twee gezelschappen wiezen exact hetzelfde. Wat per streek verschilt, kies je bij de start: troel op 8 of 9 slagen, manille op 60 of 68 punten, en zo verder.
 

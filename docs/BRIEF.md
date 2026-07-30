@@ -33,7 +33,8 @@ mobiel), geen installatie, geen accounts in de eerste fases.
   gemarkeerd met **⚠️ AANNAME**, open punten onderaan.
 - [`rulesets/*.json`](../rulesets/) is de machineleesbare vertaling; de engine voert
   uitsluitend uit wat daar staat. Eén ruleset = één coherente variant:
-  `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`.
+  `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`,
+  `klaverjassen`, `belote`.
 
 ## §5 Architectuur
 
@@ -105,6 +106,7 @@ alleen `main` deployen.
 | 7 | **Speeltypes en regelgids**: wiezen splitst in **gewoon wiezen** (troef = omgedraaide kaart) en **kleurenwiezen** (de vrager noemt de kleur bij zijn bod) — nieuwe ruleset `kleurenwiezen`, biedactie met kleur, bots die zelf een kleur kiezen, en een zichtbare speeltypekeuze op het startscherm ([REGELS.md §3bis](REGELS.md#3bis-gewoon-wiezen-vs-kleurenwiezen)). Daarnaast een **regelgids**: zes hoofdstukken (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, scorebord) die je in wizardstijl stap voor stap door de regels loodsen | ✅ |
 | 8 | **Troel: de aas moet vallen** (REGELS.md §5.4) — de houder van de vierde aas (of de hartenheer bij vier azen in één hand) komt uit met díé kaart en bepaalt zo de troef; komt hij iets anders uit, dan schuift het doel van 8 naar 9 slagen. Engine, bots, coach, regelgids en de scorebord-automodus volgen. Het **scorebord toont voortaan het aantal slagen** per ronde ("Troel — Jan + Jappe · 8/9 slagen"), zodat een rij achteraf na te rekenen valt | ✅ |
 | 9 | **Klaverjassen (NL)** — eerste spel buiten de Vlaamse familie, volgens dezelfde principes: [REGELS-KLAVERJASSEN.md](REGELS-KLAVERJASSEN.md) met gemarkeerde aannames, `rulesets/klaverjassen.json`, eigen DOM-vrije engine (troefkeuze met passen, verplicht spelen voor de deler, **roem**, Rotterdams/Amsterdams, nat, pit), bots, persistentie, coach, gidshoofdstuk en wizard, in nl/en/fr | ✅ |
+| 10 | **Belote (FR)** — [REGELS-BELOTE.md](REGELS-BELOTE.md), `rulesets/belote.json` en een eigen engine: troef via een **omgedraaide kaart in twee biedronden** (neemt niemand, dan opnieuw delen), **annonces uit de hand** (tierce/cinquante/cent/carrés, waarbij enkel de ploeg met de beste combinatie telt), **belote-rebelote**, dedans en capot, tot 501. De slagregels zijn gedeeld met klaverjassen via `trickLegalPlays` — belote verschilt daar enkel in dat ondertroeven verplicht is maar je vrij mag bijgooien als je maat de slag heeft | ✅ |
 
 ## §13 Open punten
 

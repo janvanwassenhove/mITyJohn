@@ -16,6 +16,8 @@ import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { chooseBiedenBid, chooseBiedenCard } from './bots';
 import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
 import { DEFAULT_KLAVERJAS_CONFIG, KlaverjasSession } from './engine/klaverjassen';
+import { chooseBeloteCard, chooseBeloteTake } from './bots';
+import { BeloteSession, DEFAULT_BELOTE_CONFIG } from './engine/belote';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -162,6 +164,38 @@ describe('klaverjas-bots', () => {
         }
         expect(session.finished).toBe(true);
         expect(session.roundNumber).toBe(4);
+      }
+    }
+  });
+});
+
+describe('belote-bots', () => {
+  it('spelen volledige partijen zonder illegale zetten, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 4; seed++) {
+        const session = new BeloteSession(mulberry32(seed * 17), 0, {
+          ...DEFAULT_BELOTE_CONFIG,
+          targetPoints: 300,
+        });
+        let safety = 400;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          while (gift.phase === 'bidding') {
+            const suit = chooseBeloteTake(gift, gift.toAct);
+            if (suit) gift.take(suit);
+            else gift.pass();
+          }
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseBeloteCard(gift, p, level));
+          }
+          if (gift.phase === 'scored') {
+            const s = gift.score;
+            expect((s?.cardPoints[0] ?? 0) + (s?.cardPoints[1] ?? 0)).toBe(162);
+          }
+          session.closeGift();
+        }
+        expect(session.finished).toBe(true);
       }
     }
   });

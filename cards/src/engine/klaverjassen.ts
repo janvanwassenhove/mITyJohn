@@ -179,15 +179,29 @@ function currentWinner(trick: TrickPlay[], trumpSuit: Suit | null): number | nul
   return trick.length === 0 ? null : klaverjasTrickWinner(trick, trumpSuit);
 }
 
-/** §5: volgen; anders troeven en oversteken. Ondertroeven is verplicht bij
- *  Rotterdams; bij Amsterdams mag je dan bijgooien, en hoef je helemaal niet te
- *  troeven wanneer je maat de slag al heeft. */
-export function klaverjasLegalPlays(
+/** De twee knoppen waarin klaverjassen en belote van elkaar verschillen. */
+export interface TrickRules {
+  /** Moet je troef bijleggen als je niet kan oversteken? */
+  mustUndertrump: boolean;
+  /** Mag je vrij bijgooien wanneer je maat de slag al heeft? */
+  freeWhenPartnerWins: boolean;
+}
+
+export function rulesForTelwijze(telwijze: Telwijze): TrickRules {
+  return telwijze === 'rotterdams'
+    ? { mustUndertrump: true, freeWhenPartnerWins: false }
+    : { mustUndertrump: false, freeWhenPartnerWins: true };
+}
+
+/** §5: volgen; anders troeven en oversteken. Wat er daarna moet, verschilt per
+ *  telwijze (en bij belote weer anders) — vandaar de losse knoppen. Gedeeld met
+ *  de belote-engine, want de slagregels zijn op die twee punten na identiek. */
+export function trickLegalPlays(
   hand: Card[],
   trick: TrickPlay[],
   trumpSuit: Suit,
   player: number,
-  telwijze: Telwijze = 'rotterdams',
+  rules: TrickRules,
 ): Card[] {
   if (trick.length === 0) return hand;
   const ledSuit = (trick[0] as TrickPlay).card.suit;
@@ -211,7 +225,7 @@ export function klaverjasLegalPlays(
 
   // Kleur niet: troefplicht.
   if (trumps.length === 0) return hand;
-  if (telwijze === 'amsterdams' && partnerLeads) return hand;
+  if (rules.freeWhenPartnerWins && partnerLeads) return hand;
 
   const trumpsInTrick = trick.filter((p) => p.card.suit === trumpSuit);
   if (trumpsInTrick.length === 0) return trumps;
@@ -222,8 +236,19 @@ export function klaverjasLegalPlays(
   );
   const higher = trumps.filter((c) => klaverjasStrength(c.rank, c.suit, trumpSuit) > highest);
   if (higher.length > 0) return higher;
-  // Niet kunnen oversteken: Rotterdams dwingt ondertroeven af, Amsterdams niet.
-  return telwijze === 'rotterdams' ? trumps : hand;
+  // Niet kunnen oversteken: ondertroeven verplicht of vrij bijgooien.
+  return rules.mustUndertrump ? trumps : hand;
+}
+
+/** Klaverjas-variant met de telwijze als ingang. */
+export function klaverjasLegalPlays(
+  hand: Card[],
+  trick: TrickPlay[],
+  trumpSuit: Suit,
+  player: number,
+  telwijze: Telwijze = 'rotterdams',
+): Card[] {
+  return trickLegalPlays(hand, trick, trumpSuit, player, rulesForTelwijze(telwijze));
 }
 
 /* ---------- troefkeuze ---------- */

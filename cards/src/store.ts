@@ -5,6 +5,7 @@
 import { mulberry32, type Card, type Suit } from './engine/cards';
 import { ManilleSession } from './engine/manille';
 import { BiedenSession } from './engine/bieden';
+import { BeloteSession, DEFAULT_BELOTE_CONFIG, type BeloteConfig } from './engine/belote';
 import {
   DEFAULT_KLAVERJAS_CONFIG,
   KlaverjasSession,
@@ -335,6 +336,81 @@ export function replayKlaverjas(state: PersistedKlaverjas): KlaverjasSession {
     switch (action.t) {
       case 'trump':
         gift.chooseTrump(action.suit);
+        break;
+      case 'pass':
+        gift.pass();
+        break;
+      case 'play':
+        gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
+  }
+  return session;
+}
+
+/* ---------- belote ---------- */
+
+const BELOTE_KEY = 'cards.belote.v1';
+
+export type BeloteAction =
+  { t: 'take'; suit: Suit } | { t: 'pass' } | { t: 'play'; p: number; card: Card } | { t: 'close' };
+
+export interface PersistedBelote {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  config: BeloteConfig;
+  actions: BeloteAction[];
+}
+
+export function newBelote(seed: number, botLevel: BotLevel, config: BeloteConfig): PersistedBelote {
+  return { v: 1, seed, botLevel, config, actions: [] };
+}
+
+export function saveBelote(state: PersistedBelote): void {
+  try {
+    localStorage.setItem(BELOTE_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadBelote(): PersistedBelote | null {
+  try {
+    const raw = localStorage.getItem(BELOTE_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedBelote;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!state.config || typeof state.config !== 'object') {
+      state.config = { ...DEFAULT_BELOTE_CONFIG };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearBelote(): void {
+  try {
+    localStorage.removeItem(BELOTE_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayBelote(state: PersistedBelote): BeloteSession {
+  const session = new BeloteSession(mulberry32(state.seed), 0, state.config);
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'take':
+        gift.take(action.suit);
         break;
       case 'pass':
         gift.pass();

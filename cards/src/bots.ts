@@ -6,6 +6,13 @@ import { ACE, sameCard, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
 import {
+  beloteCardPoints,
+  beloteStrength,
+  beloteTrickWinner,
+  teamOf as beloteTeamOf,
+  type BeloteGift,
+} from './engine/belote';
+import {
   klaverjasCardPoints,
   klaverjasStrength,
   klaverjasTrickWinner,
@@ -473,6 +480,74 @@ export function chooseKlaverjasCard(gift: KlaverjasGift, player: number, level: 
 
   // Ligt de slag bij je maat, dan smeer je er punten op; anders neem je hem
   // zo goedkoop mogelijk, of gooi je het goedkoopste weg.
+  if (maatLigt) {
+    return [...legal].sort((a, b) => punten(b) - punten(a) || kracht(a) - kracht(b))[0] as Card;
+  }
+  return winnend.length > 0 ? (winnend[0] as Card) : goedkoopst;
+}
+
+/* ---------- belote ---------- */
+
+/** Neemt de bot de open kaart (of noemt hij in ronde 2 een kleur)? Hij rekent op
+ *  de kaartpunten die hij in die kleur zou hebben, plus de troefkaart zelf. */
+export function chooseBeloteTake(gift: BeloteGift, player: number): Suit | null {
+  const hand = gift.hands[player] as Card[];
+  const opties = gift.legalTakes();
+  let beste: Suit | null = null;
+  let besteScore = 0;
+  for (const suit of opties) {
+    const extra = suit === gift.turnedCard.suit ? [gift.turnedCard] : [];
+    const kaarten = [...hand, ...extra];
+    const score = kaarten.reduce(
+      (sum, c) => sum + (c.suit === suit ? beloteCardPoints(c, suit) + 4 : 0),
+      0,
+    );
+    if (score > besteScore) {
+      besteScore = score;
+      beste = suit;
+    }
+  }
+  // Drempel: pas als je er te weinig aan hebt. In ronde 2 ligt hij lager, want
+  // anders wordt er eindeloos opnieuw gedeeld.
+  const drempel = gift.biddingRound === 1 ? 42 : 34;
+  return besteScore >= drempel ? beste : null;
+}
+
+export function chooseBeloteCard(gift: BeloteGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const trump = gift.trumpSuit as Suit;
+  const punten = (c: Card) => beloteCardPoints(c, trump);
+  const kracht = (c: Card) => beloteStrength(c.rank, c.suit, trump);
+  const goedkoopst = [...legal].sort(
+    (a, b) => punten(a) - punten(b) || kracht(a) - kracht(b),
+  )[0] as Card;
+  if (level === 'easy') return goedkoopst;
+
+  const trick = gift.trick;
+  if (trick.length === 0) {
+    const boer = legal.find((c) => c.suit === trump && c.rank === 11);
+    if (boer && level === 'strong') return boer;
+    const nonTrump = legal.filter((c) => c.suit !== trump);
+    const pool = nonTrump.length > 0 ? nonTrump : legal;
+    return [...pool].sort((a, b) => kracht(b) - kracht(a))[0] as Card;
+  }
+
+  const winnaar = beloteTrickWinner(trick, trump);
+  const maatLigt = beloteTeamOf(winnaar) === beloteTeamOf(player);
+  const hoogste = trick.find((p) => p.player === winnaar)?.card as Card;
+  const ledSuit = (trick[0] as { card: Card }).card.suit;
+  const winnend = legal
+    .filter((c) => {
+      const cT = c.suit === trump;
+      const tT = hoogste.suit === trump;
+      if (cT && !tT) return true;
+      if (!cT && tT) return false;
+      if (c.suit === hoogste.suit) return kracht(c) > kracht(hoogste);
+      return c.suit === ledSuit && hoogste.suit !== ledSuit;
+    })
+    .sort((a, b) => kracht(a) - kracht(b));
+
   if (maatLigt) {
     return [...legal].sort((a, b) => punten(b) - punten(a) || kracht(a) - kracht(b))[0] as Card;
   }

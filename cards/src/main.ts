@@ -31,6 +31,15 @@ import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
+import { chooseBeloteCard, chooseBeloteTake } from './bots';
+import {
+  DEFAULT_BELOTE_CONFIG,
+  teamOf as blTeamOf,
+  type Annonce,
+  type BeloteConfig,
+  type BeloteGift,
+  type BeloteSession,
+} from './engine/belote';
 import {
   DEFAULT_KLAVERJAS_CONFIG,
   teamOf as kTeamOf,
@@ -140,11 +149,15 @@ let generation = 0;
 const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
-let game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' = 'wiezen';
+let game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' = 'wiezen';
 let kSession: KlaverjasSession | null = null;
 let kPersisted: store.PersistedKlaverjas | null = null;
 let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
 let klaverjasConfig: KlaverjasConfig = { ...DEFAULT_KLAVERJAS_CONFIG };
+let blSession: BeloteSession | null = null;
+let blPersisted: store.PersistedBelote | null = null;
+let blRestored: { state: store.PersistedBelote; session: BeloteSession } | null = null;
+let beloteConfig: BeloteConfig = { ...DEFAULT_BELOTE_CONFIG };
 let mSession: ManilleSession | null = null;
 let mPersisted: store.PersistedManille | null = null;
 let mRestored: { state: store.PersistedManille; session: ManilleSession } | null = null;
@@ -441,6 +454,7 @@ function liveSession(): boolean {
   if (game === 'manille') return Boolean(mSession && !mSession.finished);
   if (game === 'bieden') return Boolean(bSession && !bSession.finished);
   if (game === 'klaverjassen') return Boolean(kSession && !kSession.finished);
+  if (game === 'belote') return Boolean(blSession && !blSession.finished);
   return Boolean(session && !session.finished);
 }
 
@@ -458,6 +472,7 @@ function resumeGame(): void {
   if (game === 'manille') scheduleManilleBots();
   else if (game === 'bieden') scheduleBiedenBots();
   else if (game === 'klaverjassen') scheduleKlaverjasBots();
+  else if (game === 'belote') scheduleBeloteBots();
   else scheduleBots();
 }
 
@@ -660,7 +675,7 @@ function manilleOptionsPanel(): HTMLElement {
 }
 
 function gameTile(
-  id: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen',
+  id: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote',
   icon: string,
   nameKey: MessageKey,
   descKey: MessageKey,
@@ -724,6 +739,7 @@ function startScreen(): HTMLElement {
     gameTile('manille', '\u2665', 'game.manillen', 'tile.manillen'),
     gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
     gameTile('klaverjassen', '\u2666', 'game.klaverjassen', 'tile.klaverjassen'),
+    gameTile('belote', '\u{1F1EB}\u{1F1F7}', 'game.belote', 'tile.belote'),
   );
   main.append(tiles);
 
@@ -738,7 +754,9 @@ function startScreen(): HTMLElement {
         ? 'bieden.intro'
         : game === 'klaverjassen'
           ? 'klaverjas.intro'
-          : 'wiezen.intro';
+          : game === 'belote'
+            ? 'belote.intro'
+            : 'wiezen.intro';
   main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
@@ -748,7 +766,9 @@ function startScreen(): HTMLElement {
         ? Boolean(bRestored && !bRestored.session.finished)
         : game === 'klaverjassen'
           ? Boolean(kRestored && !kRestored.session.finished)
-          : Boolean(restored && !restored.session.finished);
+          : game === 'belote'
+            ? Boolean(blRestored && !blRestored.session.finished)
+            : Boolean(restored && !restored.session.finished);
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
@@ -766,6 +786,10 @@ function startScreen(): HTMLElement {
           store.clearKlaverjas();
           kRestored = null;
           startKlaverjas();
+        } else if (game === 'belote') {
+          store.clearBelote();
+          blRestored = null;
+          startBelote();
         } else if (game === 'bieden') {
           store.clearBieden();
           bRestored = null;
@@ -777,6 +801,19 @@ function startScreen(): HTMLElement {
         }
       }),
     );
+  } else if (game === 'belote') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueBelote));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearBelote();
+          blRestored = null;
+          startBelote();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startBelote));
+    }
   } else if (game === 'klaverjassen') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueKlaverjas));
@@ -924,7 +961,9 @@ function tableGrid(): HTMLElement {
         ? (bSession?.giftNumber ?? 0)
         : game === 'klaverjassen'
           ? (kSession?.roundNumber ?? 0)
-          : (session?.giftNumber ?? 0);
+          : game === 'belote'
+            ? (blSession?.roundNumber ?? 0)
+            : (session?.giftNumber ?? 0);
   const key = `${game}:${n}`;
   const table = el('div', 'table-grid');
   if (key !== dealtKey) {
@@ -1574,6 +1613,22 @@ function render(): void {
     wrap.append(statsScreen());
   } else if (view === 'home') {
     wrap.append(startScreen());
+  } else if (game === 'belote') {
+    const blGift = blSession?.gift ?? null;
+    if (!blSession || (!blGift && !blSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!blGift && blSession.finished) {
+      wrap.append(beloteEndScreen());
+    } else if (blGift) {
+      wrap.append(beloteStatusBar(blGift));
+      const table = tableGrid();
+      table.append(beloteSeat(blGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(beloteSeat(blGift, 1), beloteTrickArea(blGift), beloteSeat(blGift, 3));
+      table.append(middle);
+      table.append(beloteSeat(blGift, HUMAN));
+      wrap.append(table, beloteActionPanel(blGift));
+    }
   } else if (game === 'klaverjassen') {
     const kGift = kSession?.gift ?? null;
     if (!kSession || (!kGift && !kSession.finished)) {
@@ -3048,6 +3103,325 @@ function klaverjasEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- belote ---------- */
+
+function recordB2(action: store.BeloteAction): void {
+  if (!blPersisted) return;
+  blPersisted.actions.push(action);
+  store.saveBelote(blPersisted);
+}
+
+function startBelote(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  blPersisted = store.newBelote(seed, botLevel, beloteConfig);
+  store.saveBelote(blPersisted);
+  blRestored = null;
+  blSession = store.replayBelote(blPersisted);
+  view = 'game';
+  render();
+  scheduleBeloteBots();
+}
+
+function continueBelote(): void {
+  if (!blRestored) return;
+  blPersisted = blRestored.state;
+  blSession = blRestored.session;
+  botLevel = blPersisted.botLevel;
+  beloteConfig = blPersisted.config;
+  blRestored = null;
+  view = 'game';
+  render();
+  scheduleBeloteBots();
+}
+
+function beloteActor(): { player: number; human: boolean } | null {
+  const gift = blSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'bidding') {
+    return { player: gift.toAct, human: gift.toAct === HUMAN };
+  }
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playBeloteCard(gift: BeloteGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordB2({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    sfxScore(gift.score.made === (gift.score.takingTeam === blTeamOf(HUMAN)));
+  }
+}
+
+function beloteBotStep(): boolean {
+  const gift = blSession?.gift;
+  const who = beloteActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'bidding') {
+    const suit = chooseBeloteTake(gift, who.player);
+    if (suit) {
+      gift.take(suit);
+      recordB2({ t: 'take', suit });
+    } else {
+      gift.pass();
+      recordB2({ t: 'pass' });
+    }
+    return true;
+  }
+  playBeloteCard(gift, who.player, chooseBeloteCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleBeloteBots(): void {
+  const gen = ++generation;
+  const who = beloteActor();
+  if (!who || who.human) return;
+  const gift = blSession?.gift;
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'belote' || view !== 'game') return;
+      if (beloteBotStep()) {
+        render();
+        scheduleBeloteBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function beloteCloseAndNext(): void {
+  if (!blSession) return;
+  blSession.closeGift();
+  recordB2({ t: 'close' });
+  if (!blSession.finished) {
+    blSession.nextGift();
+  } else {
+    recordSessionStat('belote', botLevel, blSession.totals, blTeamOf(HUMAN));
+    store.clearBelote();
+    blPersisted = null;
+  }
+  render();
+  scheduleBeloteBots();
+}
+
+function beloteStatusBar(gift: BeloteGift): HTMLElement {
+  const s = blSession as BeloteSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('belote.roundNo', { n: s.roundNumber })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.trumpSuit) {
+    bar.append(
+      el(
+        'span',
+        'chip',
+        t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
+      ),
+    );
+    if (gift.taker !== null) {
+      bar.append(el('span', 'chip', t('belote.taker', { name: playerName(gift.taker) })));
+    }
+  } else {
+    bar.append(el('span', 'chip', t('belote.turned', { card: cardText(gift.turnedCard) })));
+    bar.append(el('span', 'chip', t('belote.round', { n: gift.biddingRound })));
+  }
+  const we = blTeamOf(HUMAN);
+  bar.append(
+    el(
+      'span',
+      'chip strong',
+      `${t('team.we')} ${s.totals[we] ?? 0} — ${t('team.they')} ${s.totals[1 - we] ?? 0}`,
+    ),
+  );
+  return bar;
+}
+
+function beloteSeat(gift: BeloteGift, player: number): HTMLElement {
+  const who = beloteActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}`));
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playBeloteCard(gift, HUMAN, card);
+            render();
+            scheduleBeloteBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function beloteTrickArea(gift: BeloteGift): HTMLElement {
+  const area = el('div', 'trick');
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+/** "Annonces: 70 (tierce, cinquante)" — bij belote komen ze uit de hand, niet uit
+ *  de slag; zonder die regel weet je niet waar de extra punten vandaan komen. */
+function annonceLine(list: Annonce[]): string {
+  const total = list.reduce((sum, a) => sum + a.points, 0);
+  const namen = list.map((a) => t(`belote.annonce.${a.kind}` as MessageKey)).join(', ');
+  return t('belote.annonceLine', { points: total, kinds: namen });
+}
+
+function beloteActionPanel(gift: BeloteGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = beloteActor();
+  // Annonces zijn bij belote handinformatie: meld ze zodra de troef vastligt.
+  if (gift.phase === 'play' && (gift.declared[HUMAN]?.length ?? 0) > 0) {
+    panel.append(el('p', 'hint strong', annonceLine(gift.declared[HUMAN] as Annonce[])));
+  }
+
+  if (gift.phase === 'bidding') {
+    if (who?.human) {
+      panel.append(
+        el(
+          'p',
+          undefined,
+          gift.biddingRound === 1
+            ? t('belote.takeTurned', { card: cardText(gift.turnedCard) })
+            : t('belote.nameSuit'),
+        ),
+      );
+      const row = el('div', 'btn-row');
+      for (const suit of gift.legalTakes()) {
+        const red = suit === 'H' || suit === 'D';
+        row.append(
+          button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
+            gift.take(suit);
+            recordB2({ t: 'take', suit });
+            render();
+            scheduleBeloteBots();
+          }),
+        );
+      }
+      row.append(
+        button(t('bidding.pass'), 'btn muted', () => {
+          gift.pass();
+          recordB2({ t: 'pass' });
+          render();
+          scheduleBeloteBots();
+        }),
+      );
+      panel.append(row);
+    } else if (who) {
+      panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'redeal') {
+    panel.append(el('p', undefined, t('belote.redeal')));
+    panel.append(button(t('bidding.continue'), 'btn primary', () => beloteCloseAndNext()));
+    return panel;
+  }
+
+  if (gift.phase === 'scored' && gift.score) {
+    const s = gift.score;
+    const we = blTeamOf(HUMAN);
+    panel.append(
+      el(
+        'h2',
+        undefined,
+        s.made
+          ? t('belote.made', { team: s.takingTeam === we ? t('team.we') : t('team.they') })
+          : t('belote.nat', { team: s.takingTeam === we ? t('team.we') : t('team.they') }),
+      ),
+    );
+    if (s.capot) panel.append(el('p', 'strong made', t('belote.capot')));
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    head.append(el('th'), el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+    table.append(head);
+    const rij = (label: string, waarden: number[]) => {
+      const tr = el('tr');
+      tr.append(el('th', undefined, label));
+      tr.append(el('td', undefined, String(waarden[we] ?? 0)));
+      tr.append(el('td', undefined, String(waarden[1 - we] ?? 0)));
+      table.append(tr);
+    };
+    rij(t('belote.cardPoints'), s.cardPoints);
+    rij(t('belote.annonceTotal'), s.annonces);
+    rij(t('belote.beloteTotal'), s.belote);
+    rij(t('belote.roundTotal'), s.points);
+    panel.append(table);
+    panel.append(
+      button(t('score.next'), 'btn primary', () => {
+        beloteCloseAndNext();
+      }),
+    );
+    return panel;
+  }
+
+  if (who && !who.human) {
+    panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+  } else if (who?.human) {
+    panel.append(el('p', 'hint', t('play.yourTurn')));
+  }
+  panel.append(el('p', 'hint', t('belote.goal')));
+  return panel;
+}
+
+function beloteEndScreen(): HTMLElement {
+  const s = blSession as BeloteSession;
+  const we = blTeamOf(HUMAN);
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  const mine = s.totals[we] ?? 0;
+  const theirs = s.totals[1 - we] ?? 0;
+  main.append(
+    el(
+      'p',
+      'strong',
+      t('manille.sessionWon', {
+        team: mine >= theirs ? t('team.we') : t('team.they'),
+      }),
+    ),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  head.append(el('th'), el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+  const row = el('tr');
+  row.append(el('th', undefined, t('score.points')));
+  row.append(el('td', undefined, String(mine)));
+  row.append(el('td', undefined, String(theirs)));
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startBelote));
+  return main;
+}
+
 function scorebordScreen(): HTMLElement {
   return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
 }
@@ -3094,7 +3468,8 @@ try {
     storedGame === 'manille' ||
     storedGame === 'wiezen' ||
     storedGame === 'bieden' ||
-    storedGame === 'klaverjassen'
+    storedGame === 'klaverjassen' ||
+    storedGame === 'belote'
   ) {
     game = storedGame;
   }
@@ -3115,6 +3490,15 @@ if (savedBieden) {
     bRestored = { state: savedBieden, session: store.replayBieden(savedBieden) };
   } catch {
     store.clearBieden();
+  }
+}
+const savedBelote = store.loadBelote();
+if (savedBelote) {
+  try {
+    blRestored = { state: savedBelote, session: store.replayBelote(savedBelote) };
+    beloteConfig = savedBelote.config;
+  } catch {
+    store.clearBelote();
   }
 }
 const savedKlaverjas = store.loadKlaverjas();

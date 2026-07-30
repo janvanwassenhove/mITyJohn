@@ -13,11 +13,15 @@ const COACH_KEY = 'cards.coach';
 
 /** Aantal stappen in de wizard, per spel (de teksten staan in i18n als
  *  `wizard.<spel>.<n>.title` / `.body`). */
-export const WIZARD_STEPS: Record<'wiezen' | 'manille' | 'bieden' | 'klaverjassen', number> = {
+export const WIZARD_STEPS: Record<
+  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote',
+  number
+> = {
   wiezen: 5,
   manille: 4,
   bieden: 4,
   klaverjassen: 5,
+  belote: 5,
 };
 
 export function loadCoachEnabled(): boolean {
