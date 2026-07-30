@@ -2262,16 +2262,25 @@ function selectInput(
 }
 
 /** Label voor een ingegeven gift, bv. "Troel — Jan + Miel · 9/8 slagen".
- *  Het aantal slagen hoort erbij: zonder dat valt een rij achteraf niet meer na
- *  te rekenen, en dan lijkt een vole (+10) op een fout. */
-function wiezenRoundLabel(result: sbw.WiezenRoundResult): string {
-  const names = result.declarers.map((d) => sbParticipantName(d)).join(' + ');
-  const target = result.contract.target;
+ *  Wordt bij élke render opnieuw opgebouwd uit scorebord.meta, zodat het label
+ *  meeverandert met de taalkeuze — een opgeslagen tekst deed dat niet. */
+function wiezenRoundLabel(meta: scorebord.WiezenRoundMeta): string {
+  const names = meta.declarers.map((d) => sbParticipantName(d)).join(' + ');
   const tricks =
-    target.tricks === 0
-      ? t('scorebord.tricksOfZero', { tricks: result.tricks })
-      : t('scorebord.tricksOf', { tricks: result.tricks, target: target.tricks });
-  return `${tContract(result.contract.id)} — ${names} · ${tricks}`;
+    meta.target === 0
+      ? t('scorebord.tricksOfZero', { tricks: meta.tricks })
+      : t('scorebord.tricksOf', { tricks: meta.tricks, target: meta.target });
+  return `${tContract(meta.contractId)} — ${names} · ${tricks}`;
+}
+
+/** De gestructureerde beschrijving van een net berekende ronde. */
+function wiezenRoundMeta(result: sbw.WiezenRoundResult): scorebord.WiezenRoundMeta {
+  return {
+    contractId: result.contract.id,
+    declarers: [...result.declarers],
+    tricks: result.tricks,
+    target: result.contract.target.tricks,
+  };
 }
 
 function scorebordSetup(): HTMLElement {
@@ -2539,7 +2548,8 @@ function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
         tricks: Number.isFinite(tricks) ? tricks : 0,
         aceLed: sbWAceLed,
       });
-      sbBoard = scorebord.addRound(board, result.points, wiezenRoundLabel(result));
+      const meta = wiezenRoundMeta(result);
+      sbBoard = scorebord.addRound(board, result.points, wiezenRoundLabel(meta), meta);
       scorebord.save(sbBoard);
       sbWTricks = '';
       sbWAceLed = true;
@@ -2580,7 +2590,11 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
 
   board.rounds.forEach((r, idx) => {
     const tr = el('tr');
-    const label = board.labels[idx];
+    // Gestructureerde rondes krijgen hun label in de huidige taal; oudere
+    // borden vallen terug op de tekst die toen bewaard werd.
+    const meta = board.meta[idx];
+    const stored = board.labels[idx];
+    const label = meta ? wiezenRoundLabel(meta) : stored;
     tr.append(el('th', 'sb-roundlabel', label && label.length > 0 ? label : String(idx + 1)));
     for (let i = 0; i < board.participants.length; i++) {
       tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));

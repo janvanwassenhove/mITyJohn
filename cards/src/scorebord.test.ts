@@ -107,3 +107,48 @@ describe('modus wisselen op een lopend bord', () => {
     expect(canUseWiezenMode(sb)).toBe(true);
   });
 });
+
+describe('rondelabels zijn taalonafhankelijk', () => {
+  it('bewaart de ronde gestructureerd, niet als tekst', () => {
+    let sb = newScorebord(['Jan', 'Jappe', 'Limme', 'Elke'], null, false, 'wiezen');
+    sb = addRound(sb, [3, 3, -3, -3], 'Vraag & mee — Jan + Jappe · 9/8 slagen', {
+      contractId: 'vraag-en-mee',
+      declarers: [0, 1],
+      tricks: 9,
+      target: 8,
+    });
+    expect(sb.meta[0]).toEqual({
+      contractId: 'vraag-en-mee',
+      declarers: [0, 1],
+      tricks: 9,
+      target: 8,
+    });
+  });
+
+  it('houdt meta in pas bij verwijderen en wissen', () => {
+    let sb = newScorebord(['a', 'b', 'c', 'd'], null, false, 'wiezen');
+    const meta = { contractId: 'troel', declarers: [0, 2], tricks: 8, target: 9 };
+    sb = addRound(sb, [1, 1, 1, 1], 'x', meta);
+    sb = addRound(sb, [2, 2, 2, 2], 'y', { ...meta, tricks: 10 });
+    sb = removeRound(sb, 0);
+    expect(sb.meta).toHaveLength(1);
+    expect(sb.meta[0]?.tricks).toBe(10);
+    expect(resetRounds(sb).meta).toEqual([]);
+  });
+
+  it('oude borden zonder meta blijven werken', () => {
+    const oud = {
+      v: 1,
+      mode: 'wiezen',
+      participants: ['a', 'b', 'c', 'd'],
+      target: null,
+      lowWins: false,
+      rounds: [[1, 1, -1, -1]],
+      labels: ['Vraag & mee — a + b'],
+    };
+    localStorage.setItem('cards.scorebord.v1', JSON.stringify(oud));
+    const geladen = load();
+    expect(geladen?.meta).toEqual([null]);
+    expect(geladen?.labels).toEqual(['Vraag & mee — a + b']);
+  });
+});

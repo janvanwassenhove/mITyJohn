@@ -19,8 +19,23 @@ export interface Scorebord {
   lowWins: boolean;
   /** Eén rij per ronde: punten per deelnemer (zelfde lengte als participants). */
   rounds: number[][];
-  /** Optioneel label per ronde (bv. "Troel — Jan + Rita"), parallel aan rounds. */
+  /** Optioneel label per ronde (bv. "Troel — Jan + Rita"), parallel aan rounds.
+   *  Enkel nog fallback voor oude borden en handmatige rondes: een opgeslagen
+   *  tekst blijft in de taal van het moment staan. */
   labels: string[];
+  /** Gestructureerde beschrijving per ronde (wiezen-automodus), parallel aan
+   *  rounds. Hieruit bouwt de UI het label in de huidige taal. null = geen. */
+  meta: (WiezenRoundMeta | null)[];
+}
+
+/** Wat er in een wiezen-ronde gebeurde — taalonafhankelijk, zodat het label
+ *  meeverandert wanneer je van taal wisselt. */
+export interface WiezenRoundMeta {
+  contractId: string;
+  declarers: number[];
+  tricks: number;
+  /** Doel dat gold (troel zonder aas ligt een slag hoger). */
+  target: number;
 }
 
 export function newScorebord(
@@ -29,7 +44,16 @@ export function newScorebord(
   lowWins = false,
   mode: ScorebordMode = 'manueel',
 ): Scorebord {
-  return { v: 1, mode, participants: [...participants], target, lowWins, rounds: [], labels: [] };
+  return {
+    v: 1,
+    mode,
+    participants: [...participants],
+    target,
+    lowWins,
+    rounds: [],
+    labels: [],
+    meta: [],
+  };
 }
 
 /** Kan dit bord in wiezen-automodus? Die rekent met vier vaste zitplaatsen. */
@@ -73,9 +97,19 @@ export function winner(sb: Scorebord): number | null {
   return winners.length === 1 ? (winners[0] as { i: number }).i : null;
 }
 
-export function addRound(sb: Scorebord, points: number[], label = ''): Scorebord {
+export function addRound(
+  sb: Scorebord,
+  points: number[],
+  label = '',
+  meta: WiezenRoundMeta | null = null,
+): Scorebord {
   const row = sb.participants.map((_, i) => points[i] ?? 0);
-  return { ...sb, rounds: [...sb.rounds, row], labels: [...sb.labels, label] };
+  return {
+    ...sb,
+    rounds: [...sb.rounds, row],
+    labels: [...sb.labels, label],
+    meta: [...sb.meta, meta],
+  };
 }
 
 export function removeRound(sb: Scorebord, index: number): Scorebord {
@@ -83,11 +117,12 @@ export function removeRound(sb: Scorebord, index: number): Scorebord {
     ...sb,
     rounds: sb.rounds.filter((_, i) => i !== index),
     labels: sb.labels.filter((_, i) => i !== index),
+    meta: sb.meta.filter((_, i) => i !== index),
   };
 }
 
 export function resetRounds(sb: Scorebord): Scorebord {
-  return { ...sb, rounds: [], labels: [] };
+  return { ...sb, rounds: [], labels: [], meta: [] };
 }
 
 /* ---------- persistentie ---------- */
@@ -117,6 +152,10 @@ export function load(): Scorebord | null {
     if (sb.mode !== 'wiezen') sb.mode = 'manueel';
     if (!Array.isArray(sb.labels) || sb.labels.length !== sb.rounds.length) {
       sb.labels = sb.rounds.map(() => '');
+    }
+    // Borden van vóór de gestructureerde labels: die houden hun opgeslagen tekst.
+    if (!Array.isArray(sb.meta) || sb.meta.length !== sb.rounds.length) {
+      sb.meta = sb.rounds.map(() => null);
     }
     return sb;
   } catch {

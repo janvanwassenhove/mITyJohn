@@ -304,7 +304,7 @@
   "start.resume": "Reprendre",
   "wizard.pickGame": "Quel jeu voulez-vous apprendre ?",
   "play.troelPenalty": "un pli de plus : l’as n’a pas été entamé",
-  "coach.tip.troelLead": "Vous avez le quatrième as, donc vous entamez — avec cet as. Entamez autre chose et cette carte fixe l’atout, mais votre équipe devra un pli de plus.",
+  "coach.tip.troelLead": "Vous avez le quatrième as, donc vous entamez — avec cet as. Entamez autre chose et cette carte fixe l’atout, mais votre équipe devra faire un pli de plus.",
   "scorebord.troelAce": "As entamé ?",
   "scorebord.tricksOf": "{tricks}/{target} plis",
   "scorebord.tricksOfZero": "{tricks} plis",

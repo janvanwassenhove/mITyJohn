@@ -16,6 +16,47 @@ describe('i18n', () => {
     expect(Object.keys(fr).sort()).toEqual(nlKeys);
   });
 
+  // Sleutelpariteit alleen volstaat niet: een vergeten vertaling is een sleutel
+  // die er wél is maar nog de Nederlandse tekst bevat. Eigennamen (spelnamen,
+  // contracten) en woorden die in de drie talen hetzelfde zijn, staan hieronder.
+  const MAG_GELIJK = new Set([
+    'app.title',
+    'placeholder.heading',
+    'play.contract',
+    'coach.title',
+    'controls.menu',
+    'ruleset.vlaams-cafe',
+    'ruleset.kleurenwiezen',
+    'game.wiezen',
+    'game.bieden',
+    'guide.kleurenwiezen.title',
+    'guide.bieden.title',
+    'guide.manillen.title',
+    'guide.gewoon-wiezen.troel.title',
+    'scorebord.modeWiezen',
+    'scorebord.contract',
+    'stats.contract',
+    'contract.troel',
+    'contract.solo',
+    'contract.piccolo',
+    'contract.abondance-9',
+    'contract.abondance-10',
+    'contract.abondance-11',
+    'contract.abondance-12',
+  ]);
+
+  it.each([
+    ['en', en],
+    ['fr', fr],
+  ])('heeft geen onvertaalde Nederlandse tekst in %s', (_locale, bundle) => {
+    const nlText = nl as Record<string, string>;
+    const other = bundle as Record<string, string>;
+    const onvertaald = Object.keys(nlText).filter(
+      (k) => !MAG_GELIJK.has(k) && other[k] === nlText[k],
+    );
+    expect(onvertaald).toEqual([]);
+  });
+
   it('vertaalt per actieve locale', () => {
     setLocale('nl');
     expect(t('theme.light')).toBe('Licht');
