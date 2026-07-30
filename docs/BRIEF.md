@@ -22,6 +22,10 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 1. **Wiezen** (kleurenwiezen, Vlaams standaard) — eerst.
 2. Daarna, in volgorde (bevestigd 2026-07-24): een **kleurenwiezen-variant**,
    **manillen** en **bieden** — alle drie geïmplementeerd.
+3. Traditionele spellen uit de buurlanden (bevestigd 2026-07-29): **klaverjassen** (NL,
+   geïmplementeerd), daarna **belote** (FR), **hartenjagen** en **boerenbridge**;
+   **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers en een eigen
+   kaartset.
 
 ## §4 Regels & rulesets
 
@@ -100,6 +104,7 @@ alleen `main` deployen.
 | 6 | **GUI-redesign + onboarding**: mobile-first designsysteem (spelkeuze als tegels, één primaire CTA, ingeklapte instellingen, echte kaartgezichten, actiepaneel als bottom sheet), **starterswizard** per spel en een **coach** die tijdens het spel contextuele tips geeft; screenshotgenerator (`cards/scripts/screenshots.mjs`) met beelden in de README en, als vaste werkafspraak, in elke release note ([RELEASING.md](../RELEASING.md)) | ✅ |
 | 7 | **Speeltypes en regelgids**: wiezen splitst in **gewoon wiezen** (troef = omgedraaide kaart) en **kleurenwiezen** (de vrager noemt de kleur bij zijn bod) — nieuwe ruleset `kleurenwiezen`, biedactie met kleur, bots die zelf een kleur kiezen, en een zichtbare speeltypekeuze op het startscherm ([REGELS.md §3bis](REGELS.md#3bis-gewoon-wiezen-vs-kleurenwiezen)). Daarnaast een **regelgids**: zes hoofdstukken (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, scorebord) die je in wizardstijl stap voor stap door de regels loodsen | ✅ |
 | 8 | **Troel: de aas moet vallen** (REGELS.md §5.4) — de houder van de vierde aas (of de hartenheer bij vier azen in één hand) komt uit met díé kaart en bepaalt zo de troef; komt hij iets anders uit, dan schuift het doel van 8 naar 9 slagen. Engine, bots, coach, regelgids en de scorebord-automodus volgen. Het **scorebord toont voortaan het aantal slagen** per ronde ("Troel — Jan + Jappe · 8/9 slagen"), zodat een rij achteraf na te rekenen valt | ✅ |
+| 9 | **Klaverjassen (NL)** — eerste spel buiten de Vlaamse familie, volgens dezelfde principes: [REGELS-KLAVERJASSEN.md](REGELS-KLAVERJASSEN.md) met gemarkeerde aannames, `rulesets/klaverjassen.json`, eigen DOM-vrije engine (troefkeuze met passen, verplicht spelen voor de deler, **roem**, Rotterdams/Amsterdams, nat, pit), bots, persistentie, coach, gidshoofdstuk en wizard, in nl/en/fr | ✅ |
 
 ## §13 Open punten
 

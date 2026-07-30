@@ -14,6 +14,8 @@ import { DEFAULT_MANILLE_CONFIG, ManilleSession } from './engine/manille';
 import { BiedenSession, DEFAULT_BIEDEN_CONFIG } from './engine/bieden';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { chooseBiedenBid, chooseBiedenCard } from './bots';
+import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
+import { DEFAULT_KLAVERJAS_CONFIG, KlaverjasSession } from './engine/klaverjassen';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -129,6 +131,38 @@ describe('bots', () => {
       const session = simulateSession(seed, 'normal', kleuren);
       expect(session.giftNumber).toBe(session.totalGiften);
       expect(session.totals.reduce((a, b) => a + b, 0)).toBe(0);
+    }
+  });
+});
+
+describe('klaverjas-bots', () => {
+  it('spelen volledige boompjes zonder illegale zetten, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 5; seed++) {
+        const session = new KlaverjasSession(mulberry32(seed * 13), 0, {
+          ...DEFAULT_KLAVERJAS_CONFIG,
+          rounds: 4,
+        });
+        let safety = 200;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          while (gift.phase === 'trump-choice') {
+            const hand = gift.hands[gift.chooser] as Card[];
+            if (chooseKlaverjasPass(gift, hand, level)) gift.pass();
+            else gift.chooseTrump(chooseKlaverjasTrump(hand).suit);
+          }
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseKlaverjasCard(gift, p, level));
+          }
+          // 162 kaartpunten blijven altijd verdeeld over de twee ploegen
+          const s = gift.score;
+          expect((s?.cardPoints[0] ?? 0) + (s?.cardPoints[1] ?? 0)).toBe(162);
+          session.closeGift();
+        }
+        expect(session.finished).toBe(true);
+        expect(session.roundNumber).toBe(4);
+      }
     }
   });
 });

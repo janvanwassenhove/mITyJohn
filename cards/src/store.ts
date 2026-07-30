@@ -5,6 +5,11 @@
 import { mulberry32, type Card, type Suit } from './engine/cards';
 import { ManilleSession } from './engine/manille';
 import { BiedenSession } from './engine/bieden';
+import {
+  DEFAULT_KLAVERJAS_CONFIG,
+  KlaverjasSession,
+  type KlaverjasConfig,
+} from './engine/klaverjassen';
 import { Session } from './engine/game';
 import type { BidAction } from './engine/bidding';
 import type { Ruleset } from './ruleset';
@@ -260,6 +265,88 @@ export function replayBieden(state: PersistedBieden): BiedenSession {
         break;
     }
     if (gift.bidding.phase === 'done' && gift.declarer === null && !gift.score) gift.settle();
+  }
+  return session;
+}
+
+/* ---------- klaverjassen ---------- */
+
+const KLAVERJAS_KEY = 'cards.klaverjas.v1';
+
+export type KlaverjasAction =
+  | { t: 'trump'; suit: Suit }
+  | { t: 'pass' }
+  | { t: 'play'; p: number; card: Card }
+  | { t: 'close' };
+
+export interface PersistedKlaverjas {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  config: KlaverjasConfig;
+  actions: KlaverjasAction[];
+}
+
+export function newKlaverjas(
+  seed: number,
+  botLevel: BotLevel,
+  config: KlaverjasConfig,
+): PersistedKlaverjas {
+  return { v: 1, seed, botLevel, config, actions: [] };
+}
+
+export function saveKlaverjas(state: PersistedKlaverjas): void {
+  try {
+    localStorage.setItem(KLAVERJAS_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadKlaverjas(): PersistedKlaverjas | null {
+  try {
+    const raw = localStorage.getItem(KLAVERJAS_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedKlaverjas;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!state.config || typeof state.config !== 'object') {
+      state.config = { ...DEFAULT_KLAVERJAS_CONFIG };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearKlaverjas(): void {
+  try {
+    localStorage.removeItem(KLAVERJAS_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayKlaverjas(state: PersistedKlaverjas): KlaverjasSession {
+  const session = new KlaverjasSession(mulberry32(state.seed), 0, state.config);
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'trump':
+        gift.chooseTrump(action.suit);
+        break;
+      case 'pass':
+        gift.pass();
+        break;
+      case 'play':
+        gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
   }
   return session;
 }

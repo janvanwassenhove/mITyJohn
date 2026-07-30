@@ -43,6 +43,14 @@ describe('i18n', () => {
     'contract.abondance-10',
     'contract.abondance-11',
     'contract.abondance-12',
+    // Klaverjastermen blijven Nederlands in de drie talen, net als 'troel' en
+    // 'abondance' bij wiezen — het zijn de namen van het spel zelf.
+    'game.klaverjassen',
+    'guide.klaverjassen.title',
+    'guide.klaverjassen.roem.title',
+    'klaverjas.roemTotal',
+    'klaverjas.roemLine',
+    'klaverjas.roem.stuk',
   ]);
 
   it.each([

@@ -30,6 +30,15 @@ import * as sbw from './scorebord-wiezen';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
+import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
+import {
+  DEFAULT_KLAVERJAS_CONFIG,
+  teamOf as kTeamOf,
+  type KlaverjasConfig,
+  type KlaverjasGift,
+  type KlaverjasSession,
+  type RoemDetail,
+} from './engine/klaverjassen';
 import { teamOf as biedenTeamOf, type BiedenGift, type BiedenSession } from './engine/bieden';
 import { chooseBiedenBid, chooseBiedenCard } from './bots';
 import { initSound, sfxCard, sfxScore, sfxTrick, soundEnabled, toggleSound } from './sound';
@@ -46,6 +55,7 @@ import {
   WIZARD_STEPS,
   biedenTip,
   loadCoachEnabled,
+  klaverjasTip,
   manilleTip,
   saveCoachEnabled,
   wiezenTip,
@@ -130,7 +140,11 @@ let generation = 0;
 const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
-let game: 'wiezen' | 'manille' | 'bieden' = 'wiezen';
+let game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' = 'wiezen';
+let kSession: KlaverjasSession | null = null;
+let kPersisted: store.PersistedKlaverjas | null = null;
+let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
+let klaverjasConfig: KlaverjasConfig = { ...DEFAULT_KLAVERJAS_CONFIG };
 let mSession: ManilleSession | null = null;
 let mPersisted: store.PersistedManille | null = null;
 let mRestored: { state: store.PersistedManille; session: ManilleSession } | null = null;
@@ -426,6 +440,7 @@ function cardEl(card: Card, opts?: { onClick?: () => void; disabled?: boolean })
 function liveSession(): boolean {
   if (game === 'manille') return Boolean(mSession && !mSession.finished);
   if (game === 'bieden') return Boolean(bSession && !bSession.finished);
+  if (game === 'klaverjassen') return Boolean(kSession && !kSession.finished);
   return Boolean(session && !session.finished);
 }
 
@@ -442,6 +457,7 @@ function resumeGame(): void {
   render();
   if (game === 'manille') scheduleManilleBots();
   else if (game === 'bieden') scheduleBiedenBots();
+  else if (game === 'klaverjassen') scheduleKlaverjasBots();
   else scheduleBots();
 }
 
@@ -644,7 +660,7 @@ function manilleOptionsPanel(): HTMLElement {
 }
 
 function gameTile(
-  id: 'wiezen' | 'manille' | 'bieden',
+  id: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen',
   icon: string,
   nameKey: MessageKey,
   descKey: MessageKey,
@@ -707,6 +723,7 @@ function startScreen(): HTMLElement {
     gameTile('wiezen', '\u2660', 'game.wiezen', 'tile.wiezen'),
     gameTile('manille', '\u2665', 'game.manillen', 'tile.manillen'),
     gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
+    gameTile('klaverjassen', '\u2666', 'game.klaverjassen', 'tile.klaverjassen'),
   );
   main.append(tiles);
 
@@ -715,7 +732,13 @@ function startScreen(): HTMLElement {
   if (game === 'wiezen') main.append(rulesetPicker());
 
   const bodyKey =
-    game === 'manille' ? 'manille.intro' : game === 'bieden' ? 'bieden.intro' : 'wiezen.intro';
+    game === 'manille'
+      ? 'manille.intro'
+      : game === 'bieden'
+        ? 'bieden.intro'
+        : game === 'klaverjassen'
+          ? 'klaverjas.intro'
+          : 'wiezen.intro';
   main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
@@ -723,7 +746,9 @@ function startScreen(): HTMLElement {
       ? Boolean(mRestored && !mRestored.session.finished)
       : game === 'bieden'
         ? Boolean(bRestored && !bRestored.session.finished)
-        : Boolean(restored && !restored.session.finished);
+        : game === 'klaverjassen'
+          ? Boolean(kRestored && !kRestored.session.finished)
+          : Boolean(restored && !restored.session.finished);
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
@@ -737,6 +762,10 @@ function startScreen(): HTMLElement {
           store.clearManille();
           mRestored = null;
           startManille();
+        } else if (game === 'klaverjassen') {
+          store.clearKlaverjas();
+          kRestored = null;
+          startKlaverjas();
         } else if (game === 'bieden') {
           store.clearBieden();
           bRestored = null;
@@ -748,6 +777,19 @@ function startScreen(): HTMLElement {
         }
       }),
     );
+  } else if (game === 'klaverjassen') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueKlaverjas));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearKlaverjas();
+          kRestored = null;
+          startKlaverjas();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startKlaverjas));
+    }
   } else if (game === 'bieden') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueBieden));
@@ -880,7 +922,9 @@ function tableGrid(): HTMLElement {
       ? (mSession?.giftNumber ?? 0)
       : game === 'bieden'
         ? (bSession?.giftNumber ?? 0)
-        : (session?.giftNumber ?? 0);
+        : game === 'klaverjassen'
+          ? (kSession?.roundNumber ?? 0)
+          : (session?.giftNumber ?? 0);
   const key = `${game}:${n}`;
   const table = el('div', 'table-grid');
   if (key !== dealtKey) {
@@ -1530,6 +1574,22 @@ function render(): void {
     wrap.append(statsScreen());
   } else if (view === 'home') {
     wrap.append(startScreen());
+  } else if (game === 'klaverjassen') {
+    const kGift = kSession?.gift ?? null;
+    if (!kSession || (!kGift && !kSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!kGift && kSession.finished) {
+      wrap.append(klaverjasEndScreen());
+    } else if (kGift) {
+      wrap.append(klaverjasStatusBar(kGift));
+      const table = tableGrid();
+      table.append(klaverjasSeat(kGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(klaverjasSeat(kGift, 1), klaverjasTrickArea(kGift), klaverjasSeat(kGift, 3));
+      table.append(middle);
+      table.append(klaverjasSeat(kGift, HUMAN));
+      wrap.append(table, klaverjasActionPanel(kGift));
+    }
   } else if (game === 'bieden') {
     if (!bSession || (!bGift && !bSession.finished)) {
       wrap.append(startScreen());
@@ -2675,6 +2735,319 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
   return main;
 }
 
+/* ---------- klaverjassen ---------- */
+
+function recordK(action: store.KlaverjasAction): void {
+  if (!kPersisted) return;
+  kPersisted.actions.push(action);
+  store.saveKlaverjas(kPersisted);
+}
+
+function startKlaverjas(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  kPersisted = store.newKlaverjas(seed, botLevel, klaverjasConfig);
+  store.saveKlaverjas(kPersisted);
+  kRestored = null;
+  kSession = store.replayKlaverjas(kPersisted);
+  view = 'game';
+  render();
+  scheduleKlaverjasBots();
+}
+
+function continueKlaverjas(): void {
+  if (!kRestored) return;
+  kPersisted = kRestored.state;
+  kSession = kRestored.session;
+  botLevel = kPersisted.botLevel;
+  klaverjasConfig = kPersisted.config;
+  kRestored = null;
+  view = 'game';
+  render();
+  scheduleKlaverjasBots();
+}
+
+function klaverjasActor(): { player: number; human: boolean } | null {
+  const gift = kSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'trump-choice') {
+    return { player: gift.chooser, human: gift.chooser === HUMAN };
+  }
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playKlaverjasCard(gift: KlaverjasGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordK({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    sfxScore(gift.score.made === (gift.score.declaringTeam === kTeamOf(HUMAN)));
+  }
+}
+
+function klaverjasBotStep(): boolean {
+  const gift = kSession?.gift;
+  const who = klaverjasActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'trump-choice') {
+    const hand = gift.hands[who.player] as Card[];
+    if (chooseKlaverjasPass(gift, hand, botLevel)) {
+      gift.pass();
+      recordK({ t: 'pass' });
+    } else {
+      const suit = chooseKlaverjasTrump(hand).suit;
+      gift.chooseTrump(suit);
+      recordK({ t: 'trump', suit });
+    }
+    return true;
+  }
+  playKlaverjasCard(gift, who.player, chooseKlaverjasCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleKlaverjasBots(): void {
+  const gen = ++generation;
+  const who = klaverjasActor();
+  if (!who || who.human) return;
+  const gift = kSession?.gift;
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'klaverjassen' || view !== 'game') return;
+      if (klaverjasBotStep()) {
+        render();
+        scheduleKlaverjasBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function klaverjasCloseAndNext(): void {
+  if (!kSession) return;
+  kSession.closeGift();
+  recordK({ t: 'close' });
+  if (!kSession.finished) {
+    kSession.nextGift();
+  } else {
+    recordSessionStat('klaverjassen', botLevel, kSession.totals, kTeamOf(HUMAN));
+    store.clearKlaverjas();
+    kPersisted = null;
+  }
+  render();
+  scheduleKlaverjasBots();
+}
+
+function klaverjasStatusBar(gift: KlaverjasGift): HTMLElement {
+  const s = kSession as KlaverjasSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('klaverjas.round', { n: s.roundNumber })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.trumpSuit) {
+    bar.append(
+      el(
+        'span',
+        'chip',
+        t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
+      ),
+    );
+    if (gift.declarer !== null) {
+      bar.append(el('span', 'chip', t('klaverjas.declarer', { name: playerName(gift.declarer) })));
+    }
+  } else {
+    bar.append(el('span', 'chip', t('klaverjas.trumpPending', { name: playerName(gift.chooser) })));
+  }
+  const we = kTeamOf(HUMAN);
+  bar.append(
+    el(
+      'span',
+      'chip strong',
+      `${t('team.we')} ${s.totals[we] ?? 0} — ${t('team.they')} ${s.totals[1 - we] ?? 0}`,
+    ),
+  );
+  return bar;
+}
+
+function klaverjasSeat(gift: KlaverjasGift, player: number): HTMLElement {
+  const who = klaverjasActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}`));
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playKlaverjasCard(gift, HUMAN, card);
+            render();
+            scheduleKlaverjasBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function klaverjasTrickArea(gift: KlaverjasGift): HTMLElement {
+  const area = el('div', 'trick');
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  // Roem van de vorige slag meteen melden — anders zie je alleen het eindtotaal.
+  if (showLast && gift.lastRoem.length > 0) {
+    area.append(el('div', 'trick-label strong', roemLine(gift.lastRoem)));
+  }
+  return area;
+}
+
+/** "Roem: 20 (drie op volgorde)" — de reden erbij, anders is het een raadsel. */
+function roemLine(details: RoemDetail[]): string {
+  const total = details.reduce((sum, d) => sum + d.points, 0);
+  const namen = details.map((d) => t(`klaverjas.roem.${d.kind}` as MessageKey)).join(', ');
+  return t('klaverjas.roemLine', { points: total, kinds: namen });
+}
+
+function klaverjasActionPanel(gift: KlaverjasGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = klaverjasActor();
+  const tip = coachBox(who?.human ? klaverjasTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
+
+  if (gift.phase === 'trump-choice') {
+    if (who?.human) {
+      panel.append(
+        el(
+          'p',
+          undefined,
+          gift.mustChoose ? t('klaverjas.mustChoose') : t('klaverjas.chooseOrPass'),
+        ),
+      );
+      const row = el('div', 'btn-row');
+      for (const suit of SUITS) {
+        const red = suit === 'H' || suit === 'D';
+        row.append(
+          button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${red ? ' red' : ''}`, () => {
+            gift.chooseTrump(suit);
+            recordK({ t: 'trump', suit });
+            render();
+            scheduleKlaverjasBots();
+          }),
+        );
+      }
+      if (!gift.mustChoose) {
+        row.append(
+          button(t('bidding.pass'), 'btn muted', () => {
+            gift.pass();
+            recordK({ t: 'pass' });
+            render();
+            scheduleKlaverjasBots();
+          }),
+        );
+      }
+      panel.append(row);
+    } else if (who) {
+      panel.append(el('p', 'hint', t('klaverjas.trumpPending', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'scored' && gift.score) {
+    const s = gift.score;
+    const we = kTeamOf(HUMAN);
+    panel.append(
+      el(
+        'h2',
+        undefined,
+        s.made
+          ? t('klaverjas.made', { team: s.declaringTeam === we ? t('team.we') : t('team.they') })
+          : t('klaverjas.nat', { team: s.declaringTeam === we ? t('team.we') : t('team.they') }),
+      ),
+    );
+    if (s.pit) panel.append(el('p', 'strong made', t('klaverjas.pit')));
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    head.append(el('th'), el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+    table.append(head);
+    const rij = (label: string, waarden: number[]) => {
+      const tr = el('tr');
+      tr.append(el('th', undefined, label));
+      tr.append(el('td', undefined, String(waarden[we] ?? 0)));
+      tr.append(el('td', undefined, String(waarden[1 - we] ?? 0)));
+      table.append(tr);
+    };
+    rij(t('klaverjas.cardPoints'), s.cardPoints);
+    rij(t('klaverjas.roemTotal'), s.roem);
+    rij(t('klaverjas.roundTotal'), s.points);
+    panel.append(table);
+    panel.append(
+      button(t('score.next'), 'btn primary', () => {
+        klaverjasCloseAndNext();
+      }),
+    );
+    return panel;
+  }
+
+  if (who && !who.human) {
+    panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+  } else if (who?.human) {
+    panel.append(el('p', 'hint', t('play.yourTurn')));
+  }
+  panel.append(el('p', 'hint', t('klaverjas.goal')));
+  return panel;
+}
+
+function klaverjasEndScreen(): HTMLElement {
+  const s = kSession as KlaverjasSession;
+  const we = kTeamOf(HUMAN);
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  const mine = s.totals[we] ?? 0;
+  const theirs = s.totals[1 - we] ?? 0;
+  main.append(
+    el(
+      'p',
+      'strong',
+      t('manille.sessionWon', {
+        team: mine >= theirs ? t('team.we') : t('team.they'),
+      }),
+    ),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  head.append(el('th'), el('th', undefined, t('team.we')), el('th', undefined, t('team.they')));
+  const row = el('tr');
+  row.append(el('th', undefined, t('score.points')));
+  row.append(el('td', undefined, String(mine)));
+  row.append(el('td', undefined, String(theirs)));
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startKlaverjas));
+  return main;
+}
+
 function scorebordScreen(): HTMLElement {
   return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
 }
@@ -2717,7 +3090,12 @@ try {
 }
 try {
   const storedGame = localStorage.getItem(GAME_KEY);
-  if (storedGame === 'manille' || storedGame === 'wiezen' || storedGame === 'bieden') {
+  if (
+    storedGame === 'manille' ||
+    storedGame === 'wiezen' ||
+    storedGame === 'bieden' ||
+    storedGame === 'klaverjassen'
+  ) {
     game = storedGame;
   }
 } catch {
@@ -2737,6 +3115,15 @@ if (savedBieden) {
     bRestored = { state: savedBieden, session: store.replayBieden(savedBieden) };
   } catch {
     store.clearBieden();
+  }
+}
+const savedKlaverjas = store.loadKlaverjas();
+if (savedKlaverjas) {
+  try {
+    kRestored = { state: savedKlaverjas, session: store.replayKlaverjas(savedKlaverjas) };
+    klaverjasConfig = savedKlaverjas.config;
+  } catch {
+    store.clearKlaverjas();
   }
 }
 sbBoard = scorebord.load();

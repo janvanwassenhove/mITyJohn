@@ -5,6 +5,13 @@
 import { ACE, sameCard, type Card, type Suit } from './engine/cards';
 import type { Bidding, BidAction } from './engine/bidding';
 import type { Gift } from './engine/game';
+import {
+  klaverjasCardPoints,
+  klaverjasStrength,
+  klaverjasTrickWinner,
+  teamOf as klaverjasTeamOf,
+  type KlaverjasGift,
+} from './engine/klaverjassen';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import {
   biedenCardPoints,
@@ -395,4 +402,79 @@ export function chooseBiedenCard(gift: BiedenGift, player: number, level: BotLev
   const winners = legal.filter(beatsBest).sort((a, b) => str(a) - str(b));
   void led;
   return winners.length > 0 ? (winners[0] as Card) : lowest;
+}
+
+/* ---------- klaverjassen ---------- */
+
+/** Troefkeuze: de kleur waarin je het sterkst zit. De troefboer en -negen wegen
+ *  zwaar door (20 en 14 punten), dus die tellen extra mee. */
+export function chooseKlaverjasTrump(hand: Card[]): { suit: Suit; score: number } {
+  let best: Suit = 'S';
+  let bestScore = -1;
+  for (const suit of SUITS) {
+    const cards = hand.filter((c) => c.suit === suit);
+    const score = cards.reduce(
+      (sum, c) => sum + klaverjasCardPoints({ suit, rank: c.rank }, suit),
+      cards.length * 6,
+    );
+    if (score > bestScore) {
+      bestScore = score;
+      best = suit;
+    }
+  }
+  return { suit: best, score: bestScore };
+}
+
+/** Past de bot, of kiest hij? De laatste (deler) móét kiezen (REGELS §4). */
+export function chooseKlaverjasPass(gift: KlaverjasGift, hand: Card[], level: BotLevel): boolean {
+  if (gift.mustChoose) return false;
+  const { score } = chooseKlaverjasTrump(hand);
+  const drempel = level === 'easy' ? 44 : level === 'strong' ? 34 : 38;
+  return score < drempel;
+}
+
+export function chooseKlaverjasCard(gift: KlaverjasGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const trump = gift.trumpSuit as Suit;
+  const trick = gift.trick;
+  const punten = (c: Card) => klaverjasCardPoints(c, trump);
+  const kracht = (c: Card) => klaverjasStrength(c.rank, c.suit, trump);
+  const goedkoopst = [...legal].sort(
+    (a, b) => punten(a) - punten(b) || kracht(a) - kracht(b),
+  )[0] as Card;
+
+  if (level === 'easy') return goedkoopst;
+
+  if (trick.length === 0) {
+    // Uitkomen: met de troefboer eerst troef trekken, anders een hoge kaart in
+    // een lange kleur.
+    const boer = legal.find((c) => c.suit === trump && c.rank === 11);
+    if (boer && level === 'strong') return boer;
+    const nonTrump = legal.filter((c) => c.suit !== trump);
+    const pool = nonTrump.length > 0 ? nonTrump : legal;
+    return [...pool].sort((a, b) => kracht(b) - kracht(a))[0] as Card;
+  }
+
+  const winnaar = klaverjasTrickWinner(trick, trump);
+  const maatLigt = klaverjasTeamOf(winnaar) === klaverjasTeamOf(player);
+  const hoogste = trick.find((p) => p.player === winnaar)?.card as Card;
+  const ledSuit = (trick[0] as { card: Card }).card.suit;
+  const winnend = legal
+    .filter((c) => {
+      const cTrump = c.suit === trump;
+      const tTrump = hoogste.suit === trump;
+      if (cTrump && !tTrump) return true;
+      if (!cTrump && tTrump) return false;
+      if (c.suit === hoogste.suit) return kracht(c) > kracht(hoogste);
+      return c.suit === ledSuit && hoogste.suit !== ledSuit;
+    })
+    .sort((a, b) => kracht(a) - kracht(b));
+
+  // Ligt de slag bij je maat, dan smeer je er punten op; anders neem je hem
+  // zo goedkoop mogelijk, of gooi je het goedkoopste weg.
+  if (maatLigt) {
+    return [...legal].sort((a, b) => punten(b) - punten(a) || kracht(a) - kracht(b))[0] as Card;
+  }
+  return winnend.length > 0 ? (winnend[0] as Card) : goedkoopst;
 }

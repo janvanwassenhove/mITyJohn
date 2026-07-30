@@ -1,0 +1,106 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "klaverjassen",
+  "game": "klaverjassen",
+  "name": {
+    "nl": "Klaverjassen",
+    "en": "Klaverjassen (Dutch)",
+    "fr": "Klaverjas (néerlandais)"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-KLAVERJASSEN.md",
+  "players": 4,
+  "teams": 2,
+  "deck": {
+    "cards": 32,
+    "jokers": false,
+    "rankOrder": [
+      "A",
+      "K",
+      "Q",
+      "J",
+      "10",
+      "9",
+      "8",
+      "7"
+    ],
+    "trumpRankOrder": [
+      "J",
+      "9",
+      "A",
+      "10",
+      "K",
+      "Q",
+      "8",
+      "7"
+    ]
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 8,
+    "dealPattern": [
+      3,
+      2,
+      3
+    ],
+    "trumpDetermination": "chosen-by-eldest-then-around",
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": true,
+    "mustOvertrump": true
+  },
+  "points": {
+    "trump": {
+      "J": 20,
+      "9": 14,
+      "A": 11,
+      "10": 10,
+      "K": 4,
+      "Q": 3,
+      "8": 0,
+      "7": 0
+    },
+    "plain": {
+      "A": 11,
+      "10": 10,
+      "K": 4,
+      "Q": 3,
+      "J": 2,
+      "9": 0,
+      "8": 0,
+      "7": 0
+    },
+    "lastTrick": 10,
+    "total": 162
+  },
+  "roem": {
+    "threeInSequence": 20,
+    "fourInSequence": 50,
+    "fourOfAKind": 100,
+    "fourJacks": 200,
+    "stuk": 20,
+    "sequenceUsesPlainOrder": true
+  },
+  "scoring": {
+    "winCondition": "more-than-opponents",
+    "natGivesAllToOpponents": true,
+    "pitBonus": 100
+  },
+  "session": {
+    "rounds": 16,
+    "targetPoints": 1500
+  },
+  "assumptions": [
+    "Deelpatroon 3-2-3 (REGELS-KLAVERJASSEN.md §2) — AANNAME, 4-4 komt ook voor",
+    "Past iedereen, dan is de deler verplicht een troefkleur te kiezen (§4) — AANNAME",
+    "Roem gebruikt de gewone volgorde 7-8-9-10-B-V-H-A, ook in troef (§6) — AANNAME",
+    "Vier boeren = 200 roem (§6) — AANNAME, elders 100",
+    "Pitbonus 100 (§7) — AANNAME, sommige kringen spelen zonder",
+    "Partij = boompje van 16 ronden of tot 1500 punten (§7) — AANNAME"
+  ],
+  "confirmed": [
+    "Kaartwaarden en 162 punten per ronde (§3)",
+    "Rotterdams en Amsterdams allebei aanwezig en kiesbaar bij de start (§5)",
+    "Nat: alle punten naar de tegenpartij (§7)"
+  ]
+}

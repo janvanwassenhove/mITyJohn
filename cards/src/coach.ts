@@ -7,15 +7,17 @@ import type { Card } from './engine/cards';
 import type { Gift } from './engine/game';
 import type { ManilleGift } from './engine/manille';
 import type { BiedenGift } from './engine/bieden';
+import type { KlaverjasGift } from './engine/klaverjassen';
 
 const COACH_KEY = 'cards.coach';
 
 /** Aantal stappen in de wizard, per spel (de teksten staan in i18n als
  *  `wizard.<spel>.<n>.title` / `.body`). */
-export const WIZARD_STEPS: Record<'wiezen' | 'manille' | 'bieden', number> = {
+export const WIZARD_STEPS: Record<'wiezen' | 'manille' | 'bieden' | 'klaverjassen', number> = {
   wiezen: 5,
   manille: 4,
   bieden: 4,
+  klaverjassen: 5,
 };
 
 export function loadCoachEnabled(): boolean {
@@ -121,6 +123,23 @@ export function manilleTip(gift: ManilleGift, player: number): CoachTip | null {
   const ledSuit = gift.trick[0]?.card.suit;
   const canFollow = hand.some((c) => c.suit === ledSuit);
   return canFollow ? { id: 'mustFollow' } : { id: 'manilleMustTrump' };
+}
+
+/** Tip voor klaverjassen: troefkeuze en de troefplicht tijdens het spel. */
+export function klaverjasTip(gift: KlaverjasGift, player: number): CoachTip | null {
+  if (gift.phase === 'trump-choice') {
+    if (gift.chooser !== player) return null;
+    if (gift.mustChoose) return { id: 'kjMustChoose' };
+    return { id: 'kjChoose' };
+  }
+  if (gift.phase !== 'play' || gift.toPlay !== player) return null;
+  const hand = gift.hands[player] ?? [];
+  if (gift.trick.length === 0) return { id: 'kjLead' };
+  const ledSuit = gift.trick[0]?.card.suit;
+  if (hand.some((c) => c.suit === ledSuit)) return { id: 'mustFollow' };
+  const legal = gift.legalCards(player);
+  const alleenTroef = legal.length > 0 && legal.every((c) => c.suit === gift.trumpSuit);
+  return alleenTroef ? { id: 'kjMustTrump' } : { id: 'cannotFollow' };
 }
 
 export function biedenTip(gift: BiedenGift, player: number): CoachTip | null {
