@@ -32,6 +32,15 @@ import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
 import { chooseBeloteCard, chooseBeloteTake } from './bots';
+import { chooseHartenCard, chooseHartenPass } from './bots';
+import {
+  DEFAULT_HARTEN_CONFIG,
+  PASS_COUNT,
+  TOTAL_PENALTY,
+  type HartenConfig,
+  type HartenGift,
+  type HartenSession,
+} from './engine/hartenjagen';
 import {
   DEFAULT_BELOTE_CONFIG,
   teamOf as blTeamOf,
@@ -63,6 +72,7 @@ import {
 import {
   WIZARD_STEPS,
   biedenTip,
+  hartenTip,
   loadCoachEnabled,
   klaverjasTip,
   manilleTip,
@@ -149,7 +159,14 @@ let generation = 0;
 const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
-let game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' = 'wiezen';
+type GameId = 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen';
+let game: GameId = 'wiezen';
+let hjSession: HartenSession | null = null;
+let hjPersisted: store.PersistedHarten | null = null;
+let hjRestored: { state: store.PersistedHarten; session: HartenSession } | null = null;
+let hartenConfig: HartenConfig = { ...DEFAULT_HARTEN_CONFIG };
+/** Wat de mens klaargelegd heeft om door te geven (§4) — leeg zodra geruild is. */
+let hjSelected: Card[] = [];
 let kSession: KlaverjasSession | null = null;
 let kPersisted: store.PersistedKlaverjas | null = null;
 let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
@@ -455,6 +472,7 @@ function liveSession(): boolean {
   if (game === 'bieden') return Boolean(bSession && !bSession.finished);
   if (game === 'klaverjassen') return Boolean(kSession && !kSession.finished);
   if (game === 'belote') return Boolean(blSession && !blSession.finished);
+  if (game === 'hartenjagen') return Boolean(hjSession && !hjSession.finished);
   return Boolean(session && !session.finished);
 }
 
@@ -473,6 +491,7 @@ function resumeGame(): void {
   else if (game === 'bieden') scheduleBiedenBots();
   else if (game === 'klaverjassen') scheduleKlaverjasBots();
   else if (game === 'belote') scheduleBeloteBots();
+  else if (game === 'hartenjagen') scheduleHartenBots();
   else scheduleBots();
 }
 
@@ -674,12 +693,7 @@ function manilleOptionsPanel(): HTMLElement {
   return box;
 }
 
-function gameTile(
-  id: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote',
-  icon: string,
-  nameKey: MessageKey,
-  descKey: MessageKey,
-): HTMLElement {
+function gameTile(id: GameId, icon: string, nameKey: MessageKey, descKey: MessageKey): HTMLElement {
   const tile = el('button', 'game-tile');
   tile.type = 'button';
   tile.setAttribute('aria-pressed', String(game === id));
@@ -740,6 +754,7 @@ function startScreen(): HTMLElement {
     gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
     gameTile('klaverjassen', '\u2666', 'game.klaverjassen', 'tile.klaverjassen'),
     gameTile('belote', '\u{1F1EB}\u{1F1F7}', 'game.belote', 'tile.belote'),
+    gameTile('hartenjagen', '\u{1F494}', 'game.hartenjagen', 'tile.hartenjagen'),
   );
   main.append(tiles);
 
@@ -756,7 +771,9 @@ function startScreen(): HTMLElement {
           ? 'klaverjas.intro'
           : game === 'belote'
             ? 'belote.intro'
-            : 'wiezen.intro';
+            : game === 'hartenjagen'
+              ? 'harten.intro'
+              : 'wiezen.intro';
   main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
@@ -768,7 +785,9 @@ function startScreen(): HTMLElement {
           ? Boolean(kRestored && !kRestored.session.finished)
           : game === 'belote'
             ? Boolean(blRestored && !blRestored.session.finished)
-            : Boolean(restored && !restored.session.finished);
+            : game === 'hartenjagen'
+              ? Boolean(hjRestored && !hjRestored.session.finished)
+              : Boolean(restored && !restored.session.finished);
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
@@ -790,6 +809,10 @@ function startScreen(): HTMLElement {
           store.clearBelote();
           blRestored = null;
           startBelote();
+        } else if (game === 'hartenjagen') {
+          store.clearHarten();
+          hjRestored = null;
+          startHarten();
         } else if (game === 'bieden') {
           store.clearBieden();
           bRestored = null;
@@ -801,6 +824,19 @@ function startScreen(): HTMLElement {
         }
       }),
     );
+  } else if (game === 'hartenjagen') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueHarten));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearHarten();
+          hjRestored = null;
+          startHarten();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startHarten));
+    }
   } else if (game === 'belote') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueBelote));
@@ -926,7 +962,9 @@ function startScreen(): HTMLElement {
 
   // Regelvarianten horen bij een nieuwe sessie; een hersteld spel heeft de
   // zijne al vastgelegd.
-  if (!hasRestore && game !== 'bieden') {
+  // Enkel wiezen en manillen hebben regelvarianten; de andere spellen kregen
+  // hier tot nu toe het wiezen-paneel te zien, wat nergens op sloeg.
+  if (!hasRestore && (game === 'wiezen' || game === 'manille')) {
     body.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
 
@@ -963,7 +1001,9 @@ function tableGrid(): HTMLElement {
           ? (kSession?.roundNumber ?? 0)
           : game === 'belote'
             ? (blSession?.roundNumber ?? 0)
-            : (session?.giftNumber ?? 0);
+            : game === 'hartenjagen'
+              ? (hjSession?.roundNumber ?? 0)
+              : (session?.giftNumber ?? 0);
   const key = `${game}:${n}`;
   const table = el('div', 'table-grid');
   if (key !== dealtKey) {
@@ -1101,10 +1141,13 @@ function wizardScreen(): HTMLElement {
 
   // Je moest hiervoor eerst terug naar het startscherm om een ander spel te
   // leren; nu wissel je gewoon hier van spel.
-  const games: ['wiezen' | 'manille' | 'bieden', MessageKey][] = [
+  const games: [GameId, MessageKey][] = [
     ['wiezen', 'game.wiezen'],
     ['manille', 'game.manillen'],
     ['bieden', 'game.bieden'],
+    ['klaverjassen', 'game.klaverjassen'],
+    ['belote', 'game.belote'],
+    ['hartenjagen', 'game.hartenjagen'],
   ];
   const picker = el('div', 'seg wide');
   picker.setAttribute('role', 'group');
@@ -1613,6 +1656,22 @@ function render(): void {
     wrap.append(statsScreen());
   } else if (view === 'home') {
     wrap.append(startScreen());
+  } else if (game === 'hartenjagen') {
+    const hjGift = hjSession?.gift ?? null;
+    if (!hjSession || (!hjGift && !hjSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!hjGift && hjSession.finished) {
+      wrap.append(hartenEndScreen());
+    } else if (hjGift) {
+      wrap.append(hartenStatusBar(hjGift));
+      const table = tableGrid();
+      table.append(hartenSeat(hjGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(hartenSeat(hjGift, 1), hartenTrickArea(hjGift), hartenSeat(hjGift, 3));
+      table.append(middle);
+      table.append(hartenSeat(hjGift, HUMAN));
+      wrap.append(table, hartenActionPanel(hjGift));
+    }
   } else if (game === 'belote') {
     const blGift = blSession?.gift ?? null;
     if (!blSession || (!blGift && !blSession.finished)) {
@@ -3422,6 +3481,320 @@ function beloteEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- hartenjagen ---------- */
+
+function recordHJ(action: store.HartenAction): void {
+  if (!hjPersisted) return;
+  hjPersisted.actions.push(action);
+  store.saveHarten(hjPersisted);
+}
+
+function startHarten(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  hjPersisted = store.newHarten(seed, botLevel, hartenConfig);
+  store.saveHarten(hjPersisted);
+  hjRestored = null;
+  hjSelected = [];
+  hjSession = store.replayHarten(hjPersisted);
+  view = 'game';
+  render();
+  scheduleHartenBots();
+}
+
+function continueHarten(): void {
+  if (!hjRestored) return;
+  hjPersisted = hjRestored.state;
+  hjSession = hjRestored.session;
+  botLevel = hjPersisted.botLevel;
+  hartenConfig = hjPersisted.config;
+  hjRestored = null;
+  hjSelected = [];
+  view = 'game';
+  render();
+  scheduleHartenBots();
+}
+
+/** Wie is er aan zet? Tijdens het doorgeven kiest iedereen tegelijk, dus dan
+ *  telt enkel of de mens zelf nog moet kiezen. */
+function hartenActor(): { player: number; human: boolean } | null {
+  const gift = hjSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'passing') {
+    const wachtend = gift.pendingPassers();
+    if (wachtend.length === 0) return null;
+    const eerste = wachtend.includes(HUMAN) ? HUMAN : (wachtend[0] as number);
+    return { player: eerste, human: eerste === HUMAN };
+  }
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playHartenCard(gift: HartenGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordHJ({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    // "Goed" is hier: zo weinig mogelijk strafpunten — onder je eerlijke deel.
+    sfxScore((gift.score.points[HUMAN] ?? 0) <= TOTAL_PENALTY / PLAYER_COUNT);
+  }
+}
+
+function hartenBotStep(): boolean {
+  const gift = hjSession?.gift;
+  if (!gift) return false;
+  if (gift.phase === 'passing') {
+    const wachtend = gift.pendingPassers().filter((p) => p !== HUMAN);
+    const p = wachtend[0];
+    if (p === undefined) return false;
+    const cards = chooseHartenPass(gift, p, botLevel);
+    gift.selectPass(p, cards);
+    recordHJ({ t: 'pass', p, cards });
+    return true;
+  }
+  const who = hartenActor();
+  if (!who || who.human) return false;
+  playHartenCard(gift, who.player, chooseHartenCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleHartenBots(): void {
+  const gen = ++generation;
+  const gift = hjSession?.gift;
+  if (!gift) return;
+  const passing = gift.phase === 'passing' && gift.pendingPassers().some((p) => p !== HUMAN);
+  const who = hartenActor();
+  if (!passing && (!who || who.human)) return;
+  const pause = gift.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'hartenjagen' || view !== 'game') return;
+      if (hartenBotStep()) {
+        render();
+        scheduleHartenBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function hartenCloseAndNext(): void {
+  if (!hjSession) return;
+  hjSession.closeGift();
+  recordHJ({ t: 'close' });
+  hjSelected = [];
+  if (!hjSession.finished) {
+    hjSession.nextGift();
+  } else {
+    // Bij hartenjagen wint de láágste score — dat moet de statistiek weten.
+    recordSessionStat('hartenjagen', botLevel, hjSession.totals, HUMAN, true);
+    store.clearHarten();
+    hjPersisted = null;
+  }
+  render();
+  scheduleHartenBots();
+}
+
+function hartenStatusBar(gift: HartenGift): HTMLElement {
+  const s = hjSession as HartenSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('harten.roundNo', { n: s.roundNumber })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+    el(
+      'span',
+      'chip',
+      t('harten.passChip', { dir: t(`harten.pass.${gift.passDirection}` as MessageKey) }),
+    ),
+  );
+  if (gift.phase !== 'passing') {
+    bar.append(el('span', 'chip', gift.heartsBroken ? t('harten.broken') : t('harten.notBroken')));
+  }
+  bar.append(
+    el('span', 'chip strong', s.totals.map((n, p) => `${playerName(p)} ${n}`).join(' — ')),
+  );
+  return bar;
+}
+
+function hartenSeat(gift: HartenGift, player: number): HTMLElement {
+  const who = hartenActor();
+  const passing = gift.phase === 'passing';
+  const actief = passing ? gift.selected[player] === null : who?.player === player;
+  const box = el('div', `seat seat-${player}${actief ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  head.append(el('span', 'seat-tricks', `${t('harten.penalty')}: ${gift.penalties[player] ?? 0}`));
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      if (passing) {
+        // Tijdens het doorgeven tik je drie kaarten aan; een tweede tik haalt ze
+        // weer weg. Wie al gekozen heeft, kan niets meer wijzigen.
+        const gekozen = hjSelected.some((c) => c.suit === card.suit && c.rank === card.rank);
+        const vast = gift.selected[HUMAN] !== null;
+        const btn = cardEl(card, {
+          disabled: vast || (!gekozen && hjSelected.length >= PASS_COUNT),
+          onClick: () => {
+            hjSelected = gekozen
+              ? hjSelected.filter((c) => !(c.suit === card.suit && c.rank === card.rank))
+              : [...hjSelected, card];
+            render();
+          },
+        });
+        if (gekozen) btn.classList.add('selected');
+        hand.append(btn);
+        continue;
+      }
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playHartenCard(gift, HUMAN, card);
+            render();
+            scheduleHartenBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function hartenTrickArea(gift: HartenGift): HTMLElement {
+  const area = el('div', 'trick');
+  if (gift.phase === 'passing') {
+    area.append(el('div', 'trick-label', t(`harten.pass.${gift.passDirection}` as MessageKey)));
+    return area;
+  }
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function hartenActionPanel(gift: HartenGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = hartenActor();
+  const tip = coachBox(who?.human ? hartenTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
+
+  if (gift.phase === 'passing') {
+    if (gift.selected[HUMAN] === null) {
+      panel.append(
+        el(
+          'p',
+          undefined,
+          t('harten.passPrompt', {
+            n: PASS_COUNT,
+            dir: t(`harten.pass.${gift.passDirection}` as MessageKey),
+          }),
+        ),
+      );
+      const knop = button(
+        t('harten.passConfirm', { n: hjSelected.length, total: PASS_COUNT }),
+        'btn primary',
+        () => {
+          if (hjSelected.length !== PASS_COUNT) return;
+          const cards = [...hjSelected];
+          hjSelected = [];
+          gift.selectPass(HUMAN, cards);
+          recordHJ({ t: 'pass', p: HUMAN, cards });
+          render();
+          scheduleHartenBots();
+        },
+      );
+      knop.disabled = hjSelected.length !== PASS_COUNT;
+      panel.append(knop);
+    } else {
+      panel.append(el('p', 'hint', t('harten.passWaiting')));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'scored' && gift.score) {
+    const s = gift.score;
+    const total = hjSession as HartenSession;
+    panel.append(el('h2', undefined, t('harten.roundDone')));
+    if (s.moonShooter !== null) {
+      panel.append(el('p', 'strong made', t('harten.moon', { name: playerName(s.moonShooter) })));
+    }
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    head.append(el('th'));
+    for (let p = 0; p < PLAYER_COUNT; p++) head.append(el('th', undefined, playerName(p)));
+    table.append(head);
+    const rij = (label: string, waarde: (p: number) => string) => {
+      const tr = el('tr');
+      tr.append(el('th', undefined, label));
+      for (let p = 0; p < PLAYER_COUNT; p++) tr.append(el('td', undefined, waarde(p)));
+      table.append(tr);
+    };
+    rij(t('harten.penalty'), (p) => String(s.penalties[p] ?? 0));
+    rij(t('harten.roundTotal'), (p) => String(s.points[p] ?? 0));
+    rij(t('score.total'), (p) => String((total.totals[p] ?? 0) + (s.points[p] ?? 0)));
+    panel.append(table);
+    panel.append(button(t('score.next'), 'btn primary', () => hartenCloseAndNext()));
+    return panel;
+  }
+
+  // Wat je zonet kreeg blijft handig zolang de eerste slag loopt.
+  if (gift.firstTrick && (gift.received[HUMAN]?.length ?? 0) > 0) {
+    const line = el('p', 'hint strong', `${t('harten.received')} `);
+    for (const card of gift.received[HUMAN] as Card[]) line.append(cardEl(card));
+    panel.append(line);
+  }
+  if (who && !who.human) {
+    panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+  } else if (who?.human) {
+    panel.append(el('p', 'hint', t('play.yourTurn')));
+  }
+  panel.append(el('p', 'hint', t('harten.goal', { n: hartenConfig.targetPoints })));
+  return panel;
+}
+
+function hartenEndScreen(): HTMLElement {
+  const s = hjSession as HartenSession;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  main.append(
+    el(
+      'p',
+      'strong',
+      t('harten.sessionWon', {
+        name: playerName(s.winner),
+        points: s.totals[s.winner] ?? 0,
+      }),
+    ),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  for (let p = 0; p < PLAYER_COUNT; p++) {
+    head.append(el('th', undefined, playerName(p)));
+    row.append(el('td', undefined, String(s.totals[p] ?? 0)));
+  }
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startHarten));
+  return main;
+}
+
 function scorebordScreen(): HTMLElement {
   return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
 }
@@ -3469,7 +3842,8 @@ try {
     storedGame === 'wiezen' ||
     storedGame === 'bieden' ||
     storedGame === 'klaverjassen' ||
-    storedGame === 'belote'
+    storedGame === 'belote' ||
+    storedGame === 'hartenjagen'
   ) {
     game = storedGame;
   }
@@ -3499,6 +3873,15 @@ if (savedBelote) {
     beloteConfig = savedBelote.config;
   } catch {
     store.clearBelote();
+  }
+}
+const savedHarten = store.loadHarten();
+if (savedHarten) {
+  try {
+    hjRestored = { state: savedHarten, session: store.replayHarten(savedHarten) };
+    hartenConfig = savedHarten.config;
+  } catch {
+    store.clearHarten();
   }
 }
 const savedKlaverjas = store.loadKlaverjas();

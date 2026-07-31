@@ -29,20 +29,21 @@ reclame, werkt offline en is installeerbaar op je gsm.
 
 ## Wat zit erin
 
-- **Vijf spellen, zes speeltypes** — wiezen in twee vormen: **gewoon wiezen** (de
+- **Zes spellen, zeven speeltypes** — wiezen in twee vormen: **gewoon wiezen** (de
   omgedraaide laatste kaart is troef) en **kleurenwiezen** (wie vraagt, noemt zelf de
   troefkleur); daarnaast manillen (vaste ploegen, de tien is de baas), bieden (bod in
   punten, hoogste bieder bepaalt de troef), **klaverjassen** (het Nederlandse
-  ploegenspel, met roem en de keuze tussen Rotterdams en Amsterdams tellen) en
-  **belote** (het Franse ploegenspel, met annonces uit de hand en belote-rebelote).
+  ploegenspel, met roem en de keuze tussen Rotterdams en Amsterdams tellen),
+  **belote** (het Franse ploegenspel, met annonces uit de hand en belote-rebelote) en
+  **hartenjagen** (ieder voor zich, geen troef — en de punten wil je juist níét).
 - **Regelvarianten kies je bij de start** — troel op 8 of 9 slagen, manille op 60 of
   68 punten, enzovoort. De regels staan gedocumenteerd in
   [`../docs/REGELS.md`](../docs/REGELS.md) en machineleesbaar in
   [`../rulesets/`](../rulesets).
 - **Coach, starterswizard én regelgids** — ken je het spel niet? De wizard legt het in
-  vier à vijf schermen uit, de **regelgids** loodst je in zes hoofdstukken stap voor stap
-  door álle regels (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, belote,
-  klaverjassen, scorebord), en
+  vier à vijf schermen uit, de **regelgids** loodst je in negen hoofdstukken stap voor
+  stap door álle regels (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, belote,
+  klaverjassen, hartenjagen, scorebord), en
   de coach geeft tijdens het spel tips bij wat je nu moet doen.
 - **Scorebord voor een fysiek spel** — hou de stand bij aan tafel, met een automodus
   voor wiezen die uit contract, teams en aantal slagen zelf de punten berekent.
@@ -60,7 +61,8 @@ cards/                  # deze app (Vite + TypeScript, strict)
 ├── docs/screenshots/   # gegenereerde beelden (mobiel + desktop, licht + donker)
 ├── src/
 │   ├── main.ts         # UI: tafel, biedronde, wizard, scorebord, rendering
-│   ├── engine/         # DOM-vrije engines: wiezen, manillen, bieden, klaverjassen, belote
+│   ├── engine/         # DOM-vrije engines: wiezen, manillen, bieden, klaverjassen,
+│   │                   #   belote, hartenjagen
 │   ├── bots.ts         # heuristische botspelers (drie niveaus)
 │   ├── coach.ts        # starterswizard-stappen + contextuele tips
 │   ├── guide.ts        # regelgids: hoofdstukken en stappen per speltype

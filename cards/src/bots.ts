@@ -19,6 +19,7 @@ import {
   teamOf as klaverjasTeamOf,
   type KlaverjasGift,
 } from './engine/klaverjassen';
+import { PASS_COUNT, QUEEN_OF_SPADES, trickPenalty, type HartenGift } from './engine/hartenjagen';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import {
   biedenCardPoints,
@@ -552,4 +553,69 @@ export function chooseBeloteCard(gift: BeloteGift, player: number, level: BotLev
     return [...legal].sort((a, b) => punten(b) - punten(a) || kracht(a) - kracht(b))[0] as Card;
   }
   return winnend.length > 0 ? (winnend[0] as Card) : goedkoopst;
+}
+
+/* ---------- hartenjagen ---------- */
+
+/** Hoe gevaarlijk is deze kaart om te hóuden? De schoppenvrouw en de kaarten
+ *  waarmee je haar vangt (schoppenaas en -heer) wegen het zwaarst; daarna hoge
+ *  harten (REGELS-HARTENJAGEN.md §3). */
+function hartenRisico(card: Card): number {
+  if (sameCard(card, QUEEN_OF_SPADES)) return 100;
+  if (card.suit === 'S' && card.rank > 12) return 90;
+  if (card.suit === 'H') return 40 + card.rank;
+  return card.rank;
+}
+
+/** §4 — welke drie kaarten geeft de bot door? */
+export function chooseHartenPass(gift: HartenGift, player: number, level: BotLevel): Card[] {
+  const hand = gift.hands[player] ?? [];
+  const sorted =
+    level === 'easy'
+      ? [...hand].sort((a, b) => b.rank - a.rank)
+      : [...hand].sort((a, b) => hartenRisico(b) - hartenRisico(a));
+  return sorted.slice(0, PASS_COUNT);
+}
+
+export function chooseHartenCard(gift: HartenGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const laagst = [...legal].sort((a, b) => a.rank - b.rank)[0] as Card;
+  const hoogst = [...legal].sort((a, b) => b.rank - a.rank)[0] as Card;
+  if (level === 'easy') return laagst;
+
+  const trick = gift.trick;
+  if (trick.length === 0) {
+    // Uitkomen: laag, en niet in schoppen zolang de dame nog rondgaat.
+    const veilig = legal.filter((c) => !(c.suit === 'S' && c.rank >= 12));
+    const pool = veilig.length > 0 ? veilig : legal;
+    return [...pool].sort((a, b) => a.rank - b.rank)[0] as Card;
+  }
+
+  const ledSuit = (trick[0] as { card: Card }).card.suit;
+  if (legal.some((c) => c.suit === ledSuit)) {
+    const hoogsteInSlag = Math.max(
+      ...trick.filter((p) => p.card.suit === ledSuit).map((p) => p.card.rank),
+    );
+    // Zo hoog mogelijk blijven zonder de slag te pakken: je raakt een grote
+    // kaart kwijt en de punten blijven bij iemand anders.
+    const onder = [...legal].filter((c) => c.rank < hoogsteInSlag).sort((a, b) => b.rank - a.rank);
+    if (onder.length > 0) return onder[0] as Card;
+    // Je moet de slag nemen. Ligt er niets in en ben je als laatste aan zet,
+    // dan is dat gratis — gooi dan net je hoogste weg.
+    const laatste = trick.length === 3;
+    if (laatste && trickPenalty(trick) === 0 && level === 'strong') return hoogst;
+    return laagst;
+  }
+
+  // Bijgooien: je gevaarlijkste kaart de deur uit.
+  const dame = legal.find((c) => sameCard(c, QUEEN_OF_SPADES));
+  if (dame) return dame;
+  const hogeSchoppen = [...legal]
+    .filter((c) => c.suit === 'S' && c.rank > 12)
+    .sort((a, b) => b.rank - a.rank);
+  if (hogeSchoppen.length > 0) return hogeSchoppen[0] as Card;
+  const harten = [...legal].filter((c) => c.suit === 'H').sort((a, b) => b.rank - a.rank);
+  if (harten.length > 0) return harten[0] as Card;
+  return hoogst;
 }

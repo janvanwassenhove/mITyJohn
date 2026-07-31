@@ -18,6 +18,8 @@ import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from '
 import { DEFAULT_KLAVERJAS_CONFIG, KlaverjasSession } from './engine/klaverjassen';
 import { chooseBeloteCard, chooseBeloteTake } from './bots';
 import { BeloteSession, DEFAULT_BELOTE_CONFIG } from './engine/belote';
+import { chooseHartenCard, chooseHartenPass } from './bots';
+import { DEFAULT_HARTEN_CONFIG, HartenSession } from './engine/hartenjagen';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -196,6 +198,37 @@ describe('belote-bots', () => {
           session.closeGift();
         }
         expect(session.finished).toBe(true);
+      }
+    }
+  });
+});
+
+describe('hartenjagen-bots', () => {
+  it('spelen volledige partijen zonder illegale zetten, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 4; seed++) {
+        const session = new HartenSession(mulberry32(seed * 23), 0, {
+          ...DEFAULT_HARTEN_CONFIG,
+          targetPoints: 50,
+        });
+        let safety = 400;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          while (gift.phase === 'passing') {
+            const p = gift.pendingPassers()[0] as number;
+            gift.selectPass(p, chooseHartenPass(gift, p, level));
+          }
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseHartenCard(gift, p, level));
+          }
+          // Elke ronde deelt precies 26 strafpunten uit — geen kaart raakt zoek.
+          expect(gift.score?.penalties.reduce((a, b) => a + b, 0)).toBe(26);
+          session.closeGift();
+        }
+        expect(session.finished).toBe(true);
+        // De laagste score wint: die mag nooit boven de grens uitkomen.
+        expect(Math.min(...session.totals)).toBeLessThan(50);
       }
     }
   });

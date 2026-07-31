@@ -75,15 +75,17 @@ export function recordSessionStat(
   level: BotLevel,
   totals: number[],
   humanIndex = 0,
+  /** Hartenjagen draait het om: daar wint de laagste score (REGELS-HARTENJAGEN.md §6). */
+  lowestWins = false,
 ): void {
   const stats = loadStats();
-  const max = Math.max(...totals);
+  const beste = lowestWins ? Math.min(...totals) : Math.max(...totals);
   stats.sessions.push({
     ts: Date.now(),
     rulesetId,
     level,
     totals: [...totals],
-    won: (totals[humanIndex] ?? 0) === max,
+    won: (totals[humanIndex] ?? 0) === beste,
   });
   if (stats.sessions.length > 100) stats.sessions.splice(0, stats.sessions.length - 100);
   saveStats(stats);

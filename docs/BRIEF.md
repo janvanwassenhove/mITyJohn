@@ -22,10 +22,10 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 1. **Wiezen** (kleurenwiezen, Vlaams standaard) — eerst.
 2. Daarna, in volgorde (bevestigd 2026-07-24): een **kleurenwiezen-variant**,
    **manillen** en **bieden** — alle drie geïmplementeerd.
-3. Traditionele spellen uit de buurlanden (bevestigd 2026-07-29): **klaverjassen** (NL,
-   geïmplementeerd), daarna **belote** (FR), **hartenjagen** en **boerenbridge**;
-   **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers en een eigen
-   kaartset.
+3. Traditionele spellen uit de buurlanden (bevestigd 2026-07-29): **klaverjassen** (NL),
+   **belote** (FR) en **hartenjagen** — alle drie geïmplementeerd — daarna
+   **boerenbridge**; **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers
+   en een eigen kaartset.
 
 ## §4 Regels & rulesets
 
@@ -34,7 +34,7 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 - [`rulesets/*.json`](../rulesets/) is de machineleesbare vertaling; de engine voert
   uitsluitend uit wat daar staat. Eén ruleset = één coherente variant:
   `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`,
-  `klaverjassen`, `belote`.
+  `klaverjassen`, `belote`, `hartenjagen`.
 
 ## §5 Architectuur
 
@@ -107,6 +107,7 @@ alleen `main` deployen.
 | 8 | **Troel: de aas moet vallen** (REGELS.md §5.4) — de houder van de vierde aas (of de hartenheer bij vier azen in één hand) komt uit met díé kaart en bepaalt zo de troef; komt hij iets anders uit, dan schuift het doel van 8 naar 9 slagen. Engine, bots, coach, regelgids en de scorebord-automodus volgen. Het **scorebord toont voortaan het aantal slagen** per ronde ("Troel — Jan + Jappe · 8/9 slagen"), zodat een rij achteraf na te rekenen valt | ✅ |
 | 9 | **Klaverjassen (NL)** — eerste spel buiten de Vlaamse familie, volgens dezelfde principes: [REGELS-KLAVERJASSEN.md](REGELS-KLAVERJASSEN.md) met gemarkeerde aannames, `rulesets/klaverjassen.json`, eigen DOM-vrije engine (troefkeuze met passen, verplicht spelen voor de deler, **roem**, Rotterdams/Amsterdams, nat, pit), bots, persistentie, coach, gidshoofdstuk en wizard, in nl/en/fr | ✅ |
 | 10 | **Belote (FR)** — [REGELS-BELOTE.md](REGELS-BELOTE.md), `rulesets/belote.json` en een eigen engine: troef via een **omgedraaide kaart in twee biedronden** (neemt niemand, dan opnieuw delen), **annonces uit de hand** (tierce/cinquante/cent/carrés, waarbij enkel de ploeg met de beste combinatie telt), **belote-rebelote**, dedans en capot, tot 501. De slagregels zijn gedeeld met klaverjassen via `trickLegalPlays` — belote verschilt daar enkel in dat ondertroeven verplicht is maar je vrij mag bijgooien als je maat de slag heeft | ✅ |
+| 11 | **Hartenjagen (Hearts / Chasse au cœur)** — het buitenbeentje: geen ploegen, geen bieden, geen troef, en punten die je juist *wil vermijden*. [REGELS-HARTENJAGEN.md](REGELS-HARTENJAGEN.md), `rulesets/hartenjagen.json` en een eigen engine met de **doorgeeffase** (drie kaarten naar links/rechts/tegenover/niet), de strafkaarten (elke harten 1, schoppenvrouw 13), de verplichte uitkomst met klaveren 2, het **breken van harten** en **alles halen** (26 → 0 voor de schutter, 26 voor de rest). Bots die hun gevaarlijkste kaarten doorgeven en onder de slag blijven, plus coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
 
 ## §13 Open punten
 

@@ -8,13 +8,14 @@ import type { Gift } from './engine/game';
 import type { ManilleGift } from './engine/manille';
 import type { BiedenGift } from './engine/bieden';
 import type { KlaverjasGift } from './engine/klaverjassen';
+import type { HartenGift } from './engine/hartenjagen';
 
 const COACH_KEY = 'cards.coach';
 
 /** Aantal stappen in de wizard, per spel (de teksten staan in i18n als
  *  `wizard.<spel>.<n>.title` / `.body`). */
 export const WIZARD_STEPS: Record<
-  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote',
+  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen',
   number
 > = {
   wiezen: 5,
@@ -22,6 +23,7 @@ export const WIZARD_STEPS: Record<
   bieden: 4,
   klaverjassen: 5,
   belote: 5,
+  hartenjagen: 5,
 };
 
 export function loadCoachEnabled(): boolean {
@@ -144,6 +146,30 @@ export function klaverjasTip(gift: KlaverjasGift, player: number): CoachTip | nu
   const legal = gift.legalCards(player);
   const alleenTroef = legal.length > 0 && legal.every((c) => c.suit === gift.trumpSuit);
   return alleenTroef ? { id: 'kjMustTrump' } : { id: 'cannotFollow' };
+}
+
+/** Tip voor hartenjagen: het doorgeven en het ontwijken van de strafkaarten. */
+export function hartenTip(gift: HartenGift, player: number): CoachTip | null {
+  if (gift.phase === 'passing') {
+    if (gift.selected[player] !== null) return null;
+    return { id: `hjPass${gift.passDirection === 'none' ? 'None' : ''}` };
+  }
+  if (gift.phase !== 'play' || gift.toPlay !== player) return null;
+  const hand = gift.hands[player] ?? [];
+  if (gift.firstTrick && gift.trick.length === 0) return { id: 'hjOpening' };
+  if (gift.trick.length === 0) {
+    return gift.heartsBroken ? { id: 'hjLeadBroken' } : { id: 'hjLead' };
+  }
+  const ledSuit = gift.trick[0]?.card.suit;
+  if (hand.some((c) => c.suit === ledSuit)) {
+    const straf = gift.trick.reduce(
+      (sum, p) =>
+        sum + (p.card.suit === 'H' ? 1 : p.card.suit === 'S' && p.card.rank === 12 ? 13 : 0),
+      0,
+    );
+    return straf > 0 ? { id: 'hjDuck', params: { points: straf } } : { id: 'mustFollow' };
+  }
+  return { id: 'hjDiscard' };
 }
 
 export function biedenTip(gift: BiedenGift, player: number): CoachTip | null {

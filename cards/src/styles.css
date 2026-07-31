@@ -751,6 +751,18 @@ button.card:disabled {
   box-shadow: none;
 }
 
+/* Hartenjagen: de drie kaarten die je klaarlegt om door te geven. Ze moeten er
+   ook uitspringen wanneer de knop intussen uitgeschakeld is (drie gekozen). */
+button.card.selected,
+button.card.selected:disabled {
+  transform: translateY(-10px);
+  filter: none;
+  border-color: var(--accent);
+  box-shadow:
+    0 10px 20px rgb(0 0 0 / 30%),
+    inset 0 0 0 3px var(--accent);
+}
+
 .card.back {
   width: 1.5rem;
   height: 3.7rem;

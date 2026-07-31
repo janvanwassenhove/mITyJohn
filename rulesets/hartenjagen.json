@@ -1,0 +1,63 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "hartenjagen",
+  "game": "hartenjagen",
+  "name": {
+    "nl": "Hartenjagen",
+    "en": "Hearts",
+    "fr": "Chasse au cœur"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-HARTENJAGEN.md",
+  "players": 4,
+  "teams": 0,
+  "deck": {
+    "cards": 52,
+    "jokers": false,
+    "rankOrder": ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": 13,
+    "dealPattern": [13],
+    "trumpDetermination": "none",
+    "openingLead": "two-of-clubs",
+    "followSuit": "required",
+    "mustTrump": false,
+    "mustOvertrump": false,
+    "noPenaltyOnFirstTrick": true,
+    "heartsMustBeBroken": true,
+    "queenOfSpadesLeadAlwaysAllowed": true
+  },
+  "passing": {
+    "cards": 3,
+    "rotation": ["left", "right", "across", "none"]
+  },
+  "penalties": {
+    "hearts": 1,
+    "queenOfSpades": 13,
+    "totalPerRound": 26
+  },
+  "scoring": {
+    "objective": "avoid-points",
+    "shootTheMoon": true,
+    "shootTheMoonGivesOthers": 26
+  },
+  "session": {
+    "targetPoints": 100,
+    "lowestScoreWins": true
+  },
+  "assumptions": [
+    "Partij tot 100 strafpunten (REGELS-HARTENJAGEN.md §2) — AANNAME, 50 komt ook voor",
+    "Klaveren 2 komt uit (§5.1) — AANNAME, elders komt links van de deler uit",
+    "In de eerste slag mag je geen strafkaart bijgooien tenzij je niets anders hebt (§5.3) — AANNAME",
+    "De schoppenvrouw mag je wél uitkomen vóór harten gebroken is (§5.4) — AANNAME",
+    "Geen ruitenboer-variant (−10) (open vraag 4)"
+  ],
+  "confirmed": [
+    "52 kaarten, 13 per speler, ieder voor zich, geen troef (§2)",
+    "Elke harten 1 punt, schoppenvrouw 13, samen 26 per ronde (§3)",
+    "Drie kaarten doorgeven in de beurtrol links–rechts–tegenover–niet (§4)",
+    "Alles halen geeft de speler 0 en de anderen elk 26 (§6)"
+  ]
+}

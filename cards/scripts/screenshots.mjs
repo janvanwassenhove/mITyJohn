@@ -98,6 +98,18 @@ const SCENES = [
     },
   },
   {
+    // Hartenjagen heeft als enige spel een doorgeeffase; die is het tonen waard.
+    id: 'hartenjagen',
+    setup: async (page) => {
+      await click(page, 'Hartenjagen');
+      await click(page, /Nieuw spel|Start/);
+      await page.waitForTimeout(700);
+      const kaarten = page.locator('.seat-0 button.card');
+      for (const i of [0, 1, 2]) await kaarten.nth(i).click();
+      await page.waitForTimeout(200);
+    },
+  },
+  {
     id: 'gids',
     setup: async (page) => {
       await click(page, 'Regels & uitleg');

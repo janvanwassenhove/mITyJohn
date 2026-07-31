@@ -6,6 +6,7 @@ import { mulberry32, type Card, type Suit } from './engine/cards';
 import { ManilleSession } from './engine/manille';
 import { BiedenSession } from './engine/bieden';
 import { BeloteSession, DEFAULT_BELOTE_CONFIG, type BeloteConfig } from './engine/belote';
+import { DEFAULT_HARTEN_CONFIG, HartenSession, type HartenConfig } from './engine/hartenjagen';
 import {
   DEFAULT_KLAVERJAS_CONFIG,
   KlaverjasSession,
@@ -414,6 +415,78 @@ export function replayBelote(state: PersistedBelote): BeloteSession {
         break;
       case 'pass':
         gift.pass();
+        break;
+      case 'play':
+        gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
+  }
+  return session;
+}
+
+/* ---------- hartenjagen ---------- */
+
+const HARTEN_KEY = 'cards.harten.v1';
+
+export type HartenAction =
+  { t: 'pass'; p: number; cards: Card[] } | { t: 'play'; p: number; card: Card } | { t: 'close' };
+
+export interface PersistedHarten {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  config: HartenConfig;
+  actions: HartenAction[];
+}
+
+export function newHarten(seed: number, botLevel: BotLevel, config: HartenConfig): PersistedHarten {
+  return { v: 1, seed, botLevel, config, actions: [] };
+}
+
+export function saveHarten(state: PersistedHarten): void {
+  try {
+    localStorage.setItem(HARTEN_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadHarten(): PersistedHarten | null {
+  try {
+    const raw = localStorage.getItem(HARTEN_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedHarten;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!state.config || typeof state.config !== 'object') {
+      state.config = { ...DEFAULT_HARTEN_CONFIG };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearHarten(): void {
+  try {
+    localStorage.removeItem(HARTEN_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayHarten(state: PersistedHarten): HartenSession {
+  const session = new HartenSession(mulberry32(state.seed), 0, state.config);
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'pass':
+        gift.selectPass(action.p, action.cards);
         break;
       case 'play':
         gift.playCard(action.p, action.card);

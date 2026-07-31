@@ -6,6 +6,8 @@ import * as store from './store';
 import { getRuleset, type Ruleset } from './ruleset';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { DEFAULT_MANILLE_OPTIONS, DEFAULT_WIEZEN_OPTIONS } from './options';
+import { chooseHartenCard, chooseHartenPass } from './bots';
+import { DEFAULT_HARTEN_CONFIG } from './engine/hartenjagen';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -110,6 +112,36 @@ describe('sessiepersistentie (actielog-replay)', () => {
     expect(store.loadManille()).toEqual(state);
     store.clearManille();
     expect(store.loadManille()).toBeNull();
+  });
+
+  it('hartenjagen: herbouwt exact dezelfde sessietoestand, inclusief het doorgeven', () => {
+    const state = store.newHarten(9, 'normal', { ...DEFAULT_HARTEN_CONFIG });
+    const session = store.replayHarten(state);
+    const gift = session.gift as NonNullable<typeof session.gift>;
+    while (gift.phase === 'passing') {
+      const p = gift.pendingPassers()[0] as number;
+      const cards = chooseHartenPass(gift, p, 'normal');
+      gift.selectPass(p, cards);
+      state.actions.push({ t: 'pass', p, cards });
+    }
+    while (gift.phase === 'play') {
+      const p = gift.toPlay;
+      const card = chooseHartenCard(gift, p, 'normal');
+      gift.playCard(p, card);
+      state.actions.push({ t: 'play', p, card });
+    }
+    session.closeGift();
+    state.actions.push({ t: 'close' });
+    if (!session.finished) session.nextGift();
+
+    const replayed = store.replayHarten(state);
+    expect(replayed.roundNumber).toBe(session.roundNumber);
+    expect(replayed.totals).toEqual(session.totals);
+    expect(replayed.gift?.hands).toEqual(session.gift?.hands);
+    store.saveHarten(state);
+    expect(store.loadHarten()).toEqual(state);
+    store.clearHarten();
+    expect(store.loadHarten()).toBeNull();
   });
 
   it('weigert corrupte opslag', () => {

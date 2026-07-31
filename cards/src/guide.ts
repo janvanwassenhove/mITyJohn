@@ -14,6 +14,7 @@ export type GuideChapterId =
   | 'bieden'
   | 'klaverjassen'
   | 'belote'
+  | 'hartenjagen'
   | 'scorebord';
 
 export interface GuideChapter {
@@ -44,6 +45,11 @@ export const GUIDE_CHAPTERS: GuideChapter[] = [
     icon: '♦',
     steps: ['ploegen', 'waarden', 'troef', 'troefplicht', 'roem', 'punten'],
   },
+  {
+    id: 'hartenjagen',
+    icon: '\u{1F494}',
+    steps: ['omgekeerd', 'strafpunten', 'doorgeven', 'spelen', 'alles'],
+  },
   { id: 'scorebord', icon: '\u{1F4D2}', steps: ['waarvoor', 'manueel', 'auto'] },
 ];
 
@@ -53,13 +59,14 @@ export function getChapter(id: string): GuideChapter | undefined {
 
 /** Het hoofdstuk dat bij het gekozen spel + ruleset hoort, voor de "lees verder"-knop. */
 export function chapterForGame(
-  game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote',
+  game: 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen',
   rulesetId: string,
 ): GuideChapterId {
   if (game === 'manille') return 'manillen';
   if (game === 'bieden') return 'bieden';
   if (game === 'klaverjassen') return 'klaverjassen';
   if (game === 'belote') return 'belote';
+  if (game === 'hartenjagen') return 'hartenjagen';
   return rulesetId === 'kleurenwiezen' ? 'kleurenwiezen' : 'gewoon-wiezen';
 }
 
