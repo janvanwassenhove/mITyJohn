@@ -7,6 +7,7 @@ import { ManilleSession } from './engine/manille';
 import { BiedenSession } from './engine/bieden';
 import { BeloteSession, DEFAULT_BELOTE_CONFIG, type BeloteConfig } from './engine/belote';
 import { DEFAULT_HARTEN_CONFIG, HartenSession, type HartenConfig } from './engine/hartenjagen';
+import { BoerenSession, DEFAULT_BOEREN_CONFIG, type BoerenConfig } from './engine/boerenbridge';
 import {
   DEFAULT_KLAVERJAS_CONFIG,
   KlaverjasSession,
@@ -487,6 +488,78 @@ export function replayHarten(state: PersistedHarten): HartenSession {
     switch (action.t) {
       case 'pass':
         gift.selectPass(action.p, action.cards);
+        break;
+      case 'play':
+        gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
+  }
+  return session;
+}
+
+/* ---------- boerenbridge ---------- */
+
+const BOEREN_KEY = 'cards.boeren.v1';
+
+export type BoerenAction =
+  { t: 'bid'; p: number; n: number } | { t: 'play'; p: number; card: Card } | { t: 'close' };
+
+export interface PersistedBoeren {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  config: BoerenConfig;
+  actions: BoerenAction[];
+}
+
+export function newBoeren(seed: number, botLevel: BotLevel, config: BoerenConfig): PersistedBoeren {
+  return { v: 1, seed, botLevel, config, actions: [] };
+}
+
+export function saveBoeren(state: PersistedBoeren): void {
+  try {
+    localStorage.setItem(BOEREN_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadBoeren(): PersistedBoeren | null {
+  try {
+    const raw = localStorage.getItem(BOEREN_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedBoeren;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!state.config || typeof state.config !== 'object') {
+      state.config = { ...DEFAULT_BOEREN_CONFIG };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearBoeren(): void {
+  try {
+    localStorage.removeItem(BOEREN_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayBoeren(state: PersistedBoeren): BoerenSession {
+  const session = new BoerenSession(mulberry32(state.seed), 0, state.config);
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'bid':
+        gift.bid(action.p, action.n);
         break;
       case 'play':
         gift.playCard(action.p, action.card);

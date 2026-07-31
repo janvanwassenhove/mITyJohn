@@ -292,6 +292,18 @@ header.topbar {
   flex-direction: column;
 }
 
+/* Boerenbridge: negen biedknoppen (0 t.e.m. 8) moeten op een gsm in één blok
+   passen zonder de rest van het paneel weg te duwen. */
+.btn-row.bids {
+  gap: 0.4rem;
+}
+
+.btn-row.bids .btn.bid {
+  min-width: 2.75rem;
+  padding: 0.6rem 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (min-width: 30rem) {
   .btn-row.stack {
     flex-direction: row;

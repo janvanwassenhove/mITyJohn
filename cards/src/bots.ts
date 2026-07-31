@@ -20,6 +20,7 @@ import {
   type KlaverjasGift,
 } from './engine/klaverjassen';
 import { PASS_COUNT, QUEEN_OF_SPADES, trickPenalty, type HartenGift } from './engine/hartenjagen';
+import type { BoerenGift } from './engine/boerenbridge';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import {
   biedenCardPoints,
@@ -618,4 +619,81 @@ export function chooseHartenCard(gift: HartenGift, player: number, level: BotLev
   const harten = [...legal].filter((c) => c.suit === 'H').sort((a, b) => b.rank - a.rank);
   if (harten.length > 0) return harten[0] as Card;
   return hoogst;
+}
+
+/* ---------- boerenbridge ---------- */
+
+/** Ruwe schatting van het aantal slagen in deze hand — de basis voor het bod.
+ *  Troefkaarten wegen zwaarder, en met een lege troefkleur (§4.3) valt alles terug
+ *  op azen en heren. */
+export function boerenExpectedTricks(hand: Card[], trump: Suit | null): number {
+  let verwacht = 0;
+  for (const c of hand) {
+    if (trump !== null && c.suit === trump) {
+      verwacht += c.rank >= 13 ? 0.9 : c.rank >= 11 ? 0.65 : 0.35;
+    } else {
+      verwacht += c.rank === 14 ? 0.85 : c.rank === 13 ? 0.5 : c.rank === 12 ? 0.25 : 0.05;
+    }
+  }
+  return verwacht;
+}
+
+/** §5 — het bod van de bot, altijd uit de legale getallen gekozen. */
+export function chooseBoerenBid(gift: BoerenGift, player: number, level: BotLevel): number {
+  const legaal = gift.legalBids(player);
+  if (legaal.length === 0) throw new Error('Bot is niet aan de beurt');
+  const verwacht = boerenExpectedTricks(gift.hands[player] as Card[], gift.trumpSuit);
+  // Makkelijk speelt voorzichtig en biedt naar beneden af; sterk mikt op de
+  // dichtstbijzijnde waarde en durft dus vaker een hoog bod aan.
+  const doel = level === 'easy' ? Math.floor(verwacht) : Math.round(verwacht);
+  return [...legaal].sort((a, b) => Math.abs(a - doel) - Math.abs(b - doel) || a - b)[0] as number;
+}
+
+export function chooseBoerenCard(gift: BoerenGift, player: number, level: BotLevel): Card {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as Card;
+  const trump = gift.trumpSuit;
+  const laag = [...legal].sort((a, b) => a.rank - b.rank);
+  const laagst = laag[0] as Card;
+  if (level === 'easy') return laagst;
+
+  // Hoeveel slagen heeft deze bot nog nodig? Dát bepaalt alles: te veel halen is
+  // even duur als te weinig (§7).
+  const nodig = (gift.bids[player] ?? 0) - (gift.tricksWon[player] ?? 0);
+  const hoogst = laag[laag.length - 1] as Card;
+
+  if (gift.trick.length === 0) {
+    if (nodig <= 0) return laagst;
+    // Slagen nodig: kom uit met je sterkste kaart, troef eerst.
+    const troeven = legal.filter((c) => trump !== null && c.suit === trump);
+    const pool = troeven.length > 0 && level === 'strong' ? troeven : legal;
+    return [...pool].sort((a, b) => b.rank - a.rank)[0] as Card;
+  }
+
+  const ledSuit = (gift.trick[0] as { card: Card }).card.suit;
+  const beste = gift.trick.reduce((best, p) => {
+    const bT = trump !== null && best.card.suit === trump;
+    const cT = trump !== null && p.card.suit === trump;
+    if (cT && !bT) return p;
+    if (cT === bT && p.card.suit === best.card.suit && p.card.rank > best.card.rank) return p;
+    return best;
+  });
+  const wint = (c: Card): boolean => {
+    const cT = trump !== null && c.suit === trump;
+    const bT = trump !== null && beste.card.suit === trump;
+    if (cT && !bT) return true;
+    if (!cT && bT) return false;
+    if (c.suit === beste.card.suit) return c.rank > beste.card.rank;
+    return c.suit === ledSuit && beste.card.suit !== ledSuit;
+  };
+  const winnend = laag.filter(wint);
+  const verliezend = laag.filter((c) => !wint(c));
+
+  if (nodig > 0) {
+    // Zo goedkoop mogelijk winnen; lukt dat niet, gooi je goedkoopste weg.
+    return (winnend[0] ?? laagst) as Card;
+  }
+  // Niets meer nodig: de duurste kaart die de slag niét pakt. Moet je toch winnen,
+  // dan doe je dat met je hoogste — die kaart kan je later alleen maar dwarszitten.
+  return (verliezend[verliezend.length - 1] ?? hoogst) as Card;
 }

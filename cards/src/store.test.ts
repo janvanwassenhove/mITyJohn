@@ -8,6 +8,8 @@ import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { DEFAULT_MANILLE_OPTIONS, DEFAULT_WIEZEN_OPTIONS } from './options';
 import { chooseHartenCard, chooseHartenPass } from './bots';
 import { DEFAULT_HARTEN_CONFIG } from './engine/hartenjagen';
+import { chooseBoerenBid, chooseBoerenCard } from './bots';
+import { DEFAULT_BOEREN_CONFIG } from './engine/boerenbridge';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -142,6 +144,40 @@ describe('sessiepersistentie (actielog-replay)', () => {
     expect(store.loadHarten()).toEqual(state);
     store.clearHarten();
     expect(store.loadHarten()).toBeNull();
+  });
+
+  it('boerenbridge: herbouwt exact dezelfde sessietoestand, met wisselende handgrootte', () => {
+    const state = store.newBoeren(21, 'normal', { ...DEFAULT_BOEREN_CONFIG, shape: 'aflopend' });
+    const session = store.replayBoeren(state);
+    // Twee rondes spelen: dan is de handgrootte al veranderd (8 en 7 kaarten).
+    for (let ronde = 0; ronde < 2; ronde++) {
+      const gift = session.gift as NonNullable<typeof session.gift>;
+      while (gift.phase === 'bidding') {
+        const p = gift.toAct;
+        const n = chooseBoerenBid(gift, p, 'normal');
+        gift.bid(p, n);
+        state.actions.push({ t: 'bid', p, n });
+      }
+      while (gift.phase === 'play') {
+        const p = gift.toPlay;
+        const card = chooseBoerenCard(gift, p, 'normal');
+        gift.playCard(p, card);
+        state.actions.push({ t: 'play', p, card });
+      }
+      session.closeGift();
+      state.actions.push({ t: 'close' });
+      if (!session.finished) session.nextGift();
+    }
+    expect(session.gift?.cardsPerHand).toBe(6);
+
+    const replayed = store.replayBoeren(state);
+    expect(replayed.roundNumber).toBe(session.roundNumber);
+    expect(replayed.totals).toEqual(session.totals);
+    expect(replayed.gift?.hands).toEqual(session.gift?.hands);
+    store.saveBoeren(state);
+    expect(store.loadBoeren()).toEqual(state);
+    store.clearBoeren();
+    expect(store.loadBoeren()).toBeNull();
   });
 
   it('weigert corrupte opslag', () => {

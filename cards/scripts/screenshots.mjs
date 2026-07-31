@@ -110,6 +110,34 @@ const SCENES = [
     },
   },
   {
+    // Boerenbridge: het aantal kaarten wisselt per ronde, en je voorspelt met
+    // knoppen hoeveel slagen je haalt — allebei uniek in deze app.
+    id: 'boerenbridge',
+    setup: async (page) => {
+      await click(page, 'Boerenbridge');
+      await click(page, /Nieuw spel|Start/);
+      // Even doorspelen tot een ronde met meer dan één kaart: met één kaart is
+      // er niets te zien.
+      for (let i = 0; i < 60; i++) {
+        const bids = page.locator('.btn-row.bids .btn.bid');
+        if ((await bids.count()) >= 4) break;
+        if ((await bids.count()) > 0) {
+          await bids.first().click();
+          continue;
+        }
+        const next = page.getByRole('button', { name: 'Volgende gift', exact: false });
+        if ((await next.count()) > 0) {
+          await next.click();
+          continue;
+        }
+        const kaart = page.locator('.seat-0 button.card:not(:disabled)');
+        if ((await kaart.count()) > 0) await kaart.first().click();
+        else await page.waitForTimeout(200);
+      }
+      await page.waitForTimeout(300);
+    },
+  },
+  {
     id: 'gids',
     setup: async (page) => {
       await click(page, 'Regels & uitleg');

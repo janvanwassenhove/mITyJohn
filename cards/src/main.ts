@@ -33,6 +33,13 @@ import { chooseManilleCard, chooseManilleTrump } from './bots';
 import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from './bots';
 import { chooseBeloteCard, chooseBeloteTake } from './bots';
 import { chooseHartenCard, chooseHartenPass } from './bots';
+import { chooseBoerenBid, chooseBoerenCard } from './bots';
+import {
+  DEFAULT_BOEREN_CONFIG,
+  type BoerenConfig,
+  type BoerenGift,
+  type BoerenSession,
+} from './engine/boerenbridge';
 import {
   DEFAULT_HARTEN_CONFIG,
   PASS_COUNT,
@@ -72,6 +79,7 @@ import {
 import {
   WIZARD_STEPS,
   biedenTip,
+  boerenTip,
   hartenTip,
   loadCoachEnabled,
   klaverjasTip,
@@ -159,7 +167,8 @@ let generation = 0;
 const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
-type GameId = 'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen';
+type GameId =
+  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen' | 'boerenbridge';
 let game: GameId = 'wiezen';
 let hjSession: HartenSession | null = null;
 let hjPersisted: store.PersistedHarten | null = null;
@@ -167,6 +176,10 @@ let hjRestored: { state: store.PersistedHarten; session: HartenSession } | null 
 let hartenConfig: HartenConfig = { ...DEFAULT_HARTEN_CONFIG };
 /** Wat de mens klaargelegd heeft om door te geven (§4) — leeg zodra geruild is. */
 let hjSelected: Card[] = [];
+let bbSession: BoerenSession | null = null;
+let bbPersisted: store.PersistedBoeren | null = null;
+let bbRestored: { state: store.PersistedBoeren; session: BoerenSession } | null = null;
+let boerenConfig: BoerenConfig = { ...DEFAULT_BOEREN_CONFIG };
 let kSession: KlaverjasSession | null = null;
 let kPersisted: store.PersistedKlaverjas | null = null;
 let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
@@ -473,6 +486,7 @@ function liveSession(): boolean {
   if (game === 'klaverjassen') return Boolean(kSession && !kSession.finished);
   if (game === 'belote') return Boolean(blSession && !blSession.finished);
   if (game === 'hartenjagen') return Boolean(hjSession && !hjSession.finished);
+  if (game === 'boerenbridge') return Boolean(bbSession && !bbSession.finished);
   return Boolean(session && !session.finished);
 }
 
@@ -492,6 +506,7 @@ function resumeGame(): void {
   else if (game === 'klaverjassen') scheduleKlaverjasBots();
   else if (game === 'belote') scheduleBeloteBots();
   else if (game === 'hartenjagen') scheduleHartenBots();
+  else if (game === 'boerenbridge') scheduleBoerenBots();
   else scheduleBots();
 }
 
@@ -755,6 +770,7 @@ function startScreen(): HTMLElement {
     gameTile('klaverjassen', '\u2666', 'game.klaverjassen', 'tile.klaverjassen'),
     gameTile('belote', '\u{1F1EB}\u{1F1F7}', 'game.belote', 'tile.belote'),
     gameTile('hartenjagen', '\u{1F494}', 'game.hartenjagen', 'tile.hartenjagen'),
+    gameTile('boerenbridge', '\u{1F3AF}', 'game.boerenbridge', 'tile.boerenbridge'),
   );
   main.append(tiles);
 
@@ -773,7 +789,9 @@ function startScreen(): HTMLElement {
             ? 'belote.intro'
             : game === 'hartenjagen'
               ? 'harten.intro'
-              : 'wiezen.intro';
+              : game === 'boerenbridge'
+                ? 'boeren.intro'
+                : 'wiezen.intro';
   main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
@@ -787,7 +805,9 @@ function startScreen(): HTMLElement {
             ? Boolean(blRestored && !blRestored.session.finished)
             : game === 'hartenjagen'
               ? Boolean(hjRestored && !hjRestored.session.finished)
-              : Boolean(restored && !restored.session.finished);
+              : game === 'boerenbridge'
+                ? Boolean(bbRestored && !bbRestored.session.finished)
+                : Boolean(restored && !restored.session.finished);
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
@@ -813,6 +833,10 @@ function startScreen(): HTMLElement {
           store.clearHarten();
           hjRestored = null;
           startHarten();
+        } else if (game === 'boerenbridge') {
+          store.clearBoeren();
+          bbRestored = null;
+          startBoeren();
         } else if (game === 'bieden') {
           store.clearBieden();
           bRestored = null;
@@ -824,6 +848,19 @@ function startScreen(): HTMLElement {
         }
       }),
     );
+  } else if (game === 'boerenbridge') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueBoeren));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearBoeren();
+          bbRestored = null;
+          startBoeren();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startBoeren));
+    }
   } else if (game === 'hartenjagen') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueHarten));
@@ -1003,7 +1040,9 @@ function tableGrid(): HTMLElement {
             ? (blSession?.roundNumber ?? 0)
             : game === 'hartenjagen'
               ? (hjSession?.roundNumber ?? 0)
-              : (session?.giftNumber ?? 0);
+              : game === 'boerenbridge'
+                ? (bbSession?.roundNumber ?? 0)
+                : (session?.giftNumber ?? 0);
   const key = `${game}:${n}`;
   const table = el('div', 'table-grid');
   if (key !== dealtKey) {
@@ -1656,6 +1695,22 @@ function render(): void {
     wrap.append(statsScreen());
   } else if (view === 'home') {
     wrap.append(startScreen());
+  } else if (game === 'boerenbridge') {
+    const bbGift = bbSession?.gift ?? null;
+    if (!bbSession || (!bbGift && !bbSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!bbGift && bbSession.finished) {
+      wrap.append(boerenEndScreen());
+    } else if (bbGift) {
+      wrap.append(boerenStatusBar(bbGift));
+      const table = tableGrid();
+      table.append(boerenSeat(bbGift, 2));
+      const middle = el('div', 'table-middle');
+      middle.append(boerenSeat(bbGift, 1), boerenTrickArea(bbGift), boerenSeat(bbGift, 3));
+      table.append(middle);
+      table.append(boerenSeat(bbGift, HUMAN));
+      wrap.append(table, boerenActionPanel(bbGift));
+    }
   } else if (game === 'hartenjagen') {
     const hjGift = hjSession?.gift ?? null;
     if (!hjSession || (!hjGift && !hjSession.finished)) {
@@ -3795,6 +3850,284 @@ function hartenEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- boerenbridge ---------- */
+
+function recordBB(action: store.BoerenAction): void {
+  if (!bbPersisted) return;
+  bbPersisted.actions.push(action);
+  store.saveBoeren(bbPersisted);
+}
+
+function startBoeren(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  bbPersisted = store.newBoeren(seed, botLevel, boerenConfig);
+  store.saveBoeren(bbPersisted);
+  bbRestored = null;
+  bbSession = store.replayBoeren(bbPersisted);
+  view = 'game';
+  render();
+  scheduleBoerenBots();
+}
+
+function continueBoeren(): void {
+  if (!bbRestored) return;
+  bbPersisted = bbRestored.state;
+  bbSession = bbRestored.session;
+  botLevel = bbPersisted.botLevel;
+  boerenConfig = bbPersisted.config;
+  bbRestored = null;
+  view = 'game';
+  render();
+  scheduleBoerenBots();
+}
+
+function boerenActor(): { player: number; human: boolean } | null {
+  const gift = bbSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'bidding') return { player: gift.toAct, human: gift.toAct === HUMAN };
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playBoerenCard(gift: BoerenGift, player: number, card: Card): void {
+  gift.playCard(player, card);
+  recordBB({ t: 'play', p: player, card });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    // "Goed" is hier: exact gehaald wat je voorspeld had (§7).
+    sfxScore(gift.score.bids[HUMAN] === gift.score.made[HUMAN]);
+  }
+}
+
+function boerenBotStep(): boolean {
+  const gift = bbSession?.gift;
+  const who = boerenActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'bidding') {
+    const n = chooseBoerenBid(gift, who.player, botLevel);
+    gift.bid(who.player, n);
+    recordBB({ t: 'bid', p: who.player, n });
+    return true;
+  }
+  playBoerenCard(gift, who.player, chooseBoerenCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleBoerenBots(): void {
+  const gen = ++generation;
+  const who = boerenActor();
+  if (!who || who.human) return;
+  const gift = bbSession?.gift;
+  const pause = gift?.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'boerenbridge' || view !== 'game') return;
+      if (boerenBotStep()) {
+        render();
+        scheduleBoerenBots();
+      }
+    },
+    pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function boerenCloseAndNext(): void {
+  if (!bbSession) return;
+  bbSession.closeGift();
+  recordBB({ t: 'close' });
+  if (!bbSession.finished) {
+    bbSession.nextGift();
+  } else {
+    recordSessionStat('boerenbridge', botLevel, bbSession.totals, HUMAN);
+    store.clearBoeren();
+    bbPersisted = null;
+  }
+  render();
+  scheduleBoerenBots();
+}
+
+function boerenStatusBar(gift: BoerenGift): HTMLElement {
+  const s = bbSession as BoerenSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('boeren.roundNo', { n: s.roundNumber, total: s.totalRounds })),
+    // Het aantal kaarten wisselt per ronde — dat is hier de belangrijkste chip.
+    el('span', 'chip strong', t('boeren.cards', { n: gift.cardsPerHand })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.trumpSuit) {
+    bar.append(
+      el(
+        'span',
+        'chip',
+        t('game.trump', { suit: `${SUIT_GLYPH[gift.trumpSuit]} ${tSuit(gift.trumpSuit)}` }),
+      ),
+    );
+  } else {
+    bar.append(el('span', 'chip', t('boeren.noTrump')));
+  }
+  if (gift.phase !== 'bidding') {
+    bar.append(
+      el('span', 'chip', t('boeren.bidTotal', { bids: gift.bidTotal, tricks: gift.cardsPerHand })),
+    );
+  }
+  bar.append(
+    el('span', 'chip strong', s.totals.map((n, p) => `${playerName(p)} ${n}`).join(' — ')),
+  );
+  return bar;
+}
+
+function boerenSeat(gift: BoerenGift, player: number): HTMLElement {
+  const who = boerenActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  const bod = gift.bids[player] ?? null;
+  head.append(
+    el(
+      'span',
+      'seat-tricks',
+      bod === null
+        ? t('boeren.noBid')
+        : t('boeren.madeOfBid', { made: gift.tricksWon[player] ?? 0, bid: bod }),
+    ),
+  );
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortHand(gift.hands[player] as Card[]);
+  if (player === HUMAN) {
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      const isLegal = legal.some((c) => c.suit === card.suit && c.rank === card.rank);
+      hand.append(
+        cardEl(card, {
+          disabled: !isLegal,
+          onClick: () => {
+            if (!isLegal) return;
+            playBoerenCard(gift, HUMAN, card);
+            render();
+            scheduleBoerenBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+function boerenTrickArea(gift: BoerenGift): HTMLElement {
+  const area = el('div', 'trick');
+  if (gift.phase === 'bidding' && gift.turnedCard) {
+    area.append(el('div', 'trick-label', t('boeren.turned')));
+    const row = el('div', 'trick-cards');
+    const cell = el('div', 'trick-cell');
+    cell.append(cardEl(gift.turnedCard));
+    row.append(cell);
+    area.append(row);
+    return area;
+  }
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick as { player: number; card: Card }[]) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(cardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function boerenActionPanel(gift: BoerenGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = boerenActor();
+  const tip = coachBox(who?.human ? boerenTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
+
+  if (gift.phase === 'bidding') {
+    if (who?.human) {
+      panel.append(el('p', undefined, t('boeren.bidPrompt', { n: gift.cardsPerHand })));
+      const row = el('div', 'btn-row bids');
+      for (const n of gift.legalBids(HUMAN)) {
+        row.append(
+          button(String(n), 'btn bid', () => {
+            gift.bid(HUMAN, n);
+            recordBB({ t: 'bid', p: HUMAN, n });
+            render();
+            scheduleBoerenBots();
+          }),
+        );
+      }
+      panel.append(row);
+    } else if (who) {
+      panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'scored' && gift.score) {
+    const s = gift.score;
+    const total = bbSession as BoerenSession;
+    panel.append(el('h2', undefined, t('boeren.roundDone')));
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    head.append(el('th'));
+    for (let p = 0; p < PLAYER_COUNT; p++) head.append(el('th', undefined, playerName(p)));
+    table.append(head);
+    const rij = (label: string, waarde: (p: number) => string) => {
+      const tr = el('tr');
+      tr.append(el('th', undefined, label));
+      for (let p = 0; p < PLAYER_COUNT; p++) tr.append(el('td', undefined, waarde(p)));
+      table.append(tr);
+    };
+    rij(t('boeren.bid'), (p) => String(s.bids[p] ?? 0));
+    rij(t('boeren.made'), (p) => String(s.made[p] ?? 0));
+    rij(t('boeren.roundTotal'), (p) => formatPoints(s.points[p] ?? 0));
+    rij(t('score.total'), (p) => String((total.totals[p] ?? 0) + (s.points[p] ?? 0)));
+    panel.append(table);
+    panel.append(button(t('score.next'), 'btn primary', () => boerenCloseAndNext()));
+    return panel;
+  }
+
+  if (who && !who.human) {
+    panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+  } else if (who?.human) {
+    panel.append(el('p', 'hint', t('play.yourTurn')));
+  }
+  panel.append(el('p', 'hint', t('boeren.goal')));
+  return panel;
+}
+
+function boerenEndScreen(): HTMLElement {
+  const s = bbSession as BoerenSession;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  main.append(
+    el(
+      'p',
+      'strong',
+      t('session.winner', { name: playerName(s.winner), points: s.totals[s.winner] ?? 0 }),
+    ),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  for (let p = 0; p < PLAYER_COUNT; p++) {
+    head.append(el('th', undefined, playerName(p)));
+    row.append(el('td', undefined, String(s.totals[p] ?? 0)));
+  }
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startBoeren));
+  return main;
+}
+
 function scorebordScreen(): HTMLElement {
   return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
 }
@@ -3843,7 +4176,8 @@ try {
     storedGame === 'bieden' ||
     storedGame === 'klaverjassen' ||
     storedGame === 'belote' ||
-    storedGame === 'hartenjagen'
+    storedGame === 'hartenjagen' ||
+    storedGame === 'boerenbridge'
   ) {
     game = storedGame;
   }
@@ -3873,6 +4207,15 @@ if (savedBelote) {
     beloteConfig = savedBelote.config;
   } catch {
     store.clearBelote();
+  }
+}
+const savedBoeren = store.loadBoeren();
+if (savedBoeren) {
+  try {
+    bbRestored = { state: savedBoeren, session: store.replayBoeren(savedBoeren) };
+    boerenConfig = savedBoeren.config;
+  } catch {
+    store.clearBoeren();
   }
 }
 const savedHarten = store.loadHarten();

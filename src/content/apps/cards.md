@@ -3,7 +3,7 @@ name: "Cards"
 code: "CARDS"
 tag: "game"
 cat: "games"
-blurb: "Traditionele kaartspellen in je browser: wiezen, manillen, bieden, klaverjassen, belote en hartenjagen tegen drie bots — met een coach die meekijkt en een scorebord voor aan tafel."
+blurb: "Traditionele kaartspellen in je browser: wiezen, manillen, bieden, klaverjassen, belote, hartenjagen en boerenbridge tegen drie bots — met een coach die meekijkt en een scorebord voor aan tafel."
 demoUrl: "https://mityjohn.com/cards/"
 order: 1
 isNew: true
@@ -15,7 +15,7 @@ isNew: true
 
 ![Het startscherm van Cards op gsm: drie speltegels en één grote startknop](/screenshots/cards-page-1.webp)
 
-## Zeven speeltypes
+## Acht speeltypes
 
 **Wiezen** in twee vormen. Bij **gewoon wiezen** wordt de laatste kaart omgedraaid en bepaalt die de troef. Bij **kleurenwiezen** ligt er niets open: wie vraagt, noemt zelf de kleur — *"ik vraag in harten"* — en dat verklapt meteen iets over zijn hand. Verder zijn de regels identiek, dus je kiest gewoon de vorm die bij jouw tafel hoort.
 
@@ -24,6 +24,10 @@ Daarnaast **manillen** (32 kaarten, de tien boven de aas, vaste ploegen tot 101)
 Het jongste spel is meteen het vreemdste: **hartenjagen**. Geen ploegen, geen bieden, geen troef — en de punten wil je juist *niet*. Elke harten kost er één, de schoppenvrouw dertien, en vóór elke ronde schuif je drie kaarten door naar je buur. Wie het eerst aan honderd komt, beëindigt de partij; de laagste score wint. Tenzij je alle zesentwintig punten binnenhaalt, want dan draait alles om en zitten de anderen ermee.
 
 ![Hartenjagen: drie kaarten klaarleggen om door te geven](/screenshots/cards-page-4.webp)
+
+En dan is er nog **boerenbridge** — of Chinees poepen, als je van dat kamp bent. Daar draait alles om één zin: zeg vooraf hoeveel slagen je gaat halen, en haal er dan precies zoveel. Eén te veel is even duur als één te weinig. Het aantal kaarten wisselt bovendien elke ronde: van één kaart oplopend tot acht en weer terug, zeventien rondes lang. Met één kaart is voorspellen een gok, met acht kaarten reken je.
+
+![Boerenbridge: voorspellen hoeveel slagen je haalt, met de omgedraaide troefkaart op tafel](/screenshots/cards-page-5.webp)
 
 De volledige Vlaamse biedladder zit erin: vraag & mee, alleen, troel, abondance, miserie, open miserie, solo en soloslim — met de puntentelling die je van op café kent. Regels en regionale aannames zijn netjes gedocumenteerd, want geen twee gezelschappen wiezen exact hetzelfde. Wat per streek verschilt, kies je bij de start: troel op 8 of 9 slagen, manille op 60 of 68 punten, en zo verder.
 

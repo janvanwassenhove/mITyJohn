@@ -23,9 +23,9 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 2. Daarna, in volgorde (bevestigd 2026-07-24): een **kleurenwiezen-variant**,
    **manillen** en **bieden** — alle drie geïmplementeerd.
 3. Traditionele spellen uit de buurlanden (bevestigd 2026-07-29): **klaverjassen** (NL),
-   **belote** (FR) en **hartenjagen** — alle drie geïmplementeerd — daarna
-   **boerenbridge**; **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers
-   en een eigen kaartset.
+   **belote** (FR), **hartenjagen** en **boerenbridge** — alle vier geïmplementeerd.
+   **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers en een eigen
+   kaartset.
 
 ## §4 Regels & rulesets
 
@@ -34,7 +34,7 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 - [`rulesets/*.json`](../rulesets/) is de machineleesbare vertaling; de engine voert
   uitsluitend uit wat daar staat. Eén ruleset = één coherente variant:
   `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`,
-  `klaverjassen`, `belote`, `hartenjagen`.
+  `klaverjassen`, `belote`, `hartenjagen`, `boerenbridge`.
 
 ## §5 Architectuur
 
@@ -108,6 +108,7 @@ alleen `main` deployen.
 | 9 | **Klaverjassen (NL)** — eerste spel buiten de Vlaamse familie, volgens dezelfde principes: [REGELS-KLAVERJASSEN.md](REGELS-KLAVERJASSEN.md) met gemarkeerde aannames, `rulesets/klaverjassen.json`, eigen DOM-vrije engine (troefkeuze met passen, verplicht spelen voor de deler, **roem**, Rotterdams/Amsterdams, nat, pit), bots, persistentie, coach, gidshoofdstuk en wizard, in nl/en/fr | ✅ |
 | 10 | **Belote (FR)** — [REGELS-BELOTE.md](REGELS-BELOTE.md), `rulesets/belote.json` en een eigen engine: troef via een **omgedraaide kaart in twee biedronden** (neemt niemand, dan opnieuw delen), **annonces uit de hand** (tierce/cinquante/cent/carrés, waarbij enkel de ploeg met de beste combinatie telt), **belote-rebelote**, dedans en capot, tot 501. De slagregels zijn gedeeld met klaverjassen via `trickLegalPlays` — belote verschilt daar enkel in dat ondertroeven verplicht is maar je vrij mag bijgooien als je maat de slag heeft | ✅ |
 | 11 | **Hartenjagen (Hearts / Chasse au cœur)** — het buitenbeentje: geen ploegen, geen bieden, geen troef, en punten die je juist *wil vermijden*. [REGELS-HARTENJAGEN.md](REGELS-HARTENJAGEN.md), `rulesets/hartenjagen.json` en een eigen engine met de **doorgeeffase** (drie kaarten naar links/rechts/tegenover/niet), de strafkaarten (elke harten 1, schoppenvrouw 13), de verplichte uitkomst met klaveren 2, het **breken van harten** en **alles halen** (26 → 0 voor de schutter, 26 voor de rest). Bots die hun gevaarlijkste kaarten doorgeven en onder de slag blijven, plus coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
+| 12 | **Boerenbridge (Chinees poepen / Oh Hell)** — het eerste spel met een **wisselende handgrootte**: 1…8, drie rondes op acht, en weer af tot 1 (zeventien rondes, WK-reglement). [REGELS-BOERENBRIDGE.md](REGELS-BOERENBRIDGE.md), `rulesets/boerenbridge.json` en een eigen engine: troef via de omgedraaide kaart (of géén troef als de stok leeg is), voorspellen vanaf links van de deler met de deler als laatste, optioneel *screw the dealer*, kleur bekennen verplicht en troeven nooit. Scoring: juist = 10 + 3 per slag, fout = −3 per slag verschil. Bots die hun slagen schatten en daarna sturen op wat ze nog nodig hebben, plus coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
 
 ## §13 Open punten
 

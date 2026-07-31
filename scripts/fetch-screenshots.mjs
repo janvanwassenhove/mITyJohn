@@ -64,6 +64,7 @@ const MONOREPO = {
       ['spel-desktop-dark.png', 900],
       ['gids-desktop-light.png', 900],
       ['hartenjagen-desktop-light.png', 900],
+      ['boerenbridge-desktop-light.png', 900],
     ],
   },
 };

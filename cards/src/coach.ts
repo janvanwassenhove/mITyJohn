@@ -9,13 +9,14 @@ import type { ManilleGift } from './engine/manille';
 import type { BiedenGift } from './engine/bieden';
 import type { KlaverjasGift } from './engine/klaverjassen';
 import type { HartenGift } from './engine/hartenjagen';
+import type { BoerenGift } from './engine/boerenbridge';
 
 const COACH_KEY = 'cards.coach';
 
 /** Aantal stappen in de wizard, per spel (de teksten staan in i18n als
  *  `wizard.<spel>.<n>.title` / `.body`). */
 export const WIZARD_STEPS: Record<
-  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen',
+  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen' | 'boerenbridge',
   number
 > = {
   wiezen: 5,
@@ -24,6 +25,7 @@ export const WIZARD_STEPS: Record<
   klaverjassen: 5,
   belote: 5,
   hartenjagen: 5,
+  boerenbridge: 5,
 };
 
 export function loadCoachEnabled(): boolean {
@@ -170,6 +172,21 @@ export function hartenTip(gift: HartenGift, player: number): CoachTip | null {
     return straf > 0 ? { id: 'hjDuck', params: { points: straf } } : { id: 'mustFollow' };
   }
   return { id: 'hjDiscard' };
+}
+
+/** Tip voor boerenbridge: exact halen wat je voorspeld hebt — niet meer, niet minder. */
+export function boerenTip(gift: BoerenGift, player: number): CoachTip | null {
+  if (gift.phase === 'bidding') {
+    if (gift.toAct !== player) return null;
+    const laatste = gift.bids.filter((b) => b === null).length === 1;
+    if (laatste && gift.config.screwTheDealer) return { id: 'bbScrew' };
+    return { id: 'bbBid', params: { n: gift.cardsPerHand } };
+  }
+  if (gift.phase !== 'play' || gift.toPlay !== player) return null;
+  const nodig = (gift.bids[player] ?? 0) - (gift.tricksWon[player] ?? 0);
+  if (nodig > 0) return { id: 'bbNeed', params: { n: nodig } };
+  if (nodig === 0) return { id: 'bbDone' };
+  return { id: 'bbOver', params: { n: -nodig } };
 }
 
 export function biedenTip(gift: BiedenGift, player: number): CoachTip | null {

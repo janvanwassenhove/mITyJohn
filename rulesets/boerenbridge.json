@@ -1,0 +1,63 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "boerenbridge",
+  "game": "boerenbridge",
+  "name": {
+    "nl": "Boerenbridge",
+    "en": "Oh Hell",
+    "fr": "Ambitieux"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-BOERENBRIDGE.md",
+  "players": 4,
+  "teams": 0,
+  "deck": {
+    "cards": 52,
+    "jokers": false,
+    "rankOrder": ["A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"]
+  },
+  "rounds": {
+    "default": "klassiek",
+    "shapes": {
+      "klassiek": [1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 7, 6, 5, 4, 3, 2, 1],
+      "op-en-neer": [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1],
+      "aflopend": [8, 7, 6, 5, 4, 3, 2, 1]
+    }
+  },
+  "play": {
+    "direction": "clockwise",
+    "handSize": "variable",
+    "trumpDetermination": "turned-after-deal",
+    "noTrumpWhenDeckEmpty": true,
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": false,
+    "mustOvertrump": false
+  },
+  "bidding": {
+    "order": "left-of-dealer-first",
+    "min": 0,
+    "max": "handSize",
+    "zeroAllowed": true,
+    "screwTheDealer": false
+  },
+  "scoring": {
+    "objective": "exact-bid",
+    "exactBonus": 10,
+    "perTrick": 3,
+    "missPenaltyPerTrick": 3,
+    "highestScoreWins": true
+  },
+  "assumptions": [
+    "Kortere partijvormen 'op-en-neer' en 'aflopend' zijn een app-toevoeging; 'klassiek' blijft standaard (§3)",
+    "Deler klemzetten staat standaard uit — de Nederlandse bronnen kennen die regel niet (§5.3)",
+    "Links van de deler komt uit (§6.1) — elders komt de winnaar van de vorige ronde uit",
+    "Zonder troef spelen wanneer de stok leeg is (§4.3)"
+  ],
+  "confirmed": [
+    "17 rondes 1..8, 8, 8, 8..1 volgens het WK-reglement (§3)",
+    "Troef is de omgedraaide kaart na het delen (§4.2)",
+    "Kleur bekennen verplicht, troeven nooit (§6.2)",
+    "Juist: 10 punten + 3 per slag; fout: -3 per slag verschil (§7)"
+  ]
+}

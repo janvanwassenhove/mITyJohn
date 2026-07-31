@@ -20,6 +20,8 @@ import { chooseBeloteCard, chooseBeloteTake } from './bots';
 import { BeloteSession, DEFAULT_BELOTE_CONFIG } from './engine/belote';
 import { chooseHartenCard, chooseHartenPass } from './bots';
 import { DEFAULT_HARTEN_CONFIG, HartenSession } from './engine/hartenjagen';
+import { chooseBoerenBid, chooseBoerenCard } from './bots';
+import { BoerenSession, DEFAULT_BOEREN_CONFIG } from './engine/boerenbridge';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -231,5 +233,67 @@ describe('hartenjagen-bots', () => {
         expect(Math.min(...session.totals)).toBeLessThan(50);
       }
     }
+  });
+});
+
+describe('boerenbridge-bots', () => {
+  it('spelen volledige partijen zonder illegale zetten, op elk niveau', () => {
+    for (const level of BOT_LEVELS) {
+      for (let seed = 1; seed <= 4; seed++) {
+        const session = new BoerenSession(mulberry32(seed * 29), 0, {
+          ...DEFAULT_BOEREN_CONFIG,
+          shape: 'aflopend',
+          screwTheDealer: true,
+        });
+        let safety = 400;
+        while (!session.finished && safety-- > 0) {
+          const gift = session.nextGift();
+          while (gift.phase === 'bidding') {
+            const p = gift.toAct;
+            gift.bid(p, chooseBoerenBid(gift, p, level));
+          }
+          while (gift.phase === 'play') {
+            const p = gift.toPlay;
+            gift.playCard(p, chooseBoerenCard(gift, p, level));
+          }
+          // Alle slagen zijn verdeeld, en de punten volgen §7 exact.
+          const s = gift.score as NonNullable<typeof gift.score>;
+          expect(s.made.reduce((a, b) => a + b, 0)).toBe(gift.cardsPerHand);
+          session.closeGift();
+        }
+        expect(session.finished).toBe(true);
+        expect(session.roundNumber).toBe(8);
+      }
+    }
+  });
+
+  it('bieden vaker juist dan willekeurig — de schatting doet iets', () => {
+    let juist = 0;
+    let rondes = 0;
+    for (let seed = 1; seed <= 12; seed++) {
+      const session = new BoerenSession(mulberry32(seed * 31), 0, {
+        ...DEFAULT_BOEREN_CONFIG,
+        shape: 'aflopend',
+      });
+      while (!session.finished) {
+        const gift = session.nextGift();
+        while (gift.phase === 'bidding') {
+          const p = gift.toAct;
+          gift.bid(p, chooseBoerenBid(gift, p, 'strong'));
+        }
+        while (gift.phase === 'play') {
+          const p = gift.toPlay;
+          gift.playCard(p, chooseBoerenCard(gift, p, 'strong'));
+        }
+        const s = gift.score as NonNullable<typeof gift.score>;
+        for (let p = 0; p < 4; p++) {
+          rondes++;
+          if (s.bids[p] === s.made[p]) juist++;
+        }
+        session.closeGift();
+      }
+    }
+    // Blind gokken zit rond 1 op 3 bij deze rondegroottes; de bots doen beter.
+    expect(juist / rondes).toBeGreaterThan(0.4);
   });
 });
