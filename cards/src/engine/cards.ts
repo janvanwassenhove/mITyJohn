@@ -39,11 +39,12 @@ export function mulberry32(seed: number): () => number {
   };
 }
 
-export function shuffle(deck: Card[], rng: () => number): Card[] {
+// Generiek: tarot schudt zijn eigen 78 kaarten met dezelfde PRNG (tarot-cards.ts).
+export function shuffle<T>(deck: T[], rng: () => number): T[] {
   const cards = [...deck];
   for (let i = cards.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));
-    [cards[i], cards[j]] = [cards[j] as Card, cards[i] as Card];
+    [cards[i], cards[j]] = [cards[j] as T, cards[i] as T];
   }
   return cards;
 }

@@ -21,6 +21,8 @@ import {
 } from './engine/klaverjassen';
 import { PASS_COUNT, QUEEN_OF_SPADES, trickPenalty, type HartenGift } from './engine/hartenjagen';
 import type { BoerenGift } from './engine/boerenbridge';
+import type { ContractId, TarotGift, TarotPlay } from './engine/tarot';
+import { isBout, tarotHalfPoints, type TarotCard } from './engine/tarot-cards';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import {
   biedenCardPoints,
@@ -696,4 +698,182 @@ export function chooseBoerenCard(gift: BoerenGift, player: number, level: BotLev
   // Niets meer nodig: de duurste kaart die de slag niét pakt. Moet je toch winnen,
   // dan doe je dat met je hoogste — die kaart kan je later alleen maar dwarszitten.
   return (verliezend[verliezend.length - 1] ?? hoogst) as Card;
+}
+
+/* ---------- frans tarot ---------- */
+
+/** Ruwe handsterkte voor het bod (REGELS-TAROT.md §4): atouts en bouts wegen het
+ *  zwaarst, daarna de heren. Dit is de klassieke "punten tellen" van aan tafel. */
+export function tarotHandStrength(hand: TarotCard[]): number {
+  let score = 0;
+  const atouts = hand.filter((c) => c.kind === 'trump');
+  score += atouts.length * 2;
+  // De hoge atouts sturen het spel; het petit is juist een risico dat je moet
+  // kunnen dekken, dus die telt maar half mee.
+  for (const c of atouts) {
+    if (c.value >= 15) score += 2;
+    if (c.value === 21) score += 6;
+    if (c.value === 1) score += 2;
+  }
+  if (hand.some((c) => c.kind === 'excuse')) score += 4;
+  for (const c of hand) {
+    if (c.kind !== 'suit') continue;
+    if (c.rank === 14) score += 3;
+    else if (c.rank === 13) score += 1;
+  }
+  return score;
+}
+
+/** Drempels **per kaart**, want een hand van 24 (drie spelers) is nu eenmaal
+ *  sterker dan een van 15 (vijf spelers). Zonder die normalisatie past bij vijf
+ *  spelers zowat iedereen en wordt er eindeloos herdeeld. */
+const TAROT_BID_THRESHOLDS: [ContractId, number][] = [
+  ['garde-contre', 2.1],
+  ['garde-sans', 1.8],
+  ['garde', 1.5],
+  ['petite', 1.25],
+];
+
+export function chooseTarotBid(
+  gift: TarotGift,
+  player: number,
+  level: BotLevel,
+): ContractId | 'pass' {
+  const legaal = gift.legalBids(player);
+  if (legaal.length === 0) return 'pass';
+  const hand = gift.hands[player] as TarotCard[];
+  const perKaart = tarotHandStrength(hand) / hand.length;
+  // Makkelijk speelt terughoudend, sterk durft meer.
+  const schuif = level === 'easy' ? 0.15 : level === 'strong' ? -0.1 : 0;
+  for (const [id, nodig] of TAROT_BID_THRESHOLDS) {
+    if (perKaart >= nodig + schuif && legaal.includes(id)) return id;
+  }
+  return 'pass';
+}
+
+/** §7 — welke kleur roept de preneur? De kleur waarin hij zelf het langst zit,
+ *  zonder de heer die hij al heeft. */
+export function chooseTarotCall(gift: TarotGift): Suit {
+  const hand = gift.hands[gift.taker as number] as TarotCard[];
+  const rank = gift.callRank();
+  let beste: Suit = 'S';
+  let besteScore = -1;
+  for (const suit of SUITS) {
+    const inKleur = hand.filter((c) => c.kind === 'suit' && c.suit === suit);
+    if (inKleur.some((c) => c.kind === 'suit' && c.rank === rank)) continue; // zichzelf roepen
+    const score = inKleur.length;
+    if (score > besteScore) {
+      besteScore = score;
+      beste = suit;
+    }
+  }
+  return beste;
+}
+
+/** §5 — de écart: leg de kleur weg waar je het kortst zit, hoogste kaarten eerst
+ *  weg zolang het geen heer of bout is. */
+export function chooseTarotDiscard(gift: TarotGift): TarotCard {
+  const mag = gift.legalDiscards();
+  const hand = gift.hands[gift.taker as number] as TarotCard[];
+  const lengte = (card: TarotCard): number =>
+    card.kind === 'suit'
+      ? hand.filter((c) => c.kind === 'suit' && c.suit === card.suit).length
+      : 99;
+  // Korte kleuren eerst leegmaken (dan kan je daar troeven), en binnen een kleur
+  // de duurste kaart weg — behalve atouts, die hou je zolang het kan.
+  return [...mag].sort((a, b) => {
+    const atoutA = a.kind === 'trump' ? 1 : 0;
+    const atoutB = b.kind === 'trump' ? 1 : 0;
+    if (atoutA !== atoutB) return atoutA - atoutB;
+    return lengte(a) - lengte(b) || tarotHalfPoints(b) - tarotHalfPoints(a);
+  })[0] as TarotCard;
+}
+
+export function chooseTarotCard(gift: TarotGift, player: number, level: BotLevel): TarotCard {
+  const legal = gift.legalCards(player);
+  if (legal.length === 1) return legal[0] as TarotCard;
+  const goedkoop = [...legal].sort(
+    (a, b) => tarotHalfPoints(a) - tarotHalfPoints(b) || tarotRank(a) - tarotRank(b),
+  );
+  const goedkoopst = goedkoop[0] as TarotCard;
+  if (level === 'easy') return goedkoopst;
+
+  // De excuse hou je zo lang mogelijk vast: hij is 4,5 punt waard en je verliest
+  // hem nooit, behalve in de laatste slag (§6.3).
+  const zonderExcuse = legal.filter((c) => c.kind !== 'excuse');
+  const pool = zonderExcuse.length > 0 ? zonderExcuse : legal;
+
+  if (gift.trick.length === 0) {
+    // Uitkomen: als preneur trek je atouts, als verdediger speel je kleur.
+    const atouts = pool.filter((c) => c.kind === 'trump');
+    if (gift.onTakerSide(player) && atouts.length > 0 && level === 'strong') {
+      return [...atouts].sort((a, b) => tarotRank(b) - tarotRank(a))[0] as TarotCard;
+    }
+    const kleuren = pool.filter((c) => c.kind === 'suit');
+    const keuze = kleuren.length > 0 ? kleuren : pool;
+    return [...keuze].sort((a, b) => tarotHalfPoints(a) - tarotHalfPoints(b))[0] as TarotCard;
+  }
+
+  const winnaar = tarotTrickWinnerSoFar(gift.trick);
+  const vriend = winnaar !== null && gift.onTakerSide(winnaar) === gift.onTakerSide(player);
+  const potHalf = gift.trick.reduce((sum, p) => sum + tarotHalfPoints(p.card), 0);
+
+  if (vriend) {
+    // Je kamp ligt: smeer er punten op, maar geef je bouts niet weg.
+    const veilig = pool.filter((c) => !isBout(c));
+    const keuze = veilig.length > 0 ? veilig : pool;
+    return [...keuze].sort((a, b) => tarotHalfPoints(b) - tarotHalfPoints(a))[0] as TarotCard;
+  }
+
+  // Je moet hem pakken als het loont: de goedkoopste kaart die wint.
+  const winnend = [...pool]
+    .filter((c) => wintSlag(gift.trick, c))
+    .sort((a, b) => tarotRank(a) - tarotRank(b));
+  if (winnend.length > 0 && (potHalf >= 8 || level === 'strong')) return winnend[0] as TarotCard;
+  return [...pool].sort(
+    (a, b) => tarotHalfPoints(a) - tarotHalfPoints(b) || tarotRank(a) - tarotRank(b),
+  )[0] as TarotCard;
+}
+
+/** Ordeningswaarde binnen één slag: atouts boven kleuren, de excuse onderaan. */
+function tarotRank(card: TarotCard): number {
+  if (card.kind === 'excuse') return -1;
+  return card.kind === 'trump' ? 100 + card.value : card.rank;
+}
+
+/** Wie ligt er op dit moment? Null zolang er enkel een excuse ligt. */
+function tarotTrickWinnerSoFar(trick: TarotPlay[]): number | null {
+  const echt = trick.filter((p) => p.card.kind !== 'excuse');
+  if (echt.length === 0) return null;
+  const troeven = echt.filter((p) => p.card.kind === 'trump');
+  if (troeven.length > 0) {
+    return troeven.reduce((best, p) =>
+      (p.card as { value: number }).value > (best.card as { value: number }).value ? p : best,
+    ).player;
+  }
+  const kleur = (echt[0] as TarotPlay).card as { suit: Suit };
+  const inKleur = echt.filter((p) => p.card.kind === 'suit' && p.card.suit === kleur.suit);
+  return inKleur.reduce((best, p) =>
+    (p.card as { rank: number }).rank > (best.card as { rank: number }).rank ? p : best,
+  ).player;
+}
+
+function wintSlag(trick: TarotPlay[], card: TarotCard): boolean {
+  if (card.kind === 'excuse') return false;
+  const echt = trick.filter((p) => p.card.kind !== 'excuse');
+  if (echt.length === 0) return true;
+  const hoogsteAtout = echt.reduce(
+    (max, p) => (p.card.kind === 'trump' ? Math.max(max, p.card.value) : max),
+    0,
+  );
+  if (card.kind === 'trump') return card.value > hoogsteAtout;
+  if (hoogsteAtout > 0) return false;
+  const led = (echt[0] as TarotPlay).card as { kind: 'suit'; suit: Suit; rank: number };
+  if (card.suit !== led.suit) return false;
+  const hoogste = echt.reduce(
+    (max, p) =>
+      p.card.kind === 'suit' && p.card.suit === led.suit ? Math.max(max, p.card.rank) : max,
+    0,
+  );
+  return card.rank > hoogste;
 }

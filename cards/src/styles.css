@@ -1231,3 +1231,52 @@ main.hero {
     transform: none;
   }
 }
+
+/* ---------- tarot ---------- */
+
+/* Drie, vier of vijf stoelen: wat niet links of rechts van de slag zit, komt
+   bovenaan naast elkaar (REGELS-TAROT.md §1). */
+.seat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+/* Atouts en de excuse moeten in één oogopslag van de kleuren te onderscheiden
+   zijn: 21 genummerde troeven lezen anders als een muur van cijfers. */
+.card.trump {
+  background: linear-gradient(
+    160deg,
+    var(--card-face) 55%,
+    color-mix(in srgb, var(--gold) 30%, var(--card-face))
+  );
+  border-color: var(--gold);
+  color: color-mix(in srgb, var(--suit-black) 82%, var(--gold));
+}
+
+.card.trump .card-suit {
+  color: var(--gold);
+}
+
+.card.excuse {
+  background: linear-gradient(
+    160deg,
+    var(--card-face) 45%,
+    color-mix(in srgb, var(--accent) 26%, var(--card-face))
+  );
+  border-color: var(--accent);
+}
+
+.card.excuse .card-rank {
+  color: var(--accent);
+}
+
+.card.excuse .card-suit {
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+}
+
+/* De atoutnummers lopen tot 21: twee cijfers moeten passen zonder te knijpen. */
+.card.trump .card-rank {
+  font-variant-numeric: tabular-nums;
+}

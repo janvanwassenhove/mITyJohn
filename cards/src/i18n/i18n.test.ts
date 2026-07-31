@@ -63,6 +63,18 @@ describe('i18n', () => {
     'belote.annonce.cinquante',
     'belote.annonce.cent',
     'belote.annonce.carreOther',
+    // Tarottermen zijn Frans en blijven overal staan; 'partner' is bovendien in
+    // het Nederlands en het Engels hetzelfde woord.
+    'tarot.partner',
+    'tarot.bouts',
+    'tarot.atout',
+    'tarot.contract.petite',
+    'tarot.contract.garde',
+    'tarot.contract.garde-sans',
+    'tarot.contract.garde-contre',
+    'tarot.rank.11',
+    'tarot.rank.12',
+    'tarot.rank.13',
   ]);
 
   it.each([

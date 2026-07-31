@@ -24,8 +24,8 @@ mobiel), geen installatie, geen accounts in de eerste fases.
    **manillen** en **bieden** — alle drie geïmplementeerd.
 3. Traditionele spellen uit de buurlanden (bevestigd 2026-07-29): **klaverjassen** (NL),
    **belote** (FR), **hartenjagen** en **boerenbridge** — alle vier geïmplementeerd.
-   **Frans tarot** volgt als apart traject, want dat vraagt 3–5 spelers en een eigen
-   kaartset.
+4. **Frans tarot** als apart traject (bevestigd 2026-07-29): eigen kaartset van 78 kaarten
+   en 3, 4 of 5 spelers — geïmplementeerd.
 
 ## §4 Regels & rulesets
 
@@ -34,11 +34,13 @@ mobiel), geen installatie, geen accounts in de eerste fases.
 - [`rulesets/*.json`](../rulesets/) is de machineleesbare vertaling; de engine voert
   uitsluitend uit wat daar staat. Eén ruleset = één coherente variant:
   `vlaams-standaard` (gewoon wiezen), `kleurenwiezen`, `vlaams-cafe`, `manillen`, `bieden`,
-  `klaverjassen`, `belote`, `hartenjagen`, `boerenbridge`.
+  `klaverjassen`, `belote`, `hartenjagen`, `boerenbridge`, `tarot`.
 
 ## §5 Architectuur
 
-- **Engine** (`cards/src/engine/`): framework-agnostische TypeScript, geen DOM. Delen,
+- **Engine** (`cards/src/engine/`): framework-agnostische TypeScript, geen DOM. Tarot
+  heeft als enige een **eigen kaartmodel** (`tarot-cards.ts`, 78 kaarten) en een
+  **variabel aantal spelers**; de andere engines delen `cards.ts` en `PLAYER_COUNT = 4`. Delen,
   bieden, slagen, scoring; deterministisch via injecteerbare PRNG (reproduceerbaar & testbaar).
 - **Bots** (`cards/src/bots.ts`): heuristieken bovenop de engine; de engine bewaakt legaliteit.
 - **UI** (`cards/src/main.ts` + `styles.css`): lichtgewicht vanilla-TS rendering. Een
@@ -109,6 +111,7 @@ alleen `main` deployen.
 | 10 | **Belote (FR)** — [REGELS-BELOTE.md](REGELS-BELOTE.md), `rulesets/belote.json` en een eigen engine: troef via een **omgedraaide kaart in twee biedronden** (neemt niemand, dan opnieuw delen), **annonces uit de hand** (tierce/cinquante/cent/carrés, waarbij enkel de ploeg met de beste combinatie telt), **belote-rebelote**, dedans en capot, tot 501. De slagregels zijn gedeeld met klaverjassen via `trickLegalPlays` — belote verschilt daar enkel in dat ondertroeven verplicht is maar je vrij mag bijgooien als je maat de slag heeft | ✅ |
 | 11 | **Hartenjagen (Hearts / Chasse au cœur)** — het buitenbeentje: geen ploegen, geen bieden, geen troef, en punten die je juist *wil vermijden*. [REGELS-HARTENJAGEN.md](REGELS-HARTENJAGEN.md), `rulesets/hartenjagen.json` en een eigen engine met de **doorgeeffase** (drie kaarten naar links/rechts/tegenover/niet), de strafkaarten (elke harten 1, schoppenvrouw 13), de verplichte uitkomst met klaveren 2, het **breken van harten** en **alles halen** (26 → 0 voor de schutter, 26 voor de rest). Bots die hun gevaarlijkste kaarten doorgeven en onder de slag blijven, plus coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
 | 12 | **Boerenbridge (Chinees poepen / Oh Hell)** — het eerste spel met een **wisselende handgrootte**: 1…8, drie rondes op acht, en weer af tot 1 (zeventien rondes, WK-reglement). [REGELS-BOERENBRIDGE.md](REGELS-BOERENBRIDGE.md), `rulesets/boerenbridge.json` en een eigen engine: troef via de omgedraaide kaart (of géén troef als de stok leeg is), voorspellen vanaf links van de deler met de deler als laatste, optioneel *screw the dealer*, kleur bekennen verplicht en troeven nooit. Scoring: juist = 10 + 3 per slag, fout = −3 per slag verschil. Bots die hun slagen schatten en daarna sturen op wat ze nog nodig hebben, plus coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
+| 13 | **Frans tarot** — het apart traject: een **eigen kaartset van 78 kaarten** (`engine/tarot-cards.ts`: vier kleuren van veertien met cavalier, 21 atouts, de excuse) en een **variabel aantal spelers** (3, 4 of 5), waar elke andere engine op vier stoelen vastzit. [REGELS-TAROT.md](REGELS-TAROT.md), `rulesets/tarot.json` en een eigen engine: vier contracten (petite ×1 t.e.m. garde contre ×6), de chien met de écart-beperkingen, bij vijf spelers de **geroepen heer** met een partner die pas bij het vallen van die kaart bekend wordt, troef- én stijgplicht, de excuse die nooit wint maar wel in je eigen slagen blijft, doelen van 56/51/41/36 naargelang je bouts, petit au bout en chelem. Alles wordt in **halve punten** gerekend zodat er nooit met 4,5 gerekend hoeft te worden. Bots, persistentie, coach, gidshoofdstuk en wizard in nl/en/fr | ✅ |
 
 ## §13 Open punten
 

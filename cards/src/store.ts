@@ -9,6 +9,13 @@ import { BeloteSession, DEFAULT_BELOTE_CONFIG, type BeloteConfig } from './engin
 import { DEFAULT_HARTEN_CONFIG, HartenSession, type HartenConfig } from './engine/hartenjagen';
 import { BoerenSession, DEFAULT_BOEREN_CONFIG, type BoerenConfig } from './engine/boerenbridge';
 import {
+  DEFAULT_TAROT_CONFIG,
+  TarotSession,
+  type ContractId,
+  type TarotConfig,
+} from './engine/tarot';
+import { parseTarotCard } from './engine/tarot-cards';
+import {
   DEFAULT_KLAVERJAS_CONFIG,
   KlaverjasSession,
   type KlaverjasConfig,
@@ -563,6 +570,90 @@ export function replayBoeren(state: PersistedBoeren): BoerenSession {
         break;
       case 'play':
         gift.playCard(action.p, action.card);
+        break;
+      case 'close':
+        session.closeGift();
+        if (!session.finished) session.nextGift();
+        break;
+    }
+  }
+  return session;
+}
+
+/* ---------- frans tarot ---------- */
+
+const TAROT_KEY = 'cards.tarot.v1';
+
+/** Tarotkaarten gaan als sleutel het log in ("T21", "S14", "EX") — compacter dan
+ *  een object, en meteen bestand tegen een gewijzigd kaartmodel. */
+export type TarotAction =
+  | { t: 'bid'; p: number; c: ContractId | 'pass' }
+  | { t: 'call'; suit: Suit }
+  | { t: 'discard'; card: string }
+  | { t: 'play'; p: number; card: string }
+  | { t: 'close' };
+
+export interface PersistedTarot {
+  v: 1;
+  seed: number;
+  botLevel: BotLevel;
+  config: TarotConfig;
+  actions: TarotAction[];
+}
+
+export function newTarot(seed: number, botLevel: BotLevel, config: TarotConfig): PersistedTarot {
+  return { v: 1, seed, botLevel, config, actions: [] };
+}
+
+export function saveTarot(state: PersistedTarot): void {
+  try {
+    localStorage.setItem(TAROT_KEY, JSON.stringify(state));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function loadTarot(): PersistedTarot | null {
+  try {
+    const raw = localStorage.getItem(TAROT_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw) as PersistedTarot;
+    if (state.v !== 1 || !Array.isArray(state.actions)) return null;
+    if (!state.config || typeof state.config !== 'object') {
+      state.config = { ...DEFAULT_TAROT_CONFIG };
+    }
+    return state;
+  } catch {
+    return null;
+  }
+}
+
+export function clearTarot(): void {
+  try {
+    localStorage.removeItem(TAROT_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function replayTarot(state: PersistedTarot): TarotSession {
+  const session = new TarotSession(mulberry32(state.seed), 0, state.config);
+  session.nextGift();
+  for (const action of state.actions) {
+    const gift = session.gift;
+    if (!gift) throw new Error('Actie na einde sessie');
+    switch (action.t) {
+      case 'bid':
+        gift.bid(action.p, action.c);
+        break;
+      case 'call':
+        gift.callKing(action.suit);
+        break;
+      case 'discard':
+        gift.discard(parseTarotCard(action.card));
+        break;
+      case 'play':
+        gift.playCard(action.p, parseTarotCard(action.card));
         break;
       case 'close':
         session.closeGift();

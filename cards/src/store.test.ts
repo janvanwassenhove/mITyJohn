@@ -10,6 +10,9 @@ import { chooseHartenCard, chooseHartenPass } from './bots';
 import { DEFAULT_HARTEN_CONFIG } from './engine/hartenjagen';
 import { chooseBoerenBid, chooseBoerenCard } from './bots';
 import { DEFAULT_BOEREN_CONFIG } from './engine/boerenbridge';
+import { chooseTarotCard, chooseTarotDiscard } from './bots';
+import { DEFAULT_TAROT_CONFIG } from './engine/tarot';
+import { tarotKey } from './engine/tarot-cards';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -178,6 +181,49 @@ describe('sessiepersistentie (actielog-replay)', () => {
     expect(store.loadBoeren()).toEqual(state);
     store.clearBoeren();
     expect(store.loadBoeren()).toBeNull();
+  });
+
+  it('tarot: herbouwt de sessie, inclusief bod, geroepen heer en écart', () => {
+    const state = store.newTarot(31, 'normal', { ...DEFAULT_TAROT_CONFIG, players: 5 });
+    const session = store.replayTarot(state);
+    const gift = session.gift as NonNullable<typeof session.gift>;
+    while (gift.phase === 'bidding') {
+      const p = gift.toAct;
+      // Forceer een preneur, anders is de helft van de acties niet gedekt.
+      const bod =
+        p === gift.toAct && gift.taker === null && gift.legalBids(p).includes('garde')
+          ? ('garde' as const)
+          : ('pass' as const);
+      gift.bid(p, bod);
+      state.actions.push({ t: 'bid', p, c: bod });
+    }
+    expect(gift.phase).toBe('call');
+    gift.callKing('S');
+    state.actions.push({ t: 'call', suit: 'S' });
+    while (gift.phase === 'ecart') {
+      const card = chooseTarotDiscard(gift);
+      gift.discard(card);
+      state.actions.push({ t: 'discard', card: tarotKey(card) });
+    }
+    for (let i = 0; i < 10 && gift.phase === 'play'; i++) {
+      const p = gift.toPlay;
+      const card = chooseTarotCard(gift, p, 'normal');
+      gift.playCard(p, card);
+      state.actions.push({ t: 'play', p, card: tarotKey(card) });
+    }
+
+    const replayed = store.replayTarot(state);
+    expect(replayed.gift?.taker).toBe(gift.taker);
+    expect(replayed.gift?.contract).toBe(gift.contract);
+    expect(replayed.gift?.partner).toBe(gift.partner);
+    expect(replayed.gift?.ecart.map(tarotKey)).toEqual(gift.ecart.map(tarotKey));
+    expect(replayed.gift?.hands.map((h) => h.map(tarotKey))).toEqual(
+      gift.hands.map((h) => h.map(tarotKey)),
+    );
+    store.saveTarot(state);
+    expect(store.loadTarot()).toEqual(state);
+    store.clearTarot();
+    expect(store.loadTarot()).toBeNull();
   });
 
   it('weigert corrupte opslag', () => {

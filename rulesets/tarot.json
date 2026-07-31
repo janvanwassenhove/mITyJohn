@@ -1,0 +1,91 @@
+{
+  "$schema": "./ruleset.schema.json",
+  "id": "tarot",
+  "game": "tarot",
+  "name": {
+    "nl": "Frans tarot",
+    "en": "French Tarot",
+    "fr": "Tarot"
+  },
+  "version": "0.1.0",
+  "source": "docs/REGELS-TAROT.md",
+  "players": [3, 4, 5],
+  "deck": {
+    "cards": 78,
+    "suits": 4,
+    "cardsPerSuit": 14,
+    "suitOrder": ["Roi", "Dame", "Cavalier", "Valet", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+    "trumps": 21,
+    "excuse": true,
+    "bouts": ["atout-1", "atout-21", "excuse"]
+  },
+  "cardPoints": {
+    "unit": "half-points",
+    "note": "Waarden ×2 zodat er geen kommagetallen nodig zijn; §2.2 toont de gewone waarden.",
+    "boutOrRoi": 9,
+    "dame": 7,
+    "cavalier": 5,
+    "valet": 3,
+    "other": 1,
+    "totalHalfPoints": 182
+  },
+  "deal": {
+    "packet": 3,
+    "byPlayerCount": {
+      "3": { "hand": 24, "chien": 6 },
+      "4": { "hand": 18, "chien": 6 },
+      "5": { "hand": 15, "chien": 3 }
+    }
+  },
+  "contracts": [
+    { "id": "petite", "rank": 1, "multiplier": 1, "takesChien": true, "chienTo": "preneur" },
+    { "id": "garde", "rank": 2, "multiplier": 2, "takesChien": true, "chienTo": "preneur" },
+    { "id": "garde-sans", "rank": 3, "multiplier": 4, "takesChien": false, "chienTo": "preneur" },
+    { "id": "garde-contre", "rank": 4, "multiplier": 6, "takesChien": false, "chienTo": "defense" }
+  ],
+  "ecart": {
+    "forbidden": ["roi", "bout"],
+    "trumpsOnlyIfUnavoidable": true
+  },
+  "play": {
+    "direction": "clockwise",
+    "openingLead": "left-of-dealer",
+    "followSuit": "required",
+    "mustTrump": true,
+    "mustOvertrump": true,
+    "excuseAlwaysPlayable": true,
+    "excuseNeverWins": true,
+    "excuseStaysWithOwner": true,
+    "excuseLostOnLastTrick": true
+  },
+  "callKing": {
+    "playerCount": 5,
+    "fallbackWhenAllKings": "dame",
+    "partnerRevealedOnCall": true
+  },
+  "targets": { "0": 56, "1": 51, "2": 41, "3": 36 },
+  "scoring": {
+    "base": 25,
+    "petitAuBout": 10,
+    "chelemUnannounced": 200,
+    "shares": {
+      "3": { "preneur": 2, "defender": -1 },
+      "4": { "preneur": 3, "defender": -1 },
+      "5": { "preneur": 2, "partner": 1, "defender": -1 }
+    }
+  },
+  "assumptions": [
+    "Met de klok mee gedeeld en gespeeld; tarot gaat traditioneel tegen de klok in (§3)",
+    "Atouts in de écart enkel wanneer het niet anders kan (§5)",
+    "De excuse gaat in de laatste slag naar de winnaar, zonder chelem-uitzondering (§6.3)",
+    "Poignée, aangekondigde chelem en misère zitten niet in deze versie (§1)"
+  ],
+  "confirmed": [
+    "78 kaarten: 4x14 kleuren, 21 atouts, excuse (§2)",
+    "Bouts zijn de 1, de 21 en de excuse (§2.1)",
+    "Kaartwaarden 4,5 / 3,5 / 2,5 / 1,5 / 0,5 — samen 91 punten (§2.2)",
+    "Doelen 56 / 51 / 41 / 36 naargelang het aantal bouts (§8)",
+    "Resultaat = (25 + verschil + petit au bout) x factor (§9)",
+    "Bij vijf spelers: 2/3 voor de preneur, 1/3 voor de geroepene (§9.1)"
+  ]
+}

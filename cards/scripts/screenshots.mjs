@@ -138,6 +138,23 @@ const SCENES = [
     },
   },
   {
+    // Tarot: eigen kaartset met atouts en de excuse, en vijf stoelen aan tafel.
+    id: 'tarot',
+    setup: async (page) => {
+      await click(page, 'Frans tarot');
+      await click(page, '5 spelers');
+      await click(page, /Nieuw spel|Start/);
+      // Wachten tot de mens aan zet is: dan staat het biedpaneel open en zie je
+      // de hand met atouts liggen.
+      for (let i = 0; i < 40; i++) {
+        const paneel = (await page.locator('.panel').textContent()) ?? '';
+        if (paneel.includes('Wat bied je')) break;
+        await page.waitForTimeout(200);
+      }
+      await page.waitForTimeout(200);
+    },
+  },
+  {
     id: 'gids',
     setup: async (page) => {
       await click(page, 'Regels & uitleg');

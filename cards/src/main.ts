@@ -34,6 +34,22 @@ import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from '
 import { chooseBeloteCard, chooseBeloteTake } from './bots';
 import { chooseHartenCard, chooseHartenPass } from './bots';
 import { chooseBoerenBid, chooseBoerenCard } from './bots';
+import { chooseTarotBid, chooseTarotCall, chooseTarotCard, chooseTarotDiscard } from './bots';
+import {
+  CONTRACTS as TAROT_CONTRACTS,
+  DEFAULT_TAROT_CONFIG,
+  type PlayerCount,
+  type TarotConfig,
+  type TarotGift,
+  type TarotSession,
+} from './engine/tarot';
+import {
+  countBouts,
+  formatHalfPoints,
+  sortTarotHand,
+  tarotKey,
+  type TarotCard,
+} from './engine/tarot-cards';
 import {
   DEFAULT_BOEREN_CONFIG,
   type BoerenConfig,
@@ -81,6 +97,7 @@ import {
   biedenTip,
   boerenTip,
   hartenTip,
+  tarotTip,
   loadCoachEnabled,
   klaverjasTip,
   manilleTip,
@@ -147,7 +164,8 @@ let sbWDeclarer = 0;
 let sbWPartner = 1;
 let sbWTricks = '';
 let sbWAceLed = true;
-const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf'];
+// Vijf stoelen: tarot speelt met 3, 4 of 5 (REGELS-TAROT.md §1).
+const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf', 'Lowie'];
 const HUMAN = 0;
 const BOT_DELAY = 650;
 const TRICK_PAUSE = 1200;
@@ -168,7 +186,14 @@ const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
 type GameId =
-  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen' | 'boerenbridge';
+  | 'wiezen'
+  | 'manille'
+  | 'bieden'
+  | 'klaverjassen'
+  | 'belote'
+  | 'hartenjagen'
+  | 'boerenbridge'
+  | 'tarot';
 let game: GameId = 'wiezen';
 let hjSession: HartenSession | null = null;
 let hjPersisted: store.PersistedHarten | null = null;
@@ -180,6 +205,11 @@ let bbSession: BoerenSession | null = null;
 let bbPersisted: store.PersistedBoeren | null = null;
 let bbRestored: { state: store.PersistedBoeren; session: BoerenSession } | null = null;
 let boerenConfig: BoerenConfig = { ...DEFAULT_BOEREN_CONFIG };
+let ttSession: TarotSession | null = null;
+let ttPersisted: store.PersistedTarot | null = null;
+let ttRestored: { state: store.PersistedTarot; session: TarotSession } | null = null;
+let tarotConfig: TarotConfig = { ...DEFAULT_TAROT_CONFIG };
+const TAROT_PLAYERS_KEY = 'cards.tarotPlayers';
 let kSession: KlaverjasSession | null = null;
 let kPersisted: store.PersistedKlaverjas | null = null;
 let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
@@ -487,6 +517,7 @@ function liveSession(): boolean {
   if (game === 'belote') return Boolean(blSession && !blSession.finished);
   if (game === 'hartenjagen') return Boolean(hjSession && !hjSession.finished);
   if (game === 'boerenbridge') return Boolean(bbSession && !bbSession.finished);
+  if (game === 'tarot') return Boolean(ttSession && !ttSession.finished);
   return Boolean(session && !session.finished);
 }
 
@@ -507,6 +538,7 @@ function resumeGame(): void {
   else if (game === 'belote') scheduleBeloteBots();
   else if (game === 'hartenjagen') scheduleHartenBots();
   else if (game === 'boerenbridge') scheduleBoerenBots();
+  else if (game === 'tarot') scheduleTarotBots();
   else scheduleBots();
 }
 
@@ -771,7 +803,11 @@ function startScreen(): HTMLElement {
     gameTile('belote', '\u{1F1EB}\u{1F1F7}', 'game.belote', 'tile.belote'),
     gameTile('hartenjagen', '\u{1F494}', 'game.hartenjagen', 'tile.hartenjagen'),
     gameTile('boerenbridge', '\u{1F3AF}', 'game.boerenbridge', 'tile.boerenbridge'),
+    gameTile('tarot', '\u{1F52E}', 'game.tarot', 'tile.tarot'),
   );
+
+  // Tarot is het enige spel met een keuze in het aantal spelers (§1).
+  if (game === 'tarot') main.append(tarotPlayerPicker());
   main.append(tiles);
 
   // Speeltype staat bewust níét in de ingeklapte instellingen: gewoon wiezen en
@@ -791,7 +827,9 @@ function startScreen(): HTMLElement {
               ? 'harten.intro'
               : game === 'boerenbridge'
                 ? 'boeren.intro'
-                : 'wiezen.intro';
+                : game === 'tarot'
+                  ? 'tarot.intro'
+                  : 'wiezen.intro';
   main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
@@ -807,7 +845,9 @@ function startScreen(): HTMLElement {
               ? Boolean(hjRestored && !hjRestored.session.finished)
               : game === 'boerenbridge'
                 ? Boolean(bbRestored && !bbRestored.session.finished)
-                : Boolean(restored && !restored.session.finished);
+                : game === 'tarot'
+                  ? Boolean(ttRestored && !ttRestored.session.finished)
+                  : Boolean(restored && !restored.session.finished);
 
   // Primaire actie: groot en als eerste bereikbaar met de duim.
   const row = el('div', 'btn-row stack');
@@ -837,6 +877,10 @@ function startScreen(): HTMLElement {
           store.clearBoeren();
           bbRestored = null;
           startBoeren();
+        } else if (game === 'tarot') {
+          store.clearTarot();
+          ttRestored = null;
+          startTarot();
         } else if (game === 'bieden') {
           store.clearBieden();
           bRestored = null;
@@ -848,6 +892,19 @@ function startScreen(): HTMLElement {
         }
       }),
     );
+  } else if (game === 'tarot') {
+    if (hasRestore) {
+      row.append(button(t('start.continue'), 'btn primary big', continueTarot));
+      row.append(
+        button(t('start.new'), 'btn', () => {
+          store.clearTarot();
+          ttRestored = null;
+          startTarot();
+        }),
+      );
+    } else {
+      row.append(button(t('game.start'), 'btn primary big', startTarot));
+    }
   } else if (game === 'boerenbridge') {
     if (hasRestore) {
       row.append(button(t('start.continue'), 'btn primary big', continueBoeren));
@@ -1042,7 +1099,9 @@ function tableGrid(): HTMLElement {
               ? (hjSession?.roundNumber ?? 0)
               : game === 'boerenbridge'
                 ? (bbSession?.roundNumber ?? 0)
-                : (session?.giftNumber ?? 0);
+                : game === 'tarot'
+                  ? (ttSession?.giftNumber ?? 0)
+                  : (session?.giftNumber ?? 0);
   const key = `${game}:${n}`;
   const table = el('div', 'table-grid');
   if (key !== dealtKey) {
@@ -1695,6 +1754,15 @@ function render(): void {
     wrap.append(statsScreen());
   } else if (view === 'home') {
     wrap.append(startScreen());
+  } else if (game === 'tarot') {
+    const ttGift = ttSession?.gift ?? null;
+    if (!ttSession || (!ttGift && !ttSession.finished)) {
+      wrap.append(startScreen());
+    } else if (!ttGift && ttSession.finished) {
+      wrap.append(tarotEndScreen());
+    } else if (ttGift) {
+      wrap.append(tarotStatusBar(ttGift), tarotTable(ttGift), tarotActionPanel(ttGift));
+    }
   } else if (game === 'boerenbridge') {
     const bbGift = bbSession?.gift ?? null;
     if (!bbSession || (!bbGift && !bbSession.finished)) {
@@ -4128,6 +4196,522 @@ function boerenEndScreen(): HTMLElement {
   return main;
 }
 
+/* ---------- frans tarot ---------- */
+
+const TAROT_SUIT_GLYPH = SUIT_GLYPH;
+const TAROT_RANK_LABEL: Record<number, string> = { 11: 'V', 12: 'C', 13: 'D', 14: 'R' };
+
+/** Tarotkaarten hebben een eigen gezicht: atouts tonen hun nummer, de excuse een
+ *  ster, en de kleuren hebben vier pop-kaarten in plaats van drie (§2). */
+function tarotCardEl(
+  card: TarotCard,
+  opts?: { onClick?: () => void; disabled?: boolean; selected?: boolean },
+): HTMLButtonElement | HTMLSpanElement {
+  const rood = card.kind === 'suit' && (card.suit === 'H' || card.suit === 'D');
+  const soort =
+    card.kind === 'trump' ? ' trump' : card.kind === 'excuse' ? ' excuse' : rood ? ' red' : '';
+  const boven =
+    card.kind === 'trump'
+      ? String(card.value)
+      : card.kind === 'excuse'
+        ? '★'
+        : (TAROT_RANK_LABEL[card.rank] ?? String(card.rank));
+  const onder =
+    card.kind === 'trump' ? '✦' : card.kind === 'excuse' ? 'EXC' : TAROT_SUIT_GLYPH[card.suit];
+  const vul = (host: HTMLElement) => {
+    host.append(el('span', 'card-rank', boven), el('span', 'card-suit', onder));
+    host.setAttribute('aria-label', tarotCardLabel(card));
+  };
+  if (opts?.onClick) {
+    const btn = button('', `card${soort}${opts.selected ? ' selected' : ''}`, opts.onClick);
+    btn.disabled = opts.disabled ?? false;
+    vul(btn);
+    return btn;
+  }
+  const span = el('span', `card static${soort}`);
+  vul(span);
+  return span;
+}
+
+function tarotCardLabel(card: TarotCard): string {
+  if (card.kind === 'excuse') return t('tarot.excuse');
+  if (card.kind === 'trump') return t('tarot.atout', { n: card.value });
+  const rang = TAROT_RANK_LABEL[card.rank]
+    ? t(`tarot.rank.${card.rank}` as MessageKey)
+    : String(card.rank);
+  return `${rang} ${tSuit(card.suit)}`;
+}
+
+function recordT(action: store.TarotAction): void {
+  if (!ttPersisted) return;
+  ttPersisted.actions.push(action);
+  store.saveTarot(ttPersisted);
+}
+
+function setTarotPlayers(n: PlayerCount): void {
+  tarotConfig = { ...tarotConfig, players: n };
+  try {
+    localStorage.setItem(TAROT_PLAYERS_KEY, String(n));
+  } catch {
+    /* ignore */
+  }
+  render();
+}
+
+function tarotPlayerPicker(): HTMLElement {
+  const box = el('div', 'type-picker');
+  box.append(el('span', 'type-label', t('tarot.playerPicker')));
+  const seg = el('div', 'seg wide');
+  seg.setAttribute('role', 'group');
+  seg.setAttribute('aria-label', t('tarot.playerPicker'));
+  for (const n of [3, 4, 5] as PlayerCount[]) {
+    seg.append(
+      segButton(t('tarot.playerCount', { n }), tarotConfig.players === n, () => setTarotPlayers(n)),
+    );
+  }
+  box.append(seg);
+  box.append(el('p', 'type-hint', t(`tarot.hint.${tarotConfig.players}` as MessageKey)));
+  return box;
+}
+
+function startTarot(): void {
+  const seed = (Math.random() * 2 ** 31) >>> 0;
+  ttPersisted = store.newTarot(seed, botLevel, tarotConfig);
+  store.saveTarot(ttPersisted);
+  ttRestored = null;
+  ttSession = store.replayTarot(ttPersisted);
+  view = 'game';
+  render();
+  scheduleTarotBots();
+}
+
+function continueTarot(): void {
+  if (!ttRestored) return;
+  ttPersisted = ttRestored.state;
+  ttSession = ttRestored.session;
+  botLevel = ttPersisted.botLevel;
+  tarotConfig = ttPersisted.config;
+  ttRestored = null;
+  view = 'game';
+  render();
+  scheduleTarotBots();
+}
+
+function tarotActor(): { player: number; human: boolean } | null {
+  const gift = ttSession?.gift;
+  if (!gift) return null;
+  if (gift.phase === 'bidding') return { player: gift.toAct, human: gift.toAct === HUMAN };
+  if (gift.phase === 'call' || gift.phase === 'ecart') {
+    const p = gift.taker as number;
+    return { player: p, human: p === HUMAN };
+  }
+  if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
+  return null;
+}
+
+function playTarotCard(gift: TarotGift, player: number, card: TarotCard): void {
+  gift.playCard(player, card);
+  recordT({ t: 'play', p: player, card: tarotKey(card) });
+  sfxCard();
+  if (gift.trick.length === 0 && gift.phase === 'play') sfxTrick();
+  if (gift.phase === 'scored' && gift.score) {
+    sfxScore((gift.score.pointsHalf[HUMAN] ?? 0) >= 0);
+  }
+}
+
+function tarotBotStep(): boolean {
+  const gift = ttSession?.gift;
+  const who = tarotActor();
+  if (!gift || !who || who.human) return false;
+  if (gift.phase === 'bidding') {
+    const bod = chooseTarotBid(gift, who.player, botLevel);
+    gift.bid(who.player, bod);
+    recordT({ t: 'bid', p: who.player, c: bod });
+    return true;
+  }
+  if (gift.phase === 'call') {
+    const suit = chooseTarotCall(gift);
+    gift.callKing(suit);
+    recordT({ t: 'call', suit });
+    return true;
+  }
+  if (gift.phase === 'ecart') {
+    const card = chooseTarotDiscard(gift);
+    gift.discard(card);
+    recordT({ t: 'discard', card: tarotKey(card) });
+    return true;
+  }
+  playTarotCard(gift, who.player, chooseTarotCard(gift, who.player, botLevel));
+  return true;
+}
+
+function scheduleTarotBots(): void {
+  const gen = ++generation;
+  const who = tarotActor();
+  const gift = ttSession?.gift;
+  if (!gift || !who || who.human) return;
+  // De écart gaat kaart per kaart; die stappen mogen vlug gaan.
+  const snel = gift.phase === 'ecart';
+  const pause = gift.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
+  window.setTimeout(
+    () => {
+      if (gen !== generation || game !== 'tarot' || view !== 'game') return;
+      if (tarotBotStep()) {
+        render();
+        scheduleTarotBots();
+      }
+    },
+    snel ? 120 : pause ? TRICK_PAUSE : BOT_DELAY,
+  );
+}
+
+function tarotCloseAndNext(): void {
+  if (!ttSession) return;
+  ttSession.closeGift();
+  recordT({ t: 'close' });
+  if (!ttSession.finished) {
+    ttSession.nextGift();
+  } else {
+    recordSessionStat('tarot', botLevel, ttSession.totalsHalf, HUMAN);
+    store.clearTarot();
+    ttPersisted = null;
+  }
+  render();
+  scheduleTarotBots();
+}
+
+function tarotStatusBar(gift: TarotGift): HTMLElement {
+  const s = ttSession as TarotSession;
+  const bar = el('div', 'status');
+  bar.append(
+    el('span', 'chip', t('tarot.giftNo', { n: s.giftNumber + 1, total: s.totalGiften })),
+    el('span', 'chip', t('game.dealer', { name: playerName(gift.dealer) })),
+  );
+  if (gift.contract && gift.taker !== null) {
+    bar.append(
+      el(
+        'span',
+        'chip strong',
+        t('tarot.taker', {
+          name: playerName(gift.taker),
+          contract: t(`tarot.contract.${gift.contract}` as MessageKey),
+        }),
+      ),
+    );
+  }
+  if (gift.calledCard) {
+    bar.append(el('span', 'chip', t('tarot.called', { card: tarotCardLabel(gift.calledCard) })));
+    if (gift.partnerRevealed) {
+      bar.append(
+        el(
+          'span',
+          'chip',
+          gift.partner === null
+            ? t('tarot.alone')
+            : t('tarot.partner', { name: playerName(gift.partner) }),
+        ),
+      );
+    }
+  }
+  bar.append(
+    el(
+      'span',
+      'chip strong',
+      s.totalsHalf.map((n, p) => `${playerName(p)} ${formatHalfPoints(n)}`).join(' — '),
+    ),
+  );
+  return bar;
+}
+
+function tarotSeat(gift: TarotGift, player: number): HTMLElement {
+  const who = tarotActor();
+  const box = el('div', `seat seat-${player}${who?.player === player ? ' active' : ''}`);
+  const head = el('div', 'seat-head');
+  head.append(el('span', 'seat-name', playerName(player)));
+  const bouts = countBouts(gift.won[player] ?? []);
+  head.append(
+    el(
+      'span',
+      'seat-tricks',
+      `${t('score.tricks')}: ${gift.tricksWon[player] ?? 0}${bouts > 0 ? ` · ${t('tarot.bouts', { n: bouts })}` : ''}`,
+    ),
+  );
+  box.append(head);
+  const hand = el('div', 'hand');
+  const cards = sortTarotHand(gift.hands[player] ?? []);
+  if (player === HUMAN) {
+    const ecartBeurt = gift.phase === 'ecart' && gift.taker === HUMAN;
+    const mag = ecartBeurt ? gift.legalDiscards() : [];
+    const legal = gift.phase === 'play' && gift.toPlay === HUMAN ? gift.legalCards(HUMAN) : [];
+    for (const card of cards) {
+      if (ecartBeurt) {
+        const kan = mag.some((c) => tarotKey(c) === tarotKey(card));
+        hand.append(
+          tarotCardEl(card, {
+            disabled: !kan,
+            onClick: () => {
+              if (!kan) return;
+              gift.discard(card);
+              render();
+              scheduleTarotBots();
+            },
+          }),
+        );
+        continue;
+      }
+      const kan = legal.some((c) => tarotKey(c) === tarotKey(card));
+      hand.append(
+        tarotCardEl(card, {
+          disabled: !kan,
+          onClick: () => {
+            if (!kan) return;
+            playTarotCard(gift, HUMAN, card);
+            render();
+            scheduleTarotBots();
+          },
+        }),
+      );
+    }
+  } else {
+    for (let i = 0; i < cards.length; i++) hand.append(el('span', 'card back'));
+  }
+  box.append(hand);
+  return box;
+}
+
+/** Drie, vier of vijf stoelen: links en rechts flankeren de slag, wat ertussen
+ *  zit komt bovenaan. Bij drie spelers blijft die bovenrij dus leeg. */
+function tarotTable(gift: TarotGift): HTMLElement {
+  const n = gift.players;
+  const anderen: number[] = [];
+  for (let i = 1; i < n; i++) anderen.push((HUMAN + i) % n);
+  const links = anderen[0] as number;
+  const rechts = anderen[anderen.length - 1] as number;
+  const boven = anderen.slice(1, -1);
+
+  const table = tableGrid();
+  if (boven.length > 0) {
+    const rij = el('div', 'seat-row');
+    for (const p of boven) rij.append(tarotSeat(gift, p));
+    table.append(rij);
+  }
+  const middle = el('div', 'table-middle');
+  middle.append(tarotSeat(gift, links), tarotTrickArea(gift), tarotSeat(gift, rechts));
+  table.append(middle);
+  table.append(tarotSeat(gift, HUMAN));
+  return table;
+}
+
+function tarotTrickArea(gift: TarotGift): HTMLElement {
+  const area = el('div', 'trick');
+  // §5 — de open chien is het enige moment waarop iedereen die kaarten ziet.
+  if (gift.chienOpen && gift.phase === 'ecart') {
+    area.append(el('div', 'trick-label', t('tarot.chien')));
+    const row = el('div', 'trick-cards');
+    for (const card of gift.chien) {
+      const cell = el('div', 'trick-cell');
+      cell.append(tarotCardEl(card));
+      row.append(cell);
+    }
+    area.append(row);
+    return area;
+  }
+  const showLast = gift.trick.length === 0 && gift.lastTrick && gift.phase === 'play';
+  const plays = showLast ? (gift.lastTrick ?? []) : gift.trick;
+  if (showLast) area.append(el('div', 'trick-label', t('play.lastTrick')));
+  const row = el('div', 'trick-cards');
+  for (const play of plays) {
+    const cell = el('div', 'trick-cell');
+    cell.append(el('div', 'trick-player', playerName(play.player)));
+    cell.append(tarotCardEl(play.card));
+    row.append(cell);
+  }
+  area.append(row);
+  return area;
+}
+
+function tarotActionPanel(gift: TarotGift): HTMLElement {
+  const panel = el('div', 'panel');
+  const who = tarotActor();
+  const tip = coachBox(who?.human ? tarotTip(gift, HUMAN) : null);
+  if (tip) panel.append(tip);
+
+  if (gift.phase === 'bidding') {
+    if (who?.human) {
+      panel.append(el('p', undefined, t('tarot.bidPrompt')));
+      const row = el('div', 'btn-row');
+      for (const c of TAROT_CONTRACTS) {
+        if (!gift.legalBids(HUMAN).includes(c.id)) continue;
+        row.append(
+          button(`${t(`tarot.contract.${c.id}` as MessageKey)} ×${c.multiplier}`, 'btn', () => {
+            gift.bid(HUMAN, c.id);
+            recordT({ t: 'bid', p: HUMAN, c: c.id });
+            render();
+            scheduleTarotBots();
+          }),
+        );
+      }
+      row.append(
+        button(t('bidding.pass'), 'btn muted', () => {
+          gift.bid(HUMAN, 'pass');
+          recordT({ t: 'bid', p: HUMAN, c: 'pass' });
+          render();
+          scheduleTarotBots();
+        }),
+      );
+      panel.append(row);
+    } else if (who) {
+      panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'redeal') {
+    panel.append(el('p', undefined, t('tarot.redeal')));
+    panel.append(button(t('bidding.continue'), 'btn primary', () => tarotCloseAndNext()));
+    return panel;
+  }
+
+  if (gift.phase === 'call') {
+    if (who?.human) {
+      panel.append(
+        el(
+          'p',
+          undefined,
+          t('tarot.callPrompt', { rank: t(`tarot.rank.${gift.callRank()}` as MessageKey) }),
+        ),
+      );
+      const row = el('div', 'btn-row');
+      for (const suit of SUITS) {
+        const rood = suit === 'H' || suit === 'D';
+        row.append(
+          button(`${SUIT_GLYPH[suit]} ${tSuit(suit)}`, `btn${rood ? ' red' : ''}`, () => {
+            gift.callKing(suit);
+            recordT({ t: 'call', suit });
+            render();
+            scheduleTarotBots();
+          }),
+        );
+      }
+      panel.append(row);
+    } else if (who) {
+      panel.append(el('p', 'hint', t('tarot.callWait', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'ecart') {
+    if (who?.human) {
+      panel.append(
+        el(
+          'p',
+          undefined,
+          t('tarot.ecartPrompt', { done: gift.ecart.length, total: gift.chien.length }),
+        ),
+      );
+      if (gift.ecart.length > 0) {
+        const row = el('div', 'btn-row');
+        for (const card of gift.ecart) row.append(tarotCardEl(card));
+        row.append(
+          button(t('tarot.undo'), 'btn muted', () => {
+            gift.undoLastDiscard();
+            render();
+          }),
+        );
+        panel.append(row);
+      }
+    } else if (who) {
+      panel.append(el('p', 'hint', t('tarot.ecartWait', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
+  if (gift.phase === 'scored' && gift.score) {
+    const s = gift.score;
+    const total = ttSession as TarotSession;
+    panel.append(
+      el(
+        'h2',
+        undefined,
+        s.made
+          ? t('tarot.made', { name: playerName(gift.taker as number) })
+          : t('tarot.failed', { name: playerName(gift.taker as number) }),
+      ),
+    );
+    panel.append(
+      el(
+        'p',
+        'strong',
+        t('tarot.result', {
+          points: formatHalfPoints(s.preneurHalf),
+          target: formatHalfPoints(s.targetHalf),
+          bouts: s.bouts,
+        }),
+      ),
+    );
+    if (s.petitAuBout !== 0) {
+      panel.append(el('p', s.petitAuBout > 0 ? 'strong made' : 'strong', t('tarot.petitAuBout')));
+    }
+    if (s.chelem) panel.append(el('p', 'strong made', t('tarot.chelem')));
+    const table = el('table', 'score-table');
+    const head = el('tr');
+    head.append(el('th'));
+    for (let p = 0; p < gift.players; p++) head.append(el('th', undefined, playerName(p)));
+    table.append(head);
+    const rij = (label: string, waarde: (p: number) => string) => {
+      const tr = el('tr');
+      tr.append(el('th', undefined, label));
+      for (let p = 0; p < gift.players; p++) tr.append(el('td', undefined, waarde(p)));
+      table.append(tr);
+    };
+    rij(t('tarot.roundTotal'), (p) => {
+      const half = s.pointsHalf[p] ?? 0;
+      return `${half > 0 ? '+' : ''}${formatHalfPoints(half)}`;
+    });
+    rij(t('score.total'), (p) =>
+      formatHalfPoints((total.totalsHalf[p] ?? 0) + (s.pointsHalf[p] ?? 0)),
+    );
+    panel.append(table);
+    panel.append(button(t('score.next'), 'btn primary', () => tarotCloseAndNext()));
+    return panel;
+  }
+
+  if (who && !who.human) {
+    panel.append(el('p', 'hint', t('bidding.turn', { name: playerName(who.player) })));
+  } else if (who?.human) {
+    panel.append(el('p', 'hint', t('play.yourTurn')));
+  }
+  panel.append(el('p', 'hint', t('tarot.goal')));
+  return panel;
+}
+
+function tarotEndScreen(): HTMLElement {
+  const s = ttSession as TarotSession;
+  const main = el('main', 'hero');
+  main.append(el('h1', undefined, t('session.end')));
+  main.append(
+    el(
+      'p',
+      'strong',
+      t('tarot.sessionWon', {
+        name: playerName(s.winner),
+        points: formatHalfPoints(s.totalsHalf[s.winner] ?? 0),
+      }),
+    ),
+  );
+  const table = el('table', 'score-table');
+  const head = el('tr');
+  const row = el('tr');
+  for (let p = 0; p < s.players; p++) {
+    head.append(el('th', undefined, playerName(p)));
+    row.append(el('td', undefined, formatHalfPoints(s.totalsHalf[p] ?? 0)));
+  }
+  table.append(head, row);
+  main.append(table);
+  main.append(button(t('session.again'), 'btn primary', startTarot));
+  return main;
+}
+
 function scorebordScreen(): HTMLElement {
   return sbBoard ? scorebordBoard(sbBoard) : scorebordSetup();
 }
@@ -4177,7 +4761,8 @@ try {
     storedGame === 'klaverjassen' ||
     storedGame === 'belote' ||
     storedGame === 'hartenjagen' ||
-    storedGame === 'boerenbridge'
+    storedGame === 'boerenbridge' ||
+    storedGame === 'tarot'
   ) {
     game = storedGame;
   }
@@ -4207,6 +4792,21 @@ if (savedBelote) {
     beloteConfig = savedBelote.config;
   } catch {
     store.clearBelote();
+  }
+}
+try {
+  const n = Number(localStorage.getItem(TAROT_PLAYERS_KEY));
+  if (n === 3 || n === 4 || n === 5) tarotConfig = { ...tarotConfig, players: n };
+} catch {
+  /* ignore */
+}
+const savedTarot = store.loadTarot();
+if (savedTarot) {
+  try {
+    ttRestored = { state: savedTarot, session: store.replayTarot(savedTarot) };
+    tarotConfig = savedTarot.config;
+  } catch {
+    store.clearTarot();
   }
 }
 const savedBoeren = store.loadBoeren();

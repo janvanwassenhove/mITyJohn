@@ -10,13 +10,21 @@ import type { BiedenGift } from './engine/bieden';
 import type { KlaverjasGift } from './engine/klaverjassen';
 import type { HartenGift } from './engine/hartenjagen';
 import type { BoerenGift } from './engine/boerenbridge';
+import type { TarotGift } from './engine/tarot';
 
 const COACH_KEY = 'cards.coach';
 
 /** Aantal stappen in de wizard, per spel (de teksten staan in i18n als
  *  `wizard.<spel>.<n>.title` / `.body`). */
 export const WIZARD_STEPS: Record<
-  'wiezen' | 'manille' | 'bieden' | 'klaverjassen' | 'belote' | 'hartenjagen' | 'boerenbridge',
+  | 'wiezen'
+  | 'manille'
+  | 'bieden'
+  | 'klaverjassen'
+  | 'belote'
+  | 'hartenjagen'
+  | 'boerenbridge'
+  | 'tarot',
   number
 > = {
   wiezen: 5,
@@ -26,6 +34,7 @@ export const WIZARD_STEPS: Record<
   belote: 5,
   hartenjagen: 5,
   boerenbridge: 5,
+  tarot: 5,
 };
 
 export function loadCoachEnabled(): boolean {
@@ -187,6 +196,24 @@ export function boerenTip(gift: BoerenGift, player: number): CoachTip | null {
   if (nodig > 0) return { id: 'bbNeed', params: { n: nodig } };
   if (nodig === 0) return { id: 'bbDone' };
   return { id: 'bbOver', params: { n: -nodig } };
+}
+
+/** Tip voor tarot: het bod, de geroepen heer, de écart en de troefplicht. */
+export function tarotTip(gift: TarotGift, player: number): CoachTip | null {
+  if (gift.phase === 'bidding') {
+    if (gift.toAct !== player) return null;
+    const atouts = (gift.hands[player] ?? []).filter((c) => c.kind === 'trump').length;
+    return { id: 'ttBid', params: { atouts } };
+  }
+  if (gift.phase === 'call' && gift.taker === player) return { id: 'ttCall' };
+  if (gift.phase === 'ecart' && gift.taker === player) return { id: 'ttEcart' };
+  if (gift.phase !== 'play' || gift.toPlay !== player) return null;
+  if (gift.trick.length === 0) return { id: 'ttLead' };
+  const legal = gift.legalCards(player);
+  const alleenAtout = legal.length > 0 && legal.every((c) => c.kind === 'trump');
+  if (alleenAtout) return { id: 'ttMustTrump' };
+  const heeftExcuse = legal.some((c) => c.kind === 'excuse');
+  return heeftExcuse ? { id: 'ttExcuse' } : { id: 'mustFollow' };
 }
 
 export function biedenTip(gift: BiedenGift, player: number): CoachTip | null {

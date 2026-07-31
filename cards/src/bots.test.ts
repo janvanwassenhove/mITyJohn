@@ -22,6 +22,20 @@ import { chooseHartenCard, chooseHartenPass } from './bots';
 import { DEFAULT_HARTEN_CONFIG, HartenSession } from './engine/hartenjagen';
 import { chooseBoerenBid, chooseBoerenCard } from './bots';
 import { BoerenSession, DEFAULT_BOEREN_CONFIG } from './engine/boerenbridge';
+import {
+  chooseTarotBid,
+  chooseTarotCall,
+  chooseTarotCard,
+  chooseTarotDiscard,
+  tarotHandStrength,
+} from './bots';
+import {
+  DEFAULT_TAROT_CONFIG,
+  TarotSession,
+  targetHalfPoints,
+  type PlayerCount,
+} from './engine/tarot';
+import type { TarotCard } from './engine/tarot-cards';
 
 const ruleset = getRuleset('vlaams-standaard') as Ruleset;
 
@@ -295,5 +309,76 @@ describe('boerenbridge-bots', () => {
     }
     // Blind gokken zit rond 1 op 3 bij deze rondegroottes; de bots doen beter.
     expect(juist / rondes).toBeGreaterThan(0.4);
+  });
+});
+
+describe('tarot-bots', () => {
+  it.each([[3], [4], [5]])(
+    'spelen met %i spelers volledige partijen zonder illegale zetten',
+    (players) => {
+      for (const level of BOT_LEVELS) {
+        for (let seed = 1; seed <= 3; seed++) {
+          const session = new TarotSession(mulberry32(seed * 37), 0, {
+            ...DEFAULT_TAROT_CONFIG,
+            players: players as PlayerCount,
+          });
+          let safety = 200;
+          let gespeeld = 0;
+          while (!session.finished && safety-- > 0) {
+            const gift = session.nextGift();
+            while (gift.phase === 'bidding') {
+              const p = gift.toAct;
+              gift.bid(p, chooseTarotBid(gift, p, level));
+            }
+            if (gift.phase === 'redeal') {
+              session.closeGift();
+              continue;
+            }
+            if (gift.phase === 'call') gift.callKing(chooseTarotCall(gift));
+            while (gift.phase === 'ecart') gift.discard(chooseTarotDiscard(gift));
+            while (gift.phase === 'play') {
+              const p = gift.toPlay;
+              gift.playCard(p, chooseTarotCard(gift, p, level));
+            }
+            const s = gift.score as NonNullable<typeof gift.score>;
+            // Zero-sum, en het doel klopt met het aantal bouts (§8, §9.1).
+            expect(s.pointsHalf.reduce((a, b) => a + b, 0)).toBe(0);
+            expect(s.targetHalf).toBe(targetHalfPoints(s.bouts));
+            gespeeld++;
+            session.closeGift();
+          }
+          expect(session.finished).toBe(true);
+          expect(gespeeld).toBe(players);
+        }
+      }
+    },
+  );
+
+  it('bieden niet blindelings: een zwakke hand past', () => {
+    const zwak: TarotCard[] = [
+      { kind: 'suit', suit: 'S', rank: 2 },
+      { kind: 'suit', suit: 'H', rank: 3 },
+      { kind: 'suit', suit: 'D', rank: 4 },
+      { kind: 'trump', value: 3 },
+    ];
+    const sterk: TarotCard[] = [
+      { kind: 'trump', value: 21 },
+      { kind: 'trump', value: 20 },
+      { kind: 'trump', value: 19 },
+      { kind: 'trump', value: 18 },
+      { kind: 'trump', value: 17 },
+      { kind: 'trump', value: 16 },
+      { kind: 'trump', value: 15 },
+      { kind: 'excuse' },
+      { kind: 'suit', suit: 'S', rank: 14 },
+      { kind: 'suit', suit: 'H', rank: 14 },
+      { kind: 'suit', suit: 'D', rank: 14 },
+      { kind: 'suit', suit: 'C', rank: 14 },
+    ];
+    expect(tarotHandStrength(zwak)).toBeLessThan(tarotHandStrength(sterk));
+    // De drempels rekenen per kaart (zie TAROT_BID_THRESHOLDS): deze hand haalt
+    // de laagste (1,25) niet, die andere ligt er ruim boven.
+    expect(tarotHandStrength(zwak) / zwak.length).toBeLessThan(1.25);
+    expect(tarotHandStrength(sterk) / sterk.length).toBeGreaterThan(2.1);
   });
 });
