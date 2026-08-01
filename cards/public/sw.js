@@ -4,7 +4,7 @@
 // Bij elke release opgehoogd: oude clients gooien hun cache weg zodra de nieuwe
 // service worker actief wordt (zie de 'activate'-handler hieronder). Zonder dat
 // bleef een geïnstalleerde app op een oude bundel hangen.
-const CACHE = 'cards-v6';
+const CACHE = 'cards-v7';
 
 self.addEventListener('install', () => {
   self.skipWaiting();

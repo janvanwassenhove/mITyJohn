@@ -204,6 +204,7 @@ let generation = 0;
 
 const GAME_KEY = 'cards.game';
 const PLAYERS_KEY = 'cards.players';
+const INSTALL_DISMISS_KEY = 'cards.installWeg';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
 let game: GameId = 'wiezen';
@@ -211,6 +212,8 @@ let game: GameId = 'wiezen';
 let playerCount = 4;
 /** Staat het installatiepaneel open? */
 let installTonen = false;
+/** Balk weggeklikt? Blijft bewaard, zodat hij niet elke keer terugkomt. */
+let installBannerWeg = false;
 /** Chrome en Edge geven ons een echte installatievraag; die bewaren we tot je
  *  erop klikt. Safari heeft zo'n gebeurtenis niet — daar blijft het bij uitleg. */
 let installPrompt: BeforeInstallPromptEvent | null = null;
@@ -831,25 +834,26 @@ function draaitAlsApp(): boolean {
   }
 }
 
-/** Uitleg + waar mogelijk de echte installatievraag. iOS heeft daar geen API
- *  voor: daar is "deelicoon → Zet op beginscherm" het enige wat werkt. */
+/** Het echte installatievenster van de browser openen. Werkt enkel wanneer de
+ *  browser ons vooraf een beforeinstallprompt gaf (Chrome, Edge, Android). */
+function installNu(): void {
+  const vraag = installPrompt;
+  if (!vraag) return;
+  // Eén keer bruikbaar: meteen loslaten, anders bieden we een dode knop aan.
+  installPrompt = null;
+  installTonen = false;
+  installBannerWeg = true;
+  void vraag.prompt();
+  render();
+}
+
+/** Uitleg voor browsers zonder installatie-API. iOS heeft die niet: daar is
+ *  "deelicoon → Zet op beginscherm" het enige wat werkt. */
 function installPanel(): HTMLElement {
   const box = el('div', 'options');
   box.append(el('div', 'options-title', t('install.title')));
-  if (installPrompt) {
-    box.append(el('p', 'type-hint', t('install.prompted')));
-    box.append(
-      button(t('install.button'), 'btn primary', () => {
-        void installPrompt?.prompt();
-        installPrompt = null;
-        installTonen = false;
-        render();
-      }),
-    );
-  } else {
-    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    box.append(el('p', 'type-hint', t(ios ? 'install.ios' : 'install.other')));
-  }
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  box.append(el('p', 'type-hint', t(ios ? 'install.ios' : 'install.other')));
   box.append(el('p', 'type-hint', t('install.why')));
   box.append(
     button(t('install.close'), 'btn muted', () => {
@@ -860,8 +864,33 @@ function installPanel(): HTMLElement {
   return box;
 }
 
+/** Discrete balk bovenaan zodra de browser zegt dat installeren kan. Eén tik en
+ *  het venster van de browser staat er — geen tussenscherm, geen menu zoeken. */
+function installBanner(): HTMLElement {
+  const box = el('div', 'install-banner');
+  box.append(el('span', 'install-text', t('install.banner')));
+  const row = el('div', 'btn-row');
+  row.append(
+    button(t('install.now'), 'btn primary', installNu),
+    button(t('install.later'), 'btn muted', () => {
+      installBannerWeg = true;
+      try {
+        localStorage.setItem(INSTALL_DISMISS_KEY, '1');
+      } catch {
+        /* ignore */
+      }
+      render();
+    }),
+  );
+  box.append(row);
+  return box;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
+  // Zodra de browser laat weten dat installeren kan, bieden we het aan in plaats
+  // van te wachten tot iemand de knop onderaan vindt.
+  if (installPrompt && !installBannerWeg && !draaitAlsApp()) main.append(installBanner());
   main.append(el('span', 'phase', t('app.phase')));
   main.append(el('h1', undefined, t('app.title')));
   main.append(el('p', 'tagline', t('app.tagline')));
@@ -1091,8 +1120,12 @@ function startScreen(): HTMLElement {
   if (!draaitAlsApp()) {
     learnRow.append(
       button(`\u{1F4F2} ${t('install.button')}`, 'btn muted', () => {
-        installTonen = true;
-        render();
+        // Kan de browser het zelf? Dan meteen zijn venster, zonder tussenstap.
+        if (installPrompt) installNu();
+        else {
+          installTonen = true;
+          render();
+        }
       }),
     );
   }
@@ -5032,6 +5065,11 @@ try {
   /* ignore */
 }
 try {
+  installBannerWeg = localStorage.getItem(INSTALL_DISMISS_KEY) === '1';
+} catch {
+  /* ignore */
+}
+try {
   // Aantal spelers herstellen; onbekende waarden negeren we (dan blijft het vier).
   const storedPlayers = Number(localStorage.getItem(PLAYERS_KEY));
   if (APP_PLAYER_COUNTS.includes(storedPlayers)) playerCount = storedPlayers;
@@ -5168,6 +5206,9 @@ render();
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   installPrompt = e as BeforeInstallPromptEvent;
+  // De gebeurtenis komt na de eerste tekenbeurt binnen; zonder dit zou de balk
+  // pas verschijnen bij de volgende klik ergens anders.
+  render();
 });
 window.addEventListener('appinstalled', () => {
   installPrompt = null;

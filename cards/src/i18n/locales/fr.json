@@ -670,9 +670,11 @@
   "game.playerHintOne": "À ce nombre, l'application ne peut distribuer que le {game}.",
   "install.button": "Installer comme application",
   "install.title": "Cards en application",
-  "install.prompted": "Suivez la demande de votre navigateur pour installer Cards.",
   "install.ios": "Sur iPhone et iPad : touchez l’icône de partage en bas et choisissez « Sur l’écran d’accueil ». Faites-le dans Safari — les autres navigateurs ne proposent pas toujours ce bouton.",
   "install.other": "Cherchez « Installer l’application » ou « Sur l’écran d’accueil » dans le menu de votre navigateur.",
   "install.why": "Cards s’ouvre alors en plein écran, sans barre d’adresse, et fonctionne hors ligne.",
-  "install.close": "Fermer"
+  "install.close": "Fermer",
+  "install.banner": "Ajoutez Cards à votre écran d'accueil : plein écran et hors ligne.",
+  "install.now": "Installer",
+  "install.later": "Plus tard"
 }

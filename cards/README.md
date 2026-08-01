@@ -63,15 +63,20 @@ reclame, werkt offline en is installeerbaar op je gsm.
 ## Als app op je gsm
 
 Cards is een PWA: geen App Store, geen installatiebestand, gewoon de pagina op je
-beginscherm zetten. Daarna start hij schermvullend en werkt hij offline. De knop
-**Als app installeren** op het startscherm wijst je de weg; die verdwijnt zodra je
+beginscherm zetten. Daarna start hij schermvullend en werkt hij offline.
+
+Zodra je browser laat weten dat installeren kan, verschijnt er bovenaan het
+startscherm een balk met **Installeren** — één tik en het venster van de browser
+staat er. Wie hem wegklikt met _Niet nu_ krijgt hem niet meer terug; de knop
+**Als app installeren** onderaan blijft wel staan. Allebei verdwijnen ze zodra je
 de app effectief vanaf je beginscherm opent.
 
+- **Chrome, Edge, Android** — de balk en de knop openen het echte
+  installatievenster van de browser (via `beforeinstallprompt`).
 - **iPhone / iPad** — open <https://mityjohn.com/cards/> in **Safari**, tik op het
-  deelicoon en kies **Zet op beginscherm**. iOS heeft geen installatie-API, dus de
-  knop in de app toont daar enkel die uitleg. Andere browsers op iOS tonen het
+  deelicoon en kies **Zet op beginscherm**. iOS heeft geen installatie-API, dus
+  daar tonen de knoppen enkel die uitleg. Andere browsers op iOS tonen het
   deelmenu soms zonder die keuze; Safari doet het altijd.
-- **Android** — Chrome biedt "App installeren" aan in het menu.
 
 Twee dingen om te weten op iOS: een app op het beginscherm heeft zijn **eigen opslag**,
 los van Safari, dus je scoreborden en statistieken uit de browser verhuizen niet mee.

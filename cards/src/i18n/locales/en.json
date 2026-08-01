@@ -670,9 +670,11 @@
   "game.playerHintOne": "With this many, the app can only deal {game}.",
   "install.button": "Install as an app",
   "install.title": "Cards as an app",
-  "install.prompted": "Follow your browser prompt to install Cards.",
   "install.ios": "On iPhone and iPad: tap the share icon at the bottom and pick \"Add to Home Screen\". Do it in Safari — other browsers do not always offer that button.",
   "install.other": "Look for \"Install app\" or \"Add to Home Screen\" in your browser menu.",
   "install.why": "Cards then opens full screen, without an address bar, and works offline.",
-  "install.close": "Close"
+  "install.close": "Close",
+  "install.banner": "Add Cards to your home screen: full screen and offline.",
+  "install.now": "Install",
+  "install.later": "Not now"
 }

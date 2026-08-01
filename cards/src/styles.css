@@ -553,6 +553,33 @@ details.settings[open] > summary {
   color: var(--text-muted);
 }
 
+/* Installatiebalk bovenaan het startscherm: aanwezig maar niet schreeuwerig,
+   en met één tik weg voor wie hem niet wil. */
+.install-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--accent-soft);
+}
+
+.install-banner .install-text {
+  flex: 1 1 12rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.install-banner .btn-row {
+  margin: 0;
+  flex: 0 0 auto;
+}
+
 /* ---------- speltafel ---------- */
 
 .status {

@@ -13,6 +13,11 @@ isNew: true
 
 \[ [**Speel gratis in je browser**](https://mityjohn.com/cards/) \]
 
+Geen installatie nodig om te spelen. Wil je hem toch als app op je toestel, dan
+biedt Cards dat zelf aan zodra je hem opent: in Chrome, Edge en op Android met
+één tik op **Installeren**, op iPhone via het deelicoon en *Zet op beginscherm*.
+Daarna start hij schermvullend en werkt hij offline.
+
 ![Het startscherm van Cards op gsm: drie speltegels en één grote startknop](/screenshots/cards-page-1.webp)
 
 ## Negen speeltypes
