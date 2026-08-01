@@ -57,6 +57,21 @@ reclame, werkt offline en is installeerbaar op je gsm.
 - **Nederlands, Engels en Frans**, licht/donker/systeemthema, en alles blijft lokaal
   in `localStorage` — er vertrekt geen data naar een server.
 
+## Als app op je gsm
+
+Cards is een PWA: geen App Store, geen installatiebestand, gewoon de pagina op je
+beginscherm zetten. Daarna start hij schermvullend en werkt hij offline.
+
+- **iPhone / iPad** — open <https://mityjohn.com/cards/> in **Safari**, tik op het
+  deelicoon en kies **Zet op beginscherm**. Andere browsers op iOS tonen die knop
+  soms niet; Safari doet het altijd.
+- **Android** — Chrome biedt "App installeren" aan in het menu.
+
+Twee dingen om te weten op iOS: een app op het beginscherm heeft zijn **eigen opslag**,
+los van Safari, dus je scoreborden en statistieken uit de browser verhuizen niet mee.
+En een nieuwe versie komt binnen zodra je de app opent — hij kijkt bij elke keer
+terugkeren of er een update klaarstaat en herlaadt dan één keer.
+
 ## Structuur
 
 ```

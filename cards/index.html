@@ -9,6 +9,11 @@
     <meta name="theme-color" content="#0a6e4f" />
     <link rel="apple-touch-icon" href="/cards/icons/apple-touch-icon.png" />
     <meta name="mobile-web-app-capable" content="yes" />
+    <!-- iOS vóór 15.4 leest display: standalone niet uit het manifest; zonder
+         deze regel opent "Zet op beginscherm" daar gewoon Safari met balken. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- Het opschrift onder het icoon op het beginscherm. -->
+    <meta name="apple-mobile-web-app-title" content="Cards" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%A0%3C/text%3E%3C/svg%3E"
