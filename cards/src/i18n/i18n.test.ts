@@ -85,6 +85,8 @@ describe('i18n', () => {
     'scorebord.tt.petitAuBout',
     'scorebord.tt.poignee',
     'scorebord.tt.chelem',
+    // 'Versie' is in nl en fr hetzelfde woord.
+    'settings.build',
   ]);
 
   it.each([

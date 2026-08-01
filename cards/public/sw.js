@@ -1,7 +1,10 @@
 /* Cards service worker — offline-cache voor het app-shell zodat de app
    als PWA op een gsm geïnstalleerd kan worden. Netwerk-eerst voor navigatie
    (nieuwe deploys winnen), cache-eerst voor gehashte assets. */
-const CACHE = 'cards-v1';
+// Bij elke release opgehoogd: oude clients gooien hun cache weg zodra de nieuwe
+// service worker actief wordt (zie de 'activate'-handler hieronder). Zonder dat
+// bleef een geïnstalleerde app op een oude bundel hangen.
+const CACHE = 'cards-v3';
 
 self.addEventListener('install', () => {
   self.skipWaiting();

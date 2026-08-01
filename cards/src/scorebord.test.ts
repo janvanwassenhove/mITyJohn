@@ -1,4 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { isGameId } from './games';
+import { SB_GAMES } from './scorebord-games';
 import {
   addRound,
   canUseMode,
@@ -118,6 +120,14 @@ describe('modus wisselen op een lopend bord', () => {
     expect(canUseMode(vijf, 'klaverjassen')).toBe(false);
     // Manueel kan altijd.
     expect(canUseMode(drie, 'manueel')).toBe(true);
+  });
+});
+
+describe('bewaarde modus', () => {
+  it('elke automodus is een geldig spel-id, zodat de keuze een herlaadbeurt overleeft', () => {
+    // main.ts leest cards.scorebordMode terug met isGameId(); staat een modus
+    // daar niet in, dan valt hij stilletjes terug op manueel.
+    for (const game of SB_GAMES) expect(isGameId(game.id)).toBe(true);
   });
 });
 

@@ -661,5 +661,6 @@
   "scorebord.tt.chelemNone": "None",
   "scorebord.tt.chelemMade": "Made quietly (200)",
   "scorebord.tt.chelemAnnouncedMade": "Announced and made (400)",
-  "scorebord.tt.chelemAnnouncedFailed": "Announced and missed (−200)"
+  "scorebord.tt.chelemAnnouncedFailed": "Announced and missed (−200)",
+  "settings.build": "Build {build}"
 }

@@ -661,5 +661,6 @@
   "scorebord.tt.chelemNone": "Aucun",
   "scorebord.tt.chelemMade": "Réalisé sans annonce (200)",
   "scorebord.tt.chelemAnnouncedMade": "Annoncé et réalisé (400)",
-  "scorebord.tt.chelemAnnouncedFailed": "Annoncé et manqué (−200)"
+  "scorebord.tt.chelemAnnouncedFailed": "Annoncé et manqué (−200)",
+  "settings.build": "Version {build}"
 }

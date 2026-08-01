@@ -661,5 +661,6 @@
   "scorebord.tt.chelemNone": "Geen",
   "scorebord.tt.chelemMade": "Stil gehaald (200)",
   "scorebord.tt.chelemAnnouncedMade": "Aangekondigd en gehaald (400)",
-  "scorebord.tt.chelemAnnouncedFailed": "Aangekondigd en gemist (−200)"
+  "scorebord.tt.chelemAnnouncedFailed": "Aangekondigd en gemist (−200)",
+  "settings.build": "Versie {build}"
 }

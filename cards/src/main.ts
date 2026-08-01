@@ -124,6 +124,10 @@ import {
   type WiezenOptions,
 } from './options';
 
+/** Wordt bij het bouwen ingevuld (vite.config.ts). */
+declare const __BUILD_ID__: string;
+const BUILD_ID = typeof __BUILD_ID__ === 'string' ? __BUILD_ID__ : 'dev';
+
 const app = document.querySelector<HTMLDivElement>('#app');
 if (!app) throw new Error('#app ontbreekt');
 
@@ -1067,6 +1071,10 @@ function startScreen(): HTMLElement {
     body.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
   if (!hasRestore && game === 'tarot') body.append(tarotOptionsPanel());
+
+  // Bouwstempel onderaan de instellingen: zo weet je meteen of je de nieuwste
+  // versie voor je hebt (of nog een gecachte).
+  body.append(el('p', 'hint build-id', t('settings.build', { build: BUILD_ID })));
 
   settings.append(body);
   main.append(settings);
@@ -4899,7 +4907,9 @@ try {
 }
 try {
   const storedMode = localStorage.getItem(SB_MODE_KEY);
-  if (storedMode === 'wiezen' || storedMode === 'manueel') sbMode = storedMode;
+  // Elk spel kan een scorebordmodus zijn; hier stond nog enkel wiezen, waardoor
+  // je keuze na een herlaadbeurt stilletjes terugviel op manueel.
+  if (storedMode === 'manueel' || isGameId(storedMode)) sbMode = storedMode;
 } catch {
   /* ignore */
 }
