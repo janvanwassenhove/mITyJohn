@@ -5,6 +5,8 @@
 // DOM-vrij en data-gedreven: dit bestand bepaalt enkel de structuur; de teksten
 // staan in i18n als `guide.<hoofdstuk>.<stap>.title` en `.body`.
 
+import type { GameId } from './games';
+
 /** Welke speltypes de gids behandelt; `basis` en `scorebord` gelden voor alles. */
 export type GuideChapterId =
   | 'basis'
@@ -70,18 +72,7 @@ export function getChapter(id: string): GuideChapter | undefined {
 }
 
 /** Het hoofdstuk dat bij het gekozen spel + ruleset hoort, voor de "lees verder"-knop. */
-export function chapterForGame(
-  game:
-    | 'wiezen'
-    | 'manille'
-    | 'bieden'
-    | 'klaverjassen'
-    | 'belote'
-    | 'hartenjagen'
-    | 'boerenbridge'
-    | 'tarot',
-  rulesetId: string,
-): GuideChapterId {
+export function chapterForGame(game: GameId, rulesetId: string): GuideChapterId {
   if (game === 'manille') return 'manillen';
   if (game === 'bieden') return 'bieden';
   if (game === 'klaverjassen') return 'klaverjassen';

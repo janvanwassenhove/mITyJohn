@@ -461,6 +461,24 @@ main.hero h1 {
   white-space: nowrap;
 }
 
+/* Acht spellen passen niet op één rij op een gsm: alles na het vijfde viel
+   buiten beeld. Deze variant breekt af in plaats van af te snijden. */
+.seg.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  border-radius: var(--radius);
+  overflow: visible;
+}
+
+.seg.wrap button {
+  flex: 1 1 auto;
+  white-space: nowrap;
+  border-radius: 999px;
+}
+
 .type-hint {
   margin: 0.35rem 0 0;
   font-size: 0.8rem;

@@ -26,6 +26,7 @@ import {
   type BotLevel,
 } from './bots';
 import * as store from './store';
+import { GAMES, isGameId, type GameId } from './games';
 import * as sbw from './scorebord-wiezen';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
@@ -194,15 +195,6 @@ let generation = 0;
 const GAME_KEY = 'cards.game';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
-type GameId =
-  | 'wiezen'
-  | 'manille'
-  | 'bieden'
-  | 'klaverjassen'
-  | 'belote'
-  | 'hartenjagen'
-  | 'boerenbridge'
-  | 'tarot';
 let game: GameId = 'wiezen';
 let hjSession: HartenSession | null = null;
 let hjPersisted: store.PersistedHarten | null = null;
@@ -804,16 +796,9 @@ function startScreen(): HTMLElement {
   const tiles = el('div', 'game-tiles');
   tiles.setAttribute('role', 'group');
   tiles.setAttribute('aria-label', t('game.picker'));
-  tiles.append(
-    gameTile('wiezen', '\u2660', 'game.wiezen', 'tile.wiezen'),
-    gameTile('manille', '\u2665', 'game.manillen', 'tile.manillen'),
-    gameTile('bieden', '\u2663', 'game.bieden', 'tile.bieden'),
-    gameTile('klaverjassen', '\u2666', 'game.klaverjassen', 'tile.klaverjassen'),
-    gameTile('belote', '\u{1F1EB}\u{1F1F7}', 'game.belote', 'tile.belote'),
-    gameTile('hartenjagen', '\u{1F494}', 'game.hartenjagen', 'tile.hartenjagen'),
-    gameTile('boerenbridge', '\u{1F3AF}', 'game.boerenbridge', 'tile.boerenbridge'),
-    gameTile('tarot', '\u{1F52E}', 'game.tarot', 'tile.tarot'),
-  );
+  for (const g of GAMES) {
+    tiles.append(gameTile(g.id, g.icon, g.nameKey as MessageKey, g.tileKey as MessageKey));
+  }
 
   // Tarot is het enige spel met een keuze in het aantal spelers (§1).
   if (game === 'tarot') main.append(tarotPlayerPicker());
@@ -1249,20 +1234,14 @@ function wizardScreen(): HTMLElement {
 
   // Je moest hiervoor eerst terug naar het startscherm om een ander spel te
   // leren; nu wissel je gewoon hier van spel.
-  const games: [GameId, MessageKey][] = [
-    ['wiezen', 'game.wiezen'],
-    ['manille', 'game.manillen'],
-    ['bieden', 'game.bieden'],
-    ['klaverjassen', 'game.klaverjassen'],
-    ['belote', 'game.belote'],
-    ['hartenjagen', 'game.hartenjagen'],
-  ];
-  const picker = el('div', 'seg wide');
+
+  const picker = el('div', 'seg wrap');
   picker.setAttribute('role', 'group');
   picker.setAttribute('aria-label', t('wizard.pickGame'));
-  for (const [id, key] of games) {
+  for (const g of GAMES) {
+    const id = g.id;
     picker.append(
-      segButton(t(key), game === id, () => {
+      segButton(t(g.nameKey as MessageKey), game === id, () => {
         game = id;
         try {
           localStorage.setItem(GAME_KEY, id);
@@ -4908,18 +4887,7 @@ try {
 }
 try {
   const storedGame = localStorage.getItem(GAME_KEY);
-  if (
-    storedGame === 'manille' ||
-    storedGame === 'wiezen' ||
-    storedGame === 'bieden' ||
-    storedGame === 'klaverjassen' ||
-    storedGame === 'belote' ||
-    storedGame === 'hartenjagen' ||
-    storedGame === 'boerenbridge' ||
-    storedGame === 'tarot'
-  ) {
-    game = storedGame;
-  }
+  if (isGameId(storedGame)) game = storedGame;
 } catch {
   /* ignore */
 }
