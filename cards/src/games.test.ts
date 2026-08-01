@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { GAMES, GAME_IDS, isGameId, type GameId } from './games';
+import {
+  APP_PLAYER_COUNTS,
+  GAMES,
+  GAME_IDS,
+  gamesForPlayers,
+  isGameId,
+  type GameId,
+} from './games';
 import { WIZARD_STEPS } from './coach';
 import { chapterForGame, getChapter } from './guide';
 import nl from './i18n/locales/nl.json';
@@ -63,6 +70,22 @@ describe('spelcatalogus', () => {
       }
       expect(game.icon.length).toBeGreaterThan(0);
     }
+  });
+
+  it('koppelt de speltegels aan het aantal spelers', () => {
+    // Elk spel moet minstens één aantal kunnen, anders is het nergens te kiezen.
+    for (const g of GAMES) {
+      expect(g.players.length, `${g.id} heeft geen spelersaantal`).toBeGreaterThan(0);
+      for (const n of g.players) expect(APP_PLAYER_COUNTS).toContain(n);
+    }
+    // De keuzeknoppen zijn precies de aantallen die minstens één spel kan delen.
+    expect(APP_PLAYER_COUNTS).toEqual([3, 4, 5]);
+    // Met vier kan alles; met drie of vijf enkel tarot.
+    expect(gamesForPlayers(4).map((g) => g.id)).toEqual(GAME_IDS);
+    expect(gamesForPlayers(3).map((g) => g.id)).toEqual(['tarot']);
+    expect(gamesForPlayers(5).map((g) => g.id)).toEqual(['tarot']);
+    // Er blijft altijd iets over om te kiezen, anders staat het startscherm leeg.
+    for (const n of APP_PLAYER_COUNTS) expect(gamesForPlayers(n).length).toBeGreaterThan(0);
   });
 
   it('bevat alle acht spellen, in de volgorde van het startscherm', () => {

@@ -26,7 +26,7 @@ import {
   type BotLevel,
 } from './bots';
 import * as store from './store';
-import { GAMES, isGameId, type GameId } from './games';
+import { APP_PLAYER_COUNTS, GAMES, gamesForPlayers, isGameId, type GameId } from './games';
 import * as sbg from './scorebord-games';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
@@ -203,9 +203,17 @@ let bidLog: BidLogEntry[] = [];
 let generation = 0;
 
 const GAME_KEY = 'cards.game';
+const PLAYERS_KEY = 'cards.players';
 const WIEZEN_OPTS_KEY = 'cards.wiezenOptions';
 const MANILLE_OPTS_KEY = 'cards.manilleOptions';
 let game: GameId = 'wiezen';
+/** Met hoeveel spelers je wil spelen. Stuurt welke speltegels je krijgt. */
+let playerCount = 4;
+/** Staat het installatiepaneel open? */
+let installTonen = false;
+/** Chrome en Edge geven ons een echte installatievraag; die bewaren we tot je
+ *  erop klikt. Safari heeft zo'n gebeurtenis niet — daar blijft het bij uitleg. */
+let installPrompt: BeforeInstallPromptEvent | null = null;
 let hjSession: HartenSession | null = null;
 let hjPersisted: store.PersistedHarten | null = null;
 let hjRestored: { state: store.PersistedHarten; session: HartenSession } | null = null;
@@ -765,15 +773,21 @@ function gameTile(id: GameId, icon: string, nameKey: MessageKey, descKey: Messag
   body.append(el('span', 'tile-name', t(nameKey)), el('span', 'tile-desc', t(descKey)));
   tile.append(body);
   tile.addEventListener('click', () => {
-    game = id;
-    try {
-      localStorage.setItem(GAME_KEY, id);
-    } catch {
-      /* ignore */
-    }
+    setGame(id);
     render();
   });
   return tile;
+}
+
+/** Spelkeuze bewaren. Tekent niets: de aanroeper bepaalt wanneer er hertekend
+ *  wordt, zodat een keuze die uit een andere wijziging volgt niet dubbel rendert. */
+function setGame(id: GameId): void {
+  game = id;
+  try {
+    localStorage.setItem(GAME_KEY, id);
+  } catch {
+    /* ignore */
+  }
 }
 
 /** Zichtbare keuze tussen gewoon wiezen, kleurenwiezen en de cafévariant. */
@@ -801,22 +815,70 @@ function rulesetPicker(): HTMLElement {
   return box;
 }
 
+/** Niet in de standaard-DOM-typings: enkel Chromium-browsers sturen dit. */
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+}
+
+/** Draait de app al als geïnstalleerde app (beginscherm) in plaats van in een
+ *  browsertab? navigator.standalone is de iOS-variant, display-mode de rest. */
+function draaitAlsApp(): boolean {
+  try {
+    const iosStandalone = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+    return iosStandalone || matchMedia('(display-mode: standalone)').matches;
+  } catch {
+    return false;
+  }
+}
+
+/** Uitleg + waar mogelijk de echte installatievraag. iOS heeft daar geen API
+ *  voor: daar is "deelicoon → Zet op beginscherm" het enige wat werkt. */
+function installPanel(): HTMLElement {
+  const box = el('div', 'options');
+  box.append(el('div', 'options-title', t('install.title')));
+  if (installPrompt) {
+    box.append(el('p', 'type-hint', t('install.prompted')));
+    box.append(
+      button(t('install.button'), 'btn primary', () => {
+        void installPrompt?.prompt();
+        installPrompt = null;
+        installTonen = false;
+        render();
+      }),
+    );
+  } else {
+    const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    box.append(el('p', 'type-hint', t(ios ? 'install.ios' : 'install.other')));
+  }
+  box.append(el('p', 'type-hint', t('install.why')));
+  box.append(
+    button(t('install.close'), 'btn muted', () => {
+      installTonen = false;
+      render();
+    }),
+  );
+  return box;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('span', 'phase', t('app.phase')));
   main.append(el('h1', undefined, t('app.title')));
   main.append(el('p', 'tagline', t('app.tagline')));
 
+  // Eerst met hoeveel je bent, dan pas welk spel: met drie of vijf kan de app
+  // enkel tarot delen, en dat hoort de lijst te tonen in plaats van tegels die
+  // je toch niet kan starten.
+  main.append(playerCountPicker());
+
   // Spelkeuze als grote, tapbare tegels — meteen duidelijk wat je kan spelen.
+  const speelbaar = gamesForPlayers(playerCount);
   const tiles = el('div', 'game-tiles');
   tiles.setAttribute('role', 'group');
   tiles.setAttribute('aria-label', t('game.picker'));
-  for (const g of GAMES) {
+  for (const g of speelbaar) {
     tiles.append(gameTile(g.id, g.icon, g.nameKey as MessageKey, g.tileKey as MessageKey));
   }
-
-  // Tarot is het enige spel met een keuze in het aantal spelers (§1).
-  if (game === 'tarot') main.append(tarotPlayerPicker());
   main.append(tiles);
 
   // Speeltype staat bewust níét in de ingeklapte instellingen: gewoon wiezen en
@@ -1024,7 +1086,18 @@ function startScreen(): HTMLElement {
       render();
     }),
   );
+  // Enkel wanneer je hem nog kan installeren: in een app die al op het
+  // beginscherm staat is die knop alleen maar verwarrend.
+  if (!draaitAlsApp()) {
+    learnRow.append(
+      button(`\u{1F4F2} ${t('install.button')}`, 'btn muted', () => {
+        installTonen = true;
+        render();
+      }),
+    );
+  }
   main.append(learnRow);
+  if (installTonen) main.append(installPanel());
 
   // Instellingen en regelvarianten ingeklapt: rustig startscherm, alles
   // blijft bereikbaar voor wie het wil.
@@ -1261,12 +1334,7 @@ function wizardScreen(): HTMLElement {
     const id = g.id;
     picker.append(
       segButton(t(g.nameKey as MessageKey), game === id, () => {
-        game = id;
-        try {
-          localStorage.setItem(GAME_KEY, id);
-        } catch {
-          /* ignore */
-        }
+        setGame(id);
         wizardStep = 0;
         render();
       }),
@@ -4308,6 +4376,26 @@ function recordT(action: store.TarotAction): void {
   store.saveTarot(ttPersisted);
 }
 
+/** Aantal spelers kiezen. Past het gekozen spel niet bij dat aantal, dan schuift
+ *  de keuze op naar het eerste spel dat het wél kan — anders bleef je met een
+ *  spel zitten dat niet meer op het scherm staat. Tarot deelt volgens ditzelfde
+ *  aantal, dus die instelling loopt mee. */
+function setPlayerCount(n: number): void {
+  playerCount = n;
+  try {
+    localStorage.setItem(PLAYERS_KEY, String(n));
+  } catch {
+    /* ignore */
+  }
+  const speelbaar = gamesForPlayers(n);
+  if (!speelbaar.some((g) => g.id === game)) {
+    const eerste = speelbaar[0];
+    if (eerste) setGame(eerste.id);
+  }
+  if (n === 3 || n === 4 || n === 5) setTarot('players', n as PlayerCount);
+  else render();
+}
+
 function setTarot<K extends keyof TarotConfig>(key: K, value: TarotConfig[K]): void {
   tarotConfig = { ...tarotConfig, [key]: value };
   try {
@@ -4367,21 +4455,28 @@ function tarotOptionsPanel(): HTMLElement {
   return box;
 }
 
-function tarotPlayerPicker(): HTMLElement {
+/** Met hoeveel zijn jullie? Bepaalt welke speltegels je hieronder krijgt.
+ *  Tarot is het enige spel dat met drie of vijf kan; de rest deelt vier handen. */
+function playerCountPicker(): HTMLElement {
   const box = el('div', 'type-picker');
-  box.append(el('span', 'type-label', t('tarot.playerPicker')));
+  box.append(el('span', 'type-label', t('game.playerPicker')));
   const seg = el('div', 'seg wide');
   seg.setAttribute('role', 'group');
-  seg.setAttribute('aria-label', t('tarot.playerPicker'));
-  for (const n of [3, 4, 5] as PlayerCount[]) {
-    seg.append(
-      segButton(t('tarot.playerCount', { n }), tarotConfig.players === n, () =>
-        setTarot('players', n),
-      ),
-    );
+  seg.setAttribute('aria-label', t('game.playerPicker'));
+  for (const n of APP_PLAYER_COUNTS) {
+    seg.append(segButton(t('game.playerCount', { n }), playerCount === n, () => setPlayerCount(n)));
   }
   box.append(seg);
-  box.append(el('p', 'type-hint', t(`tarot.hint.${tarotConfig.players}` as MessageKey)));
+  const spellen = gamesForPlayers(playerCount);
+  box.append(
+    el(
+      'p',
+      'type-hint',
+      spellen.length === 1
+        ? t('game.playerHintOne', { game: t(gameNameKey(spellen[0]?.id ?? 'tarot')) })
+        : t('game.playerHint', { n: playerCount, count: spellen.length }),
+    ),
+  );
   return box;
 }
 
@@ -4937,6 +5032,13 @@ try {
   /* ignore */
 }
 try {
+  // Aantal spelers herstellen; onbekende waarden negeren we (dan blijft het vier).
+  const storedPlayers = Number(localStorage.getItem(PLAYERS_KEY));
+  if (APP_PLAYER_COUNTS.includes(storedPlayers)) playerCount = storedPlayers;
+} catch {
+  /* ignore */
+}
+try {
   const storedMode = localStorage.getItem(SB_MODE_KEY);
   // Elk spel kan een scorebordmodus zijn; hier stond nog enkel wiezen, waardoor
   // je keuze na een herlaadbeurt stilletjes terugviel op manueel.
@@ -4964,6 +5066,14 @@ try {
 } catch {
   /* ignore */
 }
+// Spel en aantal spelers komen uit twee losse sleutels en kunnen elkaar
+// tegenspreken (bv. een bord van vóór deze kiezer). Het aantal wint, want dat
+// bepaalt wat er op het startscherm staat; tarot deelt volgens datzelfde aantal.
+if (!gamesForPlayers(playerCount).some((g) => g.id === game)) {
+  const eerste = gamesForPlayers(playerCount)[0];
+  if (eerste) game = eerste.id;
+}
+
 const savedManille = store.loadManille();
 if (savedManille) {
   try {
@@ -4997,6 +5107,11 @@ try {
   }
 } catch {
   /* ignore */
+}
+// Tarot deelt volgens het aantal van het startscherm; die kiezer is de baas,
+// anders spreken de twee opgeslagen sleutels elkaar tegen.
+if (playerCount === 3 || playerCount === 4 || playerCount === 5) {
+  tarotConfig = { ...tarotConfig, players: playerCount };
 }
 const savedTarot = store.loadTarot();
 if (savedTarot) {
@@ -5048,6 +5163,18 @@ onLocaleChange(render);
 render();
 
 // PWA: service worker voor offline gebruik / installatie op gsm.
+// Chromium vraagt zelf wanneer een site installeerbaar is; wij vangen die vraag
+// op en bewaren ze, zodat de installatieknop ze op het juiste moment kan tonen.
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e as BeforeInstallPromptEvent;
+});
+window.addEventListener('appinstalled', () => {
+  installPrompt = null;
+  installTonen = false;
+  render();
+});
+
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   // Bij een controllerwissel is er een nieuwe service worker aan zet en draait
   // de pagina nog op de oude bundel. Eén keer herladen en je zit op de nieuwe.

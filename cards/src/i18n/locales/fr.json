@@ -663,5 +663,16 @@
   "scorebord.tt.chelemMade": "Réalisé sans annonce (200)",
   "scorebord.tt.chelemAnnouncedMade": "Annoncé et réalisé (400)",
   "scorebord.tt.chelemAnnouncedFailed": "Annoncé et manqué (−200)",
-  "settings.build": "Version {build}"
+  "settings.build": "Version {build}",
+  "game.playerPicker": "Vous jouez à combien ?",
+  "game.playerCount": "{n} joueurs",
+  "game.playerHint": "À {n} joueurs, vous pouvez jouer à ces {count} jeux.",
+  "game.playerHintOne": "À ce nombre, l'application ne peut distribuer que le {game}.",
+  "install.button": "Installer comme application",
+  "install.title": "Cards en application",
+  "install.prompted": "Suivez la demande de votre navigateur pour installer Cards.",
+  "install.ios": "Sur iPhone et iPad : touchez l’icône de partage en bas et choisissez « Sur l’écran d’accueil ». Faites-le dans Safari — les autres navigateurs ne proposent pas toujours ce bouton.",
+  "install.other": "Cherchez « Installer l’application » ou « Sur l’écran d’accueil » dans le menu de votre navigateur.",
+  "install.why": "Cards s’ouvre alors en plein écran, sans barre d’adresse, et fonctionne hors ligne.",
+  "install.close": "Fermer"
 }

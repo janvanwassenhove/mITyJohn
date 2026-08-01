@@ -663,5 +663,16 @@
   "scorebord.tt.chelemMade": "Stil gehaald (200)",
   "scorebord.tt.chelemAnnouncedMade": "Aangekondigd en gehaald (400)",
   "scorebord.tt.chelemAnnouncedFailed": "Aangekondigd en gemist (−200)",
-  "settings.build": "Versie {build}"
+  "settings.build": "Versie {build}",
+  "game.playerPicker": "Met hoeveel spelen jullie?",
+  "game.playerCount": "{n} spelers",
+  "game.playerHint": "Met {n} spelers kan je deze {count} spellen spelen.",
+  "game.playerHintOne": "Met dit aantal kan de app enkel {game} delen.",
+  "install.button": "Als app installeren",
+  "install.title": "Cards als app",
+  "install.prompted": "Volg de vraag van je browser om Cards te installeren.",
+  "install.ios": "Op iPhone en iPad: tik onderaan op het deelicoon en kies \"Zet op beginscherm\". Doe dat in Safari — andere browsers tonen die knop niet altijd.",
+  "install.other": "Zoek in het menu van je browser naar \"App installeren\" of \"Zet op beginscherm\".",
+  "install.why": "Daarna start Cards schermvullend, zonder adresbalk, en werkt hij offline.",
+  "install.close": "Sluiten"
 }

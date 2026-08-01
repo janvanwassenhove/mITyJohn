@@ -663,5 +663,16 @@
   "scorebord.tt.chelemMade": "Made quietly (200)",
   "scorebord.tt.chelemAnnouncedMade": "Announced and made (400)",
   "scorebord.tt.chelemAnnouncedFailed": "Announced and missed (−200)",
-  "settings.build": "Build {build}"
+  "settings.build": "Build {build}",
+  "game.playerPicker": "How many of you are playing?",
+  "game.playerCount": "{n} players",
+  "game.playerHint": "With {n} players you can play these {count} games.",
+  "game.playerHintOne": "With this many, the app can only deal {game}.",
+  "install.button": "Install as an app",
+  "install.title": "Cards as an app",
+  "install.prompted": "Follow your browser prompt to install Cards.",
+  "install.ios": "On iPhone and iPad: tap the share icon at the bottom and pick \"Add to Home Screen\". Do it in Safari — other browsers do not always offer that button.",
+  "install.other": "Look for \"Install app\" or \"Add to Home Screen\" in your browser menu.",
+  "install.why": "Cards then opens full screen, without an address bar, and works offline.",
+  "install.close": "Close"
 }
