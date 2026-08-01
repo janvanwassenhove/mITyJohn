@@ -75,6 +75,9 @@ describe('i18n', () => {
     'tarot.rank.11',
     'tarot.rank.12',
     'tarot.rank.13',
+    'tarot.opt.exact',
+    'tarot.poignee.simple',
+    'tarot.poigneeChip',
   ]);
 
   it.each([

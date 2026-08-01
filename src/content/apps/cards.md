@@ -29,7 +29,7 @@ En dan is er nog **boerenbridge** — of Chinees poepen, als je van dat kamp ben
 
 ![Boerenbridge: voorspellen hoeveel slagen je haalt, met de omgedraaide troefkaart op tafel](/screenshots/cards-page-5.webp)
 
-En dan het buitenbeentje: **Frans tarot**. Een heel ander spel kaarten — 78 stuks, met een cavalier tussen boer en dame, 21 genummerde atouts en de excuse. Je speelt met drie, vier of vijf, en één speler neemt het op tegen alle anderen. Hoeveel hij moet halen hangt af van zijn *bouts*: de 1 van atout, de 21 en de excuse. Met alle drie volstaat 36 punten, zonder één ervan moet hij er 56. Bij vijf spelers roept hij een heer en krijgt hij een partner die niemand kent tot die kaart valt.
+En dan het buitenbeentje: **Frans tarot**. Een heel ander spel kaarten — 78 stuks, met een cavalier tussen boer en dame, 21 genummerde atouts en de excuse. Je speelt met drie, vier of vijf, en één speler neemt het op tegen alle anderen. Hoeveel hij moet halen hangt af van zijn *bouts*: de 1 van atout, de 21 en de excuse. Met alle drie volstaat 36 punten, zonder één ervan moet hij er 56. Bij vijf spelers roept hij een heer en krijgt hij een partner die niemand kent tot die kaart valt. De app volgt het reglement van de Fédération Française de Tarot — inclusief poignée, aangekondigde chelem en petit au bout — en wie aan tafel anders speelt, zet de varianten bij de start gewoon om.
 
 ![Frans tarot met vijf spelers: atouts en kleuren in de hand, met de vier contracten](/screenshots/cards-page-6.webp)
 

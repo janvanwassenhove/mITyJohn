@@ -26,7 +26,9 @@ import {
   chooseTarotBid,
   chooseTarotCall,
   chooseTarotCard,
+  chooseTarotChelem,
   chooseTarotDiscard,
+  chooseTarotPoignee,
   tarotHandStrength,
 } from './bots';
 import {
@@ -336,6 +338,15 @@ describe('tarot-bots', () => {
             }
             if (gift.phase === 'call') gift.callKing(chooseTarotCall(gift));
             while (gift.phase === 'ecart') gift.discard(chooseTarotDiscard(gift));
+            // §9.2/§9.3 — chelem en poignée aankondigen vóór de eerste slag.
+            while (gift.phase === 'announce') {
+              const p = gift.announceToAct as number;
+              if (gift.chelemAnnounced === null && p === gift.taker) {
+                gift.announceChelem(chooseTarotChelem(gift, level));
+              } else {
+                gift.declarePoignee(p, chooseTarotPoignee(gift, p));
+              }
+            }
             while (gift.phase === 'play') {
               const p = gift.toPlay;
               gift.playCard(p, chooseTarotCard(gift, p, level));

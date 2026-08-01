@@ -12,6 +12,7 @@ import {
   DEFAULT_TAROT_CONFIG,
   TarotSession,
   type ContractId,
+  type PoigneeSize,
   type TarotConfig,
 } from './engine/tarot';
 import { parseTarotCard } from './engine/tarot-cards';
@@ -590,6 +591,8 @@ export type TarotAction =
   | { t: 'bid'; p: number; c: ContractId | 'pass' }
   | { t: 'call'; suit: Suit }
   | { t: 'discard'; card: string }
+  | { t: 'chelem'; yes: boolean }
+  | { t: 'poignee'; p: number; size: PoigneeSize | 'none' }
   | { t: 'play'; p: number; card: string }
   | { t: 'close' };
 
@@ -651,6 +654,12 @@ export function replayTarot(state: PersistedTarot): TarotSession {
         break;
       case 'discard':
         gift.discard(parseTarotCard(action.card));
+        break;
+      case 'chelem':
+        gift.announceChelem(action.yes);
+        break;
+      case 'poignee':
+        gift.declarePoignee(action.p, action.size);
         break;
       case 'play':
         gift.playCard(action.p, parseTarotCard(action.card));

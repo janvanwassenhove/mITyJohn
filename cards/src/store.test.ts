@@ -10,7 +10,7 @@ import { chooseHartenCard, chooseHartenPass } from './bots';
 import { DEFAULT_HARTEN_CONFIG } from './engine/hartenjagen';
 import { chooseBoerenBid, chooseBoerenCard } from './bots';
 import { DEFAULT_BOEREN_CONFIG } from './engine/boerenbridge';
-import { chooseTarotCard, chooseTarotDiscard } from './bots';
+import { chooseTarotCard, chooseTarotDiscard, chooseTarotPoignee } from './bots';
 import { DEFAULT_TAROT_CONFIG } from './engine/tarot';
 import { tarotKey } from './engine/tarot-cards';
 
@@ -205,6 +205,18 @@ describe('sessiepersistentie (actielog-replay)', () => {
       gift.discard(card);
       state.actions.push({ t: 'discard', card: tarotKey(card) });
     }
+    // Aankondigingen zitten ook in het log: chelem en poignée (§9.2, §9.3).
+    while (gift.phase === 'announce') {
+      const p = gift.announceToAct as number;
+      if (gift.chelemAnnounced === null && p === gift.taker) {
+        gift.announceChelem(false);
+        state.actions.push({ t: 'chelem', yes: false });
+      } else {
+        const size = chooseTarotPoignee(gift, p);
+        gift.declarePoignee(p, size);
+        state.actions.push({ t: 'poignee', p, size });
+      }
+    }
     for (let i = 0; i < 10 && gift.phase === 'play'; i++) {
       const p = gift.toPlay;
       const card = chooseTarotCard(gift, p, 'normal');
@@ -217,6 +229,8 @@ describe('sessiepersistentie (actielog-replay)', () => {
     expect(replayed.gift?.contract).toBe(gift.contract);
     expect(replayed.gift?.partner).toBe(gift.partner);
     expect(replayed.gift?.ecart.map(tarotKey)).toEqual(gift.ecart.map(tarotKey));
+    expect(replayed.gift?.chelemAnnounced).toBe(gift.chelemAnnounced);
+    expect(replayed.gift?.poigneeDeclared).toEqual(gift.poigneeDeclared);
     expect(replayed.gift?.hands.map((h) => h.map(tarotKey))).toEqual(
       gift.hands.map((h) => h.map(tarotKey)),
     );

@@ -62,19 +62,65 @@ export function targetHalfPoints(bouts: number): number {
   return TARGET_HALF[Math.min(3, bouts)] as number;
 }
 
-export interface TarotConfig {
-  players: PlayerCount;
-  /** §9 — telt de 1 van atout in de laatste slag mee? */
-  petitAuBout: boolean;
-  /** §9.2 — bonus voor een niet-aangekondigde chelem, in hele punten. */
-  chelemBonus: number;
+/** §3 — poignée-drempels per spelersaantal: simple / double / triple. */
+const POIGNEE_THRESHOLDS: Record<PlayerCount, [number, number, number]> = {
+  3: [13, 15, 18],
+  4: [10, 13, 15],
+  5: [8, 10, 13],
+};
+
+export type PoigneeSize = 'simple' | 'double' | 'triple';
+
+/** §9.3 — de premie is dezelfde bij elk contract en wordt niet vermenigvuldigd. */
+export const POIGNEE_POINTS: Record<PoigneeSize, number> = {
+  simple: 20,
+  double: 30,
+  triple: 40,
+};
+
+export function poigneeThreshold(players: PlayerCount, size: PoigneeSize): number {
+  const [s, d, t] = POIGNEE_THRESHOLDS[players];
+  return size === 'simple' ? s : size === 'double' ? d : t;
 }
 
+/**
+ * De regels die per tafel verschillen. De standaard is telkens het FFT-reglement;
+ * wie het anders speelt, zet ze op het startscherm om (§11).
+ */
+export interface TarotConfig {
+  players: PlayerCount;
+  /** §3 — het officiële tarot speelt en deelt tegen de klok in. */
+  counterClockwise: boolean;
+  /** §9 — telt de 1 van atout in de laatste slag mee? */
+  petitAuBout: boolean;
+  /** §9.3 — poignée aankondigen? */
+  poignee: boolean;
+  /** §9.2 — mag de preneur een chelem aankondigen (+400 / −200)? */
+  announcedChelem: boolean;
+  /** §3.1 — petit sec: enkel de 1 als atout, dan opnieuw delen. */
+  petitSec: boolean;
+  /** §9.4 — halve punten exact houden, of de écart naar boven afronden. */
+  rounding: 'exact' | 'up';
+}
+
+/** Het FFT-reglement, zoals de app het standaard speelt. */
 export const DEFAULT_TAROT_CONFIG: TarotConfig = {
   players: 4,
+  counterClockwise: true,
   petitAuBout: true,
-  chelemBonus: 200,
+  poignee: true,
+  announcedChelem: true,
+  petitSec: true,
+  rounding: 'exact',
 };
+
+/** §3.1 — "petit sec": de 1 van atout is je enige atout en je hebt geen excuse.
+ *  Dan wordt de donne geannuleerd en opnieuw gedeeld. */
+export function isPetitSec(hand: TarotCard[]): boolean {
+  const atouts = hand.filter((c) => c.kind === 'trump');
+  const excuse = hand.some((c) => c.kind === 'excuse');
+  return atouts.length === 1 && isPetit(atouts[0] as TarotCard) && !excuse;
+}
 
 /* ---------- slagregels (§6) ---------- */
 
@@ -140,7 +186,7 @@ export function tarotTrickWinner(trick: TarotPlay[]): number {
 
 /* ---------- gift ---------- */
 
-export type TarotPhase = 'bidding' | 'call' | 'ecart' | 'play' | 'redeal' | 'scored';
+export type TarotPhase = 'bidding' | 'call' | 'ecart' | 'announce' | 'play' | 'redeal' | 'scored';
 
 export interface TarotScore {
   /** Halve punten in de slagen van de preneur (§2.2). */
@@ -152,7 +198,11 @@ export interface TarotScore {
   made: boolean;
   multiplier: number;
   petitAuBout: 0 | 1 | -1;
+  /** Aangekondigd, gehaald, en de premie die eruit volgt (§9.2). */
   chelem: boolean;
+  chelemAnnounced: boolean;
+  /** Totale poignée-premie, altijd voor de winnaar van de gift (§9.3). */
+  poigneePoints: number;
   /** Het bedrag dat één aandeel waard is, in halve punten. */
   unitHalf: number;
   /** Per speler, in halve punten — samen altijd nul. */
@@ -181,6 +231,10 @@ export class TarotGift {
 
   ecart: TarotCard[] = [];
 
+  /** §9.2/§9.3 — de aankondigingen vóór de eerste slag. */
+  chelemAnnounced: boolean | null = null;
+  poigneeDeclared: (PoigneeSize | 'none' | null)[];
+
   trick: TarotPlay[] = [];
   trickLeader: number;
   lastTrick: TarotPlay[] | null = null;
@@ -201,25 +255,36 @@ export class TarotGift {
     const { hand, chien } = dealShape(this.players);
     const cards = shuffle(makeTarotDeck(), rng);
     this.hands = Array.from({ length: this.players }, () => []);
+    const stap = config.counterClockwise ? this.players - 1 : 1;
+    // §3 — per drie kaarten, en de chien wordt er kaart per kaart uit opgebouwd:
+    // nooit met de eerste of de laatste kaart van het spel.
+    const pakjes = (hand / 3) * this.players;
+    const chienKaarten: TarotCard[] = [];
+    const om = Math.max(1, Math.floor((pakjes - 2) / chien));
     let i = 0;
-    // Per drie kaarten delen (§3), links van de deler eerst.
-    for (let gegeven = 0; gegeven < hand; gegeven += 3) {
-      for (let seat = 1; seat <= this.players; seat++) {
-        const p = (dealer + seat) % this.players;
-        for (let n = 0; n < 3; n++) (this.hands[p] as TarotCard[]).push(cards[i++] as TarotCard);
-      }
+    for (let k = 0; k < pakjes; k++) {
+      const p = (dealer + (k + 1) * stap) % this.players;
+      for (let n = 0; n < 3; n++) (this.hands[p] as TarotCard[]).push(cards[i++] as TarotCard);
+      const magChien = k > 0 && k < pakjes - 1 && chienKaarten.length < chien;
+      if (magChien && (k - 1) % om === 0) chienKaarten.push(cards[i++] as TarotCard);
     }
-    this.chien = cards.slice(i, i + chien);
+    while (chienKaarten.length < chien) chienKaarten.push(cards[i++] as TarotCard);
+    this.chien = chienKaarten;
     this.bids = new Array<ContractId | 'pass' | null>(this.players).fill(null);
     this.toAct = this.next(dealer);
     this.trickLeader = this.next(dealer);
     this.tricksWon = new Array<number>(this.players).fill(0);
     this.won = Array.from({ length: this.players }, () => []);
     this.excuseDebt = new Array<number>(this.players).fill(0);
+    this.poigneeDeclared = new Array<PoigneeSize | 'none' | null>(this.players).fill(null);
+    // §3.1 — petit sec: wie de 1 als enige atout heeft en geen excuse, gooit in.
+    if (config.petitSec && this.hands.some((h) => isPetitSec(h))) this.redealt = true;
   }
 
+  /** §3 — tegen de klok in bij het officiële reglement; met de klok als variant. */
   private next(player: number): number {
-    return (player + 1) % this.players;
+    const stap = this.config.counterClockwise ? this.players - 1 : 1;
+    return (player + stap) % this.players;
   }
 
   get cardsPerHand(): number {
@@ -233,7 +298,53 @@ export class TarotGift {
     if (this.taker === null) return 'redeal';
     if (this.players === 5 && this.calledCard === null) return 'call';
     if (this.needsEcart()) return 'ecart';
+    if (this.announceToAct !== null) return 'announce';
     return 'play';
+  }
+
+  /* ---------- aankondigingen vóór de eerste slag (§9.2, §9.3) ---------- */
+
+  /** Wie moet er nu nog iets aankondigen? Null zodra het spel kan beginnen. */
+  get announceToAct(): number | null {
+    if (this.taker === null || this.tricksPlayed > 0 || this.trick.length > 0) return null;
+    if (this.config.announcedChelem && this.chelemAnnounced === null) return this.taker;
+    if (!this.config.poignee) return null;
+    // In speelvolgorde, want officieel toon je je poignée bij je eerste kaart.
+    let p = this.trickLeader;
+    for (let i = 0; i < this.players; i++) {
+      if (this.poigneeDeclared[p] === null && this.poigneeOptions(p).length > 0) return p;
+      p = this.next(p);
+    }
+    return null;
+  }
+
+  /** §9.3 — welke poignées kan deze speler tonen? De excuse mag meetellen. */
+  poigneeOptions(player: number): PoigneeSize[] {
+    if (!this.config.poignee) return [];
+    const hand = this.hands[player] as TarotCard[];
+    const atouts = hand.filter((c) => c.kind === 'trump' || c.kind === 'excuse').length;
+    return (['triple', 'double', 'simple'] as PoigneeSize[]).filter(
+      (size) => atouts >= poigneeThreshold(this.players, size),
+    );
+  }
+
+  announceChelem(yes: boolean): void {
+    if (this.phase !== 'announce' || this.announceToAct !== this.taker) {
+      throw new Error('Er valt nu geen chelem aan te kondigen');
+    }
+    this.chelemAnnounced = yes;
+    // §9.2 — wie een chelem aankondigt, komt zelf uit.
+    if (yes) this.trickLeader = this.taker as number;
+  }
+
+  declarePoignee(player: number, size: PoigneeSize | 'none'): void {
+    if (this.phase !== 'announce' || this.announceToAct !== player) {
+      throw new Error('Niet aan de beurt om een poignée te tonen');
+    }
+    if (size !== 'none' && !this.poigneeOptions(player).includes(size)) {
+      throw new Error('Zoveel atouts heb je niet');
+    }
+    this.poigneeDeclared[player] = size;
   }
 
   private needsEcart(): boolean {
@@ -384,7 +495,13 @@ export class TarotGift {
     const winner = tarotTrickWinner(this.trick);
     const laatste = (this.hands[winner] as TarotCard[]).length === 0;
     for (const play of this.trick) {
-      if (play.card.kind === 'excuse' && !laatste) {
+      // §6.3 — in de laatste slag gaat de excuse naar de winnaar, behalve wanneer
+      // zijn eigen kamp alle vorige slagen won: dan hoort ze bij een chelem.
+      const chelemKant =
+        laatste &&
+        this.history.length > 0 &&
+        this.history.every((slag) => this.onSameSide(tarotTrickWinner(slag), play.player));
+      if (play.card.kind === 'excuse' && (!laatste || chelemKant)) {
         // §6.3 — de excuse blijft bij zijn eigenaar; die geeft de winnaar een
         // kaart van 0,5 punt terug. De app verrekent die halve punt meteen in
         // plaats van fysiek een kaart te ruilen: de uitkomst is dezelfde.
@@ -402,6 +519,11 @@ export class TarotGift {
     this.trick = [];
     this.trickLeader = winner;
     if (laatste) this.finish();
+  }
+
+  /** Zitten deze twee spelers in hetzelfde kamp? */
+  onSameSide(a: number, b: number): boolean {
+    return this.onTakerSide(a) === this.onTakerSide(b);
   }
 
   /** Speelt deze speler mee met de preneur? (§7) */
@@ -456,19 +578,42 @@ export class TarotGift {
     }
 
     const chelem = preneurTricks === this.history.length;
-    // Alles in halve punten: 25 → 50, petit au bout 10 → 20 (§9).
-    const basisHalf = 50 + Math.abs(diffHalf) + petit * 20;
+    const aangekondigd = this.chelemAnnounced === true;
+
+    // §9.4 — de app rekent exact in halve punten; wie afrondt zoals aan tafel,
+    // rondt de écart naar boven af (altijd in het voordeel van de winnaar).
+    let ecartHalf = diffHalf;
+    if (this.config.rounding === 'up') {
+      const teken = diffHalf < 0 ? -1 : 1;
+      ecartHalf = teken * Math.ceil(Math.abs(diffHalf) / 2) * 2;
+    }
+
+    // §9 — alles in halve punten: 25 → 50, petit au bout 10 → 20.
+    const basisHalf = 50 + Math.abs(ecartHalf) + petit * 20;
     let unitHalf = basisHalf * info.multiplier;
-    if (chelem) unitHalf += this.config.chelemBonus * 2;
     if (!made) unitHalf = -unitHalf;
+
+    // §9.3 — de poignée-premie gaat naar de winnaar van de gift, wie ze ook
+    // toonde, en wordt níét vermenigvuldigd.
+    let poigneePoints = 0;
+    for (const size of this.poigneeDeclared) {
+      if (size && size !== 'none') poigneePoints += POIGNEE_POINTS[size];
+    }
+    unitHalf += (made ? 1 : -1) * poigneePoints * 2;
+
+    // §9.2 — chelem: aangekondigd en gehaald +400, stil gehaald +200,
+    // aangekondigd en gemist −200. Ook niet vermenigvuldigd.
+    if (aangekondigd && chelem) unitHalf += 800;
+    else if (!aangekondigd && chelem) unitHalf += 400;
+    else if (aangekondigd && !chelem) unitHalf -= 400;
 
     // §9.1 — aandelen; samen altijd nul.
     const pointsHalf = new Array<number>(this.players).fill(0);
     const verdedigers = this.players - (this.partner !== null ? 2 : 1);
     for (let p = 0; p < this.players; p++) {
-      if (p === taker)
+      if (p === taker) {
         pointsHalf[p] = unitHalf * verdedigers - (this.partner !== null ? unitHalf : 0);
-      else if (p === this.partner) pointsHalf[p] = unitHalf;
+      } else if (p === this.partner) pointsHalf[p] = unitHalf;
       else pointsHalf[p] = -unitHalf;
     }
 
@@ -481,6 +626,8 @@ export class TarotGift {
       multiplier: info.multiplier,
       petitAuBout: petit,
       chelem,
+      chelemAnnounced: aangekondigd,
+      poigneePoints,
       unitHalf,
       pointsHalf,
     };
@@ -530,8 +677,10 @@ export class TarotSession {
         this.totalsHalf[p] = (this.totalsHalf[p] ?? 0) + (score.pointsHalf[p] ?? 0);
       }
     }
-    // Een herdeel telt niet als gespeelde gift (§4).
-    this.dealer = (this.dealer + 1) % this.players;
+    // Een herdeel telt niet als gespeelde gift (§4). De deler schuift mee met de
+    // speelrichting (§3).
+    const stap = this.config.counterClockwise ? this.players - 1 : 1;
+    this.dealer = (this.dealer + stap) % this.players;
     this.gift = null;
   }
 }

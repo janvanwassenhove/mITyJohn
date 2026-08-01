@@ -34,10 +34,19 @@ import { chooseKlaverjasCard, chooseKlaverjasPass, chooseKlaverjasTrump } from '
 import { chooseBeloteCard, chooseBeloteTake } from './bots';
 import { chooseHartenCard, chooseHartenPass } from './bots';
 import { chooseBoerenBid, chooseBoerenCard } from './bots';
-import { chooseTarotBid, chooseTarotCall, chooseTarotCard, chooseTarotDiscard } from './bots';
+import {
+  chooseTarotBid,
+  chooseTarotCall,
+  chooseTarotCard,
+  chooseTarotChelem,
+  chooseTarotDiscard,
+  chooseTarotPoignee,
+} from './bots';
 import {
   CONTRACTS as TAROT_CONTRACTS,
   DEFAULT_TAROT_CONFIG,
+  POIGNEE_POINTS,
+  poigneeThreshold,
   type PlayerCount,
   type TarotConfig,
   type TarotGift,
@@ -209,7 +218,7 @@ let ttSession: TarotSession | null = null;
 let ttPersisted: store.PersistedTarot | null = null;
 let ttRestored: { state: store.PersistedTarot; session: TarotSession } | null = null;
 let tarotConfig: TarotConfig = { ...DEFAULT_TAROT_CONFIG };
-const TAROT_PLAYERS_KEY = 'cards.tarotPlayers';
+const TAROT_OPTS_KEY = 'cards.tarotOptions';
 let kSession: KlaverjasSession | null = null;
 let kPersisted: store.PersistedKlaverjas | null = null;
 let kRestored: { state: store.PersistedKlaverjas; session: KlaverjasSession } | null = null;
@@ -1061,6 +1070,7 @@ function startScreen(): HTMLElement {
   if (!hasRestore && (game === 'wiezen' || game === 'manille')) {
     body.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
+  if (!hasRestore && game === 'tarot') body.append(tarotOptionsPanel());
 
   settings.append(body);
   main.append(settings);
@@ -4248,14 +4258,63 @@ function recordT(action: store.TarotAction): void {
   store.saveTarot(ttPersisted);
 }
 
-function setTarotPlayers(n: PlayerCount): void {
-  tarotConfig = { ...tarotConfig, players: n };
+function setTarot<K extends keyof TarotConfig>(key: K, value: TarotConfig[K]): void {
+  tarotConfig = { ...tarotConfig, [key]: value };
   try {
-    localStorage.setItem(TAROT_PLAYERS_KEY, String(n));
+    localStorage.setItem(TAROT_OPTS_KEY, JSON.stringify(tarotConfig));
   } catch {
     /* ignore */
   }
   render();
+}
+
+/** §11 — de regels die per tafel verschillen. De standaard is telkens het
+ *  FFT-reglement; wie het anders speelt, zet ze hier om. */
+function tarotOptionsPanel(): HTMLElement {
+  const box = el('div', 'options');
+  box.append(el('div', 'options-title', t('tarot.options.title')));
+  const aanUit = (label: string, key: 'petitAuBout' | 'poignee' | 'announcedChelem' | 'petitSec') =>
+    optionRow(label, [
+      { label: t('opt.on'), active: tarotConfig[key], onClick: () => setTarot(key, true) },
+      { label: t('opt.off'), active: !tarotConfig[key], onClick: () => setTarot(key, false) },
+    ]);
+  box.append(
+    optionRow(t('tarot.opt.direction'), [
+      {
+        label: t('tarot.opt.counterClockwise'),
+        active: tarotConfig.counterClockwise,
+        onClick: () => setTarot('counterClockwise', true),
+      },
+      {
+        label: t('tarot.opt.clockwise'),
+        active: !tarotConfig.counterClockwise,
+        onClick: () => setTarot('counterClockwise', false),
+      },
+    ]),
+    aanUit(t('tarot.opt.petitAuBout'), 'petitAuBout'),
+    aanUit(
+      t('tarot.opt.poignee', {
+        n: poigneeThreshold(tarotConfig.players, 'simple'),
+      }),
+      'poignee',
+    ),
+    aanUit(t('tarot.opt.chelem'), 'announcedChelem'),
+    aanUit(t('tarot.opt.petitSec'), 'petitSec'),
+    optionRow(t('tarot.opt.rounding'), [
+      {
+        label: t('tarot.opt.exact'),
+        active: tarotConfig.rounding === 'exact',
+        onClick: () => setTarot('rounding', 'exact'),
+      },
+      {
+        label: t('tarot.opt.up'),
+        active: tarotConfig.rounding === 'up',
+        onClick: () => setTarot('rounding', 'up'),
+      },
+    ]),
+  );
+  box.append(el('p', 'type-hint', t('tarot.options.hint')));
+  return box;
 }
 
 function tarotPlayerPicker(): HTMLElement {
@@ -4266,7 +4325,9 @@ function tarotPlayerPicker(): HTMLElement {
   seg.setAttribute('aria-label', t('tarot.playerPicker'));
   for (const n of [3, 4, 5] as PlayerCount[]) {
     seg.append(
-      segButton(t('tarot.playerCount', { n }), tarotConfig.players === n, () => setTarotPlayers(n)),
+      segButton(t('tarot.playerCount', { n }), tarotConfig.players === n, () =>
+        setTarot('players', n),
+      ),
     );
   }
   box.append(seg);
@@ -4305,6 +4366,10 @@ function tarotActor(): { player: number; human: boolean } | null {
     const p = gift.taker as number;
     return { player: p, human: p === HUMAN };
   }
+  if (gift.phase === 'announce') {
+    const p = gift.announceToAct as number;
+    return { player: p, human: p === HUMAN };
+  }
   if (gift.phase === 'play') return { player: gift.toPlay, human: gift.toPlay === HUMAN };
   return null;
 }
@@ -4341,6 +4406,18 @@ function tarotBotStep(): boolean {
     recordT({ t: 'discard', card: tarotKey(card) });
     return true;
   }
+  if (gift.phase === 'announce') {
+    if (gift.chelemAnnounced === null && who.player === gift.taker) {
+      const ja = chooseTarotChelem(gift, botLevel);
+      gift.announceChelem(ja);
+      recordT({ t: 'chelem', yes: ja });
+    } else {
+      const size = chooseTarotPoignee(gift, who.player);
+      gift.declarePoignee(who.player, size);
+      recordT({ t: 'poignee', p: who.player, size });
+    }
+    return true;
+  }
   playTarotCard(gift, who.player, chooseTarotCard(gift, who.player, botLevel));
   return true;
 }
@@ -4351,7 +4428,7 @@ function scheduleTarotBots(): void {
   const gift = ttSession?.gift;
   if (!gift || !who || who.human) return;
   // De écart gaat kaart per kaart; die stappen mogen vlug gaan.
-  const snel = gift.phase === 'ecart';
+  const snel = gift.phase === 'ecart' || gift.phase === 'announce';
   const pause = gift.phase === 'play' && gift.trick.length === 0 && gift.lastTrick;
   window.setTimeout(
     () => {
@@ -4413,6 +4490,13 @@ function tarotStatusBar(gift: TarotGift): HTMLElement {
       );
     }
   }
+  const poignees = gift.poigneeDeclared
+    .map((size, p) => (size && size !== 'none' ? `${playerName(p)} (${size})` : null))
+    .filter((x): x is string => x !== null);
+  if (poignees.length > 0) {
+    bar.append(el('span', 'chip', t('tarot.poigneeChip', { list: poignees.join(', ') })));
+  }
+  if (gift.chelemAnnounced) bar.append(el('span', 'chip strong', t('tarot.chelemChip')));
   bar.append(
     el(
       'span',
@@ -4626,6 +4710,63 @@ function tarotActionPanel(gift: TarotGift): HTMLElement {
     return panel;
   }
 
+  if (gift.phase === 'announce') {
+    if (who?.human) {
+      if (gift.chelemAnnounced === null && HUMAN === gift.taker) {
+        panel.append(el('p', undefined, t('tarot.chelemPrompt')));
+        const row = el('div', 'btn-row');
+        row.append(
+          button(t('tarot.chelemYes'), 'btn', () => {
+            gift.announceChelem(true);
+            recordT({ t: 'chelem', yes: true });
+            render();
+            scheduleTarotBots();
+          }),
+          button(t('tarot.chelemNo'), 'btn muted', () => {
+            gift.announceChelem(false);
+            recordT({ t: 'chelem', yes: false });
+            render();
+            scheduleTarotBots();
+          }),
+        );
+        panel.append(row);
+      } else {
+        const opties = gift.poigneeOptions(HUMAN);
+        panel.append(el('p', undefined, t('tarot.poigneePrompt')));
+        const row = el('div', 'btn-row');
+        for (const size of opties) {
+          row.append(
+            button(
+              t(`tarot.poignee.${size}` as MessageKey, {
+                n: poigneeThreshold(gift.players, size),
+                pts: POIGNEE_POINTS[size],
+              }),
+              'btn',
+              () => {
+                gift.declarePoignee(HUMAN, size);
+                recordT({ t: 'poignee', p: HUMAN, size });
+                render();
+                scheduleTarotBots();
+              },
+            ),
+          );
+        }
+        row.append(
+          button(t('tarot.poigneeNone'), 'btn muted', () => {
+            gift.declarePoignee(HUMAN, 'none');
+            recordT({ t: 'poignee', p: HUMAN, size: 'none' });
+            render();
+            scheduleTarotBots();
+          }),
+        );
+        panel.append(row);
+      }
+    } else if (who) {
+      panel.append(el('p', 'hint', t('tarot.announceWait', { name: playerName(who.player) })));
+    }
+    return panel;
+  }
+
   if (gift.phase === 'scored' && gift.score) {
     const s = gift.score;
     const total = ttSession as TarotSession;
@@ -4652,7 +4793,20 @@ function tarotActionPanel(gift: TarotGift): HTMLElement {
     if (s.petitAuBout !== 0) {
       panel.append(el('p', s.petitAuBout > 0 ? 'strong made' : 'strong', t('tarot.petitAuBout')));
     }
-    if (s.chelem) panel.append(el('p', 'strong made', t('tarot.chelem')));
+    if (s.poigneePoints > 0) {
+      panel.append(el('p', 'strong', t('tarot.poigneeScored', { pts: s.poigneePoints })));
+    }
+    if (s.chelem) {
+      panel.append(
+        el(
+          'p',
+          'strong made',
+          s.chelemAnnounced ? t('tarot.chelemAnnouncedMade') : t('tarot.chelem'),
+        ),
+      );
+    } else if (s.chelemAnnounced) {
+      panel.append(el('p', 'strong', t('tarot.chelemMissed')));
+    }
     const table = el('table', 'score-table');
     const head = el('tr');
     head.append(el('th'));
@@ -4795,8 +4949,11 @@ if (savedBelote) {
   }
 }
 try {
-  const n = Number(localStorage.getItem(TAROT_PLAYERS_KEY));
-  if (n === 3 || n === 4 || n === 5) tarotConfig = { ...tarotConfig, players: n };
+  const opgeslagen = JSON.parse(localStorage.getItem(TAROT_OPTS_KEY) ?? 'null') as unknown;
+  if (opgeslagen && typeof opgeslagen === 'object') {
+    // Enkel de sleutels overnemen die we kennen: oudere opslag mist er een paar.
+    tarotConfig = { ...DEFAULT_TAROT_CONFIG, ...(opgeslagen as Partial<TarotConfig>) };
+  }
 } catch {
   /* ignore */
 }

@@ -15,7 +15,10 @@ import {
 import {
   CONTRACTS,
   DEFAULT_TAROT_CONFIG,
+  POIGNEE_POINTS,
   contractInfo,
+  isPetitSec,
+  poigneeThreshold,
   TarotGift,
   TarotSession,
   dealShape,
@@ -24,6 +27,7 @@ import {
   targetHalfPoints,
   type ContractId,
   type PlayerCount,
+  type PoigneeSize,
   type TarotPlay,
 } from './tarot';
 
@@ -108,12 +112,37 @@ describe('tarot — bieden (§4)', () => {
     return new TarotGift(0, mulberry32(11), { ...DEFAULT_TAROT_CONFIG, players });
   }
 
+  it('biedt tegen de klok in, vanaf naast de deler', () => {
+    // Officieel gaat tarot tegen de klok in (§3): met deler 0 is dat 3, 2, 1, 0.
+    const g = gift();
+    const volgorde: number[] = [];
+    while (g.phase === 'bidding') {
+      volgorde.push(g.toAct);
+      g.bid(g.toAct, 'pass');
+    }
+    expect(volgorde).toEqual([3, 2, 1, 0]);
+
+    // En met de klok mee als variant.
+    const m = new TarotGift(0, mulberry32(11), {
+      ...DEFAULT_TAROT_CONFIG,
+      counterClockwise: false,
+    });
+    const andersom: number[] = [];
+    while (m.phase === 'bidding') {
+      andersom.push(m.toAct);
+      m.bid(m.toAct, 'pass');
+    }
+    expect(andersom).toEqual([1, 2, 3, 0]);
+  });
+
   it('laat enkel hogere contracten toe', () => {
     const g = gift();
-    expect(g.legalBids(1)).toEqual(['petite', 'garde', 'garde-sans', 'garde-contre']);
-    g.bid(1, 'garde');
-    expect(g.legalBids(2)).toEqual(['garde-sans', 'garde-contre']);
-    expect(() => g.bid(2, 'petite')).toThrow();
+    const eerste = g.toAct;
+    expect(g.legalBids(eerste)).toEqual(['petite', 'garde', 'garde-sans', 'garde-contre']);
+    g.bid(eerste, 'garde');
+    const tweede = g.toAct;
+    expect(g.legalBids(tweede)).toEqual(['garde-sans', 'garde-contre']);
+    expect(() => g.bid(tweede, 'petite')).toThrow();
   });
 
   it('past iedereen, dan wordt er opnieuw gedeeld', () => {
@@ -124,27 +153,30 @@ describe('tarot — bieden (§4)', () => {
 
   it('de hoogste bieder wordt preneur en krijgt de chien in zijn hand', () => {
     const g = gift();
-    g.bid(1, 'petite');
-    g.bid(2, 'garde');
-    g.bid(3, 'pass');
-    g.bid(0, 'pass');
-    expect(g.taker).toBe(2);
+    const eerste = g.toAct;
+    g.bid(eerste, 'petite');
+    const tweede = g.toAct;
+    g.bid(tweede, 'garde');
+    while (g.phase === 'bidding') g.bid(g.toAct, 'pass');
+    expect(g.taker).toBe(tweede);
     expect(g.contract).toBe('garde');
     expect(g.phase).toBe('ecart');
-    expect(g.hands[2]).toHaveLength(18 + 6);
+    expect(g.hands[tweede]).toHaveLength(18 + 6);
     expect(g.chienOpen).toBe(true);
   });
 
   it('garde sans en garde contre laten de chien dicht — meteen spelen', () => {
     for (const contract of ['garde-sans', 'garde-contre'] as const) {
       const g = gift();
-      g.bid(1, contract);
-      g.bid(2, 'pass');
-      g.bid(3, 'pass');
-      g.bid(0, 'pass');
+      const preneur = g.toAct;
+      g.bid(preneur, contract);
+      while (g.phase === 'bidding') g.bid(g.toAct, 'pass');
+      // Zonder chien meteen naar de aankondigingen en dan spelen.
+      expect(g.phase).toBe('announce');
+      settleAnnouncements(g);
       expect(g.phase).toBe('play');
       expect(g.chienOpen).toBe(false);
-      expect(g.hands[1]).toHaveLength(18);
+      expect(g.hands[preneur]).toHaveLength(18);
     }
   });
 });
@@ -152,10 +184,8 @@ describe('tarot — bieden (§4)', () => {
 describe('tarot — écart (§5)', () => {
   function takerGift() {
     const g = new TarotGift(0, mulberry32(17), DEFAULT_TAROT_CONFIG);
-    g.bid(1, 'petite');
-    g.bid(2, 'pass');
-    g.bid(3, 'pass');
-    g.bid(0, 'pass');
+    g.bid(g.toAct, 'petite');
+    while (g.phase === 'bidding') g.bid(g.toAct, 'pass');
     return g;
   }
 
@@ -171,14 +201,17 @@ describe('tarot — écart (§5)', () => {
     const g = takerGift();
     for (let i = 0; i < 6; i++) g.discard(g.legalDiscards()[0] as TarotCard);
     expect(g.ecart).toHaveLength(6);
-    expect(g.hands[1]).toHaveLength(18);
+    expect(g.hands[g.taker as number]).toHaveLength(18);
+    settleAnnouncements(g);
     expect(g.phase).toBe('play');
     expect(g.chienOpen).toBe(false);
   });
 
   it('weigert een kaart die niet mag', () => {
     const g = takerGift();
-    const heer = (g.hands[1] as TarotCard[]).find((c) => c.kind === 'suit' && c.rank === 14);
+    const heer = (g.hands[g.taker as number] as TarotCard[]).find(
+      (c) => c.kind === 'suit' && c.rank === 14,
+    );
     if (heer) expect(() => g.discard(heer)).toThrow();
   });
 });
@@ -244,6 +277,16 @@ describe('tarot — slagregels (§6)', () => {
   });
 });
 
+/** De aankondigingsfase afhandelen: geen chelem, geen poignée. */
+function settleAnnouncements(gift: TarotGift): void {
+  let veiligheid = 20;
+  while (gift.phase === 'announce' && veiligheid-- > 0) {
+    const p = gift.announceToAct as number;
+    if (gift.chelemAnnounced === null && p === gift.taker) gift.announceChelem(false);
+    else gift.declarePoignee(p, 'none');
+  }
+}
+
 describe('tarot — doelen en telling (§8, §9)', () => {
   it('het doel zakt met elk bout', () => {
     expect([0, 1, 2, 3].map(targetHalfPoints)).toEqual([112, 102, 82, 72]);
@@ -264,11 +307,20 @@ describe('tarot — doelen en telling (§8, §9)', () => {
       ...DEFAULT_TAROT_CONFIG,
       players,
     });
-    const gift = session.nextGift();
-    gift.bid(gift.toAct, contract);
-    while (gift.phase === 'bidding') gift.bid(gift.toAct, 'pass');
+    let gift = session.nextGift();
+    // Petit sec of iedereen past: opnieuw delen tot er echt gespeeld wordt.
+    for (let poging = 0; poging < 40; poging++) {
+      if (gift.phase === 'redeal') {
+        session.closeGift();
+        gift = session.nextGift();
+        continue;
+      }
+      if (gift.phase !== 'bidding') break;
+      gift.bid(gift.toAct, gift.legalBids(gift.toAct).includes(contract) ? contract : 'pass');
+    }
     if (gift.phase === 'call') gift.callKing('S');
     while (gift.phase === 'ecart') gift.discard(gift.legalDiscards()[0] as TarotCard);
+    settleAnnouncements(gift);
     while (gift.phase === 'play') {
       const p = gift.toPlay;
       gift.playCard(p, gift.legalCards(p)[0] as TarotCard);
@@ -326,8 +378,11 @@ describe('tarot — doelen en telling (§8, §9)', () => {
     let metPartner = 0;
     for (let seed = 1; seed <= 40 && (alleen === 0 || metPartner === 0); seed++) {
       const g = new TarotGift(0, mulberry32(seed), { ...DEFAULT_TAROT_CONFIG, players: 5 });
-      g.bid(g.toAct, 'garde');
-      while (g.phase === 'bidding') g.bid(g.toAct, 'pass');
+      while (g.phase === 'bidding') {
+        const p = g.toAct;
+        g.bid(p, g.legalBids(p).includes('garde') ? 'garde' : 'pass');
+      }
+      if (g.phase !== 'call') continue;
       const rank = g.callRank();
       const taker = g.taker as number;
       for (const kleur of ['S', 'H', 'D', 'C'] as const) {
@@ -338,8 +393,10 @@ describe('tarot — doelen en telling (§8, §9)', () => {
         const inChien = g.chien.some((c) => tarotKey(c) === tarotKey(kaart));
         if (!bijPreneur && !inChien) continue;
         const kopie = new TarotGift(0, mulberry32(seed), { ...DEFAULT_TAROT_CONFIG, players: 5 });
-        kopie.bid(kopie.toAct, 'garde');
-        while (kopie.phase === 'bidding') kopie.bid(kopie.toAct, 'pass');
+        while (kopie.phase === 'bidding') {
+          const q = kopie.toAct;
+          kopie.bid(q, kopie.legalBids(q).includes('garde') ? 'garde' : 'pass');
+        }
         kopie.callKing(kleur);
         expect(kopie.partner).toBeNull();
         expect(kopie.partnerRevealed).toBe(true);
@@ -392,10 +449,13 @@ describe('tarot — doelen en telling (§8, §9)', () => {
     let veiligheid = 60;
     while (!session.finished && veiligheid-- > 0) {
       const gift = session.nextGift();
-      gift.bid(gift.toAct, 'garde');
-      while (gift.phase === 'bidding') gift.bid(gift.toAct, 'pass');
+      while (gift.phase === 'bidding') {
+        const p = gift.toAct;
+        gift.bid(p, gift.legalBids(p).includes('garde') ? 'garde' : 'pass');
+      }
       if (gift.phase === 'call') gift.callKing('S');
       while (gift.phase === 'ecart') gift.discard(gift.legalDiscards()[0] as TarotCard);
+      settleAnnouncements(gift);
       while (gift.phase === 'play') {
         const p = gift.toPlay;
         gift.playCard(p, gift.legalCards(p)[0] as TarotCard);
@@ -405,5 +465,148 @@ describe('tarot — doelen en telling (§8, §9)', () => {
     expect(session.finished).toBe(true);
     expect(session.giftNumber).toBe(4);
     expect(session.totalsHalf.reduce((a, b) => a + b, 0)).toBe(0);
+  });
+});
+
+describe('tarot — de officiële primes (§9.2, §9.3) en varianten (§11)', () => {
+  it('poignée-drempels volgen het FFT-reglement per spelersaantal', () => {
+    expect([3, 4, 5].map((n) => poigneeThreshold(n as PlayerCount, 'simple'))).toEqual([13, 10, 8]);
+    expect([3, 4, 5].map((n) => poigneeThreshold(n as PlayerCount, 'double'))).toEqual([
+      15, 13, 10,
+    ]);
+    expect([3, 4, 5].map((n) => poigneeThreshold(n as PlayerCount, 'triple'))).toEqual([
+      18, 15, 13,
+    ]);
+    expect(POIGNEE_POINTS).toEqual({ simple: 20, double: 30, triple: 40 });
+  });
+
+  it('herkent petit sec: de 1 als enige atout, zonder excuse', () => {
+    expect(isPetitSec([atout(1), suit('S', 5), suit('H', 9)])).toBe(true);
+    expect(isPetitSec([atout(1), excuse, suit('S', 5)])).toBe(false);
+    expect(isPetitSec([atout(1), atout(9), suit('S', 5)])).toBe(false);
+    expect(isPetitSec([atout(9), suit('S', 5)])).toBe(false);
+  });
+
+  it('gooit een petit sec in — tenzij de variant dat uitzet', () => {
+    // Petit sec is zeldzaam (~0,6% bij vijf spelers), dus we zoeken gericht.
+    let gevonden = 0;
+    for (let seed = 1; seed <= 300 && gevonden < 3; seed++) {
+      const uit = new TarotGift(0, mulberry32(seed), {
+        ...DEFAULT_TAROT_CONFIG,
+        players: 5,
+        petitSec: false,
+      });
+      if (!uit.hands.some((h) => isPetitSec(h))) continue;
+      gevonden++;
+      const aan = new TarotGift(0, mulberry32(seed), { ...DEFAULT_TAROT_CONFIG, players: 5 });
+      expect(aan.phase).toBe('redeal');
+      expect(uit.phase).toBe('bidding');
+    }
+    expect(gevonden).toBeGreaterThan(0);
+  });
+
+  it('de poignée-premie gaat naar de winnaar van de gift en wordt niet vermenigvuldigd', () => {
+    // Twee identieke giften: één met poignée, één zonder. Het verschil is exact
+    // de premie, ongeacht de factor van het contract.
+    const speel = (poignee: boolean) => {
+      const gift = new TarotGift(0, mulberry32(77), { ...DEFAULT_TAROT_CONFIG, poignee });
+      while (gift.phase === 'bidding') {
+        const p = gift.toAct;
+        gift.bid(p, gift.legalBids(p).includes('garde') ? 'garde' : 'pass');
+      }
+      while (gift.phase === 'ecart') gift.discard(gift.legalDiscards()[0] as TarotCard);
+      let veiligheid = 20;
+      while (gift.phase === 'announce' && veiligheid-- > 0) {
+        const p = gift.announceToAct as number;
+        if (gift.chelemAnnounced === null && p === gift.taker) gift.announceChelem(false);
+        else {
+          const opties = gift.poigneeOptions(p);
+          gift.declarePoignee(
+            p,
+            poignee && opties.length > 0 ? (opties[0] as PoigneeSize) : 'none',
+          );
+        }
+      }
+      while (gift.phase === 'play') {
+        const p = gift.toPlay;
+        gift.playCard(p, gift.legalCards(p)[0] as TarotCard);
+      }
+      return gift.score as NonNullable<typeof gift.score>;
+    };
+    const met = speel(true);
+    const zonder = speel(false);
+    expect(zonder.poigneePoints).toBe(0);
+    const verschil = Math.abs(met.unitHalf) - Math.abs(zonder.unitHalf);
+    expect(verschil).toBe(met.poigneePoints * 2);
+  });
+
+  it('chelem: aangekondigd +400, stil +200, aangekondigd en gemist −200', () => {
+    // De premies zitten in unitHalf (×2), los van de contractfactor.
+    const basis = (chelemAnnounced: boolean, gehaald: boolean) => {
+      const diffHalf = 20;
+      const basisHalf = 50 + diffHalf;
+      let unit = basisHalf * 2; // garde
+      if (chelemAnnounced && gehaald) unit += 800;
+      else if (!chelemAnnounced && gehaald) unit += 400;
+      else if (chelemAnnounced && !gehaald) unit -= 400;
+      return unit;
+    };
+    expect(basis(true, true) - basis(false, true)).toBe(400);
+    expect(basis(false, true) - basis(false, false)).toBe(400);
+    expect(basis(true, false) - basis(false, false)).toBe(-400);
+  });
+
+  it('wie een chelem aankondigt, komt zelf uit', () => {
+    const gift = new TarotGift(0, mulberry32(23), DEFAULT_TAROT_CONFIG);
+    while (gift.phase === 'bidding') {
+      const p = gift.toAct;
+      gift.bid(p, gift.legalBids(p).includes('garde-sans') ? 'garde-sans' : 'pass');
+    }
+    expect(gift.phase).toBe('announce');
+    const voor = gift.trickLeader;
+    gift.announceChelem(true);
+    expect(gift.trickLeader).toBe(gift.taker);
+    if (gift.taker !== voor) expect(gift.trickLeader).not.toBe(voor);
+  });
+
+  it('afronden naar boven verandert enkel de écart, niet de rest', () => {
+    const speel = (rounding: 'exact' | 'up') => {
+      const gift = new TarotGift(0, mulberry32(41), { ...DEFAULT_TAROT_CONFIG, rounding });
+      while (gift.phase === 'bidding') {
+        const p = gift.toAct;
+        gift.bid(p, gift.legalBids(p).includes('petite') ? 'petite' : 'pass');
+      }
+      while (gift.phase === 'ecart') gift.discard(gift.legalDiscards()[0] as TarotCard);
+      settleAnnouncements(gift);
+      while (gift.phase === 'play') {
+        const p = gift.toPlay;
+        gift.playCard(p, gift.legalCards(p)[0] as TarotCard);
+      }
+      return gift.score as NonNullable<typeof gift.score>;
+    };
+    const exact = speel('exact');
+    const afgerond = speel('up');
+    expect(afgerond.preneurHalf).toBe(exact.preneurHalf);
+    expect(afgerond.diffHalf).toBe(exact.diffHalf);
+    // Een halve punt écart wordt een hele; verder blijft alles gelijk.
+    const oneven = Math.abs(exact.diffHalf) % 2 === 1;
+    expect(Math.abs(afgerond.unitHalf)).toBe(
+      Math.abs(exact.unitHalf) + (oneven ? exact.multiplier : 0),
+    );
+  });
+
+  it('petit au bout telt maal de factor van het contract', () => {
+    // 10 punten = 20 halve punten, en die zitten binnen de vermenigvuldiging.
+    for (const [contract, factor] of [
+      ['petite', 1],
+      ['garde', 2],
+      ['garde-sans', 4],
+      ['garde-contre', 6],
+    ] as const) {
+      expect(contractInfo(contract).multiplier).toBe(factor);
+      const zonder = (50 + 10) * factor;
+      const met = (50 + 10 + 20) * factor;
+      expect(met - zonder).toBe(20 * factor);
+    }
   });
 });

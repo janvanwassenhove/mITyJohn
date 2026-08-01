@@ -38,7 +38,7 @@ reclame, werkt offline en is installeerbaar op je gsm.
   **hartenjagen** (ieder voor zich, geen troef — en de punten wil je juist níét) en
   **boerenbridge** (voorspel exact je aantal slagen; de handgrootte wisselt elke ronde) en
   **Frans tarot** (een eigen spel van 78 kaarten met atouts en de excuse, met 3, 4 of 5
-  spelers).
+  spelers, volgens het officiële FFT-reglement — met de varianten als keuze bij de start).
 - **Regelvarianten kies je bij de start** — troel op 8 of 9 slagen, manille op 60 of
   68 punten, enzovoort. De regels staan gedocumenteerd in
   [`../docs/REGELS.md`](../docs/REGELS.md) en machineleesbaar in

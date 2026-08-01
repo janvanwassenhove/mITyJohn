@@ -1,8 +1,10 @@
 # RÈGLES / REGELS — Frans tarot (*jeu de tarot*)
 
-> **Status:** onderzoeksdocument, opgesteld zoals `REGELS.md`. Keuzes waar bronnen
-> uiteenlopen of waar de app bewust vereenvoudigt, staan gemarkeerd met
-> **⚠️ AANNAME**. Machineleesbaar in [`rulesets/tarot.json`](../rulesets/tarot.json).
+> **Status:** de app volgt het **officiële reglement van de Fédération Française de
+> Tarot**. Waar tafels het traditioneel anders spelen, staat dat als **variant** die
+> je op het startscherm kiest (§11) — de standaard is telkens het FFT-reglement.
+> Wat écht onzeker blijft, staat gemarkeerd met **⚠️ AANNAME**.
+> Machineleesbaar in [`rulesets/tarot.json`](../rulesets/tarot.json).
 >
 > Tarot is het apart traject dat bij de spelkeuze van 2026-07-29 al werd aangekondigd:
 > het is het eerste spel in deze app met een **eigen kaartset van 78 kaarten** en met
@@ -19,8 +21,8 @@
 - **Ruleset-id:** `tarot`.
 - Eén speler — de **preneur** — neemt het op tegen alle anderen. Bij vijf spelers
   roept hij een heer en krijgt hij daarmee een verborgen partner (§7).
-- Niet in deze eerste versie: **poignée**, **aangekondigde chelem**, **misère** en de
-  officiële toernooitelling met meerdere gevers. Zie de open vragen.
+- Niet in deze versie: **misère** (geen FFT-contract, een streekvariant) en de
+  toernooiformules met meerdere tafels. Zie de open vragen.
 
 ## 2. De kaarten
 
@@ -65,17 +67,22 @@ en toont de gewone waarden.
 | 4 | 18 | 6 |
 | 5 | 15 | 3 |
 
-Er wordt **per drie kaarten** gedeeld, tegen de klok in; de **chien** (het talon)
+Er wordt **per drie kaarten** gedeeld, **tegen de klok in**; de **chien** (het talon)
 wordt er kaart per kaart uit opgebouwd. De chien mag niet met de eerste of de laatste
-kaart van het spel gevuld worden. ✅ *Standaardregel.*
+kaart van het spel gevuld worden. ✅ *Officieel — en zo doet de app het ook.*
 
-**⚠️ AANNAME** — de app deelt met de klok mee, zoals alle andere spellen; het
-Franse tarot deelt traditioneel tegen de klok in. Op het resultaat heeft dat geen
-invloed, wel op wie er naast wie zit.
+Tarot is daarmee het enige spel in deze app dat **tegen de klok in** gaat; alle
+andere gaan met de klok mee. Wie het liever gelijk houdt, zet de richting om (§11).
+
+### 3.1 Petit sec
+
+Heeft een speler de **1 van atout als enige atout** en géén excuse, dan heeft hij
+*petit sec*: de donne wordt **geannuleerd** en de kaarten gaan terug. ✅ *Officieel.*
 
 ## 4. Bieden
 
-Vanaf links van de deler mag elke speler één keer bieden, hoger dan wat er ligt:
+Vanaf de speler naast de deler mag elke speler **één keer** bieden, telkens hoger dan
+wat er ligt. Wie paste, mag niet meer terug in de veiling:
 
 | Contract | Chien | Factor |
 |---|---|---|
@@ -86,7 +93,7 @@ Vanaf links van de deler mag elke speler één keer bieden, hoger dan wat er lig
 | **Garde contre** (le chien) | de chien blijft dicht en telt **voor de verdediging** | ×6 |
 
 Past iedereen, dan worden de kaarten binnengegooid en deelt de volgende speler
-opnieuw. ✅ *Standaardregel.*
+opnieuw. ✅ *Officieel.*
 
 ## 5. De chien en de écart
 
@@ -100,13 +107,13 @@ Wat mag je **niet** in de écart leggen:
 2. geen **bouts**;
 3. **atouts** enkel als het niet anders kan, en dan **open** op tafel. ✅ *Standaardregel.*
 
-**⚠️ AANNAME** — de app laat atouts in de écart alleen toe wanneer de hand anders
-geen geldige écart oplevert, en toont ze dan; de verplichting om ze te *tonen* is in
-een spel tegen bots enkel informatief.
+De app laat atouts in de écart alleen toe wanneer de hand anders geen geldige écart
+oplevert, en toont ze dan — precies wat het reglement voorschrijft.
 
 ## 6. Het spel
 
-1. Links van de deler komt uit. ✅ *Standaardregel.*
+1. De speler **naast de deler** komt uit — tegen de klok in, dus rechts van hem.
+   Kondigt iemand een chelem aan, dan komt **die** uit (§9.2). ✅ *Officieel.*
 2. **Kleur bekennen is verplicht.**
 3. Kan je de gevraagde kleur niet volgen, dan **moet je een atout spelen**
    (*obligation de couper*).
@@ -123,8 +130,9 @@ De excuse is de vrijbuiter van het spel:
 - Hij **wint nooit** een slag.
 - Hij blijft in de **slagen van je eigen kamp**: wie de slag wint krijgt in ruil een
   waardeloze kaart (0,5 punt) terug. ✅ *Standaardregel.*
-- Speel je hem in de **laatste slag**, dan gaat hij wél naar de winnaar van die slag.
-  **⚠️ AANNAME** — behalve bij een chelem; die uitzondering zit er niet in.
+- Speel je hem in de **laatste slag**, dan gaat hij wél naar de winnaar van die slag —
+  **tenzij je eigen kamp alle vorige slagen won**. Bij een chelem blijft de excuse dus
+  waar ze hoort. ✅ *Officieel.*
 
 ## 7. Vijf spelers: de geroepen heer
 
@@ -180,9 +188,39 @@ Het spel is **zero-sum**: wat de preneur wint, betalen de anderen samen.
 
 ### 9.2 Chelem
 
-Wint de preneur **alle** slagen zonder het aan te kondigen, dan komt er **200** bij.
-✅ *Standaardregel voor een niet-aangekondigde chelem.* De aangekondigde chelem
-(+400, of −200 bij mislukken) zit **niet** in deze versie.
+| Situatie | Premie |
+|---|---|
+| **Aangekondigd** en gehaald | **+400** |
+| Niet aangekondigd maar gehaald | **+200** |
+| **Aangekondigd** en gemist | **−200** |
+
+✅ *Officieel.* De aankondiging gebeurt vóór de eerste slag, en wie een chelem
+aankondigt **komt zelf uit**. De premie wordt **niet** vermenigvuldigd met het contract.
+
+### 9.3 Poignée
+
+Wie vóór zijn eerste kaart genoeg atouts kan tonen, verdient een premie. Het aantal
+hangt af van hoeveel spelers er zijn:
+
+| | 3 spelers | 4 spelers | 5 spelers | Premie |
+|---|---|---|---|---|
+| **Poignée** | 13 atouts | 10 | 8 | **20** |
+| **Dubbele poignée** | 15 | 13 | 10 | **30** |
+| **Drievoudige poignée** | 18 | 15 | 13 | **40** |
+
+✅ *Officieel.* Twee dingen die verrassen:
+
+- de premie gaat naar de **winnaar van de gift**, wie ze ook toonde;
+- ze wordt **niet** vermenigvuldigd met het contract.
+
+De excuse mag meetellen om een poignée vol te maken — maar dan weet iedereen dat je
+geen atout over hebt. ✅ *Officieel.*
+
+### 9.4 Halve punten
+
+Elke kaartwaarde eindigt op een halve punt, dus de score van een gift kan op een halve
+punt uitkomen. De app **rekent exact** en toont "25,5". Tafels die liever met hele
+getallen werken, ronden de écart naar boven af; dat is een variant (§11).
 
 ## 10. Verschillen met de andere spellen in deze app
 
@@ -195,13 +233,30 @@ Wint de preneur **alle** slagen zonder het aan te kondigen, dan komt er **200** 
 | Doel | hangt af van je **bouts** | vast |
 | Ploegen | preneur alleen (of +1 bij vijf) | vaste ploegen, of ieder voor zich |
 
+## 11. Varianten — te kiezen op het startscherm
+
+Alles hieronder staat standaard op het **FFT-reglement**. Wie aan tafel anders speelt,
+zet het om bij de start van een partij.
+
+| Variant | Standaard (officieel) | Alternatief |
+|---|---|---|
+| **Speelrichting** | tegen de klok in | met de klok mee, zoals de rest van de app |
+| **Petit au bout** | aan (10 × factor) | uit |
+| **Poignée** | aan | uit |
+| **Chelem aankondigen** | aan (+400 / −200) | uit — een stille chelem telt dan nog altijd +200 |
+| **Petit sec** | opnieuw delen | gewoon doorspelen |
+| **Halve punten** | exact | écart naar boven afronden |
+
+Daarnaast kies je het **aantal spelers** (3, 4 of 5), wat de handgrootte, de chien én
+de poignée-drempels bepaalt.
+
 ## Open regelvragen
 
-1. **Poignée** — de aankondiging van tien/dertien/vijftien atouts (10/20/30 punten)
-   toevoegen?
-2. **Aangekondigde chelem** — met de knop "chelem" vóór de eerste slag, +400 of −200?
-3. **Misère** — sommige clubs spelen een misère d'atout of misère de tête; nodig?
-4. **Speelrichting** — de app speelt met de klok mee; tarot gaat traditioneel tegen
-   de klok in. Storend?
-5. **Aantal giften** — de app speelt standaard één gift per speler (dus 3, 4 of 5).
-   Of liever een vast aantal, of tot een puntendoel?
+1. **Misère** — sommige clubs spelen een misère d'atout of misère de tête. Toevoegen
+   als extra contract, of buiten houden omdat het geen FFT-contract is?
+2. **Aantal giften** — de app speelt standaard één gift per speler (dus 3, 4 of 5).
+   Of liever een vast aantal, of een echte toernooiformule?
+3. **Coinche / surcoinche** — bestaat niet in tarot, maar sommige tafels spelen wel met
+   een "prise à l'aveugle". Nodig?
+4. **Bots en aankondigingen** — de bots tonen altijd de grootste poignée die ze hebben.
+   Aan tafel houdt men die soms achter om niets te verklappen. Slimmer maken?

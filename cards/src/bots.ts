@@ -21,7 +21,7 @@ import {
 } from './engine/klaverjassen';
 import { PASS_COUNT, QUEEN_OF_SPADES, trickPenalty, type HartenGift } from './engine/hartenjagen';
 import type { BoerenGift } from './engine/boerenbridge';
-import type { ContractId, TarotGift, TarotPlay } from './engine/tarot';
+import type { ContractId, PoigneeSize, TarotGift, TarotPlay } from './engine/tarot';
 import { isBout, tarotHalfPoints, type TarotCard } from './engine/tarot-cards';
 import { cardPoints, strength, teamOf, type ManilleGift } from './engine/manille';
 import {
@@ -787,6 +787,26 @@ export function chooseTarotDiscard(gift: TarotGift): TarotCard {
     if (atoutA !== atoutB) return atoutA - atoutB;
     return lengte(a) - lengte(b) || tarotHalfPoints(b) - tarotHalfPoints(a);
   })[0] as TarotCard;
+}
+
+/** §9.2 — een chelem kondig je alleen aan met een hand die alles kan nemen: bijna
+ *  alle hoge atouts en de 21. Bots zijn hier bewust voorzichtig; een gemiste
+ *  aangekondigde chelem kost 200. */
+export function chooseTarotChelem(gift: TarotGift, level: BotLevel): boolean {
+  if (level === 'easy') return false;
+  const hand = gift.hands[gift.taker as number] as TarotCard[];
+  const atouts = hand.filter((c) => c.kind === 'trump');
+  const heeft21 = atouts.some((c) => c.kind === 'trump' && c.value === 21);
+  const hoog = atouts.filter((c) => c.kind === 'trump' && c.value >= 15).length;
+  const heren = hand.filter((c) => c.kind === 'suit' && c.rank === 14).length;
+  return heeft21 && hoog >= 6 && atouts.length >= hand.length * 0.7 && heren >= 3;
+}
+
+/** §9.3 — tonen kost niets: de premie gaat toch naar de winnaar van de gift, wie
+ *  ze ook aankondigde. Bots tonen dus altijd de grootste die ze kunnen. */
+export function chooseTarotPoignee(gift: TarotGift, player: number): PoigneeSize | 'none' {
+  const opties = gift.poigneeOptions(player);
+  return opties.length > 0 ? (opties[0] as PoigneeSize) : 'none';
 }
 
 export function chooseTarotCard(gift: TarotGift, player: number, level: BotLevel): TarotCard {

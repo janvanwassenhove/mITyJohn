@@ -207,6 +207,10 @@ export function tarotTip(gift: TarotGift, player: number): CoachTip | null {
   }
   if (gift.phase === 'call' && gift.taker === player) return { id: 'ttCall' };
   if (gift.phase === 'ecart' && gift.taker === player) return { id: 'ttEcart' };
+  if (gift.phase === 'announce' && gift.announceToAct === player) {
+    if (gift.chelemAnnounced === null && player === gift.taker) return { id: 'ttChelem' };
+    return { id: 'ttPoignee' };
+  }
   if (gift.phase !== 'play' || gift.toPlay !== player) return null;
   if (gift.trick.length === 0) return { id: 'ttLead' };
   const legal = gift.legalCards(player);
