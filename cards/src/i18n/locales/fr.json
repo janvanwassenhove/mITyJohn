@@ -137,6 +137,7 @@
   "scorebord.title": "Tableau de scores",
   "scorebord.intro": "Tenez le score d'une partie jouée avec de vraies cartes à table.",
   "scorebord.participants": "Nombre de participants",
+  "scorebord.dropPlayers": "Retirer {names} supprime aussi les points inscrits à leur nom. Continuer ?",
   "scorebord.name": "Nom {n}",
   "scorebord.defaultName": "Joueur {n}",
   "scorebord.target": "Score cible (facultatif)",

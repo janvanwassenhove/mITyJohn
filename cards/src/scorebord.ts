@@ -97,6 +97,19 @@ export function setMode(sb: Scorebord, mode: ScorebordMode): Scorebord {
   return canUseMode(sb, mode) ? { ...sb, mode } : sb;
 }
 
+/** Het aantal deelnemers van een lopend bord aanpassen: er schuift iemand aan
+ *  of iemand stopt ermee. Erbij = lege naam en nul punten voor de gespeelde
+ *  rondes; eraf = de laatsten vallen weg, mét hun kolom in elke ronde. Past het
+ *  gekozen spel niet meer bij het nieuwe aantal, dan valt het bord terug op
+ *  manueel — anders zou je in een automodus staan die niet kan rekenen. */
+export function setParticipantCount(sb: Scorebord, n: number): Scorebord {
+  if (n < 2 || n === sb.participants.length) return sb;
+  const participants = Array.from({ length: n }, (_, i) => sb.participants[i] ?? '');
+  const rounds = sb.rounds.map((r) => Array.from({ length: n }, (_, i) => r[i] ?? 0));
+  const next: Scorebord = { ...sb, participants, rounds };
+  return canUseMode(next, next.mode) ? next : { ...next, mode: 'manueel' };
+}
+
 export function totals(sb: Scorebord): number[] {
   return sb.participants.map((_, i) => sb.rounds.reduce((sum, r) => sum + (r[i] ?? 0), 0));
 }

@@ -137,6 +137,7 @@
   "scorebord.title": "Scoreboard",
   "scorebord.intro": "Keep score for a game you play with real cards at the table.",
   "scorebord.participants": "Number of participants",
+  "scorebord.dropPlayers": "Removing {names} also deletes their points on this board. Continue?",
   "scorebord.name": "Name {n}",
   "scorebord.defaultName": "Player {n}",
   "scorebord.target": "Target score (optional)",

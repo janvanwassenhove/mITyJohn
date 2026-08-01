@@ -12,6 +12,7 @@ import {
   resetRounds,
   save,
   setMode,
+  setParticipantCount,
   totals,
   winner,
 } from './scorebord';
@@ -161,6 +162,33 @@ describe('rondelabels zijn taalonafhankelijk', () => {
     expect(sb.meta).toHaveLength(1);
     expect(sb.meta[0]?.params.tricks).toBe(10);
     expect(resetRounds(sb).meta).toEqual([]);
+  });
+
+  it('deelnemers erbij of eraf op een lopend bord', () => {
+    const start = addRound(
+      newScorebord(['a', 'b', 'c', 'd'], null, false, 'wiezen'),
+      [1, 1, -1, -1],
+    );
+
+    // Erbij: lege naam, en nul punten voor wat al gespeeld is. Wiezen kan niet
+    // met vijf, dus het bord valt terug op manueel.
+    const vijf = setParticipantCount(start, 5);
+    expect(vijf.participants).toEqual(['a', 'b', 'c', 'd', '']);
+    expect(vijf.rounds).toEqual([[1, 1, -1, -1, 0]]);
+    expect(vijf.mode).toBe('manueel');
+
+    // Eraf: de laatsten vallen weg, mét hun kolom in elke ronde.
+    const drie = setParticipantCount(start, 3);
+    expect(drie.participants).toEqual(['a', 'b', 'c']);
+    expect(drie.rounds).toEqual([[1, 1, -1]]);
+
+    // Past het spel wél bij het nieuwe aantal, dan blijft de modus staan.
+    const tarot = setParticipantCount(newScorebord(['a', 'b', 'c', 'd'], null, false, 'tarot'), 5);
+    expect(tarot.mode).toBe('tarot');
+
+    // Onzin doet niets.
+    expect(setParticipantCount(start, 1)).toBe(start);
+    expect(setParticipantCount(start, 4)).toBe(start);
   });
 
   it('oude borden zonder meta blijven werken', () => {

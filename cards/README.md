@@ -51,7 +51,8 @@ reclame, werkt offline en is installeerbaar op je gsm.
 - **Scorebord voor een fysiek spel** — hou de stand bij aan tafel. Elk spel heeft een
   **automodus**: duid aan wat er gebeurde en de app rekent de punten uit, met dezelfde
   scorefuncties als het spel zelf. Welke spellen je kan kiezen hangt af van het aantal
-  deelnemers.
+  deelnemers, en dat aantal kan je ook op een lopend bord nog wijzigen — schuift er
+  iemand aan of stopt iemand ermee, dan past de lijst zich meteen aan.
 - **Drie botniveaus**, statistieken, animaties en geluid.
 - **Nederlands, Engels en Frans**, licht/donker/systeemthema, en alles blijft lokaal
   in `localStorage` — er vertrekt geen data naar een server.
@@ -71,7 +72,7 @@ cards/                  # deze app (Vite + TypeScript, strict)
 │   ├── bots.ts         # heuristische botspelers (drie niveaus)
 │   ├── coach.ts        # starterswizard-stappen + contextuele tips
 │   ├── guide.ts        # regelgids: hoofdstukken en stappen per speltype
-│   ├── scorebord*.ts   # scorebord voor fysiek spel (incl. wiezen-automodus)
+│   ├── scorebord*.ts   # scorebord voor fysiek spel (automodus per spel)
 │   ├── options.ts      # regelvarianten per sessie
 │   ├── store.ts        # persistentie via actielog + replay
 │   ├── i18n/           # nl / en / fr, nl = fallback

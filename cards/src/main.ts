@@ -2954,6 +2954,37 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
 
   if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
 
+  // Aantal deelnemers ook hier, niet enkel bij het opzetten: schuift er iemand
+  // aan of stopt iemand ermee, dan moest je vroeger een nieuw bord beginnen —
+  // en dus je stand weggooien. De moduslijst hieronder volgt dit aantal.
+  const countGroup = el('div', 'control-group');
+  countGroup.append(el('span', undefined, t('scorebord.participants')));
+  const countSeg = el('div', 'seg');
+  countSeg.setAttribute('role', 'group');
+  for (const n of sbg.SB_PLAYER_COUNTS) {
+    countSeg.append(
+      segButton(String(n), board.participants.length === n, () => {
+        // Minder deelnemers gooit de laatste kolommen weg. Staan daar punten in,
+        // dan is dat verlies dat je niet per ongeluk wil maken met één tik.
+        const weg = board.participants.slice(n);
+        const heeftPunten = board.rounds.some((r) => r.slice(n).some((p) => p !== 0));
+        if (weg.length > 0 && heeftPunten) {
+          const namen = weg.map((_, i) => sbParticipantName(n + i)).join(', ');
+          if (!confirm(t('scorebord.dropPlayers', { names: namen }))) return;
+        }
+        sbBoard = scorebord.setParticipantCount(board, n);
+        sbNames = [...sbBoard.participants];
+        sbCount = sbBoard.participants.length;
+        sbMode = sbBoard.mode;
+        saveScorebordMode();
+        scorebord.save(sbBoard);
+        render();
+      }),
+    );
+  }
+  countGroup.append(countSeg);
+  main.append(countGroup);
+
   // Modus wisselen op een lopend bord: koos je bij de start de verkeerde, dan
   // moest je vroeger opnieuw beginnen en was je stand weg. Enkel de spellen die
   // bij dit aantal deelnemers passen staan er.
@@ -5018,9 +5049,31 @@ render();
 
 // PWA: service worker voor offline gebruik / installatie op gsm.
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  // Bij een controllerwissel is er een nieuwe service worker aan zet en draait
+  // de pagina nog op de oude bundel. Eén keer herladen en je zit op de nieuwe.
+  let herlaadt = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (herlaadt) return;
+    herlaadt = true;
+    location.reload();
+  });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(`${import.meta.env.BASE_URL}sw.js`).catch(() => {
-      /* offline-modus is nice-to-have */
-    });
+    navigator.serviceWorker
+      // updateViaCache: 'none' — anders mag de browser sw.js zélf uit zijn
+      // HTTP-cache serveren (Pages zet max-age), en dan merkt hij een nieuwe
+      // versie pas veel later. Een geïnstalleerde app bleef zo op een oude
+      // bundel hangen terwijl de deploy al lang gebeurd was.
+      .register(`${import.meta.env.BASE_URL}sw.js`, { updateViaCache: 'none' })
+      .then((reg) => {
+        void reg.update();
+        // Een PWA wordt zelden echt afgesloten; bij het terugkeren naar de app
+        // is het beste moment om te kijken of er een nieuwe versie klaarstaat.
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') void reg.update();
+        });
+      })
+      .catch(() => {
+        /* offline-modus is nice-to-have */
+      });
   });
 }

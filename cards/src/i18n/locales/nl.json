@@ -137,6 +137,7 @@
   "scorebord.title": "Scorebord",
   "scorebord.intro": "Houd de punten bij van een spel dat je met echte kaarten aan tafel speelt.",
   "scorebord.participants": "Aantal deelnemers",
+  "scorebord.dropPlayers": "{names} valt weg van het bord, met de punten die daar staan. Doorgaan?",
   "scorebord.name": "Naam {n}",
   "scorebord.defaultName": "Speler {n}",
   "scorebord.target": "Doelscore (optioneel)",
