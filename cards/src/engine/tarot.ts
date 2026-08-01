@@ -209,6 +209,84 @@ export interface TarotScore {
   pointsHalf: number[];
 }
 
+/** §9.2 — hoe liep de chelem af? */
+export type ChelemOutcome = 'none' | 'made' | 'announced-made' | 'announced-failed';
+
+/**
+ * De hele afrekening van één gift (§9), los van het spelverloop: uit de punten
+ * van de preneur, zijn bouts en de premies volgt wat iedereen betaalt of krijgt.
+ * Het scorebord voor een fysiek spel rekent met exact deze functie.
+ */
+export function scoreTarotRound(input: {
+  players: PlayerCount;
+  preneur: number;
+  /** Geroepen partner bij vijf spelers, of null. */
+  partner: number | null;
+  contract: ContractId;
+  /** Punten van de preneur in **halve punten** (§2.2). */
+  preneurHalf: number;
+  bouts: number;
+  /** +1 als de preneur het petit au bout haalde, −1 als de verdediging het deed. */
+  petitAuBout: 0 | 1 | -1;
+  /** Totaal van alle getoonde poignées, in hele punten (§9.3). */
+  poigneePoints: number;
+  chelem: ChelemOutcome;
+  rounding: 'exact' | 'up';
+}): TarotScore {
+  const info = contractInfo(input.contract);
+  const targetHalf = targetHalfPoints(input.bouts);
+  const diffHalf = input.preneurHalf - targetHalf;
+  const made = diffHalf >= 0;
+
+  // §9.4 — de app rekent exact in halve punten; wie afrondt zoals aan tafel,
+  // rondt de écart naar boven af (altijd in het voordeel van de winnaar).
+  let ecartHalf = diffHalf;
+  if (input.rounding === 'up') {
+    const teken = diffHalf < 0 ? -1 : 1;
+    ecartHalf = teken * Math.ceil(Math.abs(diffHalf) / 2) * 2;
+  }
+
+  // §9 — alles in halve punten: 25 → 50, petit au bout 10 → 20.
+  const basisHalf = 50 + Math.abs(ecartHalf) + input.petitAuBout * 20;
+  let unitHalf = basisHalf * info.multiplier;
+  if (!made) unitHalf = -unitHalf;
+
+  // §9.3 — de poignée-premie gaat naar de winnaar van de gift, wie ze ook
+  // toonde, en wordt níét vermenigvuldigd.
+  unitHalf += (made ? 1 : -1) * input.poigneePoints * 2;
+
+  // §9.2 — chelem: aangekondigd en gehaald +400, stil gehaald +200,
+  // aangekondigd en gemist −200. Ook niet vermenigvuldigd.
+  if (input.chelem === 'announced-made') unitHalf += 800;
+  else if (input.chelem === 'made') unitHalf += 400;
+  else if (input.chelem === 'announced-failed') unitHalf -= 400;
+
+  // §9.1 — aandelen; samen altijd nul.
+  const pointsHalf = new Array<number>(input.players).fill(0);
+  const verdedigers = input.players - (input.partner !== null ? 2 : 1);
+  for (let p = 0; p < input.players; p++) {
+    if (p === input.preneur) {
+      pointsHalf[p] = unitHalf * verdedigers - (input.partner !== null ? unitHalf : 0);
+    } else if (p === input.partner) pointsHalf[p] = unitHalf;
+    else pointsHalf[p] = -unitHalf;
+  }
+
+  return {
+    preneurHalf: input.preneurHalf,
+    bouts: input.bouts,
+    targetHalf,
+    diffHalf,
+    made,
+    multiplier: info.multiplier,
+    petitAuBout: input.petitAuBout,
+    chelem: input.chelem === 'made' || input.chelem === 'announced-made',
+    chelemAnnounced: input.chelem.startsWith('announced'),
+    poigneePoints: input.poigneePoints,
+    unitHalf,
+    pointsHalf,
+  };
+}
+
 export class TarotGift {
   readonly players: PlayerCount;
   readonly dealer: number;
@@ -562,10 +640,6 @@ export class TarotGift {
 
     const preneurHalf = halfPointsOf(preneurKaarten) + extra;
     const bouts = countBouts(preneurKaarten);
-    const targetHalf = targetHalfPoints(bouts);
-    const diffHalf = preneurHalf - targetHalf;
-    const made = diffHalf >= 0;
-
     // §9 — petit au bout: wie de 1 van atout in de laatste slag binnenhaalt.
     let petit: 0 | 1 | -1 = 0;
     if (this.config.petitAuBout) {
@@ -579,58 +653,29 @@ export class TarotGift {
 
     const chelem = preneurTricks === this.history.length;
     const aangekondigd = this.chelemAnnounced === true;
-
-    // §9.4 — de app rekent exact in halve punten; wie afrondt zoals aan tafel,
-    // rondt de écart naar boven af (altijd in het voordeel van de winnaar).
-    let ecartHalf = diffHalf;
-    if (this.config.rounding === 'up') {
-      const teken = diffHalf < 0 ? -1 : 1;
-      ecartHalf = teken * Math.ceil(Math.abs(diffHalf) / 2) * 2;
-    }
-
-    // §9 — alles in halve punten: 25 → 50, petit au bout 10 → 20.
-    const basisHalf = 50 + Math.abs(ecartHalf) + petit * 20;
-    let unitHalf = basisHalf * info.multiplier;
-    if (!made) unitHalf = -unitHalf;
-
-    // §9.3 — de poignée-premie gaat naar de winnaar van de gift, wie ze ook
-    // toonde, en wordt níét vermenigvuldigd.
     let poigneePoints = 0;
     for (const size of this.poigneeDeclared) {
       if (size && size !== 'none') poigneePoints += POIGNEE_POINTS[size];
     }
-    unitHalf += (made ? 1 : -1) * poigneePoints * 2;
 
-    // §9.2 — chelem: aangekondigd en gehaald +400, stil gehaald +200,
-    // aangekondigd en gemist −200. Ook niet vermenigvuldigd.
-    if (aangekondigd && chelem) unitHalf += 800;
-    else if (!aangekondigd && chelem) unitHalf += 400;
-    else if (aangekondigd && !chelem) unitHalf -= 400;
-
-    // §9.1 — aandelen; samen altijd nul.
-    const pointsHalf = new Array<number>(this.players).fill(0);
-    const verdedigers = this.players - (this.partner !== null ? 2 : 1);
-    for (let p = 0; p < this.players; p++) {
-      if (p === taker) {
-        pointsHalf[p] = unitHalf * verdedigers - (this.partner !== null ? unitHalf : 0);
-      } else if (p === this.partner) pointsHalf[p] = unitHalf;
-      else pointsHalf[p] = -unitHalf;
-    }
-
-    this.score = {
+    this.score = scoreTarotRound({
+      players: this.players,
+      preneur: taker,
+      partner: this.partner,
+      contract: this.contract as ContractId,
       preneurHalf,
       bouts,
-      targetHalf,
-      diffHalf,
-      made,
-      multiplier: info.multiplier,
       petitAuBout: petit,
-      chelem,
-      chelemAnnounced: aangekondigd,
       poigneePoints,
-      unitHalf,
-      pointsHalf,
-    };
+      chelem: chelem
+        ? aangekondigd
+          ? 'announced-made'
+          : 'made'
+        : aangekondigd
+          ? 'announced-failed'
+          : 'none',
+      rounding: this.config.rounding,
+    });
   }
 }
 

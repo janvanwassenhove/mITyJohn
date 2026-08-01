@@ -145,6 +145,28 @@ export interface HartenScore {
   points: number[];
 }
 
+/**
+ * De telling van één ronde (§6): normaal betaal je je eigen strafpunten, maar
+ * wie alles haalt draait het om. Het scorebord voor een fysiek spel rekent met
+ * dezelfde functie.
+ */
+export function scoreHartenRound(
+  penaltiesIn: number[],
+  config: HartenConfig = DEFAULT_HARTEN_CONFIG,
+): HartenScore {
+  const penalties = [...penaltiesIn];
+  let moonShooter: number | null = null;
+  if (config.shootTheMoon) {
+    const alles = penalties.findIndex((n) => n === TOTAL_PENALTY);
+    if (alles >= 0) moonShooter = alles;
+  }
+  const points =
+    moonShooter === null
+      ? [...penalties]
+      : penalties.map((_, p) => (p === moonShooter ? 0 : TOTAL_PENALTY));
+  return { penalties, moonShooter, points };
+}
+
 export class HartenGift {
   readonly dealer: number;
   readonly config: HartenConfig;
@@ -275,18 +297,7 @@ export class HartenGift {
   }
 
   private finish(): void {
-    const penalties = [...this.penalties];
-    let moonShooter: number | null = null;
-    if (this.config.shootTheMoon) {
-      const alles = penalties.findIndex((n) => n === TOTAL_PENALTY);
-      if (alles >= 0) moonShooter = alles;
-    }
-    // §6: wie alles haalt, krijgt 0 en deelt 26 uit aan de rest.
-    const points =
-      moonShooter === null
-        ? penalties
-        : penalties.map((_, p) => (p === moonShooter ? 0 : TOTAL_PENALTY));
-    this.score = { penalties, moonShooter, points };
+    this.score = scoreHartenRound(this.penalties, this.config);
   }
 }
 

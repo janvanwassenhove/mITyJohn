@@ -78,6 +78,13 @@ describe('i18n', () => {
     'tarot.opt.exact',
     'tarot.poignee.simple',
     'tarot.poigneeChip',
+    // Scorebord: dezelfde Franse tarot- en belotetermen.
+    'scorebord.bl.belote',
+    'scorebord.tt.preneur',
+    'scorebord.tt.bouts',
+    'scorebord.tt.petitAuBout',
+    'scorebord.tt.poignee',
+    'scorebord.tt.chelem',
   ]);
 
   it.each([

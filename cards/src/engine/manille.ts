@@ -122,6 +122,27 @@ export interface ManilleGiftScore {
   multiplier: number;
 }
 
+/**
+ * De telling van één gift: het winnende team scoort wat het boven de helft
+ * haalde, maal de multiplicator. Los van het spelverloop zodat het scorebord
+ * voor een fysiek spel met dezelfde regels rekent.
+ */
+export function scoreManilleGift(
+  teamPoints: [number, number],
+  multiplier = 1,
+  config: ManilleConfig = DEFAULT_MANILLE_CONFIG,
+): ManilleGiftScore {
+  const [a, b] = teamPoints;
+  const half = config.pointModel === 68 ? 34 : 30;
+  const winnerTeam = a === b ? null : a > b ? 0 : 1;
+  return {
+    teamPoints: [a, b],
+    winner: winnerTeam,
+    multiplier,
+    score: winnerTeam === null ? 0 : (Math.max(a, b) - half) * multiplier,
+  };
+}
+
 export class ManilleGift {
   readonly dealer: number;
   readonly hands: Card[][];
@@ -226,14 +247,7 @@ export class ManilleGift {
       this.trickLeader = winner;
       if (this.tricksPlayed === TRICKS_PER_GIFT) {
         const [a = 0, b = 0] = this.teamPoints;
-        const half = this.config.pointModel === 68 ? 34 : 30;
-        const winnerTeam = a === b ? null : a > b ? 0 : 1;
-        this.score = {
-          teamPoints: [a, b],
-          winner: winnerTeam,
-          multiplier: this.multiplier,
-          score: winnerTeam === null ? 0 : (Math.max(a, b) - half) * this.multiplier,
-        };
+        this.score = scoreManilleGift([a, b], this.multiplier, this.config);
       }
     }
   }

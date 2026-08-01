@@ -45,6 +45,6 @@ Een **starterswizard** legt elk spel in vier à vijf schermen uit. Wil je het ec
 
 ## En als je liever met echte kaarten speelt
 
-Er zit een **scorebord** in voor aan tafel. Manueel voor eender welk spel, of in automodus voor wiezen: duid aan welk contract er gespeeld werd, wie er speelde, wie zijn maat was — of dat hij alleen ging — en hoeveel slagen er binnen zijn. De app rekent de punten voor alle vier de spelers uit met dezelfde regels als het spel zelf.
+Er zit een **scorebord** in voor aan tafel. Manueel voor eender welk spel, of in automodus — en die is er voor **alle acht**. Bij wiezen duid je het contract aan, wie er speelde en hoeveel slagen er binnen zijn; bij tarot het contract, de punten van de preneur en zijn bouts, met poignée en chelem erbij; bij hartenjagen gewoon de strafpunten per speler. De app rekent het uit met exact dezelfde regels als het spel zelf, en laat het resultaat al zien terwijl je typt. Welke spellen je kan kiezen hangt af van hoeveel mensen er meespelen: met drie of vijf blijven boerenbridge en tarot over, met vier kan alles.
 
 Geen account, geen backend: je sessie wordt lokaal bewaard, en je kunt de app op je telefoon installeren om offline verder te spelen. Drie botniveaus, drie talen (NL/EN/FR), licht en donker thema.

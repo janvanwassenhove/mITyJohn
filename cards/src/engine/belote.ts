@@ -135,6 +135,52 @@ export interface BeloteScore {
   points: number[];
 }
 
+/**
+ * De telling van één ronde (§8), los van het spelverloop — zodat het scorebord
+ * voor een fysiek spel met exact dezelfde regels rekent.
+ */
+export function scoreBeloteRound(input: {
+  /** Kaartpunten per ploeg, inclusief de dix de der (samen 162). */
+  cardPoints: [number, number];
+  annonces: [number, number];
+  belote: [number, number];
+  takingTeam: number;
+  /** Slagen van de nemende ploeg — acht is capot. */
+  takerTricks: number;
+  config: BeloteConfig;
+}): BeloteScore {
+  const { cardPoints, annonces, belote, takingTeam, takerTricks, config } = input;
+  const other = 1 - takingTeam;
+  const raw = [0, 1].map(
+    (team) => (cardPoints[team] ?? 0) + (annonces[team] ?? 0) + (belote[team] ?? 0),
+  );
+  const capot = takerTricks === TRICKS_PER_ROUND;
+  const made = (raw[takingTeam] as number) > (raw[other] as number);
+
+  const points = [0, 0];
+  if (made) {
+    points[takingTeam] = (raw[takingTeam] as number) + (capot ? config.capotBonus : 0);
+    points[other] = raw[other] as number;
+  } else {
+    // Dedans (§8): alles naar de tegenpartij. Belote-rebelote blijft staan als
+    // de config dat zegt.
+    const keepBelote = config.beloteAlwaysCounts ? (belote[takingTeam] as number) : 0;
+    points[takingTeam] = keepBelote;
+    points[other] = (raw[0] as number) + (raw[1] as number) - keepBelote;
+  }
+
+  return {
+    cardPoints: [...cardPoints],
+    annonces: [...annonces],
+    belote: [...belote],
+    raw,
+    takingTeam,
+    made,
+    capot,
+    points,
+  };
+}
+
 export class BeloteGift {
   readonly dealer: number;
   readonly config: BeloteConfig;
@@ -304,43 +350,18 @@ export class BeloteGift {
   private finish(): void {
     const lastTeam = teamOf(this.lastTrickWinner);
     this.teamCardPoints[lastTeam] = (this.teamCardPoints[lastTeam] ?? 0) + LAST_TRICK_BONUS;
-
     const takingTeam = teamOf(this.taker as number);
-    const other = 1 - takingTeam;
-    const cardPts = [this.teamCardPoints[0] ?? 0, this.teamCardPoints[1] ?? 0];
-    const ann = [this.teamAnnonces[0] ?? 0, this.teamAnnonces[1] ?? 0];
-    const bel = [this.teamBelote[0] ?? 0, this.teamBelote[1] ?? 0];
-    const raw = [0, 1].map((t) => (cardPts[t] as number) + (ann[t] as number) + (bel[t] as number));
-
-    const takerTricks = this.tricksWon.reduce(
-      (sum, n, p) => sum + (teamOf(p) === takingTeam ? n : 0),
-      0,
-    );
-    const capot = takerTricks === TRICKS_PER_ROUND;
-    const made = (raw[takingTeam] as number) > (raw[other] as number);
-
-    const points = [0, 0];
-    if (made) {
-      points[takingTeam] = (raw[takingTeam] as number) + (capot ? this.config.capotBonus : 0);
-      points[other] = raw[other] as number;
-    } else {
-      // Dedans (§8): alles naar de tegenpartij. Belote-rebelote blijft staan als
-      // de config dat zegt.
-      const keepBelote = this.config.beloteAlwaysCounts ? (bel[takingTeam] as number) : 0;
-      points[takingTeam] = keepBelote;
-      points[other] = (raw[0] as number) + (raw[1] as number) - keepBelote;
-    }
-
-    this.score = {
-      cardPoints: cardPts,
-      annonces: ann,
-      belote: bel,
-      raw,
+    this.score = scoreBeloteRound({
+      cardPoints: [this.teamCardPoints[0] ?? 0, this.teamCardPoints[1] ?? 0],
+      annonces: [this.teamAnnonces[0] ?? 0, this.teamAnnonces[1] ?? 0],
+      belote: [this.teamBelote[0] ?? 0, this.teamBelote[1] ?? 0],
       takingTeam,
-      made,
-      capot,
-      points,
-    };
+      takerTricks: this.tricksWon.reduce(
+        (sum, n, p) => sum + (teamOf(p) === takingTeam ? n : 0),
+        0,
+      ),
+      config: this.config,
+    });
   }
 }
 

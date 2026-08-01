@@ -165,6 +165,33 @@ export interface BiedenGiftScore {
   points: number[];
 }
 
+/**
+ * De telling van één gift: haalt de spelende ploeg haar bod, dan wint ze dat
+ * bedrag, anders verliest ze het. Los van het spelverloop zodat het scorebord
+ * voor een fysiek spel met dezelfde regels rekent.
+ */
+export function scoreBiedenGift(input: {
+  bid: number;
+  declarer: number;
+  /** Kaartpunten per ploeg, inclusief de laatste-slag-bonus. */
+  teamPoints: [number, number];
+}): BiedenGiftScore {
+  const declaringTeam = teamOf(input.declarer);
+  const made = (input.teamPoints[declaringTeam] ?? 0) >= input.bid;
+  const delta = made ? input.bid : -input.bid;
+  const points = [0, 0];
+  points[declaringTeam] = delta;
+  points[1 - declaringTeam] = -delta;
+  return {
+    bid: input.bid,
+    declarer: input.declarer,
+    declaringTeam,
+    teamPoints: [...input.teamPoints],
+    made,
+    points,
+  };
+}
+
 export class BiedenGift {
   readonly dealer: number;
   readonly hands: Card[][];
@@ -245,23 +272,14 @@ export class BiedenGift {
   private finish(): void {
     const bid = this.bidding.highBid as number;
     const declarer = this.declarer as number;
-    const declaringTeam = teamOf(declarer);
     // Laatste-slag-bonus.
     this.teamPoints[teamOf(this.lastTrickWinner)] =
       (this.teamPoints[teamOf(this.lastTrickWinner)] ?? 0) + LAST_TRICK_BONUS;
-    const made = (this.teamPoints[declaringTeam] ?? 0) >= bid;
-    const delta = made ? bid : -bid;
-    const points = [0, 0];
-    points[declaringTeam] = delta;
-    points[1 - declaringTeam] = -delta;
-    this.score = {
+    this.score = scoreBiedenGift({
       bid,
       declarer,
-      declaringTeam,
       teamPoints: [this.teamPoints[0] ?? 0, this.teamPoints[1] ?? 0],
-      made,
-      points,
-    };
+    });
   }
 }
 

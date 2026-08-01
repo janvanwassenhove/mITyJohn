@@ -3,11 +3,15 @@
 // puur een teller met rondes en lopende totalen, persistent in localStorage.
 // De functies zijn puur/immutable zodat ze los testbaar zijn.
 
+import type { GameId } from './games';
+import { sbGame, type LabelParams } from './scorebord-games';
+
 const STORAGE_KEY = 'cards.scorebord.v1';
 
-/** 'manueel' = zelf punten intypen; 'wiezen' = contract + slagen + team ingeven,
- *  de app berekent de punten via de wiezen-scoring (zie main.ts). */
-export type ScorebordMode = 'manueel' | 'wiezen';
+/** 'manueel' = zelf punten intypen; elk ander spel is een automodus waarin je
+ *  ingeeft wát er gebeurde en de app de punten uitrekent met dezelfde
+ *  scorefuncties als het spel zelf (scorebord-games.ts). */
+export type ScorebordMode = 'manueel' | GameId;
 
 export interface Scorebord {
   v: 1;
@@ -23,19 +27,43 @@ export interface Scorebord {
    *  Enkel nog fallback voor oude borden en handmatige rondes: een opgeslagen
    *  tekst blijft in de taal van het moment staan. */
   labels: string[];
-  /** Gestructureerde beschrijving per ronde (wiezen-automodus), parallel aan
-   *  rounds. Hieruit bouwt de UI het label in de huidige taal. null = geen. */
-  meta: (WiezenRoundMeta | null)[];
+  /** Gestructureerde beschrijving per ronde (automodus), parallel aan rounds.
+   *  Hieruit bouwt de UI het label in de huidige taal. null = geen. */
+  meta: (RoundMeta | null)[];
 }
 
-/** Wat er in een wiezen-ronde gebeurde — taalonafhankelijk, zodat het label
+/** Wat er in een ronde gebeurde — taalonafhankelijk, zodat het label
  *  meeverandert wanneer je van taal wisselt. */
-export interface WiezenRoundMeta {
+export interface RoundMeta {
+  game: GameId;
+  labelKey: string;
+  params: LabelParams;
+}
+
+/** De vorm die borden van vóór de andere spellen gebruikten: enkel wiezen. */
+interface LegacyWiezenMeta {
   contractId: string;
   declarers: number[];
   tricks: number;
-  /** Doel dat gold (troel zonder aas ligt een slag hoger). */
   target: number;
+}
+
+/** Oud bord inlezen: één wiezen-vorm werd toen rechtstreeks bewaard. */
+function migrateMeta(meta: unknown): RoundMeta | null {
+  if (!meta || typeof meta !== 'object') return null;
+  const m = meta as Partial<RoundMeta> & Partial<LegacyWiezenMeta>;
+  if (typeof m.labelKey === 'string' && m.params) return m as RoundMeta;
+  if (typeof m.contractId !== 'string' || !Array.isArray(m.declarers)) return null;
+  return {
+    game: 'wiezen',
+    labelKey: m.target === 0 ? 'scorebord.round.wiezenZero' : 'scorebord.round.wiezen',
+    params: {
+      contract: { i18n: `contract.${m.contractId}` },
+      players: { players: [...m.declarers] },
+      tricks: m.tricks ?? 0,
+      target: m.target ?? 0,
+    },
+  };
 }
 
 export function newScorebord(
@@ -56,16 +84,17 @@ export function newScorebord(
   };
 }
 
-/** Kan dit bord in wiezen-automodus? Die rekent met vier vaste zitplaatsen. */
-export function canUseWiezenMode(sb: Scorebord): boolean {
-  return sb.participants.length === 4;
+/** Kan dit bord in de automodus van dit spel? Elk spel heeft zijn eigen
+ *  deelnemersaantallen — wiezen speelt met vier, tarot met drie tot vijf. */
+export function canUseMode(sb: Scorebord, mode: ScorebordMode): boolean {
+  if (mode === 'manueel') return true;
+  return sbGame(mode)?.playerCounts.includes(sb.participants.length) ?? false;
 }
 
 /** Wissel de modus van een lopend bord, met behoud van namen en rondes. Zonder
  *  dit moest je een nieuw bord beginnen — en dus je stand weggooien. */
 export function setMode(sb: Scorebord, mode: ScorebordMode): Scorebord {
-  if (mode === 'wiezen' && !canUseWiezenMode(sb)) return sb;
-  return { ...sb, mode };
+  return canUseMode(sb, mode) ? { ...sb, mode } : sb;
 }
 
 export function totals(sb: Scorebord): number[] {
@@ -101,7 +130,7 @@ export function addRound(
   sb: Scorebord,
   points: number[],
   label = '',
-  meta: WiezenRoundMeta | null = null,
+  meta: RoundMeta | null = null,
 ): Scorebord {
   const row = sb.participants.map((_, i) => points[i] ?? 0);
   return {
@@ -149,13 +178,16 @@ export function load(): Scorebord | null {
       return null;
     }
     // Migratie van oudere borden zonder mode/labels.
-    if (sb.mode !== 'wiezen') sb.mode = 'manueel';
+    if (sb.mode !== 'manueel' && !sbGame(sb.mode)) sb.mode = 'manueel';
     if (!Array.isArray(sb.labels) || sb.labels.length !== sb.rounds.length) {
       sb.labels = sb.rounds.map(() => '');
     }
     // Borden van vóór de gestructureerde labels: die houden hun opgeslagen tekst.
     if (!Array.isArray(sb.meta) || sb.meta.length !== sb.rounds.length) {
       sb.meta = sb.rounds.map(() => null);
+    } else {
+      // Borden met de oude wiezen-vorm omzetten naar het algemene model.
+      sb.meta = sb.meta.map(migrateMeta);
     }
     return sb;
   } catch {

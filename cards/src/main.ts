@@ -27,7 +27,7 @@ import {
 } from './bots';
 import * as store from './store';
 import { GAMES, isGameId, type GameId } from './games';
-import * as sbw from './scorebord-wiezen';
+import * as sbg from './scorebord-games';
 import { strength, teamOf, type ManilleGift } from './engine/manille';
 import type { ManilleSession } from './engine/manille';
 import { chooseManilleCard, chooseManilleTrump } from './bots';
@@ -169,11 +169,17 @@ let sbNames: string[] = [];
 let sbTarget = '';
 let sbLowWins = false;
 // Wiezen-automodus: huidige invoer voor de volgende gift.
-let sbWContract = 'vraag-en-mee';
-let sbWDeclarer = 0;
-let sbWPartner = 1;
-let sbWTricks = '';
-let sbWAceLed = true;
+/** Invoer van de automodus, per spel bewaard zodat je niet alles kwijt bent
+ *  wanneer je even van modus wisselt. */
+let sbValues: Record<string, sbg.SbValues> = {};
+
+function sbCurrentValues(mode: scorebord.ScorebordMode, n: number): sbg.SbValues {
+  if (mode === 'manueel') return {};
+  const game = sbg.sbGame(mode);
+  if (!game) return {};
+  sbValues[mode] ??= game.defaults(n);
+  return sbValues[mode] as sbg.SbValues;
+}
 // Vijf stoelen: tarot speelt met 3, 4 of 5 (REGELS-TAROT.md §1).
 const BOT_NAMES = ['', 'Miel', 'Rita', 'Staf', 'Lowie'];
 const HUMAN = 0;
@@ -242,6 +248,11 @@ const RANK_LABEL: Record<number, string> = { 11: 'J', 12: 'Q', 13: 'K', 14: 'A' 
 
 function playerName(p: number): string {
   return p === HUMAN ? t('player.you') : (BOT_NAMES[p] as string);
+}
+
+/** i18n-sleutel voor de naam van een spel. */
+function gameNameKey(id: GameId): MessageKey {
+  return (GAMES.find((g) => g.id === id)?.nameKey ?? `game.${id}`) as MessageKey;
 }
 
 /** i18n-naam van het actieve spel ('manille' heet in de teksten 'manillen'). */
@@ -2550,23 +2561,22 @@ function selectInput(
 /** Label voor een ingegeven gift, bv. "Troel — Jan + Miel · 9/8 slagen".
  *  Wordt bij élke render opnieuw opgebouwd uit scorebord.meta, zodat het label
  *  meeverandert met de taalkeuze — een opgeslagen tekst deed dat niet. */
-function wiezenRoundLabel(meta: scorebord.WiezenRoundMeta): string {
-  const names = meta.declarers.map((d) => sbParticipantName(d)).join(' + ');
-  const tricks =
-    meta.target === 0
-      ? t('scorebord.tricksOfZero', { tricks: meta.tricks })
-      : t('scorebord.tricksOf', { tricks: meta.tricks, target: meta.target });
-  return `${tContract(meta.contractId)} — ${names} · ${tricks}`;
+/** Labelparameters omzetten naar leesbare tekst: spelersindexen worden namen,
+ *  i18n-verwijzingen worden vertaald. Zo blijft een bewaarde ronde meelezen in
+ *  de taal die je nú gekozen hebt. */
+function sbResolveParams(params: sbg.LabelParams): Record<string, string | number> {
+  const out: Record<string, string | number> = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value === 'string' || typeof value === 'number') out[key] = value;
+    else if ('player' in value) out[key] = sbParticipantName(value.player);
+    else if ('players' in value) out[key] = value.players.map(sbParticipantName).join(' + ');
+    else out[key] = t(value.i18n as MessageKey);
+  }
+  return out;
 }
 
-/** De gestructureerde beschrijving van een net berekende ronde. */
-function wiezenRoundMeta(result: sbw.WiezenRoundResult): scorebord.WiezenRoundMeta {
-  return {
-    contractId: result.contract.id,
-    declarers: [...result.declarers],
-    tricks: result.tricks,
-    target: result.contract.target.tricks,
-  };
+function sbRoundLabel(meta: scorebord.RoundMeta): string {
+  return t(meta.labelKey as MessageKey, sbResolveParams(meta.params));
 }
 
 function scorebordSetup(): HTMLElement {
@@ -2575,43 +2585,57 @@ function scorebordSetup(): HTMLElement {
   main.append(el('p', undefined, t('scorebord.intro')));
 
   if (sbNames.length === 0) sbNames = ['', '', '', ''];
-  const wiezenMode = sbMode === 'wiezen';
-  if (wiezenMode) sbCount = 4; // wiezen = altijd 4 spelers
 
-  const modeGroup = el('div', 'control-group level-picker');
-  modeGroup.append(el('span', undefined, t('scorebord.mode')));
-  const modeSeg = el('div', 'seg');
-  modeSeg.setAttribute('role', 'group');
-  modeSeg.append(
-    segButton(t('scorebord.modeManual'), sbMode === 'manueel', () => {
-      sbMode = 'manueel';
-      saveScorebordMode();
-      render();
-    }),
-    segButton(t('scorebord.modeWiezen'), sbMode === 'wiezen', () => {
-      sbMode = 'wiezen';
-      saveScorebordMode();
-      render();
-    }),
-  );
-  modeGroup.append(modeSeg);
-  main.append(modeGroup);
-  if (wiezenMode) main.append(el('p', 'hint', t('scorebord.wiezenHint')));
-
+  // Eerst het aantal deelnemers: dat bepaalt welke spellen je kan kiezen.
   const countGroup = el('div', 'control-group level-picker');
   countGroup.append(el('span', undefined, t('scorebord.participants')));
   const countSeg = el('div', 'seg');
   countSeg.setAttribute('role', 'group');
-  for (const n of [2, 3, 4]) {
-    const btn = segButton(String(n), sbCount === n, () => {
-      sbCount = n;
-      render();
-    });
-    if (wiezenMode) btn.disabled = true;
-    countSeg.append(btn);
+  for (const n of sbg.SB_PLAYER_COUNTS) {
+    countSeg.append(
+      segButton(String(n), sbCount === n, () => {
+        sbCount = n;
+        // Past het gekozen spel niet meer bij dit aantal, val terug op manueel.
+        if (sbMode !== 'manueel' && !(sbg.sbGame(sbMode)?.playerCounts.includes(n) ?? false)) {
+          sbMode = 'manueel';
+          saveScorebordMode();
+        }
+        render();
+      }),
+    );
   }
   countGroup.append(countSeg);
   main.append(countGroup);
+
+  const modeGroup = el('div', 'control-group level-picker');
+  modeGroup.append(el('span', undefined, t('scorebord.mode')));
+  const modeSeg = el('div', 'seg wrap');
+  modeSeg.setAttribute('role', 'group');
+  const kiesModus = (mode: scorebord.ScorebordMode) => {
+    sbMode = mode;
+    saveScorebordMode();
+    // Hartenjagen telt strafpunten: daar wint de laagste.
+    const spel = mode === 'manueel' ? undefined : sbg.sbGame(mode);
+    if (spel?.lowWins !== undefined) sbLowWins = spel.lowWins;
+    render();
+  };
+  modeSeg.append(
+    segButton(t('scorebord.modeManual'), sbMode === 'manueel', () => kiesModus('manueel')),
+  );
+  for (const g of sbg.sbGamesFor(sbCount)) {
+    modeSeg.append(segButton(t(gameNameKey(g.id)), sbMode === g.id, () => kiesModus(g.id)));
+  }
+  modeGroup.append(modeSeg);
+  main.append(modeGroup);
+  main.append(
+    el(
+      'p',
+      'hint',
+      sbMode === 'manueel'
+        ? t('scorebord.manualHint')
+        : t('scorebord.autoHint', { game: t(gameNameKey(sbMode)) }),
+    ),
+  );
 
   const nameBox = el('div', 'sb-names');
   for (let i = 0; i < sbCount; i++) {
@@ -2667,6 +2691,7 @@ function scorebordSetup(): HTMLElement {
         sbLowWins,
         sbMode,
       );
+      sbValues = {};
       scorebord.save(sbBoard);
       render();
     }),
@@ -2708,137 +2733,150 @@ function manualRoundForm(board: scorebord.Scorebord): HTMLElement {
   return form;
 }
 
-/** Huidige maatkeuze, gecorrigeerd voor het gekozen contract. */
-function currentPartner(): number {
-  if (sbWPartner === sbw.ALONE) {
-    // "Alleen" bestaat enkel na een vraag; elders valt hij terug op de overbuur.
-    return sbw.canGoAlone(sbWContract) ? sbw.ALONE : (sbWDeclarer + 2) % 4;
-  }
-  return sbWPartner === sbWDeclarer ? (sbWDeclarer + 2) % 4 : sbWPartner;
-}
-
-function wiezenRoundForm(board: scorebord.Scorebord): HTMLElement {
+/** Eén generiek formulier voor elke automodus: elk spel beschrijft zijn velden
+ *  in scorebord-games.ts, hier worden ze getekend. */
+function autoRoundForm(board: scorebord.Scorebord, game: sbg.SbGame): HTMLElement {
+  const n = board.participants.length;
+  const values = sbCurrentValues(game.id, n);
   const form = el('div', 'sb-newround');
   form.append(el('div', 'options-title', t('scorebord.newRound')));
-  const isTeam = sbw.needsPartner(sbWContract);
+
   const playerOptions = board.participants.map((_, i) => ({
     value: String(i),
     label: sbParticipantName(i),
   }));
 
+  // Wordt hieronder ingevuld; de invoervelden roepen hem aan.
+  let refreshPreview = (): void => {};
+
   const rows = el('div', 'sb-wiezen');
-
-  const cGroup = el('div', 'control-group');
-  cGroup.append(el('span', undefined, t('scorebord.contract')));
-  cGroup.append(
-    selectInput(
-      sbw.scorebordContracts().map((c) => ({ value: c.id, label: tContract(c.id) })),
-      sbWContract,
-      (v) => {
-        sbWContract = v;
-        render();
-      },
-    ),
-  );
-  rows.append(cGroup);
-
-  const dGroup = el('div', 'control-group');
-  dGroup.append(el('span', undefined, t('scorebord.declarer')));
-  dGroup.append(
-    selectInput(playerOptions, String(sbWDeclarer), (v) => {
-      sbWDeclarer = Number(v);
-      render();
-    }),
-  );
-  rows.append(dGroup);
-
-  const partner = currentPartner();
-  if (isTeam) {
-    // Na een vraag kan niemand meegaan: dan speelt de vrager alleen (§5.2).
-    const options = playerOptions.filter((o) => Number(o.value) !== sbWDeclarer);
-    if (sbw.canGoAlone(sbWContract)) {
-      options.unshift({ value: String(sbw.ALONE), label: t('scorebord.alone') });
+  for (const field of game.fields(values, n)) {
+    const group = el('div', 'control-group');
+    group.append(el('span', undefined, t(field.label as MessageKey)));
+    switch (field.kind) {
+      case 'choice': {
+        group.append(
+          selectInput(
+            field.options.map((o) => ({ value: o.value, label: t(o.label as MessageKey) })),
+            String(values[field.key] ?? field.options[0]?.value ?? ''),
+            (v) => {
+              values[field.key] = v;
+              render();
+            },
+          ),
+        );
+        break;
+      }
+      case 'player': {
+        const options = [
+          ...(field.extra ?? []).map((o) => ({ value: o.value, label: t(o.label as MessageKey) })),
+          ...playerOptions,
+        ];
+        group.append(
+          selectInput(options, String(values[field.key] ?? 0), (v) => {
+            values[field.key] = Number(v);
+            render();
+          }),
+        );
+        break;
+      }
+      case 'number': {
+        const input = numberInput(String(values[field.key] ?? ''), String(field.min));
+        input.addEventListener('input', () => {
+          const v = Number(input.value);
+          values[field.key] = Number.isFinite(v) ? Math.min(Math.max(v, field.min), field.max) : 0;
+          refreshPreview();
+        });
+        group.append(input);
+        break;
+      }
+      case 'toggle': {
+        const seg = el('div', 'seg');
+        seg.setAttribute('role', 'group');
+        const aan = values[field.key] === 1;
+        seg.append(
+          segButton(t('opt.yes'), aan, () => {
+            values[field.key] = 1;
+            render();
+          }),
+          segButton(t('opt.no'), !aan, () => {
+            values[field.key] = 0;
+            render();
+          }),
+        );
+        group.append(seg);
+        break;
+      }
+      case 'perPlayer': {
+        const huidig = Array.isArray(values[field.key])
+          ? (values[field.key] as number[])
+          : new Array<number>(n).fill(0);
+        const cells = el('div', 'sb-inputs');
+        for (let i = 0; i < n; i++) {
+          const cell = el('div', 'sb-inputcell');
+          cell.append(el('div', 'trick-player', sbParticipantName(i)));
+          const input = numberInput(String(huidig[i] ?? 0), String(field.min));
+          input.addEventListener('input', () => {
+            const v = Number(input.value);
+            const next = [...(values[field.key] as number[])];
+            next[i] = Number.isFinite(v) ? Math.min(Math.max(v, field.min), field.max) : 0;
+            values[field.key] = next;
+            refreshPreview();
+          });
+          cell.append(input);
+          cells.append(cell);
+        }
+        values[field.key] = huidig;
+        group.append(cells);
+        group.classList.add('sb-perplayer');
+        break;
+      }
     }
-    const pGroup = el('div', 'control-group');
-    pGroup.append(el('span', undefined, t('scorebord.partner')));
-    pGroup.append(
-      selectInput(options, String(partner), (v) => {
-        sbWPartner = Number(v);
-        render();
-      }),
-    );
-    rows.append(pGroup);
+    rows.append(group);
   }
-
-  if (sbw.asksAceLed(sbWContract)) {
-    // Troel: kwam de vierde aas uit? Zo niet, dan ligt het doel een slag hoger.
-    const aceGroup = el('div', 'control-group');
-    aceGroup.append(el('span', undefined, t('scorebord.troelAce')));
-    const aceSeg = el('div', 'seg');
-    aceSeg.setAttribute('role', 'group');
-    aceSeg.append(
-      segButton(t('opt.yes'), sbWAceLed, () => {
-        sbWAceLed = true;
-        render();
-      }),
-      segButton(t('opt.no'), !sbWAceLed, () => {
-        sbWAceLed = false;
-        render();
-      }),
-    );
-    aceGroup.append(aceSeg);
-    rows.append(aceGroup);
-  }
-
-  const tGroup = el('div', 'control-group');
-  tGroup.append(el('span', undefined, t('scorebord.tricks')));
-  const tricksInput = numberInput(sbWTricks, '0');
-  tricksInput.addEventListener('input', () => {
-    sbWTricks = tricksInput.value;
-  });
-  tGroup.append(tricksInput);
-  rows.append(tGroup);
-
   form.append(rows);
 
-  // Toon meteen welk contract er gerekend wordt en wat het doel is.
-  const preview = sbw.computeWiezenRound({
-    contractId: sbWContract,
-    declarer: sbWDeclarer,
-    partner,
-    tricks: Number(sbWTricks) || 0,
-    aceLed: sbWAceLed,
-  });
-  const target = preview.contract.target;
-  form.append(
-    el(
-      'p',
-      'hint',
-      target.tricks === 0
-        ? `${tContract(preview.contract.id)} — ${t('play.goalZero')}`
-        : `${tContract(preview.contract.id)} — ${
-            target.combined
-              ? t('play.goalTogether', { tricks: target.tricks })
-              : t('play.goal', { tricks: target.tricks })
-          }`,
-    ),
-  );
+  // Meteen tonen wat er gerekend wordt, zodat je vóór het toevoegen al ziet of
+  // je goed zit. Getallen werken het voorbeeld bij zonder de hele pagina te
+  // hertekenen — anders spring je bij elke toetsaanslag uit het invoerveld.
+  const labelRegel = el('p', 'hint');
+  const hintRegel = el('p', 'hint');
+  const puntenRij = el('div', 'sb-preview');
+  const puntenCellen: HTMLElement[] = [];
+  for (let i = 0; i < n; i++) {
+    const cell = el('div', 'sb-inputcell');
+    cell.append(el('div', 'trick-player', sbParticipantName(i)));
+    const waarde = el('div', 'strong');
+    puntenCellen.push(waarde);
+    cell.append(waarde);
+    puntenRij.append(cell);
+  }
+  refreshPreview = () => {
+    const preview = game.compute(values, n);
+    labelRegel.textContent = sbRoundLabel({ game: game.id, ...preview });
+    hintRegel.textContent = preview.hintKey
+      ? t(preview.hintKey as MessageKey, sbResolveParams(preview.hintParams ?? {}))
+      : '';
+    hintRegel.hidden = !preview.hintKey;
+    puntenCellen.forEach((cell, i) => {
+      cell.textContent = formatPoints(preview.points[i] ?? 0);
+    });
+  };
+  refreshPreview();
+  form.append(labelRegel, hintRegel, puntenRij);
 
   form.append(
     button(t('scorebord.add'), 'btn primary', () => {
-      const tricks = Number(sbWTricks);
-      const result = sbw.computeWiezenRound({
-        contractId: sbWContract,
-        declarer: sbWDeclarer,
-        partner: currentPartner(),
-        tricks: Number.isFinite(tricks) ? tricks : 0,
-        aceLed: sbWAceLed,
-      });
-      const meta = wiezenRoundMeta(result);
-      sbBoard = scorebord.addRound(board, result.points, wiezenRoundLabel(meta), meta);
+      const result = game.compute(values, n);
+      const meta: scorebord.RoundMeta = {
+        game: game.id,
+        labelKey: result.labelKey,
+        params: result.params,
+      };
+      sbBoard = scorebord.addRound(board, result.points, sbRoundLabel(meta), meta);
       scorebord.save(sbBoard);
-      sbWTricks = '';
-      sbWAceLed = true;
+      // Volgende ronde begint met een schone lei.
+      sbValues[game.id] = game.defaults(n);
       sfxCard();
       render();
     }),
@@ -2880,7 +2918,7 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
     // borden vallen terug op de tekst die toen bewaard werd.
     const meta = board.meta[idx];
     const stored = board.labels[idx];
-    const label = meta ? wiezenRoundLabel(meta) : stored;
+    const label = meta ? sbRoundLabel(meta) : stored;
     tr.append(el('th', 'sb-roundlabel', label && label.length > 0 ? label : String(idx + 1)));
     for (let i = 0; i < board.participants.length; i++) {
       tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));
@@ -2909,36 +2947,30 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
   if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
 
   // Modus wisselen op een lopend bord: koos je bij de start de verkeerde, dan
-  // moest je vroeger opnieuw beginnen en was je stand weg.
+  // moest je vroeger opnieuw beginnen en was je stand weg. Enkel de spellen die
+  // bij dit aantal deelnemers passen staan er.
   const modeGroup = el('div', 'control-group');
   modeGroup.append(el('span', undefined, t('scorebord.mode')));
-  const modeSeg = el('div', 'seg');
+  const modeSeg = el('div', 'seg wrap');
   modeSeg.setAttribute('role', 'group');
-  modeSeg.append(
-    segButton(t('scorebord.modeManual'), board.mode === 'manueel', () => {
-      sbBoard = scorebord.setMode(board, 'manueel');
-      sbMode = 'manueel';
-      saveScorebordMode();
-      scorebord.save(sbBoard);
-      render();
-    }),
-  );
-  const wiezenBtn = segButton(t('scorebord.modeWiezen'), board.mode === 'wiezen', () => {
-    sbBoard = scorebord.setMode(board, 'wiezen');
-    sbMode = 'wiezen';
+  const wissel = (mode: scorebord.ScorebordMode) => {
+    sbBoard = scorebord.setMode(board, mode);
+    sbMode = mode;
     saveScorebordMode();
     scorebord.save(sbBoard);
     render();
-  });
-  if (!scorebord.canUseWiezenMode(board)) wiezenBtn.disabled = true;
-  modeSeg.append(wiezenBtn);
+  };
+  modeSeg.append(
+    segButton(t('scorebord.modeManual'), board.mode === 'manueel', () => wissel('manueel')),
+  );
+  for (const g of sbg.sbGamesFor(board.participants.length)) {
+    modeSeg.append(segButton(t(gameNameKey(g.id)), board.mode === g.id, () => wissel(g.id)));
+  }
   modeGroup.append(modeSeg);
   main.append(modeGroup);
-  if (!scorebord.canUseWiezenMode(board)) {
-    main.append(el('p', 'hint', t('scorebord.wiezenNeedsFour')));
-  }
 
-  main.append(board.mode === 'wiezen' ? wiezenRoundForm(board) : manualRoundForm(board));
+  const autoGame = board.mode === 'manueel' ? undefined : sbg.sbGame(board.mode);
+  main.append(autoGame ? autoRoundForm(board, autoGame) : manualRoundForm(board));
 
   const row = el('div', 'btn-row');
   row.append(

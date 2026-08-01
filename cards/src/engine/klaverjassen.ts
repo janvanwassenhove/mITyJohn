@@ -270,6 +270,47 @@ export interface KlaverjasScore {
   points: number[];
 }
 
+/**
+ * De telling van één ronde, los van het spelverloop (§7). Het scorebord voor een
+ * fysiek spel rekent met dezelfde functie, zodat de app aan tafel niet anders
+ * telt dan tegen de bots.
+ */
+export function scoreKlaverjasRound(input: {
+  /** Kaartpunten per ploeg, inclusief de laatste-slag-bonus (samen 162). */
+  cardPoints: [number, number];
+  roem: [number, number];
+  declaringTeam: number;
+  /** Aantal slagen van de spelende ploeg — bepaalt of het pit is. */
+  declarerTricks: number;
+  config: KlaverjasConfig;
+}): KlaverjasScore {
+  const { cardPoints, roem, declaringTeam, declarerTricks, config } = input;
+  const other = 1 - declaringTeam;
+  const raw: [number, number] = [cardPoints[0] + roem[0], cardPoints[1] + roem[1]];
+
+  // §7: binnen is méér dan de tegenpartij; anders nat en alles naar de tegenpartij.
+  const made = (raw[declaringTeam] as number) > (raw[other] as number);
+  const isPit = declarerTricks === TRICKS_PER_ROUND;
+
+  const points = [0, 0];
+  if (made) {
+    points[declaringTeam] = (raw[declaringTeam] as number) + (isPit ? config.pitBonus : 0);
+    points[other] = raw[other] as number;
+  } else {
+    points[declaringTeam] = 0;
+    points[other] = raw[0] + raw[1];
+  }
+  return {
+    cardPoints: [...cardPoints],
+    roem: [...roem],
+    raw,
+    declaringTeam,
+    made,
+    pit: isPit,
+    points,
+  };
+}
+
 export class KlaverjasGift {
   readonly dealer: number;
   readonly hands: Card[][];
@@ -376,31 +417,17 @@ export class KlaverjasGift {
   private finish(): void {
     const lastTeam = teamOf(this.lastTrickWinner);
     this.teamCardPoints[lastTeam] = (this.teamCardPoints[lastTeam] ?? 0) + LAST_TRICK_BONUS;
-
     const declaringTeam = teamOf(this.declarer as number);
-    const other = 1 - declaringTeam;
-    const cardPoints = [this.teamCardPoints[0] ?? 0, this.teamCardPoints[1] ?? 0];
-    const roem = [this.teamRoem[0] ?? 0, this.teamRoem[1] ?? 0];
-    const raw = [(cardPoints[0] ?? 0) + (roem[0] ?? 0), (cardPoints[1] ?? 0) + (roem[1] ?? 0)];
-
-    // §7: binnen is méér dan de tegenpartij; anders nat en alles naar de tegenpartij.
-    const made = (raw[declaringTeam] as number) > (raw[other] as number);
-    const pit = this.tricksWon.reduce(
-      (sum, n, p) => sum + (teamOf(p) === declaringTeam ? n : 0),
-      0,
-    );
-    const isPit = pit === TRICKS_PER_ROUND;
-
-    const points = [0, 0];
-    if (made) {
-      points[declaringTeam] = (raw[declaringTeam] as number) + (isPit ? this.config.pitBonus : 0);
-      points[other] = raw[other] as number;
-    } else {
-      points[declaringTeam] = 0;
-      points[other] = (raw[0] as number) + (raw[1] as number);
-    }
-
-    this.score = { cardPoints, roem, raw, declaringTeam, made, pit: isPit, points };
+    this.score = scoreKlaverjasRound({
+      cardPoints: [this.teamCardPoints[0] ?? 0, this.teamCardPoints[1] ?? 0],
+      roem: [this.teamRoem[0] ?? 0, this.teamRoem[1] ?? 0],
+      declaringTeam,
+      declarerTricks: this.tricksWon.reduce(
+        (sum, n, p) => sum + (teamOf(p) === declaringTeam ? n : 0),
+        0,
+      ),
+      config: this.config,
+    });
   }
 }
 

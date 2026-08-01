@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import {
   addRound,
-  canUseWiezenMode,
+  canUseMode,
   clear,
   leader,
   load,
@@ -98,41 +98,58 @@ describe('modus wisselen op een lopend bord', () => {
 
   it('weigert wiezen-automodus bij minder dan vier spelers', () => {
     const sb = newScorebord(['Jan', 'Elke'], null, false, 'manueel');
-    expect(canUseWiezenMode(sb)).toBe(false);
+    expect(canUseMode(sb, 'wiezen')).toBe(false);
     expect(setMode(sb, 'wiezen').mode).toBe('manueel');
   });
 
   it('laat vier spelers wel toe', () => {
     const sb = newScorebord(['a', 'b', 'c', 'd']);
-    expect(canUseWiezenMode(sb)).toBe(true);
+    expect(canUseMode(sb, 'wiezen')).toBe(true);
+  });
+
+  it('koppelt elke automodus aan zijn eigen deelnemersaantallen', () => {
+    const drie = newScorebord(['a', 'b', 'c']);
+    const vijf = newScorebord(['a', 'b', 'c', 'd', 'e']);
+    // Wiezen speelt met vier, tarot met drie tot vijf, boerenbridge vanaf drie.
+    expect(canUseMode(drie, 'wiezen')).toBe(false);
+    expect(canUseMode(drie, 'tarot')).toBe(true);
+    expect(canUseMode(drie, 'boerenbridge')).toBe(true);
+    expect(canUseMode(vijf, 'tarot')).toBe(true);
+    expect(canUseMode(vijf, 'klaverjassen')).toBe(false);
+    // Manueel kan altijd.
+    expect(canUseMode(drie, 'manueel')).toBe(true);
   });
 });
 
 describe('rondelabels zijn taalonafhankelijk', () => {
   it('bewaart de ronde gestructureerd, niet als tekst', () => {
     let sb = newScorebord(['Jan', 'Jappe', 'Limme', 'Elke'], null, false, 'wiezen');
-    sb = addRound(sb, [3, 3, -3, -3], 'Vraag & mee — Jan + Jappe · 9/8 slagen', {
-      contractId: 'vraag-en-mee',
-      declarers: [0, 1],
-      tricks: 9,
-      target: 8,
-    });
-    expect(sb.meta[0]).toEqual({
-      contractId: 'vraag-en-mee',
-      declarers: [0, 1],
-      tricks: 9,
-      target: 8,
-    });
+    const meta = {
+      game: 'wiezen' as const,
+      labelKey: 'scorebord.round.wiezen',
+      params: {
+        contract: { i18n: 'contract.vraag-en-mee' },
+        players: { players: [0, 1] },
+        tricks: 9,
+        target: 8,
+      },
+    };
+    sb = addRound(sb, [3, 3, -3, -3], 'Vraag & mee — Jan + Jappe · 9/8 slagen', meta);
+    expect(sb.meta[0]).toEqual(meta);
   });
 
   it('houdt meta in pas bij verwijderen en wissen', () => {
     let sb = newScorebord(['a', 'b', 'c', 'd'], null, false, 'wiezen');
-    const meta = { contractId: 'troel', declarers: [0, 2], tricks: 8, target: 9 };
+    const meta = {
+      game: 'wiezen' as const,
+      labelKey: 'scorebord.round.wiezen',
+      params: { contract: { i18n: 'contract.troel' }, players: { players: [0, 2] }, tricks: 8 },
+    };
     sb = addRound(sb, [1, 1, 1, 1], 'x', meta);
-    sb = addRound(sb, [2, 2, 2, 2], 'y', { ...meta, tricks: 10 });
+    sb = addRound(sb, [2, 2, 2, 2], 'y', { ...meta, params: { ...meta.params, tricks: 10 } });
     sb = removeRound(sb, 0);
     expect(sb.meta).toHaveLength(1);
-    expect(sb.meta[0]?.tricks).toBe(10);
+    expect(sb.meta[0]?.params.tricks).toBe(10);
     expect(resetRounds(sb).meta).toEqual([]);
   });
 

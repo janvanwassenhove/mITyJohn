@@ -48,8 +48,10 @@ reclame, werkt offline en is installeerbaar op je gsm.
   stap door álle regels (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, belote,
   klaverjassen, hartenjagen, boerenbridge, tarot, scorebord), en
   de coach geeft tijdens het spel tips bij wat je nu moet doen.
-- **Scorebord voor een fysiek spel** — hou de stand bij aan tafel, met een automodus
-  voor wiezen die uit contract, teams en aantal slagen zelf de punten berekent.
+- **Scorebord voor een fysiek spel** — hou de stand bij aan tafel. Elk spel heeft een
+  **automodus**: duid aan wat er gebeurde en de app rekent de punten uit, met dezelfde
+  scorefuncties als het spel zelf. Welke spellen je kan kiezen hangt af van het aantal
+  deelnemers.
 - **Drie botniveaus**, statistieken, animaties en geluid.
 - **Nederlands, Engels en Frans**, licht/donker/systeemthema, en alles blijft lokaal
   in `localStorage` — er vertrekt geen data naar een server.
