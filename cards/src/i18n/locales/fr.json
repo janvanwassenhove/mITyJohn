@@ -1,7 +1,7 @@
 {
   "app.title": "Cards",
-  "app.tagline": "Jeux de cartes flamands, à table ou en ligne.",
-  "app.phase": "3 jeux · jouable hors ligne · gratuit",
+  "app.tagline": "Jouez contre des bots, ou tenez les points à table.",
+  "app.phase": "{count} jeux · hors ligne · gratuit",
   "placeholder.heading": "Wiezen",
   "wiezen.intro": "Jouez une session complète de 16 donnes contre trois bots — vous choisissez leur niveau.",
   "placeholder.ruleset": "Règles chargées : {name} (v{version}, {contracts} contrats)",
@@ -676,5 +676,12 @@
   "install.close": "Fermer",
   "install.banner": "Ajoutez Cards à votre écran d'accueil : plein écran et hors ligne.",
   "install.now": "Installer",
-  "install.later": "Plus tard"
+  "install.later": "Plus tard",
+  "tab.nav": "Navigation principale",
+  "tab.play": "Jouer",
+  "tab.scorebord": "Score",
+  "tab.guide": "Règles",
+  "tab.stats": "Stats",
+  "controls.prefs": "Langue et thème",
+  "guide.forGame": "Règles du {game}"
 }

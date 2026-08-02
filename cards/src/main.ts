@@ -210,6 +210,10 @@ const MANILLE_OPTS_KEY = 'cards.manilleOptions';
 let game: GameId = 'wiezen';
 /** Met hoeveel spelers je wil spelen. Stuurt welke speltegels je krijgt. */
 let playerCount = 4;
+/** Staat het voorkeurenblad (taal/thema) open onder de kop? */
+let prefsOpen = false;
+/** Hoe ver de tafel gescrold stond; null = nog niet zelf gescrold. */
+let tafelScroll: number | null = null;
 /** Staat het installatiepaneel open? */
 let installTonen = false;
 /** Balk weggeklikt? Blijft bewaard, zodat hij niet elke keer terugkomt. */
@@ -569,18 +573,53 @@ function resumeGame(): void {
   else scheduleBots();
 }
 
+/** Compacte kop. Taal, thema en geluid stonden hier vroeger permanent uitgeklapt
+ *  — drie rijen knoppen boven élk scherm, ook boven de speeltafel. Dat is de
+ *  duurste plek van een telefoonscherm en het zijn instellingen, geen inhoud.
+ *  Ze zitten nu achter één knop. */
 function topbar(): HTMLElement {
   const header = el('header', 'topbar');
   const left = el('div', 'topbar-left');
   // Zonder deze knop zit je in een spel of scherm vast: er was geen weg terug.
   if (view !== 'home') {
-    left.append(button(`\u2039 ${t('controls.menu')}`, 'btn back', () => goHome()));
+    const terug = button('\u2039', 'btn back', () => goHome());
+    terug.setAttribute('aria-label', t('controls.menu'));
+    left.append(terug);
   }
   const brand = el('div', 'brand');
   brand.innerHTML =
     'Cards<span class="suits" aria-hidden="true"><span class="suit-black">♠</span>' +
     '<span class="suit-red">♥</span><span class="suit-black">♣</span><span class="suit-red">♦</span></span>';
+  left.append(brand);
+
   const controls = el('div', 'controls');
+  const soundBtn = el('button', 'btn icon');
+  soundBtn.type = 'button';
+  soundBtn.append(icoon(soundEnabled() ? 'sound' : 'mute'));
+  soundBtn.addEventListener('click', () => {
+    toggleSound();
+    render();
+  });
+  soundBtn.setAttribute('aria-label', t('controls.sound'));
+  soundBtn.setAttribute('aria-pressed', String(soundEnabled()));
+  const prefsBtn = el('button', 'btn icon');
+  prefsBtn.type = 'button';
+  prefsBtn.append(icoon('prefs'));
+  prefsBtn.addEventListener('click', () => {
+    prefsOpen = !prefsOpen;
+    render();
+  });
+  prefsBtn.setAttribute('aria-label', t('controls.prefs'));
+  prefsBtn.setAttribute('aria-expanded', String(prefsOpen));
+  controls.append(soundBtn, prefsBtn);
+
+  header.append(left, controls);
+  return header;
+}
+
+/** Taal en thema, uitgeklapt onder de kop wanneer je op het tandwiel tikt. */
+function prefsSheet(): HTMLElement {
+  const box = el('div', 'prefs-sheet');
 
   const langGroup = el('div', 'control-group');
   langGroup.append(el('span', undefined, t('controls.language')));
@@ -612,17 +651,85 @@ function topbar(): HTMLElement {
   }
   themeGroup.append(themeSeg);
 
-  const soundBtn = button(soundEnabled() ? '🔊' : '🔇', 'btn sound', () => {
-    toggleSound();
-    render();
-  });
-  soundBtn.setAttribute('aria-label', t('controls.sound'));
-  soundBtn.setAttribute('aria-pressed', String(soundEnabled()));
+  box.append(langGroup, themeGroup);
+  return box;
+}
 
-  controls.append(langGroup, themeGroup, soundBtn);
-  left.append(brand);
-  header.append(left, controls);
-  return header;
+/** De vier plekken waar je naartoe kan. Vroeger stonden die als knoppenrij
+ *  onderaan het startscherm, dus moest je eerst terug naar huis én scrollen om
+ *  bij het scorebord of de regels te raken. */
+// Getekende iconen in plaats van emoji: die laatste vallen per toestel anders
+// uit (op deze bouwmachine werd \u{1F0CF} zelfs een leeg kadertje) en ze nemen
+// de kleur van de actieve tab niet over.
+const TAB_ICONS: Record<string, string> = {
+  sound:
+    '<path d="M11 5 6.5 8.5H3.5v7h3L11 19z"/><path d="M14.5 9.5a3.5 3.5 0 0 1 0 5"/><path d="M17 7a7 7 0 0 1 0 10"/>',
+  mute: '<path d="M11 5 6.5 8.5H3.5v7h3L11 19z"/><path d="m15 9.5 5 5M20 9.5l-5 5"/>',
+  prefs:
+    '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 7.2l1.9 1.1M17.9 15.7l1.9 1.1M4.2 16.8l1.9-1.1M17.9 8.3l1.9-1.1"/>',
+  play: '<path d="M4 7.5A2.5 2.5 0 0 1 6.5 5h5A2.5 2.5 0 0 1 14 7.5v9A2.5 2.5 0 0 1 11.5 19h-5A2.5 2.5 0 0 1 4 16.5z"/><path d="M9.5 3.7 14 2.6a2.5 2.5 0 0 1 3 1.8l2 8.2"/>',
+  scorebord:
+    '<rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M8 8.5h8M8 12h8M8 15.5h5"/>',
+  guide:
+    '<path d="M4 5.5A2 2 0 0 1 6 3.5h5v17H6a2 2 0 0 0-2 2z"/><path d="M20 5.5a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 1 2 2z"/>',
+  stats: '<path d="M4 20h16"/><path d="M7 20v-6M12 20V6M17 20v-9"/>',
+};
+
+const TABS: { view: 'home' | 'scorebord' | 'guide' | 'stats'; icon: string; key: string }[] = [
+  { view: 'home', icon: 'play', key: 'tab.play' },
+  { view: 'scorebord', icon: 'scorebord', key: 'tab.scorebord' },
+  { view: 'guide', icon: 'guide', key: 'tab.guide' },
+  { view: 'stats', icon: 'stats', key: 'tab.stats' },
+];
+
+/** Eén getekend icoon uit de bibliotheek hierboven. Neemt currentColor over,
+ *  dus het volgt vanzelf het thema en de actieve tab. */
+function icoon(naam: string): HTMLElement {
+  const span = el('span', 'ui-icon');
+  span.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    (TAB_ICONS[naam] ?? '') +
+    '</svg>';
+  return span;
+}
+
+function tabIcon(naam: string): HTMLElement {
+  const span = el('span', 'tab-icon');
+  span.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" ' +
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    (TAB_ICONS[naam] ?? '') +
+    '</svg>';
+  return span;
+}
+
+/** De tabbalk hoort niet aan een speeltafel of in de starterswizard: dat zijn
+ *  schermen waar je iets afmaakt, niet rondkijkt. */
+function toonTabs(): boolean {
+  if (view === 'wizard') return false;
+  return view !== 'game' || !liveSession();
+}
+
+function tabbar(): HTMLElement {
+  const nav = el('nav', 'tabbar');
+  nav.setAttribute('aria-label', t('tab.nav'));
+  for (const tab of TABS) {
+    const knop = el('button', view === tab.view ? 'tab active' : 'tab');
+    knop.type = 'button';
+    knop.setAttribute('aria-current', view === tab.view ? 'page' : 'false');
+    knop.append(tabIcon(tab.icon), el('span', 'tab-label', t(tab.key as MessageKey)));
+    knop.addEventListener('click', () => {
+      if (tab.view === 'home') goHome();
+      else if (tab.view === 'guide') openGuide(guideChapter);
+      else {
+        view = tab.view;
+        render();
+      }
+    });
+    nav.append(knop);
+  }
+  return nav;
 }
 
 function optionRow(
@@ -891,9 +998,15 @@ function startScreen(): HTMLElement {
   // Zodra de browser laat weten dat installeren kan, bieden we het aan in plaats
   // van te wachten tot iemand de knop onderaan vindt.
   if (installPrompt && !installBannerWeg && !draaitAlsApp()) main.append(installBanner());
-  main.append(el('span', 'phase', t('app.phase')));
-  main.append(el('h1', undefined, t('app.title')));
-  main.append(el('p', 'tagline', t('app.tagline')));
+  // Stond hier hardgecodeerd op "3 spellen" terwijl het er intussen acht zijn.
+  // Wie hier voor het eerst komt heeft iets aan de belofte; wie al gespeeld
+  // heeft niet meer, en die duwde het alleen maar de startknop uit beeld.
+  const nieuw = loadStats().sessions.length === 0;
+  if (nieuw) {
+    main.append(el('span', 'phase', t('app.phase', { count: GAMES.length })));
+    main.append(el('h1', undefined, t('app.title')));
+    main.append(el('p', 'tagline', t('app.tagline')));
+  }
 
   // Eerst met hoeveel je bent, dan pas welk spel: met drie of vijf kan de app
   // enkel tarot delen, en dat hoort de lijst te tonen in plaats van tegels die
@@ -930,7 +1043,6 @@ function startScreen(): HTMLElement {
                 : game === 'tarot'
                   ? 'tarot.intro'
                   : 'wiezen.intro';
-  main.append(el('p', 'hint', t(bodyKey)));
 
   const hasRestore =
     game === 'manille'
@@ -949,7 +1061,8 @@ function startScreen(): HTMLElement {
                   ? Boolean(ttRestored && !ttRestored.session.finished)
                   : Boolean(restored && !restored.session.finished);
 
-  // Primaire actie: groot en als eerste bereikbaar met de duim.
+  // Primaire actie: groot, en boven de vouw. Ze stond hier onder een alinea
+  // uitleg, waardoor je op een telefoon moest scrollen om te kunnen starten.
   const row = el('div', 'btn-row stack');
   if (liveSession()) {
     // Je stapte via de menuknop uit een lopend spel: hervatten mag niet
@@ -1096,8 +1209,11 @@ function startScreen(): HTMLElement {
     row.append(button(t('game.start'), 'btn primary big', startSession));
   }
   main.append(row);
+  main.append(el('p', 'hint', t(bodyKey)));
 
   // Nieuw? Leer het spel — prominent voor wie het spel niet kent.
+  // Scorebord, regels en statistiek zitten in de tabbalk onderaan; hier blijft
+  // enkel wat bij dít spel hoort staan.
   const learnRow = el('div', 'btn-row stack');
   learnRow.append(
     button(`\u{1F393} ${t('coach.learnButton')}`, 'btn', () => {
@@ -1105,15 +1221,9 @@ function startScreen(): HTMLElement {
       view = 'wizard';
       render();
     }),
-    button(`\u{1F4D6} ${t('guide.button')}`, 'btn', () => openGuide(null)),
-    button(t('scorebord.button'), 'btn', () => {
-      view = 'scorebord';
-      render();
-    }),
-    button(t('stats.button'), 'btn muted', () => {
-      view = 'stats';
-      render();
-    }),
+    button(`\u{1F4D6} ${t('guide.forGame', { game: t(gameNameKey(game)) })}`, 'btn', () =>
+      openGuide(chapterForGame(game, ruleset.id)),
+    ),
   );
   // Enkel wanneer je hem nog kan installeren: in een app die al op het
   // beginscherm staat is die knop alleen maar verwarrend.
@@ -1849,6 +1959,7 @@ function render(): void {
   app.replaceChildren();
   const wrap = el('div', 'wrap game');
   wrap.append(topbar());
+  if (prefsOpen) wrap.append(prefsSheet());
 
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
@@ -1980,7 +2091,26 @@ function render(): void {
     table.append(seat(gift, HUMAN));
     wrap.append(table, actionPanel(gift));
   }
+  if (toonTabs()) wrap.append(tabbar());
+  // Ligt er een tafel? Dan krijgt de schil een vaste hoogte, zodat het
+  // actiepaneel onderaan blijft plakken. Anders moest je op een telefoon eerst
+  // langs de hele tafel scrollen voor je kon bieden of een kaart leggen.
+  const tafel = wrap.querySelector('.table-grid');
+  if (tafel) wrap.classList.add('at-table');
   app.append(wrap);
+  // Past de tafel niet in beeld, dan wil je je eigen hand zien en niet de
+  // ruggen van de bots: die staat onderaan. Keek je zelf naar boven, dan laten
+  // we je daar staan — anders zou elke botzet je terugtrekken.
+  if (tafel instanceof HTMLElement && tafel.scrollHeight > tafel.clientHeight) {
+    const vorige = tafelScroll;
+    const onderaan = vorige === null || vorige >= tafel.scrollHeight - tafel.clientHeight - 40;
+    tafel.scrollTop = onderaan ? tafel.scrollHeight : vorige;
+    tafel.addEventListener('scroll', () => {
+      tafelScroll = tafel.scrollTop;
+    });
+  } else {
+    tafelScroll = null;
+  }
 }
 
 /* ---------- manillen (Fase 4b) ---------- */

@@ -53,6 +53,12 @@ reclame, werkt offline en is installeerbaar op je gsm.
   scorefuncties als het spel zelf. Welke spellen je kan kiezen hangt af van het aantal
   deelnemers, en dat aantal kan je ook op een lopend bord nog wijzigen — schuift er
   iemand aan of stopt iemand ermee, dan past de lijst zich meteen aan.
+- **App-schil in plaats van een lange pagina.** Onderaan een tabbalk (Spelen ·
+  Scorebord · Regels · Statistiek) die overal met de duim bereikbaar is; taal,
+  thema en geluid zitten achter het tandwiel bovenaan in plaats van permanent
+  drie rijen knoppen in beslag te nemen. Aan de speeltafel verdwijnt de tabbalk
+  en blijft het actiepaneel onderaan staan, zodat je nooit moet scrollen om te
+  bieden of een kaart te leggen.
 - **Kies eerst met hoeveel je bent** (3, 4 of 5) — het startscherm toont dan enkel
   de spellen die de app met dat aantal kan delen. Met drie of vijf is dat Frans
   tarot; de andere spellen delen vier handen.

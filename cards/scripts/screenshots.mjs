@@ -155,9 +155,11 @@ const SCENES = [
     },
   },
   {
+    // Regels en scorebord zitten in de tabbalk onderaan, niet meer in een
+    // knoppenrij op het startscherm.
     id: 'gids',
     setup: async (page) => {
-      await click(page, 'Regels & uitleg');
+      await click(page, 'Regels');
       await page.waitForTimeout(200);
     },
   },

@@ -1,7 +1,7 @@
 {
   "app.title": "Cards",
-  "app.tagline": "Flemish card games, at the table or online.",
-  "app.phase": "3 games · plays offline · free",
+  "app.tagline": "Play against bots, or keep score at the real table.",
+  "app.phase": "{count} games · offline · free",
   "placeholder.heading": "Wiezen",
   "wiezen.intro": "Play a full 16-deal session against three bots — you choose how strong they play.",
   "placeholder.ruleset": "Loaded ruleset: {name} (v{version}, {contracts} contracts)",
@@ -676,5 +676,12 @@
   "install.close": "Close",
   "install.banner": "Add Cards to your home screen: full screen and offline.",
   "install.now": "Install",
-  "install.later": "Not now"
+  "install.later": "Not now",
+  "tab.nav": "Main navigation",
+  "tab.play": "Play",
+  "tab.scorebord": "Scoreboard",
+  "tab.guide": "Rules",
+  "tab.stats": "Stats",
+  "controls.prefs": "Language and theme",
+  "guide.forGame": "{game} rules"
 }

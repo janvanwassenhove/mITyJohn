@@ -83,10 +83,15 @@ body {
     color 0.3s ease;
 }
 
+/* App-shell. De onderrand houdt rekening met de tabbalk én met de balk van het
+   toestel zelf (thuisindicator op iPhone) — zonder env() valt de laatste knop
+   onder die streep. */
 .wrap {
   max-width: 34rem;
   margin: 0 auto;
-  padding: 0 1rem 5rem;
+  padding: 0 1rem calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
 }
 
 .wrap.game {
@@ -105,7 +110,7 @@ header.topbar {
   justify-content: space-between;
   gap: 0.5rem;
   margin: 0 -1rem;
-  padding: 0.6rem 1rem;
+  padding: calc(0.6rem + env(safe-area-inset-top, 0px)) 1rem 0.6rem;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -312,13 +317,22 @@ header.topbar {
 
 /* ---------- hero / startscherm ---------- */
 
+/* Op een telefoon staat er geen kaart op een pagina: het scherm ís het scherm.
+   Vanaf tabletbreedte komt de omlijsting terug. */
 main.hero {
-  margin-top: 1.25rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.1rem 1.5rem;
-  box-shadow: var(--shadow);
+  margin-top: 0.9rem;
+  padding: 0.25rem 0 1rem;
+}
+
+@media (min-width: 40rem) {
+  main.hero {
+    margin-top: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem 1.1rem 1.5rem;
+    box-shadow: var(--shadow);
+  }
 }
 
 main.hero h1 {
@@ -359,11 +373,13 @@ main.hero h1 {
 }
 
 /* Spelkeuze als grote, tapbare tegels */
+/* Acht spellen onder elkaar is een scrolloefening; naast elkaar zie je in één
+   oogopslag wat er te spelen valt. */
 .game-tiles {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.6rem;
-  margin: 1rem 0 0.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 0.8rem 0 0.25rem;
 }
 
 @media (min-width: 30rem) {
@@ -374,11 +390,12 @@ main.hero h1 {
 
 .game-tile {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
   width: 100%;
-  min-height: 3.6rem;
-  padding: 0.7rem 0.9rem;
+  min-height: 4.4rem;
+  padding: 0.6rem 0.7rem;
   border: 2px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
@@ -434,6 +451,125 @@ main.hero h1 {
   font-size: 0.78rem;
   color: var(--text-muted);
   line-height: 1.3;
+}
+
+/* Op een smal scherm is de tegelnaam genoeg; de beschrijving zou er twee regels
+   van maken en de acht spellen weer uit beeld duwen. */
+@media (max-width: 29.99rem) {
+  .game-tile .tile-desc {
+    display: none;
+  }
+}
+
+/* ---------- tabbalk ---------- */
+
+.tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: flex;
+  justify-content: space-around;
+  gap: 0.2rem;
+  padding: 0.35rem 0.4rem calc(0.35rem + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+}
+
+.tabbar .tab {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  /* 44px: de maat waarop een duim betrouwbaar raakt. */
+  min-height: 2.75rem;
+  padding: 0.25rem 0.2rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.tabbar .tab .tab-icon {
+  display: block;
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.tabbar .tab .tab-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tabbar .tab .tab-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.tabbar .tab.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.tabbar .tab:active {
+  transform: translateY(1px);
+}
+
+/* Op een breed scherm is een balk over de volle breedte een telefoonpatroon op
+   de verkeerde plek; daar wordt het een zwevende pil in de contentkolom. */
+@media (min-width: 40rem) {
+  .tabbar {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(34rem, calc(100% - 2rem));
+    bottom: 1rem;
+    padding: 0.35rem 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* ---------- voorkeuren onder de kop ---------- */
+
+.prefs-sheet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  margin: 0 -1rem;
+  padding: 0.7rem 1rem;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.btn.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  padding: 0.3rem;
+  border-radius: 999px;
+}
+
+.ui-icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.ui-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Speeltype (gewoon wiezen / kleurenwiezen / café) — zichtbaar, niet weggestopt */
@@ -869,6 +1005,32 @@ button.card.selected:disabled {
 }
 
 /* ---------- actiepaneel (bottom sheet op gsm) ---------- */
+
+/* Speeltafel als app-schil: kop en actiepaneel staan vast, de tafel ertussen
+   schuift. Zonder dit stond het paneel onder de vouw en moest je scrollen om
+   te kunnen bieden — op precies het moment dat je aan zet bent. */
+@media (max-width: 44.99rem) {
+  .wrap.at-table {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    padding-bottom: 0;
+  }
+
+  .wrap.at-table .table-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* Een biedpaneel met tien contracten mag de tafel niet helemaal opeten: het
+     krijgt hoogstens de helft en schuift daarbinnen zelf. */
+  .wrap.at-table .panel {
+    margin-top: auto;
+    max-height: 52dvh;
+    overflow-y: auto;
+  }
+}
 
 .panel {
   position: sticky;

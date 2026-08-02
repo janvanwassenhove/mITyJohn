@@ -1,7 +1,7 @@
 {
   "app.title": "Cards",
-  "app.tagline": "Vlaamse kaartspellen, aan tafel of online.",
-  "app.phase": "3 spellen · offline speelbaar · gratis",
+  "app.tagline": "Kaarten leggen met bots, of de punten bijhouden aan tafel.",
+  "app.phase": "{count} spellen · offline · gratis",
   "placeholder.heading": "Wiezen",
   "wiezen.intro": "Speel een volledige sessie van 16 giften tegen drie bots — jij kiest hoe sterk ze spelen.",
   "placeholder.ruleset": "Geladen ruleset: {name} (v{version}, {contracts} contracten)",
@@ -676,5 +676,12 @@
   "install.close": "Sluiten",
   "install.banner": "Zet Cards op je beginscherm: schermvullend en offline.",
   "install.now": "Installeren",
-  "install.later": "Niet nu"
+  "install.later": "Niet nu",
+  "tab.nav": "Hoofdnavigatie",
+  "tab.play": "Spelen",
+  "tab.scorebord": "Scorebord",
+  "tab.guide": "Regels",
+  "tab.stats": "Statistiek",
+  "controls.prefs": "Taal en thema",
+  "guide.forGame": "Regels van {game}"
 }
