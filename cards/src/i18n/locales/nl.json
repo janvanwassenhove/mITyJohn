@@ -1,7 +1,6 @@
 {
   "app.title": "Cards",
   "app.tagline": "Kaarten leggen met bots, of de punten bijhouden aan tafel.",
-  "app.phase": "{count} spellen · offline · gratis",
   "placeholder.heading": "Wiezen",
   "wiezen.intro": "Speel een volledige sessie van 16 giften tegen drie bots — jij kiest hoe sterk ze spelen.",
   "placeholder.ruleset": "Geladen ruleset: {name} (v{version}, {contracts} contracten)",

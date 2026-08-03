@@ -1088,7 +1088,6 @@ function startScreen(): HTMLElement {
   // heeft niet meer, en die duwde het alleen maar de startknop uit beeld.
   const nieuw = loadStats().sessions.length === 0;
   if (nieuw) {
-    main.append(el('span', 'phase', t('app.phase', { count: GAMES.length })));
     main.append(el('h1', undefined, t('app.title')));
     main.append(el('p', 'tagline', t('app.tagline')));
   }

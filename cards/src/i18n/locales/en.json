@@ -1,7 +1,6 @@
 {
   "app.title": "Cards",
   "app.tagline": "Play against bots, or keep score at the real table.",
-  "app.phase": "{count} games · offline · free",
   "placeholder.heading": "Wiezen",
   "wiezen.intro": "Play a full 16-deal session against three bots — you choose how strong they play.",
   "placeholder.ruleset": "Loaded ruleset: {name} (v{version}, {contracts} contracts)",
