@@ -83,16 +83,20 @@ const VIEWPORTS = {
 
 // Elke scène: waar we heen klikken vanaf het startscherm.
 const SCENES = [
-  { id: 'start', setup: async () => {} },
+  // Het landingsscherm: kaarten tegen bots, of enkel de punten bijhouden.
+  { id: 'splash', setup: async () => {} },
+  { id: 'start', setup: async (page) => await click(page, 'Spelen tegen bots') },
   {
     id: 'wizard',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Leer het spel');
     },
   },
   {
     id: 'spel',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, /Nieuw spel|Start|Verder spelen/);
       await page.waitForTimeout(1400);
     },
@@ -101,6 +105,7 @@ const SCENES = [
     // Hartenjagen heeft als enige spel een doorgeeffase; die is het tonen waard.
     id: 'hartenjagen',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Hartenjagen');
       await click(page, /Nieuw spel|Start/);
       await page.waitForTimeout(700);
@@ -114,6 +119,7 @@ const SCENES = [
     // knoppen hoeveel slagen je haalt — allebei uniek in deze app.
     id: 'boerenbridge',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Boerenbridge');
       await click(page, /Nieuw spel|Start/);
       // Even doorspelen tot een ronde met meer dan één kaart: met één kaart is
@@ -141,6 +147,7 @@ const SCENES = [
     // Tarot: eigen kaartset met atouts en de excuse, en vijf stoelen aan tafel.
     id: 'tarot',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Frans tarot');
       await click(page, '5 spelers');
       await click(page, /Nieuw spel|Start/);
@@ -159,6 +166,7 @@ const SCENES = [
     // knoppenrij op het startscherm.
     id: 'gids',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Regels');
       await page.waitForTimeout(200);
     },
@@ -166,6 +174,7 @@ const SCENES = [
   {
     id: 'scorebord',
     setup: async (page) => {
+      await click(page, 'Spelen tegen bots');
       await click(page, 'Scorebord');
       await page.waitForTimeout(200);
     },

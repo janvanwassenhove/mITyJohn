@@ -167,7 +167,7 @@
   "tile.wiezen": "Four players, every one for themselves. Bid, team up for one deal and take your tricks.",
   "tile.manillen": "Fixed teams, 32 cards. The ten rules them all.",
   "tile.bieden": "Bid your points. The highest bidder leads and sets the trump.",
-  "settings.title": "Settings & rule variants",
+  "settings.title": "Rule variants & settings",
   "coach.learnButton": "New? Learn the game",
   "coach.setting": "Coach (tips while playing)",
   "coach.title": "Coach",
@@ -682,5 +682,11 @@
   "tab.guide": "Rules",
   "tab.stats": "Stats",
   "controls.prefs": "Language and theme",
-  "guide.forGame": "{game} rules"
+  "guide.forGame": "{game} rules",
+  "splash.intro": "What do you need it for today?",
+  "splash.bots": "Play against bots",
+  "splash.botsDesc": "Eight card games, just you and the computer.",
+  "splash.board": "Scoreboard at the table",
+  "splash.boardDesc": "Real cards, real people — the app counts the points.",
+  "settings.hint": "Bot level, and the rules your table plays by."
 }

@@ -98,6 +98,11 @@ body {
   max-width: 60rem;
 }
 
+/* Schermen zonder tabbalk hoeven er onderaan geen plaats voor vrij te houden. */
+.wrap.no-tabs {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+}
+
 /* ---------- topbar ---------- */
 
 header.topbar {
@@ -357,6 +362,12 @@ main.hero h1 {
 }
 
 @media (max-width: 39.99rem) {
+  /* De inleidende zin van het scorebord duwde het opzetscherm net buiten beeld;
+     de titel en de tab zeggen al waar je bent. */
+  .sb-intro {
+    display: none;
+  }
+
   main.hero > h1 {
     font-size: 1.3rem;
     margin: 0.1rem 0 0.3rem;
@@ -422,12 +433,12 @@ main.hero h1 {
 
 .game-tile {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.15rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.55rem;
   width: 100%;
-  min-height: 3.9rem;
-  padding: 0.5rem 0.6rem;
+  min-height: 2.9rem;
+  padding: 0.45rem 0.6rem;
   border: 2px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
@@ -448,6 +459,11 @@ main.hero h1 {
     gap: 0.25rem;
     min-height: 5rem;
   }
+}
+
+/* De naam mag niet over het teken heen breken op een smal scherm. */
+.game-tile .tile-text {
+  min-width: 0;
 }
 
 .game-tile:active {
@@ -476,8 +492,9 @@ main.hero h1 {
    tegel neemt het zwarte teken de accentkleur over zodat de keuze meteen leest. */
 .game-mark {
   display: block;
-  width: 1.5rem;
-  height: 1.5rem;
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .game-mark svg {
@@ -517,6 +534,92 @@ main.hero h1 {
   .game-tile .tile-desc {
     display: none;
   }
+}
+
+/* ---------- landingsscherm ---------- */
+
+main.hero.splash {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  /* De volle hoogte onder de kop, zodat de twee keuzes in het midden staan en
+     niet bovenaan blijven hangen met een leeg scherm eronder. */
+  min-height: calc(100dvh - 9rem);
+}
+
+.topbar.bare .brand {
+  display: none;
+}
+
+.splash-brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.splash-brand .suits {
+  font-size: 1.1rem;
+  letter-spacing: -0.05em;
+}
+
+.splash-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.splash-card {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  padding: 1rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition:
+    border-color 0.15s ease,
+    transform 0.12s ease;
+}
+
+.splash-card:active {
+  transform: translateY(1px);
+}
+
+.splash-card .ui-icon {
+  flex: 0 0 auto;
+  width: 1.9rem;
+  height: 1.9rem;
+  color: var(--accent);
+}
+
+.splash-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.splash-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.splash-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.35;
 }
 
 /* ---------- tabbalk ---------- */
@@ -681,10 +784,10 @@ main.hero h1 {
 
 /* Inklapbare instellingen zodat het startscherm rustig blijft */
 details.settings {
-  margin-top: 1rem;
-  border: 1px solid var(--border);
+  margin-top: 0.9rem;
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
-  background: var(--surface-2);
+  background: var(--surface);
   overflow: hidden;
 }
 
@@ -692,13 +795,44 @@ details.settings > summary {
   min-height: var(--tap);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 0.9rem;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
   font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text);
   cursor: pointer;
   list-style: none;
+}
+
+/* Naam plus één regel wat erin zit: zonder die tweede regel bleek nergens uit
+   dat de regelvarianten van dit spel hier zitten. */
+.settings-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.settings-name {
+  font-weight: 700;
+}
+
+.settings-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* Chevron rechts, zodat het als een open te klappen rij leest. */
+details.settings > summary::after {
+  content: '›';
+  margin-left: auto;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: var(--text-muted);
+  transform: rotate(90deg);
+}
+
+details.settings[open] > summary::after {
+  transform: rotate(-90deg);
 }
 
 details.settings > summary::-webkit-details-marker {
@@ -707,7 +841,8 @@ details.settings > summary::-webkit-details-marker {
 
 details.settings > summary::before {
   content: '⚙';
-  font-size: 1rem;
+  font-size: 1.15rem;
+  color: var(--accent);
 }
 
 details.settings[open] > summary {

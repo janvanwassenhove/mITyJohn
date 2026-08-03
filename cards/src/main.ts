@@ -133,7 +133,10 @@ if (!app) throw new Error('#app ontbreekt');
 
 const RULESET_KEY = 'cards.ruleset';
 let ruleset = getRuleset('vlaams-standaard') as Ruleset;
-let view: 'home' | 'game' | 'stats' | 'scorebord' | 'wizard' | 'guide' = 'home';
+// 'splash' is het scherm waarop je landt: kaarten leggen tegen bots, of enkel
+// de punten bijhouden van een spel aan tafel. Dat zijn twee heel verschillende
+// dingen, en tot nu moest je maar raden dat het tweede ook bestond.
+let view: 'splash' | 'home' | 'game' | 'stats' | 'scorebord' | 'wizard' | 'guide' = 'splash';
 
 // Coach & starterswizard.
 let coachOn = loadCoachEnabled();
@@ -584,10 +587,10 @@ function resumeGame(): void {
  *  duurste plek van een telefoonscherm en het zijn instellingen, geen inhoud.
  *  Ze zitten nu achter één knop. */
 function topbar(): HTMLElement {
-  const header = el('header', 'topbar');
+  const header = el('header', view === 'splash' ? 'topbar bare' : 'topbar');
   const left = el('div', 'topbar-left');
   // Zonder deze knop zit je in een spel of scherm vast: er was geen weg terug.
-  if (view !== 'home') {
+  if (view !== 'home' && view !== 'splash') {
     const terug = button('\u2039', 'btn back', () => goHome());
     terug.setAttribute('aria-label', t('controls.menu'));
     left.append(terug);
@@ -787,7 +790,7 @@ function tabIcon(naam: string): HTMLElement {
 /** De tabbalk hoort niet aan een speeltafel of in de starterswizard: dat zijn
  *  schermen waar je iets afmaakt, niet rondkijkt. */
 function toonTabs(): boolean {
-  if (view === 'wizard') return false;
+  if (view === 'wizard' || view === 'splash') return false;
   return view !== 'game' || !liveSession();
 }
 
@@ -1078,6 +1081,43 @@ function installBanner(): HTMLElement {
   return box;
 }
 
+/** Landingsscherm: twee keuzes, groot en zonder omhaal. */
+function splashScreen(): HTMLElement {
+  const main = el('main', 'hero splash');
+  const merk = el('div', 'splash-brand');
+  merk.innerHTML =
+    'Cards<span class="suits" aria-hidden="true"><span class="suit-black">\u2660</span>' +
+    '<span class="suit-red">\u2665</span><span class="suit-black">\u2663</span>' +
+    '<span class="suit-red">\u2666</span></span>';
+  main.append(merk);
+  main.append(el('p', 'tagline', t('splash.intro')));
+
+  const keuzes = el('div', 'splash-choices');
+  const keuze = (naam: string, titel: string, uitleg: string, bij: () => void): HTMLElement => {
+    const knop = el('button', 'splash-card');
+    knop.type = 'button';
+    knop.append(icoon(naam));
+    const tekst = el('span', 'splash-text');
+    tekst.append(el('span', 'splash-title', titel), el('span', 'splash-desc', uitleg));
+    knop.append(tekst);
+    knop.addEventListener('click', bij);
+    return knop;
+  };
+
+  keuzes.append(
+    keuze('play', t('splash.bots'), t('splash.botsDesc'), () => {
+      view = 'home';
+      render();
+    }),
+    keuze('scorebord', t('splash.board'), t('splash.boardDesc'), () => {
+      view = 'scorebord';
+      render();
+    }),
+  );
+  main.append(keuzes);
+  return main;
+}
+
 function startScreen(): HTMLElement {
   const main = el('main', 'hero');
   // Zodra de browser laat weten dat installeren kan, bieden we het aan in plaats
@@ -1086,11 +1126,6 @@ function startScreen(): HTMLElement {
   // Stond hier hardgecodeerd op "3 spellen" terwijl het er intussen acht zijn.
   // Wie hier voor het eerst komt heeft iets aan de belofte; wie al gespeeld
   // heeft niet meer, en die duwde het alleen maar de startknop uit beeld.
-  const nieuw = loadStats().sessions.length === 0;
-  if (nieuw) {
-    main.append(el('h1', undefined, t('app.title')));
-    main.append(el('p', 'tagline', t('app.tagline')));
-  }
 
   // Eerst met hoeveel je bent, dan pas welk spel: met drie of vijf kan de app
   // enkel tarot delen, en dat hoort de lijst te tonen in plaats van tegels die
@@ -1318,7 +1353,14 @@ function startScreen(): HTMLElement {
   // blijft bereikbaar voor wie het wil.
   const settings = el('details', 'settings');
   const summary = document.createElement('summary');
-  summary.textContent = t('settings.title');
+  // Was één grijze regel onderaan die je makkelijk over het hoofd zag, en waar
+  // niet uit bleek dat de regelvarianten van dít spel erin zitten.
+  const kop = el('span', 'settings-label');
+  kop.append(
+    el('span', 'settings-name', t('settings.title')),
+    el('span', 'settings-desc', t('settings.hint')),
+  );
+  summary.append(kop);
   settings.append(summary);
   const body = el('div', 'settings-body');
 
@@ -2045,7 +2087,7 @@ function endScreen(): HTMLElement {
 function render(): void {
   if (!app) return;
   app.replaceChildren();
-  const wrap = el('div', 'wrap game');
+  const wrap = el('div', view === 'splash' ? 'wrap game no-tabs' : 'wrap game');
   wrap.append(topbar());
   if (prefsPaneel === 'taal') wrap.append(langSheet());
   else if (prefsPaneel === 'thema') wrap.append(prefsSheet());
@@ -2053,7 +2095,9 @@ function render(): void {
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
   const bGift = bSession?.gift ?? null;
-  if (view === 'guide') {
+  if (view === 'splash') {
+    wrap.append(splashScreen());
+  } else if (view === 'guide') {
     wrap.append(guideScreen());
   } else if (view === 'wizard') {
     wrap.append(wizardScreen());
@@ -2910,7 +2954,7 @@ function sbRoundLabel(meta: scorebord.RoundMeta): string {
 function scorebordSetup(): HTMLElement {
   const main = el('main', 'hero');
   main.append(el('h1', undefined, t('scorebord.title')));
-  main.append(el('p', undefined, t('scorebord.intro')));
+  main.append(el('p', 'hint sb-intro', t('scorebord.intro')));
 
   if (sbNames.length === 0) sbNames = ['', '', '', ''];
 

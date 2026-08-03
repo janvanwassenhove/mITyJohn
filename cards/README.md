@@ -53,6 +53,9 @@ reclame, werkt offline en is installeerbaar op je gsm.
   scorefuncties als het spel zelf. Welke spellen je kan kiezen hangt af van het aantal
   deelnemers, en dat aantal kan je ook op een lopend bord nog wijzigen — schuift er
   iemand aan of stopt iemand ermee, dan past de lijst zich meteen aan.
+- **Je landt op een keuzescherm**: kaarten leggen tegen bots, of enkel de punten
+  bijhouden van een spel aan tafel. Dat zijn twee heel verschillende dingen, en
+  het tweede bestond voor veel mensen gewoon niet omdat het onder een knop zat.
 - **App-schil in plaats van een lange pagina.** Onderaan een tabbalk (Spelen ·
   Scorebord · Regels · Statistiek) die overal met de duim bereikbaar is. In de kop
   staat de **taalkeuze als eigen knop met de actieve code erop** (NL / EN / FR) —
