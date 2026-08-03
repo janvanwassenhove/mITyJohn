@@ -297,6 +297,12 @@ header.topbar {
   flex-direction: column;
 }
 
+/* Twee knoppen die samen één rij delen: scheelt een knophoogte op het
+   startscherm, en dat is precies wat de startknop in beeld houdt. */
+.btn-row.split > .btn {
+  flex: 1 1 8rem;
+}
+
 /* Boerenbridge: negen biedknoppen (0 t.e.m. 8) moeten op een gsm in één blok
    passen zonder de rest van het paneel weg te duwen. */
 .btn-row.bids {
@@ -320,8 +326,8 @@ header.topbar {
 /* Op een telefoon staat er geen kaart op een pagina: het scherm ís het scherm.
    Vanaf tabletbreedte komt de omlijsting terug. */
 main.hero {
-  margin-top: 0.9rem;
-  padding: 0.25rem 0 1rem;
+  margin-top: 0.6rem;
+  padding: 0.15rem 0 0.75rem;
 }
 
 @media (min-width: 40rem) {
@@ -336,9 +342,9 @@ main.hero {
 }
 
 main.hero h1 {
-  margin: 0.35rem 0 0.35rem;
+  margin: 0.25rem 0;
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 7vw, 2.1rem);
+  font-size: clamp(1.35rem, 6vw, 2.1rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -346,8 +352,34 @@ main.hero h1 {
 
 .tagline {
   color: var(--text-muted);
-  margin: 0 0 1rem;
-  font-size: 0.95rem;
+  margin: 0 0 0.7rem;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 39.99rem) {
+  main.hero > h1 {
+    font-size: 1.3rem;
+    margin: 0.1rem 0 0.3rem;
+  }
+
+  main.hero > h1 + p {
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    font-size: 0.88rem;
+  }
+}
+
+/* De gidslijst is een lijst: die mag schuiven. Wel zo compact dat er meer dan
+   een handvol hoofdstukken tegelijk in beeld staat. */
+@media (max-width: 39.99rem) {
+  .guide-item {
+    min-height: 3rem;
+    padding: 0.5rem 0.7rem;
+  }
+
+  .guide-item .tile-desc {
+    display: none;
+  }
 }
 
 .phase {
@@ -378,8 +410,8 @@ main.hero h1 {
 .game-tiles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem;
-  margin: 0.8rem 0 0.25rem;
+  gap: 0.45rem;
+  margin: 0.6rem 0 0.25rem;
 }
 
 @media (min-width: 30rem) {
@@ -392,10 +424,10 @@ main.hero h1 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.2rem;
+  gap: 0.15rem;
   width: 100%;
-  min-height: 4.4rem;
-  padding: 0.6rem 0.7rem;
+  min-height: 3.9rem;
+  padding: 0.5rem 0.6rem;
   border: 2px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
@@ -438,6 +470,32 @@ main.hero h1 {
 .guide-item .tile-icon {
   font-size: 1.5rem;
   line-height: 1;
+}
+
+/* Geometrisch spelteken. Rood en zwart zoals aan een echte tafel; op de gekozen
+   tegel neemt het zwarte teken de accentkleur over zodat de keuze meteen leest. */
+.game-mark {
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.game-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.game-mark.rood {
+  color: var(--suit-red);
+}
+
+.game-mark.zwart {
+  color: var(--suit-black);
+}
+
+.game-tile[aria-pressed='true'] .game-mark.zwart {
+  color: var(--accent);
 }
 
 .game-tile .tile-name,
@@ -574,7 +632,7 @@ main.hero h1 {
 
 /* Speeltype (gewoon wiezen / kleurenwiezen / café) — zichtbaar, niet weggestopt */
 .type-picker {
-  margin: 0.75rem 0 0.25rem;
+  margin: 0.5rem 0 0.2rem;
 }
 
 .type-label {

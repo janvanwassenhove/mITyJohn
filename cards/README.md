@@ -54,11 +54,18 @@ reclame, werkt offline en is installeerbaar op je gsm.
   deelnemers, en dat aantal kan je ook op een lopend bord nog wijzigen — schuift er
   iemand aan of stopt iemand ermee, dan past de lijst zich meteen aan.
 - **App-schil in plaats van een lange pagina.** Onderaan een tabbalk (Spelen ·
-  Scorebord · Regels · Statistiek) die overal met de duim bereikbaar is; taal,
-  thema en geluid zitten achter het tandwiel bovenaan in plaats van permanent
-  drie rijen knoppen in beslag te nemen. Aan de speeltafel verdwijnt de tabbalk
-  en blijft het actiepaneel onderaan staan, zodat je nooit moet scrollen om te
-  bieden of een kaart te leggen.
+  Scorebord · Regels · Statistiek) die overal met de duim bereikbaar is. In de kop
+  staat de **taalkeuze als eigen knop met de actieve code erop** (NL / EN / FR) —
+  achter het tandwiel zat ze verstopt, en dat is net de instelling die je moet
+  kunnen vinden als de app in een taal opstart die je niet leest. Het tandwiel
+  houdt het thema. Aan de speeltafel verdwijnt de tabbalk en blijft het
+  actiepaneel onderaan staan, zodat je nooit moet scrollen om te bieden of een
+  kaart te leggen.
+- **Eén geometrische tekenset.** Elk spel heeft een getekend teken in dezelfde
+  meetkunde — de vier kleuren waar ze horen, en voor de andere vier een teken uit
+  dezelfde familie (twee kaarten, een gebarsten hart, een roos, een ster). Rood
+  en zwart zoals aan een echte tafel; op de gekozen tegel neemt het zwarte teken
+  de accentkleur over.
 - **Kies eerst met hoeveel je bent** (3, 4 of 5) — het startscherm toont dan enkel
   de spellen die de app met dat aantal kan delen. Met drie of vijf is dat Frans
   tarot; de andere spellen delen vier handen.

@@ -210,8 +210,14 @@ const MANILLE_OPTS_KEY = 'cards.manilleOptions';
 let game: GameId = 'wiezen';
 /** Met hoeveel spelers je wil spelen. Stuurt welke speltegels je krijgt. */
 let playerCount = 4;
-/** Staat het voorkeurenblad (taal/thema) open onder de kop? */
-let prefsOpen = false;
+/** Welk blad onder de kop openstaat: taal, thema, of geen van beide. */
+let prefsPaneel: 'taal' | 'thema' | null = null;
+/** De taalnamen zelf, altijd in hun eigen taal. */
+const LOCALE_NAMES: Record<string, string> = {
+  nl: 'Nederlands',
+  en: 'English',
+  fr: 'Français',
+};
 /** Hoe ver de tafel gescrold stond; null = nog niet zelf gescrold. */
 let tafelScroll: number | null = null;
 /** Staat het installatiepaneel open? */
@@ -602,35 +608,58 @@ function topbar(): HTMLElement {
   });
   soundBtn.setAttribute('aria-label', t('controls.sound'));
   soundBtn.setAttribute('aria-pressed', String(soundEnabled()));
-  const prefsBtn = el('button', 'btn icon');
+  // Taal apart en met de actieve code erop. Ze zat weggestopt achter het
+  // tandwiel, en dan is ze niet meer terug te vinden — zeker niet als de app
+  // toevallig in een taal opstart die je niet leest.
+  const langBtn = el('button', prefsPaneel === 'taal' ? 'btn icon lang active' : 'btn icon lang');
+  langBtn.type = 'button';
+  langBtn.textContent = getLocale().toUpperCase();
+  langBtn.addEventListener('click', () => {
+    prefsPaneel = prefsPaneel === 'taal' ? null : 'taal';
+    render();
+  });
+  langBtn.setAttribute('aria-label', t('controls.language'));
+  langBtn.setAttribute('aria-expanded', String(prefsPaneel === 'taal'));
+
+  const prefsBtn = el('button', prefsPaneel === 'thema' ? 'btn icon active' : 'btn icon');
   prefsBtn.type = 'button';
   prefsBtn.append(icoon('prefs'));
   prefsBtn.addEventListener('click', () => {
-    prefsOpen = !prefsOpen;
+    prefsPaneel = prefsPaneel === 'thema' ? null : 'thema';
     render();
   });
   prefsBtn.setAttribute('aria-label', t('controls.prefs'));
-  prefsBtn.setAttribute('aria-expanded', String(prefsOpen));
-  controls.append(soundBtn, prefsBtn);
+  prefsBtn.setAttribute('aria-expanded', String(prefsPaneel === 'thema'));
+  controls.append(langBtn, soundBtn, prefsBtn);
 
   header.append(left, controls);
   return header;
 }
 
-/** Taal en thema, uitgeklapt onder de kop wanneer je op het tandwiel tikt. */
-function prefsSheet(): HTMLElement {
+/** Taalkeuze, uitgeklapt onder de kop. Met de volledige taalnaam erbij: 'NL'
+ *  alleen zegt weinig als je de app niet kan lezen. */
+function langSheet(): HTMLElement {
   const box = el('div', 'prefs-sheet');
-
-  const langGroup = el('div', 'control-group');
-  langGroup.append(el('span', undefined, t('controls.language')));
-  const langSeg = el('div', 'seg');
-  langSeg.setAttribute('role', 'group');
+  const groep = el('div', 'control-group');
+  groep.append(el('span', undefined, t('controls.language')));
+  const seg = el('div', 'seg');
+  seg.setAttribute('role', 'group');
   for (const locale of LOCALES) {
-    langSeg.append(
-      segButton(locale.toUpperCase(), getLocale() === locale, () => setLocale(locale)),
+    seg.append(
+      segButton(LOCALE_NAMES[locale] ?? locale.toUpperCase(), getLocale() === locale, () => {
+        prefsPaneel = null;
+        setLocale(locale);
+      }),
     );
   }
-  langGroup.append(langSeg);
+  groep.append(seg);
+  box.append(groep);
+  return box;
+}
+
+/** Thema, uitgeklapt onder de kop wanneer je op het tandwiel tikt. */
+function prefsSheet(): HTMLElement {
+  const box = el('div', 'prefs-sheet');
 
   const themeGroup = el('div', 'control-group');
   themeGroup.append(el('span', undefined, t('controls.theme')));
@@ -651,7 +680,7 @@ function prefsSheet(): HTMLElement {
   }
   themeGroup.append(themeSeg);
 
-  box.append(langGroup, themeGroup);
+  box.append(themeGroup);
   return box;
 }
 
@@ -661,6 +690,57 @@ function prefsSheet(): HTMLElement {
 // Getekende iconen in plaats van emoji: die laatste vallen per toestel anders
 // uit (op deze bouwmachine werd \u{1F0CF} zelfs een leeg kadertje) en ze nemen
 // de kleur van de actieve tab niet over.
+/** Geometrische speltekens. De vier kleuren staan waar ze horen; de vier andere
+ *  spellen krijgen een teken uit dezelfde meetkunde (cirkels, ruiten, hoeken) in
+ *  plaats van emoji. Emoji stonden in vier verschillende tekenstijlen door
+ *  elkaar en vielen per toestel anders uit. */
+const GAME_ICONS: Record<GameId, { pad: string; kleur: 'zwart' | 'rood' }> = {
+  // Schoppen: hartvorm op zijn kop, met steel.
+  wiezen: {
+    pad: 'M12 3 5.4 9.9a4.3 4.3 0 0 0 5.1 6.7L9 21h6l-1.5-4.4a4.3 4.3 0 0 0 5.1-6.7z',
+    kleur: 'zwart',
+  },
+  // Harten: twee cirkelbogen op een punt.
+  manille: { pad: 'M12 20.5 3.9 12.2a5 5 0 0 1 8.1-5.7 5 5 0 0 1 8.1 5.7z', kleur: 'rood' },
+  // Klaveren: drie cirkels en een steel.
+  bieden: {
+    pad: 'M12 2.8a3.5 3.5 0 0 0-2.6 5.8 3.6 3.6 0 1 0 1.7 6.2L9 21h6l-2.1-6.2a3.6 3.6 0 1 0 1.7-6.2A3.5 3.5 0 0 0 12 2.8',
+    kleur: 'zwart',
+  },
+  // Ruiten: de zuivere ruit.
+  klaverjassen: { pad: 'M12 2.5 20 12l-8 9.5L4 12z', kleur: 'rood' },
+  // Belote: twee kaarten naast elkaar, de Franse ploegenvorm.
+  belote: {
+    pad: 'M4.2 6.6 9.8 4.4a1.4 1.4 0 0 1 1.8.8l4.2 11a1.4 1.4 0 0 1-.8 1.8l-5.6 2.2a1.4 1.4 0 0 1-1.8-.8l-4.2-11a1.4 1.4 0 0 1 .8-1.8M14 4.5h4.4a1.4 1.4 0 0 1 1.4 1.4v11.8a1.4 1.4 0 0 1-1.4 1.4H16',
+    kleur: 'zwart',
+  },
+  // Hartenjagen: hetzelfde hart, maar gebarsten.
+  hartenjagen: {
+    pad: 'M12 20.5 3.9 12.2a5 5 0 0 1 8.1-5.7 5 5 0 0 1 8.1 5.7zM12 6.5 10 12h4l-2 5.5',
+    kleur: 'rood',
+  },
+  // Boerenbridge: je voorspelt exact — een roos met een middelpunt.
+  boerenbridge: {
+    pad: 'M12 3.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6M12 7.6a4.4 4.4 0 1 0 0 8.8 4.4 4.4 0 0 0 0-8.8M12 11.2a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6',
+    kleur: 'zwart',
+  },
+  // Tarot: de ster van de atouts, op de ruit gebouwd.
+  tarot: {
+    pad: 'M12 2.2 14.3 9l6.8.2-5.4 4.2 2 6.6-5.7-4-5.7 4 2-6.6L2.9 9.2 9.7 9z',
+    kleur: 'rood',
+  },
+};
+
+function gameIcon(id: GameId): HTMLElement {
+  const info = GAME_ICONS[id];
+  const span = el('span', `game-mark ${info.kleur}`);
+  span.innerHTML =
+    '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true">' +
+    `<path d="${info.pad}"/>` +
+    '</svg>';
+  return span;
+}
+
 const TAB_ICONS: Record<string, string> = {
   sound:
     '<path d="M11 5 6.5 8.5H3.5v7h3L11 19z"/><path d="M14.5 9.5a3.5 3.5 0 0 1 0 5"/><path d="M17 7a7 7 0 0 1 0 10"/>',
@@ -874,11 +954,16 @@ function manilleOptionsPanel(): HTMLElement {
   return box;
 }
 
-function gameTile(id: GameId, icon: string, nameKey: MessageKey, descKey: MessageKey): HTMLElement {
+function gameTile(
+  id: GameId,
+  _icon: string,
+  nameKey: MessageKey,
+  descKey: MessageKey,
+): HTMLElement {
   const tile = el('button', 'game-tile');
   tile.type = 'button';
   tile.setAttribute('aria-pressed', String(game === id));
-  tile.append(el('span', 'tile-icon', icon));
+  tile.append(gameIcon(id));
   const body = el('span', 'tile-text');
   body.append(el('span', 'tile-name', t(nameKey)), el('span', 'tile-desc', t(descKey)));
   tile.append(body);
@@ -1214,7 +1299,7 @@ function startScreen(): HTMLElement {
   // Nieuw? Leer het spel — prominent voor wie het spel niet kent.
   // Scorebord, regels en statistiek zitten in de tabbalk onderaan; hier blijft
   // enkel wat bij dít spel hoort staan.
-  const learnRow = el('div', 'btn-row stack');
+  const learnRow = el('div', 'btn-row split');
   learnRow.append(
     button(`\u{1F393} ${t('coach.learnButton')}`, 'btn', () => {
       wizardStep = 0;
@@ -1227,18 +1312,6 @@ function startScreen(): HTMLElement {
   );
   // Enkel wanneer je hem nog kan installeren: in een app die al op het
   // beginscherm staat is die knop alleen maar verwarrend.
-  if (!draaitAlsApp()) {
-    learnRow.append(
-      button(`\u{1F4F2} ${t('install.button')}`, 'btn muted', () => {
-        // Kan de browser het zelf? Dan meteen zijn venster, zonder tussenstap.
-        if (installPrompt) installNu();
-        else {
-          installTonen = true;
-          render();
-        }
-      }),
-    );
-  }
   main.append(learnRow);
   if (installTonen) main.append(installPanel());
 
@@ -1288,18 +1361,26 @@ function startScreen(): HTMLElement {
   }
   if (!hasRestore && game === 'tarot') body.append(tarotOptionsPanel());
 
-  // Bouwstempel onderaan de instellingen: zo weet je meteen of je de nieuwste
-  // versie voor je hebt (of nog een gecachte).
-  body.append(el('p', 'hint build-id', t('settings.build', { build: BUILD_ID })));
-
-  settings.append(body);
-  main.append(settings);
+  if (!draaitAlsApp()) {
+    const rij = el('div', 'btn-row');
+    rij.append(
+      button(`\u{1F4F2} ${t('install.button')}`, 'btn muted', () => {
+        // Kan de browser het zelf? Dan meteen zijn venster, zonder tussenstap.
+        if (installPrompt) installNu();
+        else {
+          installTonen = true;
+          render();
+        }
+      }),
+    );
+    body.append(rij);
+  }
 
   if (game === 'wiezen') {
-    main.append(
+    body.append(
       el(
         'p',
-        'ruleset',
+        'hint ruleset',
         t('placeholder.ruleset', {
           name: ruleset.name[getLocale()],
           version: ruleset.version,
@@ -1308,6 +1389,14 @@ function startScreen(): HTMLElement {
       ),
     );
   }
+
+  // Bouwstempel onderaan de instellingen: zo weet je meteen of je de nieuwste
+  // versie voor je hebt (of nog een gecachte).
+  body.append(el('p', 'hint build-id', t('settings.build', { build: BUILD_ID })));
+
+  settings.append(body);
+  main.append(settings);
+
   return main;
 }
 
@@ -1959,7 +2048,8 @@ function render(): void {
   app.replaceChildren();
   const wrap = el('div', 'wrap game');
   wrap.append(topbar());
-  if (prefsOpen) wrap.append(prefsSheet());
+  if (prefsPaneel === 'taal') wrap.append(langSheet());
+  else if (prefsPaneel === 'thema') wrap.append(prefsSheet());
 
   const gift = currentGift();
   const mGift = mSession?.gift ?? null;
@@ -4631,15 +4721,15 @@ function playerCountPicker(): HTMLElement {
   }
   box.append(seg);
   const spellen = gamesForPlayers(playerCount);
-  box.append(
-    el(
-      'p',
-      'type-hint',
-      spellen.length === 1
-        ? t('game.playerHintOne', { game: t(gameNameKey(spellen[0]?.id ?? 'tarot')) })
-        : t('game.playerHint', { n: playerCount, count: spellen.length }),
-    ),
-  );
+  if (spellen.length === 1) {
+    box.append(
+      el(
+        'p',
+        'type-hint',
+        t('game.playerHintOne', { game: t(gameNameKey(spellen[0]?.id ?? 'tarot')) }),
+      ),
+    );
+  }
   return box;
 }
 
