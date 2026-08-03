@@ -279,6 +279,11 @@ function playerName(p: number): string {
 }
 
 /** i18n-sleutel voor de naam van een spel. */
+/** De naam van een scorebordmodus, met 'Manueel' voor het handmatige geval. */
+function sbModeName(mode: scorebord.ScorebordMode): string {
+  return mode === 'manueel' ? t('scorebord.modeManual') : t(gameNameKey(mode));
+}
+
 function gameNameKey(id: GameId): MessageKey {
   return (GAMES.find((g) => g.id === id)?.nameKey ?? `game.${id}`) as MessageKey;
 }
@@ -3131,6 +3136,9 @@ function autoRoundForm(board: scorebord.Scorebord, game: sbg.SbGame): HTMLElemen
   let refreshPreview = (): void => {};
 
   const rows = el('div', 'sb-wiezen');
+  // Premies (petit au bout, poignée, chelem) heb je zelden nodig; samengeklapt
+  // blijft het formulier op een telefoon binnen één scherm.
+  const extras = el('div', 'sb-wiezen');
   for (const field of game.fields(values, n)) {
     const group = el('div', 'control-group');
     group.append(el('span', undefined, t(field.label as MessageKey)));
@@ -3213,9 +3221,21 @@ function autoRoundForm(board: scorebord.Scorebord, game: sbg.SbGame): HTMLElemen
         break;
       }
     }
-    rows.append(group);
+    ('extraField' in field && field.extraField ? extras : rows).append(group);
   }
   form.append(rows);
+  if (extras.childElementCount > 0) {
+    const blok = el('details', 'settings sb-extra');
+    const kop = document.createElement('summary');
+    const label = el('span', 'settings-label');
+    label.append(el('span', 'settings-name', t('scorebord.extras')));
+    kop.append(label);
+    blok.append(kop);
+    const lijf = el('div', 'settings-body');
+    lijf.append(extras);
+    blok.append(lijf);
+    form.append(blok);
+  }
 
   // Meteen tonen wat er gerekend wordt, zodat je vóór het toevoegen al ziet of
   // je goed zit. Getallen werken het voorbeeld bij zonder de hele pagina te
@@ -3223,6 +3243,7 @@ function autoRoundForm(board: scorebord.Scorebord, game: sbg.SbGame): HTMLElemen
   const labelRegel = el('p', 'hint');
   const hintRegel = el('p', 'hint');
   const puntenRij = el('div', 'sb-preview');
+  puntenRij.style.gridTemplateColumns = `repeat(${n <= 4 ? n : 3}, minmax(0, 1fr))`;
   const puntenCellen: HTMLElement[] = [];
   for (let i = 0; i < n; i++) {
     const cell = el('div', 'sb-inputcell');
@@ -3265,8 +3286,40 @@ function autoRoundForm(board: scorebord.Scorebord, game: sbg.SbGame): HTMLElemen
   return form;
 }
 
+/** Wat je aan tafel het vaakst bekijkt: wie staat waar. Eén kaartje per
+ *  deelnemer, gesorteerd, en de leider (of winnaar) springt eruit. Dit stond
+ *  vroeger enkel als laatste rij van een brede tabel, en die viel op een
+ *  telefoon buiten beeld — dan zag je van je eigen stand niets. */
+function sbStandings(
+  board: scorebord.Scorebord,
+  totals: number[],
+  lead: number,
+  win: number | null,
+): HTMLElement {
+  const strip = el('div', 'sb-standings');
+  const n = board.participants.length;
+  strip.style.gridTemplateColumns = `repeat(${n <= 4 ? n : 3}, minmax(0, 1fr))`;
+  const orde = board.participants
+    .map((_, i) => i)
+    .sort((a, b) => {
+      const va = totals[a] ?? 0;
+      const vb = totals[b] ?? 0;
+      return board.lowWins ? va - vb : vb - va;
+    });
+  for (const i of orde) {
+    const klasse = i === win ? 'sb-stand win' : i === lead ? 'sb-stand lead' : 'sb-stand';
+    const kaart = el('div', klasse);
+    kaart.append(
+      el('span', 'sb-stand-name', sbParticipantName(i)),
+      el('span', 'sb-stand-points', formatPoints(totals[i] ?? 0)),
+    );
+    strip.append(kaart);
+  }
+  return strip;
+}
+
 function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
-  const main = el('main', 'hero');
+  const main = el('main', 'hero sb-board');
   main.append(el('h1', undefined, t('scorebord.title')));
 
   const totals = scorebord.totals(board);
@@ -3280,52 +3333,101 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
         t('scorebord.winner', { name: sbParticipantName(win), points: totals[win] ?? 0 }),
       ),
     );
-  } else if (lead >= 0) {
-    main.append(el('p', 'hint', t('scorebord.leader', { name: sbParticipantName(lead) })));
   }
 
-  const table = el('table', 'score-table sb-table');
-  const head = el('tr');
-  head.append(el('th', undefined, '#'));
-  for (let i = 0; i < board.participants.length; i++) {
-    head.append(el('th', undefined, sbParticipantName(i)));
-  }
-  head.append(el('th'));
-  table.append(head);
+  // Stand bovenaan, dan meteen het formulier voor de volgende ronde: dat zijn de
+  // twee dingen die je aan tafel nodig hebt. De historiek en de bordinstellingen
+  // klappen daaronder open. Vroeger stond er eerst een tabel die te breed was en
+  // daarna twee rijen instelknoppen — samen goed voor het halve scherm.
+  main.append(sbStandings(board, totals, lead, win));
 
-  board.rounds.forEach((r, idx) => {
-    const tr = el('tr');
-    // Gestructureerde rondes krijgen hun label in de huidige taal; oudere
-    // borden vallen terug op de tekst die toen bewaard werd.
-    const meta = board.meta[idx];
-    const stored = board.labels[idx];
-    const label = meta ? sbRoundLabel(meta) : stored;
-    tr.append(el('th', 'sb-roundlabel', label && label.length > 0 ? label : String(idx + 1)));
+  const autoGame = board.mode === 'manueel' ? undefined : sbg.sbGame(board.mode);
+  main.append(autoGame ? autoRoundForm(board, autoGame) : manualRoundForm(board));
+
+  /* ---- historiek ---- */
+  const hist = el('details', 'settings sb-hist');
+  const histKop = document.createElement('summary');
+  const histLabel = el('span', 'settings-label');
+  histLabel.append(
+    el('span', 'settings-name', t('scorebord.history', { n: board.rounds.length })),
+    el(
+      'span',
+      'settings-desc',
+      board.rounds.length === 0 ? t('scorebord.empty') : t('scorebord.historyHint'),
+    ),
+  );
+  histKop.append(histLabel);
+  hist.append(histKop);
+
+  const histBody = el('div', 'settings-body');
+  if (board.rounds.length > 0) {
+    // De ronderegels zijn lang ("Vraag & mee — Jan + Rita · 9/8 slagen"); de
+    // tabel schuift binnen haar eigen kader in plaats van de punten van het
+    // scherm te duwen.
+    const scroller = el('div', 'sb-scroll');
+    const table = el('table', 'score-table sb-table');
+    const head = el('tr');
+    head.append(el('th', undefined, '#'));
     for (let i = 0; i < board.participants.length; i++) {
-      tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));
+      head.append(el('th', undefined, sbParticipantName(i)));
     }
-    const del = el('td');
-    const btn = button('✕', 'btn muted sb-del', () => {
-      sbBoard = scorebord.removeRound(board, idx);
-      scorebord.save(sbBoard);
-      render();
+    head.append(el('th'));
+    table.append(head);
+
+    board.rounds.forEach((r, idx) => {
+      const tr = el('tr');
+      // Gestructureerde rondes krijgen hun label in de huidige taal; oudere
+      // borden vallen terug op de tekst die toen bewaard werd.
+      const meta = board.meta[idx];
+      const stored = board.labels[idx];
+      const label = meta ? sbRoundLabel(meta) : stored;
+      tr.append(el('th', 'sb-roundlabel', label && label.length > 0 ? label : String(idx + 1)));
+      for (let i = 0; i < board.participants.length; i++) {
+        tr.append(el('td', undefined, formatPoints(r[i] ?? 0)));
+      }
+      const del = el('td');
+      const btn = button('✕', 'btn muted sb-del', () => {
+        sbBoard = scorebord.removeRound(board, idx);
+        scorebord.save(sbBoard);
+        render();
+      });
+      btn.setAttribute('aria-label', t('scorebord.deleteRound'));
+      del.append(btn);
+      tr.append(del);
+      table.append(tr);
     });
-    btn.setAttribute('aria-label', t('scorebord.deleteRound'));
-    del.append(btn);
-    tr.append(del);
-    table.append(tr);
-  });
 
-  const totalRow = el('tr', 'sb-total');
-  totalRow.append(el('th', undefined, t('scorebord.total')));
-  for (let i = 0; i < board.participants.length; i++) {
-    totalRow.append(el('td', undefined, formatPoints(totals[i] ?? 0)));
+    const totalRow = el('tr', 'sb-total');
+    totalRow.append(el('th', undefined, t('scorebord.total')));
+    for (let i = 0; i < board.participants.length; i++) {
+      totalRow.append(el('td', undefined, formatPoints(totals[i] ?? 0)));
+    }
+    totalRow.append(el('td'));
+    table.append(totalRow);
+    scroller.append(table);
+    histBody.append(scroller);
   }
-  totalRow.append(el('td'));
-  table.append(totalRow);
-  main.append(table);
+  hist.append(histBody);
+  main.append(hist);
 
-  if (board.rounds.length === 0) main.append(el('p', 'hint', t('scorebord.empty')));
+  /* ---- bordinstellingen ---- */
+  const setup = el('details', 'settings sb-setup');
+  const setupKop = document.createElement('summary');
+  const setupLabel = el('span', 'settings-label');
+  setupLabel.append(
+    el('span', 'settings-name', t('scorebord.setup')),
+    el(
+      'span',
+      'settings-desc',
+      t('scorebord.setupHint', {
+        n: board.participants.length,
+        mode: sbModeName(board.mode),
+      }),
+    ),
+  );
+  setupKop.append(setupLabel);
+  setup.append(setupKop);
+  const setupBody = el('div', 'settings-body');
 
   // Aantal deelnemers ook hier, niet enkel bij het opzetten: schuift er iemand
   // aan of stopt iemand ermee, dan moest je vroeger een nieuw bord beginnen —
@@ -3356,7 +3458,7 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
     );
   }
   countGroup.append(countSeg);
-  main.append(countGroup);
+  setupBody.append(countGroup);
 
   // Modus wisselen op een lopend bord: koos je bij de start de verkeerde, dan
   // moest je vroeger opnieuw beginnen en was je stand weg. Enkel de spellen die
@@ -3379,10 +3481,7 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
     modeSeg.append(segButton(t(gameNameKey(g.id)), board.mode === g.id, () => wissel(g.id)));
   }
   modeGroup.append(modeSeg);
-  main.append(modeGroup);
-
-  const autoGame = board.mode === 'manueel' ? undefined : sbg.sbGame(board.mode);
-  main.append(autoGame ? autoRoundForm(board, autoGame) : manualRoundForm(board));
+  setupBody.append(modeGroup);
 
   const row = el('div', 'btn-row');
   row.append(
@@ -3401,7 +3500,9 @@ function scorebordBoard(board: scorebord.Scorebord): HTMLElement {
       render();
     }),
   );
-  main.append(row);
+  setupBody.append(row);
+  setup.append(setupBody);
+  main.append(setup);
   return main;
 }
 

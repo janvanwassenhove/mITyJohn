@@ -689,5 +689,10 @@
   "splash.board": "Marque à table",
   "splash.boardDesc": "De vraies cartes, de vraies personnes — les points sont pour nous.",
   "settings.hint": "Les règles de votre table.",
-  "install.label": "Sur l'écran d'accueil"
+  "install.label": "Sur l'écran d'accueil",
+  "scorebord.history": "Manches ({n})",
+  "scorebord.historyHint": "Le tableau complet, où vous pouvez aussi effacer une manche.",
+  "scorebord.setup": "Réglage du tableau",
+  "scorebord.setupHint": "{n} participants · {mode}",
+  "scorebord.extras": "Primes (petit au bout, poignée, chelem)"
 }

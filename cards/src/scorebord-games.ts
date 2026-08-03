@@ -48,12 +48,20 @@ export type LabelParam =
   | { i18n: string };
 export type LabelParams = Record<string, LabelParam>;
 
+/** `extra: true` markeert een veld dat je zelden nodig hebt (premies bij tarot).
+ *  De UI klapt die samen, zodat het formulier op een telefoon kort blijft. */
 export type SbField =
-  | { kind: 'choice'; key: string; label: string; options: { value: string; label: string }[] }
+  | {
+      kind: 'choice';
+      key: string;
+      label: string;
+      options: { value: string; label: string }[];
+      extraField?: boolean;
+    }
   /** Keuze uit de deelnemers; de UI vult de namen in. */
   | { kind: 'player'; key: string; label: string; extra?: { value: string; label: string }[] }
   | { kind: 'number'; key: string; label: string; min: number; max: number }
-  | { kind: 'toggle'; key: string; label: string }
+  | { kind: 'toggle'; key: string; label: string; extraField?: boolean }
   /** Eén getal per deelnemer. */
   | { kind: 'perPlayer'; key: string; label: string; min: number; max: number };
 
@@ -424,11 +432,12 @@ const TAROT: SbGame = {
         })),
       },
       { kind: 'number', key: 'points', label: 'scorebord.tt.points', min: 0, max: 91 },
-      { kind: 'toggle', key: 'half', label: 'scorebord.tt.half' },
+      { kind: 'toggle', key: 'half', extraField: true, label: 'scorebord.tt.half' },
       { kind: 'number', key: 'bouts', label: 'scorebord.tt.bouts', min: 0, max: 3 },
       {
         kind: 'choice',
         key: 'petit',
+        extraField: true,
         label: 'scorebord.tt.petitAuBout',
         options: [
           { value: '0', label: 'scorebord.tt.petitNone' },
@@ -439,6 +448,7 @@ const TAROT: SbGame = {
       {
         kind: 'choice',
         key: 'poignee',
+        extraField: true,
         label: 'scorebord.tt.poignee',
         options: [
           { value: 'none', label: 'tarot.poigneeNone' },
@@ -450,6 +460,7 @@ const TAROT: SbGame = {
       {
         kind: 'choice',
         key: 'chelem',
+        extraField: true,
         label: 'scorebord.tt.chelem',
         options: [
           { value: 'none', label: 'scorebord.tt.chelemNone' },

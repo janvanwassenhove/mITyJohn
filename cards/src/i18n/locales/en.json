@@ -689,5 +689,10 @@
   "splash.board": "Scoreboard at the table",
   "splash.boardDesc": "Real cards, real people — the app counts the points.",
   "settings.hint": "The rules your table plays by.",
-  "install.label": "On your home screen"
+  "install.label": "On your home screen",
+  "scorebord.history": "Rounds ({n})",
+  "scorebord.historyHint": "The full table, where you can also delete a round.",
+  "scorebord.setup": "Board setup",
+  "scorebord.setupHint": "{n} players · {mode}",
+  "scorebord.extras": "Bonuses (petit au bout, poignée, chelem)"
 }

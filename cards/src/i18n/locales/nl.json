@@ -689,5 +689,10 @@
   "splash.board": "Scorebord aan tafel",
   "splash.boardDesc": "Echte kaarten, echte mensen — de app telt de punten.",
   "settings.hint": "De regels die aan jouw tafel gelden.",
-  "install.label": "Op je beginscherm"
+  "install.label": "Op je beginscherm",
+  "scorebord.history": "Rondes ({n})",
+  "scorebord.historyHint": "De volledige tabel, met de mogelijkheid om een ronde te wissen.",
+  "scorebord.setup": "Bord instellen",
+  "scorebord.setupHint": "{n} deelnemers · {mode}",
+  "scorebord.extras": "Premies (petit au bout, poignée, chelem)"
 }

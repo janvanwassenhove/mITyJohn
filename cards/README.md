@@ -48,7 +48,10 @@ reclame, werkt offline en is installeerbaar op je gsm.
   stap door álle regels (basis, gewoon wiezen, kleurenwiezen, manillen, bieden, belote,
   klaverjassen, hartenjagen, boerenbridge, tarot, scorebord), en
   de coach geeft tijdens het spel tips bij wat je nu moet doen.
-- **Scorebord voor een fysiek spel** — hou de stand bij aan tafel. Elk spel heeft een
+- **Scorebord voor een fysiek spel** — hou de stand bij aan tafel. Op een gsm
+  staat de stand bovenaan als kaartje per deelnemer, met daaronder meteen het
+  formulier voor de volgende ronde; de rondetabel en de bordinstellingen klappen
+  daaronder open. Elk spel heeft een
   **automodus**: duid aan wat er gebeurde en de app rekent de punten uit, met dezelfde
   scorefuncties als het spel zelf. Welke spellen je kan kiezen hangt af van het aantal
   deelnemers, en dat aantal kan je ook op een lopend bord nog wijzigen — schuift er

@@ -368,6 +368,12 @@ main.hero h1 {
     display: none;
   }
 
+  /* Op een lopend bord zegt de tabbalk al waar je bent, en de stand eronder
+     laat geen twijfel; die titel kost enkel een regel. */
+  main.hero.sb-board > h1 {
+    display: none;
+  }
+
   main.hero > h1 {
     font-size: 1.3rem;
     margin: 0.1rem 0 0.3rem;
@@ -1547,8 +1553,8 @@ tr.sb-total td {
 }
 
 .sb-newround {
-  margin: 0.9rem 0;
-  padding: 0.85rem;
+  margin: 0.7rem 0;
+  padding: 0.7rem;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-2);
@@ -1556,14 +1562,42 @@ tr.sb-total td {
 
 .sb-inputs,
 .sb-wiezen {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 0.9rem;
-  margin: 0.6rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.5rem 0.7rem;
+  margin: 0.5rem 0;
+}
+
+.sb-wiezen select,
+.sb-wiezen .sb-input,
+.sb-wiezen .seg {
+  width: 100%;
 }
 
 .sb-inputcell {
   text-align: center;
+}
+
+.sb-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(3.5rem, 1fr));
+  gap: 0.3rem;
+  margin: 0.5rem 0 0.2rem;
+  padding: 0.5rem 0.3rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.sb-preview .trick-player {
+  font-size: 0.72rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sb-preview .strong {
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .sb-inputcell .trick-player {
@@ -1572,6 +1606,35 @@ tr.sb-total td {
 
 .sb-inputcell .sb-input {
   width: 4.5rem;
+}
+
+/* Een veld per deelnemer (boerenbridge: voorspeld en gehaald) kreeg zo weinig
+   breedte dat de zes vakjes onder elkaar kwamen — twee kolommen van zes, goed
+   voor het dubbele van een telefoonscherm. Zo'n rij krijgt nu de volle breedte
+   en de vakjes staan naast elkaar. */
+.sb-wiezen .control-group.sb-perplayer,
+.sb-inputs .control-group.sb-perplayer {
+  grid-column: 1 / -1;
+}
+
+.sb-perplayer .sb-inputs {
+  grid-template-columns: repeat(auto-fit, minmax(3.1rem, 1fr));
+  gap: 0.3rem;
+  margin: 0.15rem 0 0;
+}
+
+.sb-perplayer .sb-inputcell .sb-input {
+  width: 100%;
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  text-align: center;
+}
+
+.sb-perplayer .trick-player {
+  font-size: 0.72rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .sb-wiezen .control-group {
@@ -1585,6 +1648,102 @@ tr.sb-total td {
   text-align: left;
   white-space: nowrap;
   font-size: 0.82rem;
+}
+
+/* De ronderegels zijn lang; de tabel schuift binnen haar eigen kader in plaats
+   van de puntenkolommen van het scherm af te duwen. */
+.sb-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.sb-scroll .sb-table {
+  min-width: 100%;
+  width: max-content;
+}
+
+/* ---------- stand ---------- */
+
+.sb-standings {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0.2rem;
+}
+
+.sb-stand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.sb-stand-name {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sb-stand-points {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.sb-stand.lead {
+  border-color: var(--accent);
+}
+
+.sb-stand.lead .sb-stand-points,
+.sb-stand.win .sb-stand-points {
+  color: var(--accent);
+}
+
+.sb-stand.win {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* De twee uitklappers onder het bord staan dichter op elkaar dan de losse
+   instellingenrij op het startscherm. */
+.sb-hist,
+.sb-setup {
+  margin-top: 0.6rem;
+}
+
+/* Een tandwiel klopt voor de bordinstellingen, niet voor de historiek of de
+   premies binnen het rondeformulier. */
+details.sb-hist > summary::before {
+  content: '☰';
+}
+
+details.sb-extra {
+  margin: 0.4rem 0 0;
+  background: var(--surface);
+}
+
+details.sb-extra > summary {
+  min-height: 2.4rem;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+details.sb-extra > summary::before {
+  content: '＋';
+  font-size: 0.95rem;
+}
+
+details.sb-extra[open] > summary::before {
+  content: '－';
+}
+
+details.sb-extra .settings-body {
+  padding: 0.5rem 0.7rem 0.7rem;
 }
 
 /* ---------- animaties ---------- */
