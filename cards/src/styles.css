@@ -703,12 +703,34 @@ main.hero.splash {
 
 .prefs-sheet {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1rem;
+  flex-direction: column;
+  gap: 0.55rem;
   margin: 0 -1rem;
-  padding: 0.7rem 1rem;
+  padding: 0.8rem 1rem 0.9rem;
   background: var(--surface-2);
   border-bottom: 1px solid var(--border);
+}
+
+.prefs-sheet .control-group {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.35rem 0.6rem;
+}
+
+.prefs-sheet .control-group > span {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.prefs-sheet .build-id {
+  margin: 0.1rem 0 0;
+  font-size: 0.72rem;
+}
+
+.btn.small {
+  min-height: 2.2rem;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.85rem;
 }
 
 .btn.icon {

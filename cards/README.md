@@ -61,7 +61,10 @@ reclame, werkt offline en is installeerbaar op je gsm.
   staat de **taalkeuze als eigen knop met de actieve code erop** (NL / EN / FR) —
   achter het tandwiel zat ze verstopt, en dat is net de instelling die je moet
   kunnen vinden als de app in een taal opstart die je niet leest. Het tandwiel
-  houdt het thema. Aan de speeltafel verdwijnt de tabbalk en blijft het
+  ernaast draagt alles wat voor de hele app geldt: thema, botniveau, coach en
+  installeren. Onderaan het startscherm blijft enkel wat bij dát ene spel hoort
+  — en die uitklapper verschijnt alleen bij de drie spellen die echt varianten
+  hebben (wiezen, manillen, tarot). Aan de speeltafel verdwijnt de tabbalk en blijft het
   actiepaneel onderaan staan, zodat je nooit moet scrollen om te bieden of een
   kaart te leggen.
 - **Eén geometrische tekenset.** Elk spel heeft een getekend teken in dezelfde

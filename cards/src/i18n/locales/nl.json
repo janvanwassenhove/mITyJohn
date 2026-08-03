@@ -167,7 +167,7 @@
   "tile.wiezen": "Vier spelers, elk voor zich. Bied, vorm even een team en haal je slagen.",
   "tile.manillen": "Vaste ploegen, 32 kaarten. De tien is de baas.",
   "tile.bieden": "Bied op je punten. Hoogste bieder komt uit en bepaalt de troef.",
-  "settings.title": "Regelvarianten & instellingen",
+  "settings.title": "Regelvarianten van dit spel",
   "coach.learnButton": "Nieuw? Leer het spel",
   "coach.setting": "Coach (tips tijdens het spel)",
   "coach.title": "Coach",
@@ -688,5 +688,6 @@
   "splash.botsDesc": "Acht kaartspellen, alleen tegen de computer.",
   "splash.board": "Scorebord aan tafel",
   "splash.boardDesc": "Echte kaarten, echte mensen — de app telt de punten.",
-  "settings.hint": "Botniveau, en de regels die aan jouw tafel gelden."
+  "settings.hint": "De regels die aan jouw tafel gelden.",
+  "install.label": "Op je beginscherm"
 }

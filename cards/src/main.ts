@@ -660,7 +660,10 @@ function langSheet(): HTMLElement {
   return box;
 }
 
-/** Thema, uitgeklapt onder de kop wanneer je op het tandwiel tikt. */
+/** Alles wat voor de hele app geldt, uitgeklapt onder de kop: thema, hoe sterk
+ *  de bots spelen, de coach, en installeren. Botniveau en coach zaten vroeger
+ *  onderaan het startscherm bij de regelvarianten van één spel, terwijl ze voor
+ *  elk spel gelden. */
 function prefsSheet(): HTMLElement {
   const box = el('div', 'prefs-sheet');
 
@@ -683,7 +686,54 @@ function prefsSheet(): HTMLElement {
   }
   themeGroup.append(themeSeg);
 
-  box.append(themeGroup);
+  const levelSeg = el('div', 'seg');
+  levelSeg.setAttribute('role', 'group');
+  for (const level of BOT_LEVELS) {
+    levelSeg.append(
+      segButton(t(`bots.${level}` as MessageKey), botLevel === level, () => {
+        botLevel = level;
+        try {
+          localStorage.setItem(LEVEL_KEY, level);
+        } catch {
+          /* ignore */
+        }
+        render();
+      }),
+    );
+  }
+  const levelGroup = el('div', 'control-group');
+  levelGroup.append(el('span', undefined, t('bots.level')), levelSeg);
+
+  const coachSeg = el('div', 'seg');
+  coachSeg.setAttribute('role', 'group');
+  coachSeg.append(
+    segButton(t('opt.on'), coachOn, () => setCoach(true)),
+    segButton(t('opt.off'), !coachOn, () => setCoach(false)),
+  );
+  const coachGroup = el('div', 'control-group');
+  coachGroup.append(el('span', undefined, t('coach.setting')), coachSeg);
+
+  box.append(themeGroup, levelGroup, coachGroup);
+
+  if (!draaitAlsApp()) {
+    const rij = el('div', 'control-group');
+    rij.append(
+      el('span', undefined, t('install.label')),
+      button(t('install.button'), 'btn small', () => {
+        prefsPaneel = null;
+        // Kan de browser het zelf? Dan meteen zijn venster, zonder tussenstap.
+        if (installPrompt) installNu();
+        else {
+          installTonen = true;
+          view = 'home';
+          render();
+        }
+      }),
+    );
+    box.append(rij);
+  }
+
+  box.append(el('p', 'hint build-id', t('settings.build', { build: BUILD_ID })));
   return box;
 }
 
@@ -1362,36 +1412,10 @@ function startScreen(): HTMLElement {
   );
   summary.append(kop);
   settings.append(summary);
+  // Botniveau, coach en installeren zaten hier ook; die gelden voor de hele app
+  // en staan nu onder het tandwiel bovenaan. Wat overblijft, hoort echt bij dit
+  // ene spel.
   const body = el('div', 'settings-body');
-
-  const levelSeg = el('div', 'seg');
-  levelSeg.setAttribute('role', 'group');
-  for (const level of BOT_LEVELS) {
-    levelSeg.append(
-      segButton(t(`bots.${level}` as MessageKey), botLevel === level, () => {
-        botLevel = level;
-        try {
-          localStorage.setItem(LEVEL_KEY, level);
-        } catch {
-          /* ignore */
-        }
-        render();
-      }),
-    );
-  }
-  const levelGroup = el('div', 'control-group');
-  levelGroup.append(el('span', undefined, t('bots.level')), levelSeg);
-  body.append(levelGroup);
-
-  const coachSeg = el('div', 'seg');
-  coachSeg.setAttribute('role', 'group');
-  coachSeg.append(
-    segButton(t('opt.on'), coachOn, () => setCoach(true)),
-    segButton(t('opt.off'), !coachOn, () => setCoach(false)),
-  );
-  const coachGroup = el('div', 'control-group');
-  coachGroup.append(el('span', undefined, t('coach.setting')), coachSeg);
-  body.append(coachGroup);
 
   // Regelvarianten horen bij een nieuwe sessie; een hersteld spel heeft de
   // zijne al vastgelegd.
@@ -1401,21 +1425,6 @@ function startScreen(): HTMLElement {
     body.append(game === 'manille' ? manilleOptionsPanel() : wiezenOptionsPanel());
   }
   if (!hasRestore && game === 'tarot') body.append(tarotOptionsPanel());
-
-  if (!draaitAlsApp()) {
-    const rij = el('div', 'btn-row');
-    rij.append(
-      button(`\u{1F4F2} ${t('install.button')}`, 'btn muted', () => {
-        // Kan de browser het zelf? Dan meteen zijn venster, zonder tussenstap.
-        if (installPrompt) installNu();
-        else {
-          installTonen = true;
-          render();
-        }
-      }),
-    );
-    body.append(rij);
-  }
 
   if (game === 'wiezen') {
     body.append(
@@ -1431,12 +1440,12 @@ function startScreen(): HTMLElement {
     );
   }
 
-  // Bouwstempel onderaan de instellingen: zo weet je meteen of je de nieuwste
-  // versie voor je hebt (of nog een gecachte).
-  body.append(el('p', 'hint build-id', t('settings.build', { build: BUILD_ID })));
-
-  settings.append(body);
-  main.append(settings);
+  // Enkel tonen wanneer er ook echt iets in staat: vijf van de acht spellen
+  // hebben geen regelvarianten, en dan is een lege uitklapper alleen ruis.
+  if (body.childElementCount > 0) {
+    settings.append(body);
+    main.append(settings);
+  }
 
   return main;
 }

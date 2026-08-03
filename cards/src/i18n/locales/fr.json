@@ -167,7 +167,7 @@
   "tile.wiezen": "Quatre joueurs, chacun pour soi. Enchérissez, faites équipe le temps d'une donne et prenez vos plis.",
   "tile.manillen": "Équipes fixes, 32 cartes. Le dix est roi.",
   "tile.bieden": "Enchérissez vos points. Le plus offrant entame et fixe l'atout.",
-  "settings.title": "Variantes & réglages",
+  "settings.title": "Variantes de ce jeu",
   "coach.learnButton": "Nouveau ? Apprenez le jeu",
   "coach.setting": "Coach (conseils en cours de partie)",
   "coach.title": "Coach",
@@ -688,5 +688,6 @@
   "splash.botsDesc": "Huit jeux de cartes, vous contre l'ordinateur.",
   "splash.board": "Marque à table",
   "splash.boardDesc": "De vraies cartes, de vraies personnes — les points sont pour nous.",
-  "settings.hint": "Niveau des bots, et les règles de votre table."
+  "settings.hint": "Les règles de votre table.",
+  "install.label": "Sur l'écran d'accueil"
 }
