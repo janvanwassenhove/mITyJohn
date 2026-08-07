@@ -17,6 +17,11 @@
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 8%);
   --shadow: 0 4px 16px rgb(0 0 0 / 12%);
   --shadow-lg: 0 12px 40px rgb(0 0 0 / 18%);
+  /* Inkt op een kaartvlak. Buiten de themablokken, want een kaart is in beide
+     thema's licht: met de donkere --suit-black (#e8e4db) stonden schoppen en
+     klaveren licht op licht en waren ze zo goed als onzichtbaar. */
+  --card-ink: #1b1a19;
+  --card-ink-red: #c02a2f;
 }
 
 :root[data-theme='light'] {
@@ -1105,7 +1110,7 @@ details.settings[open] > summary {
   border: 1px solid var(--border-strong);
   border-radius: 0.42rem;
   background: var(--card-face);
-  color: var(--suit-black);
+  color: var(--card-ink);
   font: inherit;
   font-weight: 700;
   line-height: 1;
@@ -1125,7 +1130,7 @@ details.settings[open] > summary {
 }
 
 .card.red {
-  color: var(--suit-red);
+  color: var(--card-ink-red);
 }
 
 /* Speelbare kaarten in je eigen hand: groter en duidelijk aanraakbaar.
@@ -1144,25 +1149,38 @@ details.settings[open] > summary {
 
 button.card:not(:disabled) {
   cursor: pointer;
+  transform: translateY(-4px);
   border-color: var(--accent);
   box-shadow:
-    0 2px 8px rgb(0 0 0 / 22%),
-    inset 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+    0 4px 10px rgb(0 0 0 / 26%),
+    inset 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
 }
 
 button.card:not(:disabled):hover,
 button.card:not(:disabled):focus-visible {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 18px rgb(0 0 0 / 28%);
+  transform: translateY(-9px);
+  box-shadow: 0 10px 20px rgb(0 0 0 / 30%);
   outline: none;
 }
 
-/* Niet-speelbare kaarten blijven dekkend (anders schijnt het vilt erdoor) maar
-   duidelijk grijzer, zodat de speelbare kaarten meteen opvallen. */
+/* Niet-speelbare kaarten blijven dekkend (anders schijnt het vilt erdoor) en
+   herkenbaar. Hier stond grayscale(0.85), en dat haalde net het enige weg wat
+   je op een kaart écht moet zien: of ze rood of zwart is. Tijdens de biedronde
+   is je hele hand niet-speelbaar, dus zat je precies op het moment dat je je
+   hand moet inschatten naar een grijze rij te kijken. Nu een doffer kaartvlak
+   en een rustige rand; de kleur blijft. */
 button.card:disabled {
-  filter: grayscale(0.85) brightness(0.86);
+  background: color-mix(in srgb, var(--card-face) 74%, var(--border));
   border-color: var(--border);
   box-shadow: none;
+}
+
+/* Is er niets speelbaar (biedronde, of een bot aan zet), dan valt er ook niets
+   te onderscheiden — dan blijft de hand gewoon zoals ze is. */
+.hand:not(:has(button.card:not(:disabled))) button.card:disabled {
+  background: var(--card-face);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Hartenjagen: de drie kaarten die je klaarlegt om door te geven. Ze moeten er
@@ -1832,7 +1850,7 @@ main.hero {
     color-mix(in srgb, var(--gold) 30%, var(--card-face))
   );
   border-color: var(--gold);
-  color: color-mix(in srgb, var(--suit-black) 82%, var(--gold));
+  color: color-mix(in srgb, var(--card-ink) 82%, var(--gold));
 }
 
 .card.trump .card-suit {
