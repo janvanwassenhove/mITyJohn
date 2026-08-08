@@ -20,7 +20,7 @@ Daarna start hij schermvullend en werkt hij offline.
 
 ![Het startscherm van Cards op gsm: drie speltegels en één grote startknop](/screenshots/cards-page-1.webp)
 
-## Negen speeltypes
+## Acht spellen, wiezen in twee vormen
 
 **Wiezen** in twee vormen. Bij **gewoon wiezen** wordt de laatste kaart omgedraaid en bepaalt die de troef. Bij **kleurenwiezen** ligt er niets open: wie vraagt, noemt zelf de kleur — *"ik vraag in harten"* — en dat verklapt meteen iets over zijn hand. Verder zijn de regels identiek, dus je kiest gewoon de vorm die bij jouw tafel hoort.
 
