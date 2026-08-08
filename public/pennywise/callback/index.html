@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pennywise — Returning to the app</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="referrer" content="no-referrer">
+<style>
+  :root{
+    --ink:#16171a;--ink-soft:#4a4d55;--paper:#fbfaf7;--rule:#d8d5cd;--accent:#1f5c4a;--warn:#8a3324;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;min-height:100vh;display:grid;place-items:center;
+    background:var(--paper);color:var(--ink);
+    font:400 17px/1.6 ui-serif, Georgia, "Times New Roman", serif;
+    padding:2rem 1.5rem;
+  }
+  .card{max-width:32rem;width:100%}
+  .eyebrow{
+    font:500 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 1rem;
+  }
+  h1{font-size:1.6rem;line-height:1.2;font-weight:600;margin:0 0 .75rem;letter-spacing:-.01em}
+  p{margin:0 0 1rem;color:var(--ink-soft)}
+  .hidden{display:none}
+  .code-box{
+    display:flex;gap:.5rem;align-items:stretch;margin:1.25rem 0;
+  }
+  code{
+    flex:1;min-width:0;overflow-x:auto;white-space:nowrap;
+    font:400 14px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:rgba(31,92,74,.07);border:1px solid var(--rule);border-radius:4px;
+    padding:.65rem .75rem;color:var(--ink);
+  }
+  button{
+    font:500 13px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.06em;text-transform:uppercase;
+    background:var(--accent);color:var(--paper);border:0;border-radius:4px;
+    padding:0 1rem;cursor:pointer;
+  }
+  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  .err{color:var(--warn)}
+  .foot{
+    margin-top:2rem;padding-top:1rem;border-top:1px solid var(--rule);
+    font:400 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--ink:#e8e6e1;--ink-soft:#a3a29d;--paper:#141513;--rule:#33352f;--accent:#7fc4ac;--warn:#e0836f}
+    code{background:rgba(127,196,172,.12)}
+  }
+</style>
+</head>
+<body>
+<main class="card">
+
+  <p class="eyebrow">Pennywise</p>
+
+  <div id="ok" class="hidden">
+    <h1>Authorisation complete</h1>
+    <p>Handing this back to the Pennywise app on your computer. You can close this tab once the app confirms the connection.</p>
+    <p>If nothing happened, copy the code below and paste it into the app.</p>
+    <div class="code-box">
+      <code id="code">—</code>
+      <button id="copy" type="button">Copy</button>
+    </div>
+  </div>
+
+  <div id="fail" class="hidden">
+    <h1 class="err">Authorisation did not complete</h1>
+    <p id="reason">The bank did not return an authorisation code. Start the connection again from the Pennywise app.</p>
+  </div>
+
+  <p class="foot">This page holds nothing. The code below is single-use, expires within minutes, and is worthless without your application's private key, which never leaves your computer.</p>
+
+</main>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var code  = params.get('code');
+  var state = params.get('state');
+  var error = params.get('error');
+
+  if (!code || error) {
+    document.getElementById('fail').classList.remove('hidden');
+    if (error) {
+      document.getElementById('reason').textContent =
+        'The bank reported: ' + error + '. Start the connection again from the Pennywise app.';
+    }
+    return;
+  }
+
+  document.getElementById('ok').classList.remove('hidden');
+  document.getElementById('code').textContent = code;
+
+  document.getElementById('copy').addEventListener('click', function () {
+    navigator.clipboard.writeText(code).then(function () {
+      var b = document.getElementById('copy');
+      b.textContent = 'Copied';
+      setTimeout(function () { b.textContent = 'Copy'; }, 2000);
+    });
+  });
+
+  // Hand off to the desktop app via its registered protocol.
+  var deep = 'pennywise://auth/callback?code=' + encodeURIComponent(code) +
+             (state ? '&state=' + encodeURIComponent(state) : '');
+  window.location.href = deep;
+
+  // Clear the code out of the address bar and browser history entry.
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+})();
+</script>
+</body>
+</html>
