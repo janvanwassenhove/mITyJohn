@@ -139,7 +139,11 @@ a:hover { color: var(--text); }
   margin: 0;
   transition: transform var(--hover-duration) var(--hover-ease);
 }
-.about-media:hover img { transform: translateY(-3px); }
+/* a media column can hold one image, or a stacked pair (photo + collage) */
+.about-media.stack { display: grid; gap: 14px; }
+.about-media figure { margin: 0; }
+.about-media > img:hover,
+.about-media figure:hover img { transform: translateY(-3px); }
 .about-cap {
   display: block;
   margin-top: 8px;
