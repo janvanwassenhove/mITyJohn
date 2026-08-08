@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pennywise — Terms of Use</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="Terms of use for Pennywise, a local-only personal finance reporting application.">
+<style>
+  :root{
+    --ink:#16171a;
+    --ink-soft:#4a4d55;
+    --paper:#fbfaf7;
+    --rule:#d8d5cd;
+    --accent:#1f5c4a;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:400 17px/1.65 ui-serif, Georgia, "Times New Roman", serif;
+  }
+  .wrap{max-width:44rem;margin:0 auto;padding:4rem 1.5rem 6rem}
+  .eyebrow{
+    font:500 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    margin:0 0 1.25rem;
+  }
+  h1{
+    font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.15;font-weight:600;
+    margin:0 0 .5rem;letter-spacing:-.015em;
+  }
+  .stand{color:var(--ink-soft);margin:0 0 2rem;font-size:1.05rem}
+  .meta{
+    font:400 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft);border-top:1px solid var(--rule);
+    padding-top:1rem;margin:0 0 3rem;
+  }
+  h2{
+    font:600 13px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+    margin:3rem 0 .85rem;
+  }
+  h2:first-of-type{margin-top:0}
+  p{margin:0 0 1.1rem}
+  ul{margin:0 0 1.1rem;padding-left:1.15rem}
+  li{margin-bottom:.5rem}
+  a{color:var(--accent);text-underline-offset:.18em}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  strong{font-weight:600}
+  .callout{
+    border-left:3px solid var(--accent);padding:.15rem 0 .15rem 1.15rem;
+    margin:0 0 1.1rem;color:var(--ink-soft);
+  }
+  footer{
+    margin-top:4rem;padding-top:1.25rem;border-top:1px solid var(--rule);
+    font:400 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--ink:#e8e6e1;--ink-soft:#a3a29d;--paper:#141513;--rule:#33352f;--accent:#7fc4ac}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <p class="eyebrow">Pennywise</p>
+  <h1>Terms of Use</h1>
+  <p class="stand">Pennywise is a personal project, offered as-is, that runs on your own machine and reads your own accounts. These terms set out what it does, what it does not do, and where responsibility sits.</p>
+  <p class="meta">Last updated: 8 August 2026</p>
+
+  <h2>Scope</h2>
+  <p>These terms apply to the Pennywise desktop application. By installing or using it, you accept them. If you do not, do not use the application.</p>
+  <p>Pennywise is built and maintained by Jan Van Wassenhove (mITy.John) as a personal, non-commercial project. It is not a company, not a financial institution, and not a regulated service.</p>
+
+  <h2>What the application does</h2>
+  <p>Pennywise reads account information you explicitly authorise, stores it locally in encrypted form, and produces reports from it. It is a reporting tool and nothing else.</p>
+  <p class="callout"><strong>Read-only, by design.</strong> Pennywise requests account information access only. It cannot initiate, modify, or cancel payments, transfers, or standing orders, and it never requests the permissions that would make that possible.</p>
+
+  <h2>Your accounts, your authorisation</h2>
+  <p>You may only use Pennywise to access accounts you hold or are lawfully authorised to access. Each account holder completes their bank's own authentication themselves; you cannot authorise someone else's account on their behalf, and you should not attempt to.</p>
+  <p>Automatic retrieval runs through Enable Banking Oy, a regulated Account Information Service Provider. Their own terms and privacy notice apply to that part of the chain, alongside these terms. Some uses of their free tier are restricted to your own accounts — respecting those restrictions is your responsibility.</p>
+
+  <h2>Your passphrase and your data</h2>
+  <p>Your data is encrypted with a key derived from a passphrase only you hold. There is no recovery mechanism, no backdoor, and no reset. If you lose the passphrase, the data is unrecoverable.</p>
+  <p>Keeping backups is your responsibility. So is the security of the device the application runs on: local encryption protects the stored data, but it cannot protect you from an already-compromised machine.</p>
+
+  <h2>Not financial advice</h2>
+  <p>Reports, categories, forecasts, and loan calculations are informational. They are computed from data that may be incomplete, delayed, or wrong, and from figures you entered yourself. Loan schedules in particular are modelled locally, because banks do not expose loan data through open banking, so they are an approximation until you reconcile them against your own statements and annual certificates.</p>
+  <p>Nothing the application produces is financial, tax, accounting, or legal advice. Do not rely on it for filings, declarations, or decisions with consequences without checking against your bank's own statements. Where figures differ, your bank is right.</p>
+
+  <h2>Dependence on third parties</h2>
+  <p>Automatic retrieval depends on your banks' open banking interfaces and on Enable Banking. Banks change formats, impose rate limits, expire consents, and take services offline. Any of this can interrupt or stop automatic retrieval without notice and outside anyone's control. Manual file import remains available as a fallback.</p>
+
+  <h2>No warranty</h2>
+  <p>The application is provided "as is" and "as available", without warranty of any kind, express or implied, including fitness for a particular purpose, accuracy of data, uninterrupted operation, or freedom from error.</p>
+
+  <h2>Liability</h2>
+  <p>To the fullest extent permitted by law, the author is not liable for any loss or damage arising from use of the application, including lost or corrupted data, missed payments, incorrect reports, or decisions taken on the basis of its output. Nothing here excludes liability that cannot lawfully be excluded, including for wilful misconduct.</p>
+
+  <h2>Changes and discontinuation</h2>
+  <p>The application may change, and development may stop at any time, without obligation to provide updates, fixes, or support. These terms may be updated; the date at the top will change accordingly, and continued use after that constitutes acceptance.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by Belgian law. Mandatory consumer protection rights in your country of residence are unaffected.</p>
+
+  <h2>Contact</h2>
+  <p><a href="mailto:privacy@mityjohn.com">privacy@mityjohn.com</a></p>
+
+  <footer>
+    <p>Pennywise · privacy@mityjohn.com · <a href="/pennywise/privacy">Privacy Notice</a></p>
+  </footer>
+
+</main>
+</body>
+</html>

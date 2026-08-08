@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pennywise — Privacy Notice</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="Privacy notice for Pennywise, a local-only personal finance reporting application.">
+<style>
+  :root{
+    --ink:#16171a;
+    --ink-soft:#4a4d55;
+    --paper:#fbfaf7;
+    --rule:#d8d5cd;
+    --accent:#1f5c4a;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font:400 17px/1.65 ui-serif, Georgia, "Times New Roman", serif;
+  }
+  .wrap{max-width:44rem;margin:0 auto;padding:4rem 1.5rem 6rem}
+  .eyebrow{
+    font:500 12px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+    margin:0 0 1.25rem;
+  }
+  h1{
+    font-size:clamp(1.9rem,5vw,2.6rem);line-height:1.15;font-weight:600;
+    margin:0 0 .5rem;letter-spacing:-.015em;
+  }
+  .stand{color:var(--ink-soft);margin:0 0 2rem;font-size:1.05rem}
+  .meta{
+    font:400 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft);border-top:1px solid var(--rule);
+    padding-top:1rem;margin:0 0 3rem;
+  }
+  h2{
+    font:600 13px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+    margin:3rem 0 .85rem;
+  }
+  h2:first-of-type{margin-top:0}
+  p{margin:0 0 1.1rem}
+  ul{margin:0 0 1.1rem;padding-left:1.15rem}
+  li{margin-bottom:.5rem}
+  a{color:var(--accent);text-underline-offset:.18em}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+  strong{font-weight:600}
+  code{
+    font:400 .88em/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    background:rgba(31,92,74,.07);padding:.1em .35em;border-radius:3px;
+  }
+  .callout{
+    border-left:3px solid var(--accent);padding:.15rem 0 .15rem 1.15rem;
+    margin:0 0 1.1rem;color:var(--ink-soft);
+  }
+  footer{
+    margin-top:4rem;padding-top:1.25rem;border-top:1px solid var(--rule);
+    font:400 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:var(--ink-soft);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--ink:#e8e6e1;--ink-soft:#a3a29d;--paper:#141513;--rule:#33352f;--accent:#7fc4ac}
+    code{background:rgba(127,196,172,.12)}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <p class="eyebrow">Pennywise</p>
+  <h1>Privacy Notice</h1>
+  <p class="stand">Pennywise is a personal finance reporting application that runs entirely on your own computer. This notice explains what it touches, where that stays, and what never happens to it.</p>
+  <p class="meta">Last updated: 8 August 2026</p>
+
+  <h2>Who is responsible</h2>
+  <p>Pennywise is built and maintained by Jan Van Wassenhove (mITy.John) as a personal, non-commercial project. For any question about this notice or about data handling, write to <a href="mailto:privacy@mityjohn.com">privacy@mityjohn.com</a>.</p>
+
+  <h2>What Pennywise is</h2>
+  <p>Pennywise is a desktop application you install on your own machine. It reads bank account information you explicitly authorise, stores it locally in encrypted form, and produces reports and charts from it. There is no Pennywise account, no server, and no hosted component. Nothing you do in the application is visible to anyone else, including its author.</p>
+  <p class="callout"><strong>Pennywise is read-only.</strong> It requests account information access only. It cannot initiate, modify, or cancel a payment, and it never asks for the permission that would allow it to.</p>
+
+  <h2>What data it handles</h2>
+  <ul>
+    <li><strong>Account information</strong> retrieved from banks you link: account holder name, account identifiers such as IBAN, balances, and transactions including dates, amounts, counterparty names and account numbers, and payment references.</li>
+    <li><strong>Statement files</strong> you import yourself, such as CSV or CODA exports downloaded from your online banking.</li>
+    <li><strong>Information you enter</strong>, such as loan terms, categories, budgets, and labels for household members.</li>
+    <li><strong>Application settings</strong>, such as your category rules and sync preferences.</li>
+  </ul>
+  <p>All of it is financial data about you and the people in your household whose accounts you are authorised to view. It is treated accordingly.</p>
+
+  <h2>Where it is stored</h2>
+  <p>On your device only, in an encrypted database. The encryption key is derived from a passphrase that only you know, using a memory-hard key derivation function. Exports and backups are encrypted with the same scheme.</p>
+  <p>Your passphrase is never stored anywhere in recoverable form and is never transmitted. If you lose it, the data cannot be recovered — not by you, and not by anyone else. That is the intended trade-off.</p>
+
+  <h2>What never happens</h2>
+  <ul>
+    <li>No data is sent to a Pennywise server, because there is no Pennywise server.</li>
+    <li>No analytics, telemetry, crash reporting, or usage tracking of any kind.</li>
+    <li>No advertising, no profiling, no sale or sharing of data with anyone.</li>
+    <li>No use of your data to train machine learning models.</li>
+    <li>No cloud processing. Optional automatic categorisation, if you enable it, runs on your own machine.</li>
+  </ul>
+  <p>The application enforces this technically: outbound network requests are restricted to an allowlist containing only the services described below.</p>
+
+  <h2>The one third party involved</h2>
+  <p>To read your accounts automatically, Pennywise connects through <strong>Enable Banking Oy</strong> (Espoo, Finland), a registered Account Information Service Provider supervised by the Finnish Financial Supervisory Authority. You can verify their authorisation in the European Banking Authority register.</p>
+  <p>Enable Banking acts as the regulated conduit between Pennywise and your bank. Your account data passes through their infrastructure in transit. Per their published terms, they do not store or cache the account information they process; it is delivered to the authorised application and nothing is retained. Their handling of your data is governed by <a href="https://enablebanking.com/privacy/" rel="noopener noreferrer">their own privacy notice</a>.</p>
+  <p>You can review and withdraw every data sharing consent you have given, at any time, at <a href="https://enablebanking.com/data-sharing-consents/" rel="noopener noreferrer">enablebanking.com/data-sharing-consents</a>. This works independently of Pennywise.</p>
+  <p>If you prefer no third party at all, you can use Pennywise entirely through manual CSV or CODA file import. Every feature works that way; only the automatic retrieval is lost.</p>
+
+  <h2>Update checks</h2>
+  <p>If you turn on update checking, the application contacts GitHub to ask whether a newer release exists. This is a plain request for a public file and carries no information about you or your data. It is off by default.</p>
+
+  <h2>Legal basis and your rights</h2>
+  <p>Processing happens on the basis of your explicit consent, given separately for each bank connection through your bank's own authentication. You can withdraw it at any time, either in the application or through the Enable Banking consent page linked above.</p>
+  <p>Under the GDPR you have rights of access, rectification, erasure, restriction, portability, and objection. Because the data never leaves your device, you exercise these rights directly: you hold the only copy, you can export it, and deleting it is immediate and complete. There is no request to file and no one to file it with.</p>
+  <p>If you believe your data has been handled unlawfully, you may lodge a complaint with the Belgian Data Protection Authority (<a href="https://www.gegevensbeschermingsautoriteit.be/" rel="noopener noreferrer">gegevensbeschermingsautoriteit.be</a>) or the supervisory authority in your country of residence.</p>
+
+  <h2>Retention</h2>
+  <p>Data stays until you delete it. Removing a connection deletes the data held for it. Uninstalling the application and deleting its data directory removes everything.</p>
+
+  <h2>Changes</h2>
+  <p>If this notice changes, the date at the top changes with it. Material changes will also be noted in the application's release notes.</p>
+
+  <footer>
+    <p>Pennywise · privacy@mityjohn.com · <a href="/pennywise/terms">Terms of Use</a></p>
+  </footer>
+
+</main>
+</body>
+</html>
