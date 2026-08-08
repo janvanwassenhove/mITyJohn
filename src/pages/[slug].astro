@@ -5,6 +5,7 @@ import Page from '../layouts/Page.astro';
 import Quotes from '../components/Quotes.astro';
 import NameOrigin from '../components/NameOrigin.astro';
 import AboutDig from '../components/AboutDig.astro';
+import AboutProfile from '../components/AboutProfile.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
@@ -21,8 +22,9 @@ const isAbout = page.id === 'about';
 ---
 
 <Page title={page.data.title} description={page.data.description}>
-  {isAbout && <NameOrigin />}
+  {isAbout && <AboutProfile />}
   {isAbout && <AboutDig />}
+  {isAbout && <NameOrigin />}
   <Content />
   {isAbout && <Quotes slot="full" />}
 </Page>

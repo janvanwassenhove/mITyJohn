@@ -5,13 +5,22 @@
 // Box-shadow pixel art (same technique as ArcadeStrip). Every sprite here was
 // rasterised to PNG and looked at before shipping, rather than plotted blind.
 
+// The 0.5px spread makes each 6px pixel overlap its neighbours. Without it the
+// sprite sits at a fractional offset (the relics are placed by percentage) and
+// every pixel edge antialiases, which draws graph-paper seams across the art.
 const put = (cells: [number, number, string][]) =>
-  cells.map(([x, y, c]) => `${x * 6}px ${y * 6}px 0 ${c}`).join(', ');
+  cells.map(([x, y, c]) => `${x * 6}px ${y * 6}px 0 0.5px ${c}`).join(', ');
 function grid(x0: number, x1: number, y0: number, y1: number, c: string): [number, number, string][] {
   const out: [number, number, string][] = [];
   for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) out.push([x, y, c]);
   return out;
 }
+// Later cells win, so overlays can be painted over a filled base.
+const dedupe = (cells: [number, number, string][]): [number, number, string][] => {
+  const m = new Map<string, [number, number, string]>();
+  for (const c of cells) m.set(`${c[0]},${c[1]}`, c);
+  return [...m.values()];
+};
 
 // Fedora archaeologist, both hands on a pickaxe angled down into the dirt.
 const DIGGER = put([
@@ -23,44 +32,44 @@ const DIGGER = put([
   [10, 5, '#7d5732'], [11, 6, '#7d5732'], [12, 7, '#7d5732'], [11, 5, '#9a9a9a'], [13, 7, '#9a9a9a'], [13, 8, '#9a9a9a'],
 ]);
 
-// 3.5" floppy: blue shell, silver shutter with slit, corner notch, cream label
-// with a red stripe. 9x9 cells = 54x54px.
-const FLOPPY = put([
-  ...grid(0, 8, 0, 8, '#2f6d8c'), ...grid(0, 8, 0, 0, '#28607d'),
-  [0, 0, '#17140f'], [1, 0, '#17140f'],
-  ...grid(4, 7, 0, 2, '#c9d6dc'), ...grid(5, 6, 0, 2, '#8fa0a8'),
-  ...grid(1, 7, 4, 8, '#efe9db'), ...grid(2, 6, 5, 5, '#c24a3a'), ...grid(2, 5, 7, 7, '#9aa2a8'),
-]);
+// 3.5" floppy: dark rim, big silver shutter with its slit, corner notch, cream
+// label with a red stripe. 10x10 cells = 60x60px.
+const FLOPPY = put(dedupe([
+  ...grid(0, 9, 0, 9, '#2f6d8c'),
+  ...grid(0, 9, 0, 0, '#1b4257'), ...grid(0, 0, 0, 9, '#1b4257'),
+  ...grid(9, 9, 0, 9, '#1b4257'), ...grid(0, 9, 9, 9, '#1b4257'),
+  [1, 1, '#17140f'],
+  ...grid(4, 8, 1, 3, '#c9d6dc'), ...grid(6, 7, 1, 3, '#5c6b73'),
+  ...grid(1, 8, 5, 8, '#efe9db'), ...grid(2, 7, 6, 6, '#c24a3a'), ...grid(2, 6, 8, 8, '#9aa2a8'),
+]));
 
-// Old desktop: CRT with a green cursor line, wide base with a 5.25" drive slot,
-// detached keyboard. 11x9 cells = 66x54px.
-const OLDPC = put([
-  ...grid(1, 8, 0, 4, '#cfc7b1'), ...grid(2, 7, 1, 3, '#22414d'),
-  ...grid(3, 6, 2, 2, '#3f7f6d'), [3, 3, '#7fd0b0'],
-  ...grid(0, 10, 5, 7, '#bcb298'), ...grid(2, 8, 6, 6, '#2b2b2b'),
-  ...grid(3, 7, 8, 8, '#a89e86'),
-]);
+// Old desktop: the monitor is clearly narrower than the base — that stepped
+// silhouette is what makes it read as a computer. 12x9 cells = 72x54px.
+const OLDPC = put(dedupe([
+  ...grid(2, 9, 0, 5, '#d6cdb6'),
+  ...grid(2, 9, 0, 0, '#8f8873'), ...grid(2, 2, 0, 5, '#8f8873'), ...grid(9, 9, 0, 5, '#8f8873'),
+  ...grid(3, 8, 1, 4, '#16323d'),
+  ...grid(4, 7, 2, 2, '#4fae8c'), ...grid(4, 5, 3, 3, '#4fae8c'), [7, 3, '#9fe8c8'],
+  ...grid(0, 11, 6, 8, '#c2b89c'), ...grid(0, 11, 6, 6, '#8f8873'),
+  ...grid(6, 10, 7, 7, '#1f1f1f'), ...grid(1, 4, 7, 7, '#8f8873'),
+]));
 
-// Punch card: clipped corner, header row and columns of rectangular holes.
-// 14x7 cells = 84x42px.
-const PUNCH = (() => {
-  const c: [number, number, string][] = [...grid(0, 13, 0, 6, '#efe9db')];
-  c.push([0, 0, '#17140f'], [1, 0, '#17140f'], [0, 1, '#17140f']);
-  const pattern = [2, 3, 4, 2, 5, 3, 4, 2, 3, 5, 4, 3];
-  for (let i = 0; i < pattern.length; i++) {
-    const x = 1 + i;
-    if (x > 12) break;
-    if (i % 2 === 0) c.push([x, pattern[i], '#2b2b2b']);
-  }
-  for (let x = 2; x <= 12; x += 2) c.push([x, 1, '#2b2b2b']);
-  return put(c);
-})();
+// Punch card: long and low — its signature proportion — with a clipped corner
+// and rows of punched holes. 18x6 cells = 108x36px.
+const PUNCH = put(dedupe([
+  ...grid(0, 17, 0, 5, '#efe9db'),
+  ...grid(0, 17, 0, 0, '#b9b0a0'), ...grid(0, 17, 5, 5, '#b9b0a0'),
+  [0, 0, '#17140f'], [1, 0, '#17140f'], [0, 1, '#17140f'],
+  ...[2, 4, 6, 8, 10, 12, 14, 16].map((x) => [x, 1, '#2b2b2b'] as [number, number, string]),
+  ...[3, 6, 9, 12, 15].map((x) => [x, 3, '#2b2b2b'] as [number, number, string]),
+  ...[2, 5, 8, 11, 14, 17].map((x) => [x, 4, '#2b2b2b'] as [number, number, string]),
+]));
 
 // Ground line sits 116px down the 150px stage; top = 116 − sprite height.
 const relics = [
-  { art: FLOPPY, left: '42%', top: 62, w: 54, delay: '0s' },
-  { art: OLDPC, left: '60%', top: 62, w: 66, delay: '1.6s' },
-  { art: PUNCH, left: '78%', top: 74, w: 84, delay: '3.2s' },
+  { art: FLOPPY, left: '40%', top: 56, w: 60, delay: '0s' },
+  { art: OLDPC, left: '58%', top: 62, w: 72, delay: '1.6s' },
+  { art: PUNCH, left: '76%', top: 80, w: 108, delay: '3.2s' },
 ];
 const stalactites = [[9, 20, 32], [20, 13, 20], [33, 24, 42], [47, 15, 24], [62, 19, 30], [74, 28, 48], [87, 15, 22]];
 const stalagmites = [[16, 15, 13], [69, 18, 17], [91, 13, 11]];
