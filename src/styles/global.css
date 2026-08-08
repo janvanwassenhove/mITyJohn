@@ -80,6 +80,84 @@ a:hover { color: var(--text); }
 .prose th { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted2); }
 .prose iframe { max-width: 100%; border: 0; border-radius: var(--radius-embed); }
 
+/* About page — profile card + alternating media rows. Authored as raw HTML in
+   about.md, so the styles live here (global) rather than in a scoped block. */
+.about-profile {
+  display: flex;
+  gap: clamp(18px, 3vw, 30px);
+  align-items: center;
+  flex-wrap: wrap;
+  padding: clamp(20px, 3vw, 30px);
+  margin: 0 0 clamp(28px, 4vw, 44px);
+  background: linear-gradient(140deg, var(--s2), var(--s1));
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-panel);
+}
+.about-profile .about-photo {
+  width: clamp(132px, 22vw, 188px);
+  height: clamp(132px, 22vw, 188px);
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border3);
+  margin: 0;
+}
+.about-id { flex: 1; min-width: 240px; }
+.about-id .about-name { font-family: var(--font-display); font-size: clamp(24px, 3.4vw, 32px); font-weight: 700; letter-spacing: -0.01em; color: var(--text); margin: 0; }
+.about-id .about-alias { font-family: var(--font-mono); font-size: var(--text-small); color: var(--accent); margin: 2px 0 0; }
+.about-id .about-role { font-size: var(--text-small); color: var(--muted); margin: 10px 0 0; }
+.about-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 7px; padding: 0; margin: 14px 0 0; }
+.about-tags li {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption-xs);
+  letter-spacing: 0.06em;
+  color: var(--muted2);
+  background: var(--chip);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-pill);
+  padding: 3px 10px;
+  margin: 0;
+}
+.about-tags li::before { content: '#'; color: var(--accent); }
+.about-id .about-motto { font-size: var(--text-small); font-style: italic; color: var(--muted2); margin: 14px 0 0; text-wrap: pretty; }
+
+.about-row {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+  gap: clamp(18px, 3vw, 32px);
+  align-items: center;
+  margin: 0 0 clamp(22px, 3.5vw, 36px);
+}
+.about-row.reverse .about-media { order: 2; }
+.about-media { margin: 0; }
+.about-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  margin: 0;
+  transition: transform var(--hover-duration) var(--hover-ease);
+}
+.about-media:hover img { transform: translateY(-3px); }
+.about-cap {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption-xs);
+  letter-spacing: 0.04em;
+  color: var(--muted2);
+}
+.about-text p { margin: 0 0 1em; }
+.about-text p:last-child { margin-bottom: 0; }
+@media (max-width: 640px) {
+  .about-row { grid-template-columns: 1fr; gap: 12px; }
+  .about-row.reverse .about-media { order: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-media:hover img { transform: none; }
+}
+
 /* SCRUM code samples — shared by the homepage feature (ScrumFeature.astro) and
    the SPL app page, which authors the same markup inline in its Markdown so the
    two never drift apart. Global rather than scoped for exactly that reason. */
