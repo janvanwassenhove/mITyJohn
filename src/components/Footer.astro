@@ -69,10 +69,15 @@ const year = new Date().getFullYear();
     margin: 0 auto;
     padding: clamp(44px, 6vw, 80px) var(--section-pad-x) 40px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* Fixed three columns so the link lists spread across the full width. An
+       auto-fit track count left a trailing empty column on the right, because
+       the full-width statement above keeps auto-fit from collapsing it. */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 40px;
   }
   .statement { grid-column: 1 / -1; max-width: 640px; }
+  @media (max-width: 720px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 460px) { .grid { grid-template-columns: 1fr; } }
   .kicker {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
