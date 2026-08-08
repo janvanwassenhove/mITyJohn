@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content';
 import Page from '../layouts/Page.astro';
 import Quotes from '../components/Quotes.astro';
 import NameOrigin from '../components/NameOrigin.astro';
+import AboutDig from '../components/AboutDig.astro';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages');
@@ -21,6 +22,7 @@ const isAbout = page.id === 'about';
 
 <Page title={page.data.title} description={page.data.description}>
   {isAbout && <NameOrigin />}
+  {isAbout && <AboutDig />}
   <Content />
   {isAbout && <Quotes slot="full" />}
 </Page>
