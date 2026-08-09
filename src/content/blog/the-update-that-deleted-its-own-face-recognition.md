@@ -2,6 +2,7 @@
 title: "The update that deleted its own face recognition"
 date: 2026-11-22
 tags: ["development", "electron", "packaging"]
+cover: "/blog/the-update-that-deleted-its-own-face-recognition/cover.webp"
 cardTag: "Development · Electron"
 draft: true
 ---

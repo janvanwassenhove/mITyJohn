@@ -2,6 +2,7 @@
 title: "A privacy scanner in your pre-commit hook"
 date: 2026-11-08
 tags: ["security", "privacy", "development", "python"]
+cover: "/blog/a-privacy-scanner-in-your-pre-commit-hook/cover.webp"
 cardTag: "Security · Development"
 draft: true
 ---

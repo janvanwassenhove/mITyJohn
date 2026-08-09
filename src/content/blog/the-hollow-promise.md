@@ -2,6 +2,7 @@
 title: "The hollow promise: encryption whose key sat next to the ciphertext"
 date: 2026-11-01
 tags: ["security", "privacy", "development"]
+cover: "/blog/the-hollow-promise/cover.webp"
 cardTag: "Security · Privacy"
 draft: true
 ---

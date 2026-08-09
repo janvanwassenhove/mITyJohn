@@ -2,6 +2,7 @@
 title: "Envelope encryption, and what \"delete\" should mean"
 date: 2026-10-25
 tags: ["security", "privacy", "development", "python"]
+cover: "/blog/envelope-encryption-and-what-delete-should-mean/cover.webp"
 cardTag: "Security · Privacy"
 draft: true
 ---

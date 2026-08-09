@@ -2,6 +2,7 @@
 title: "\"I thought my repo was private\""
 date: 2026-11-15
 tags: ["security", "privacy", "development", "git"]
+cover: "/blog/i-thought-my-repo-was-private/cover.webp"
 cardTag: "Security · Git"
 draft: true
 ---

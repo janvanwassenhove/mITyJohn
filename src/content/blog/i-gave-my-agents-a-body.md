@@ -2,6 +2,7 @@
 title: "I gave my agents a body"
 date: 2026-08-16
 tags: ["ai", "development", "robotics", "agents"]
+cover: "/blog/i-gave-my-agents-a-body/cover.webp"
 cardTag: "AI · Robotics"
 draft: true
 ---

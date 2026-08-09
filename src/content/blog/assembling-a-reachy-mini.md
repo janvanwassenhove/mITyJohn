@@ -2,6 +2,7 @@
 title: "Assembling a Reachy Mini"
 date: 2026-08-23
 tags: ["robotics", "hardware", "raspberry-pi"]
+cover: "/blog/assembling-a-reachy-mini/cover.webp"
 cardTag: "Robotics · Hardware"
 draft: true
 ---
@@ -36,6 +37,14 @@ It is also, I should say, the more expensive trade in evenings.
 
 ## The build
 
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/unboxing.webp"
+       alt="The opened shipping box: nested cardboard compartments printed with line drawings of the robot, and a Getting Started booklet."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>Nested compartments, each printed with the part it holds. The
+  packaging is the first half of the instructions.</figcaption>
+</figure>
+
 The assembly is genuinely pleasant. Pollen's
 [assembly guide](https://www.youtube.com/watch?v=PC5Yx950nMY) is clear and
 paced for someone doing it for the first time, and I have nothing to add to the
@@ -53,11 +62,34 @@ Weeks later, debugging why speech sounded wrong in a room, I had a mental model
 of the physical object to think with. That model came from an hour with a screwdriver,
 and I do not think I would have got it from a datasheet.
 
-> *[Photo: parts laid out before assembly]*
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/head-mechanism.webp"
+       alt="The head platform seen from above: six polished steel linkages radiating from a central hub, with motor blocks and looms of black cable beneath."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>Six linkages, one platform. You do not forget how the head moves
+  after putting this together.</figcaption>
+</figure>
 
-> *[Photo: mid-build — the head mechanism]*
+That is the part I would have skipped if it had arrived pre-assembled, and it
+is the part I referred back to most. The head is not on a pan-tilt bracket; it
+sits on a platform driven by six independent linkages. Which explains, months
+later, why some motions read as *looking* and others read as *mechanism*.
 
-> *[Photo: the finished robot on the desk]*
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/board-on-platform.webp"
+       alt="The main board mounted above the head platform, connected by ribbon and power cables, with the linkages visible below."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>The board goes on top of the mechanism, not beside it. Space is
+  the scarcest material in here.</figcaption>
+</figure>
+
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/base-internals.webp"
+       alt="The open base with the battery, power board and cable runs laid out inside the circular chassis."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>The base: battery, power board, and the cable runs that have to
+  survive a head turning above them.</figcaption>
+</figure>
 
 ## The moment it stops being a kit
 

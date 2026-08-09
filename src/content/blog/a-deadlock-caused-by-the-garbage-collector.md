@@ -2,6 +2,7 @@
 title: "A deadlock caused by the garbage collector"
 date: 2026-10-18
 tags: ["development", "python", "debugging"]
+cover: "/blog/a-deadlock-caused-by-the-garbage-collector/cover.webp"
 cardTag: "Development · Python"
 draft: true
 ---

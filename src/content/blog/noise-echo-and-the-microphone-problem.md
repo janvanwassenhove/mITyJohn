@@ -2,6 +2,7 @@
 title: "Noise, echo, and the microphone problem nobody solves in a weekend"
 date: 2026-10-11
 tags: ["hardware", "voice", "robotics"]
+cover: "/blog/noise-echo-and-the-microphone-problem/cover.webp"
 cardTag: "Hardware · Voice"
 draft: true
 ---
