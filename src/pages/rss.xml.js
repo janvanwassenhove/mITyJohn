@@ -3,6 +3,8 @@ import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 
 export async function GET(context) {
+  // Drafts stay out of the feed even in dev: a feed item that escapes is
+  // not retractable. Preview drafts in the browser, never here.
   const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );

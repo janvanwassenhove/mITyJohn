@@ -98,6 +98,14 @@ an object. For me it was fitting the head onto the body: before that it was
 components, after it was a robot, and nothing had changed except that the shape
 was now complete.
 
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/finished.webp"
+       alt="The assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, two coiled wire antennae, and a single power cable running off to the side."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>Every part in this photograph passed through my hands an hour
+  earlier. That is the whole difference.</figcaption>
+</figure>
+
 That transition matters more than it should for something as pragmatic as
 software architecture, and I want to be honest about why.
 
