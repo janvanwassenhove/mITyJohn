@@ -1,142 +1,124 @@
 ---
-title: "Assembling a Reachy Mini, and what the box does not tell you"
+title: "Assembling a Reachy Mini"
 date: 2026-08-23
 tags: ["robotics", "hardware", "raspberry-pi"]
 cardTag: "Robotics · Hardware"
 draft: true
 ---
 
-Unboxing posts end with the assembled robot on the desk, everything working,
-soft music. This one starts there, because the gap between "the robot arrived"
-and "the robot does something useful" is where the real work lives — and almost
-none of it is AI.
+A box arrived containing a robot in pieces. This is what it was like to put it
+together, and what I thought about while doing it.
 
-## What a Reachy Mini actually is
+There is a second post after this one about getting the assembled thing to
+actually *do* something, which turned out to be a completely different kind of
+work. This one is just the build.
+
+## What a Reachy Mini is
 
 A Raspberry Pi 5 with motors, a camera, a microphone array and a speaker, in a
-body designed to be expressive rather than industrial. Pollen Robotics ship it
-as an open platform, not a product, and that distinction is the whole reason it
-is interesting.
+body designed to be expressive rather than industrial. Roughly the size of a
+desk plant. It has a head that moves with real degrees of freedom, two small
+antennae that turn out to carry a surprising amount of personality, and a face
+that is mostly camera.
 
-A product decides what you may do with it. A platform hands you a Pi with an SSH
-port and gets out of the way. That means nothing is finished for you, and it
-also means nothing is closed to you. If you want a robot that runs *your*
-software rather than a vendor's assistant, this is the trade you want.
+[Pollen Robotics](https://pollen-robotics.com/reachy-mini/) ship it as an open
+platform rather than a finished product, and that distinction is the whole
+reason I bought one.
 
-The assembly itself is pleasant and well documented, and I have nothing useful
-to add to the instructions. The interesting part started at first boot.
+A product decides what you may do with it. You get an app, a cloud account, and
+a set of behaviours somebody else chose. A platform hands you a Pi with an SSH
+port and gets out of the way. Nothing is finished for you, and nothing is closed
+to you either.
 
-## The daemon that bound its port and then went quiet
+If what you want is a robot that runs *your* software — where the intelligence,
+the data and the decisions are yours — that is the trade you are looking for.
+It is also, I should say, the more expensive trade in evenings.
 
-The robot came up. The service was listening. And then it stopped responding —
-not crashed, not refusing connections, just accepting them and never answering.
+## The build
 
-I rebooted it. It worked. Fifteen minutes later it did the same thing.
+The assembly is genuinely pleasant. Pollen's
+[assembly guide](https://www.youtube.com/watch?v=PC5Yx950nMY) is clear and
+paced for someone doing it for the first time, and I have nothing to add to the
+instructions themselves — follow them, they work.
 
-I want to dwell on this, because "fixed by a reboot" is where most write-ups
-stop and it is exactly where the useful thinking starts. A reboot is not a fix.
-It is a *finding*: it tells you the fault is in accumulated state rather than
-configuration, that something is being exhausted or deadlocked rather than
-mis-set, and that whatever it is takes roughly a quarter of an hour of normal
-operation to reach.
+What I did not expect was how much the process tells you about the machine.
 
-That is a real diagnostic narrowing. It is just not a solution, and writing
-"fixed by a reboot" in your notes lets you pretend it was one.
+You handle every part before it becomes invisible. You see where the camera sits
+relative to the microphones, which matters enormously later when the thing
+starts hearing its own voice. You see how the head is actually driven, which
+explains why some motions feel natural and others do not. You see how little
+space there is around the speaker.
 
-The honest status at that point: the daemon's media path was unreliable, I did
-not yet understand why, and I decided to build around it rather than block on
-it. Which turned out to matter, because the same subsystem cost me weeks later.
+Weeks later, debugging why speech sounded wrong in a room, I had a mental model
+of the physical object to think with. That model came from an hour with a screwdriver,
+and I do not think I would have got it from a datasheet.
 
-## The split that is actually the security model
+> *[Photo: parts laid out before assembly]*
 
-Before writing a line of robot code I decided where things would live, and this
-turned out to be the most consequential decision in the project.
+> *[Photo: mid-build — the head mechanism]*
 
-Everything sensitive stays on the laptop: the API keys, the OAuth tokens, the
-encrypted profiles, the face embeddings, the conversation history. The Pi runs a
-small service that moves motors, plays audio and serves camera frames. It holds
-no keys, no tokens and no personal data.
+> *[Photo: the finished robot on the desk]*
 
-Steal the robot and you get motors.
+## The moment it stops being a kit
 
-This sounds like an obvious precaution until you notice how many devices in this
-category do the opposite — the camera on the shelf holding the credentials that
-reach your cloud account. A robot is a physically accessible computer in a room
-other people walk through. Treating it as untrusted is not paranoia, it is just
-where it sits.
+There is a specific point in a build like this where the pile of parts becomes
+an object. For me it was fitting the head onto the body: before that it was
+components, after it was a robot, and nothing had changed except that the shape
+was now complete.
 
-It also has a pleasant engineering side effect: the boundary between "laptop
-brain" and "robot body" is a network API, so the entire system runs without
-hardware. There is a `FakeRobot` adapter, and it is the *primary* development
-target. Everything gets built and tested against it, and the real robot is where
-you find out which of your assumptions about the physical world were wrong.
+That transition matters more than it should for something as pragmatic as
+software architecture, and I want to be honest about why.
 
-## Deploying to the Pi, and the process that would not die
+A robot on your desk is an *object other people react to*. My family walked past
+the laptop running this project for weeks without comment. The robot got
+reactions on day one — from everyone, unprompted, including people with no
+interest whatsoever in what it does.
 
-Getting the runtime onto the robot was straightforward once SSH was available:
-install `uv`, transfer the repository as a git bundle, install the service under
-systemd so it comes back after a power cut.
+That changes the standards you hold yourself to. Software that is slow is
+annoying. A robot that turns its head a second and a half after you have already
+walked past is *broken*, visibly, in front of people. Software that mis-hears you
+produces a wrong line of text. A robot that mis-hears you says something wrong
+out loud, in a room, while somebody is watching.
 
-Then the service started crash-looping. `NRestarts=22` and climbing.
+I did not anticipate how much that would sharpen my priorities. Latency stopped
+being a number in a table. It became the difference between something that feels
+alive and something that feels faulty.
 
-The cause was mundane and worth knowing, because you will hit it: an earlier
-manual run — started with `nohup` while I was testing, forgotten, still alive —
-was holding port 8001. The systemd unit started, found the port taken, failed,
-and got restarted. Twenty-two times. Meanwhile the stale process, in its
-initialisation loop, was politely hammering the daemon's media-release endpoint
-every ten seconds.
+## What the box does not tell you
 
-Two lessons, both cheap:
+Here is the thing nobody puts on the product page, and it is not a criticism —
+it is just the shape of this kind of project.
 
-**Check for the ghost before debugging the service.** The failure mode of "your
-new deployment cannot bind" is almost always your old deployment. The restart
-counter is the tell — a config error fails identically every time and does not
-usually produce a *loop*.
+**The gap between "assembled" and "useful" is where all the work is.** The build
+takes an hour. Getting from a correctly assembled robot to one that reliably
+does something in your house took considerably longer, and almost none of it was
+artificial intelligence.
 
-**`nohup` during exploration is a liability.** Anything you start by hand on a
-device you are about to automate should be started in a way that dies with your
-session, or you will be debugging your own past self at an inconvenient moment.
+It was ports and services and network names. It was a daemon that bound its port
+and then went quiet. It was audio mixer levels on the Pi that had nothing to do
+with my code. It was discovering that the robot's hostname had stopped resolving
+and that both of my diagnostic tools were confidently telling me it was not on
+the network at all.
 
-## Then the name stopped resolving
+That is the next post, and several after it. If you are considering one of
+these, budget for that part rather than being surprised by it.
 
-The robot was reachable at `reachy-mini.local` — mDNS, zero configuration,
-lovely. Until it was not, at which point the app reported "Robot: offline",
-which was true and completely useless.
+## Would I recommend it
 
-That single change of state produced three units of work: making the error say
-what actually failed, giving the owner somewhere to *act* on that information,
-and finally having the software find the robot itself. There is a whole post
-coming about that, including the part where my network diagnosis was confidently
-and instructively wrong.
+Yes, with one condition: **be honest about which project you are starting.**
 
-For now the practical advice: **do not build on mDNS as your only path to the
-device.** It is excellent when it works and it fails in ways that look like the
-device being dead. Have an address you can set, and have something that can go
-looking.
+If you want a robot that does things out of the box, this is not that, and it
+does not claim to be. If you want a physical platform you can put your own
+software on — where you decide what it knows, what it says, and where its data
+lives — then it is exactly right, and the openness is not a marketing word. It
+is an SSH port and a documented API.
 
-## What I would tell someone starting today
-
-**Decide the trust boundary before you write code.** Which machine holds
-secrets? If the answer is "both", you have not decided.
-
-**Build against a fake first.** Not for purity — for iteration speed and because
-it forces you to define the interface between brain and body rather than letting
-it grow into whatever the SDK happened to expose.
-
-**Treat "fixed by a reboot" as an open ticket.** Write down what you learned
-from the fact that it worked.
-
-**Expect the boring layer to dominate.** Ports, services, network names, audio
-mixer levels. The intelligence is a library call. Making a physical thing
-reliably reachable in a house is where the evenings go.
-
-None of that is what I expected to be writing about when the box arrived. It is
-what actually stood between me and a robot that does something useful, which is
-why it is post two rather than a footnote.
+I have spent more evenings on this than I planned. I have also learned more
+about the gap between "works on my machine" and "works in a room where people
+live" than any purely-software project has ever taught me.
 
 ---
 
-*Next: the agent loop that built everything on top of this — a backlog, hard
-edges, and 226 units. The project is
-[on GitHub](https://github.com/janvanwassenhove/aura); the setup guide covers
-both the real device and the hardware-free path.*
+*Next: getting from an assembled robot to a service that actually runs — the Pi,
+the deploy, the daemon that hung twice, and deciding which machine is allowed to
+hold the secrets.*

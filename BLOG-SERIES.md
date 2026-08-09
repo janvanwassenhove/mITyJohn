@@ -3,13 +3,18 @@
 A series about putting agentic AI to work on real hardware: where AI is taking
 software work, and what happens when you give a team of agents a body.
 
-**Status: all sixteen posts are written**, in `src/content/blog/`, every one
+**Status: all seventeen posts are written**, in `src/content/blog/`, every one
 `draft: true` — verified excluded from the build and absent from the sitemap.
 Publish by flipping `draft` and setting a real `date`.
 
 Still to do per post: a cover image at `public/blog/<slug>/cover.webp` and a
 `cover:` line in the frontmatter (omitted for now because the images do not
-exist yet — the schema treats it as optional).
+exist yet — the schema treats it as optional). Generation prompts are at the
+bottom of this file.
+
+The Reachy post was split in two: the build itself (carried by real photographs)
+and getting the assembled robot to run as a service. They are different posts
+for different readers, and the first one has pictures.
 
 The outlines below are kept as the editorial record: thesis, hook and beats for
 each post, so a rewrite has something to argue with.
@@ -85,7 +90,28 @@ in.
 
 ---
 
-### 2. Assembling a Reachy Mini, and what the box does not tell you
+### 2a. Assembling a Reachy Mini
+
+`assembling-a-reachy-mini` — **illustrated with real photographs**, not a
+generated cover. What a Reachy Mini is (open platform, not product), the build,
+the moment a pile of parts becomes an object, and why an hour with a screwdriver
+gave a mental model that paid off weeks later when sound went wrong. Links to
+Pollen's page and the assembly video. The broadest post in the series; the one
+non-developers will read.
+
+Photo slots marked in the draft: parts laid out, mid-build head mechanism,
+finished robot on the desk.
+
+### 2b. From an assembled robot to a running service
+
+`from-robot-to-running-service` — the other ninety-nine percent. The daemon that
+bound its port and went quiet twice ("fixed by a reboot" is a finding, not a
+solution). Deciding which machine holds the secrets, and why that decision
+produced the `FakeRobot`-first architecture rather than the other way round. The
+systemd deploy and the stale `nohup` process holding port 8001 that produced
+`NRestarts=22`. Why not to build on mDNS alone.
+
+### Original combined outline (kept for reference)
 
 ```yaml
 ---
@@ -562,3 +588,69 @@ scrutiny that implies.
 - **Cross-posting.** Hardware posts (2, 7, 8, 9) belong in Reachy/Pollen
   community spaces; the agentic ones (3–6) travel further on developer
   aggregators.
+
+---
+
+## Cover images
+
+The house style is set by the one existing cover
+(`public/blog/write-the-brief-not-the-prompts/cover.webp`): a square 1200×1200
+flat-lay of a cream technical-manual page on a near-black warm surface, amber
+hairline frames, mid-century engineering illustration, one rust-orange accent,
+no legible text. Every cover in this series inherits it so the set reads as a
+series rather than sixteen unrelated images.
+
+### The style block — append to every subject prompt
+
+```
+Style: square 1200x1200 flat-lay, shot top-down on a near-black warm charcoal
+surface with fine paper grain. Cream/ivory technical-manual page as the central
+object, softly lit from the upper left with a gentle directional shadow. Thin
+amber hairline border frames, doubled and offset, plus a faint engineering grid
+in the background. Mid-century technical illustration: precise line drawings,
+exploded isometric views, block schematics, small plots on graph paper. Body
+text abstracted into fine horizontal rules — no legible words, no lettering, no
+logos. Muted palette: charcoal, cream, ochre, one muted rust-orange accent used
+sparingly. Calm, analogue, precise. No people, no 3D render gloss, no neon.
+```
+
+### Subjects
+
+| Slug | Subject |
+|---|---|
+| `i-gave-my-agents-a-body` | An open technical manual: left page an exploded isometric of a small desk robot (rounded head, two antennae, camera eye) separating into shells; right page a flow diagram of a task loop with a decision gate. A pencil and a small brass gear at the edge. |
+| `assembling-a-reachy-mini` | **Photograph, not generated** — see below. |
+| `from-robot-to-running-service` | An open manual showing a single-board computer in exploded isometric, beside a schematic of two boxes linked by a labelled line, one box drawn with a heavy vault-like outline. A short coiled network cable at the edge. |
+| `a-backlog-a-loop-and-226-units` | A ruled ledger page with a long column of numbered rows, most ticked, a few annotated in the margin; a circular process-loop diagram in the corner. A fountain pen at the edge. |
+| `subloops` | Three concentric timing rings rotating at different rates, drawn as a mechanical escapement diagram, with a small state-machine flow beside them. A pair of dividers at the edge. |
+| `the-day-the-agent-started-talking-to-itself` | A signal-path diagram where a loudspeaker's output arcs back into a microphone, forming a closed loop that feeds itself; a waveform curling into an ouroboros. One rust-orange arrow marks the return path. |
+| `why-just-use-the-best-model-is-not-a-strategy` | An old telephone-exchange patch panel drawn schematically: one input, four labelled outgoing routes, three connected correctly and one plugged into a socket marked with a small rust-orange cross. |
+| `making-a-camera-feel-live` | A timing chart with a long bar shrinking to a very short one, beside a lens cross-section and a falling curve on graph paper. A stopwatch at the edge. |
+| `looking-for-a-robot-that-was-there-the-whole-time` | A grid of 254 small empty squares like a survey map, nine faintly marked, one ringed in rust-orange near the middle. A brass magnifying glass at the edge. |
+| `noise-echo-and-the-microphone-problem` | A cross-section of a loudspeaker and a microphone in one housing, with reflected sound paths bouncing off room walls; a waveform with a decaying echo tail and a fader scale. |
+| `a-deadlock-caused-by-the-garbage-collector` | Two parallel thread lanes drawn as railway tracks meeting at a junction where both signals show stop; a small chain with one closed link. A stopped pocket watch at the edge. |
+| `envelope-encryption-and-what-delete-should-mean` | Nested envelopes drawn in cutaway, the outer sealing a ring of smaller sealed envelopes, each holding a tiny key. A wax seal and a burnt match at the edge. |
+| `the-hollow-promise` | A heavy strongbox drawn in precise line work, firmly padlocked — with its key hanging on a small hook mounted on the outside of the same box. One rust-orange line points at the key. |
+| `a-privacy-scanner-in-your-pre-commit-hook` | A stream of small document icons falling through a fine mesh sieve; three are caught and marked, the rest pass. A rubber stamp lying face-up at the edge. |
+| `i-thought-my-repo-was-private` | A window drawn in elevation with its shutters wide open and daylight falling through, while a small "closed" latch sits unfastened beside it. A padlock lying open at the edge. |
+| `the-update-that-deleted-its-own-face-recognition` | A filing drawer being pulled out and replaced wholesale, while a small paper tag on a string remains attached to the empty frame. A torn label at the edge. |
+| `verifying-an-installer-before-you-run-it` | A sealed parcel with a wax seal and a tag bearing a long row of abstracted characters; a magnifying glass held over the tag comparing it to a second tag. |
+
+### Editing the real assembly photographs
+
+The build post uses real photographs. To make them sit beside the generated
+covers without clashing, the treatment matters more than any filter — see the
+image-to-image prompt below. The critical instruction is that the robot's actual
+geometry must be preserved exactly; an image model left to its own devices will
+cheerfully redesign the hardware.
+
+### Mechanics
+
+Export each as **webp, 1200×1200**, to `public/blog/<slug>/cover.webp`, add the
+`cover:` line to the frontmatter, then from the repo root:
+
+```bash
+node scripts/build-image-dims.mjs
+```
+
+Skipping that leaves the layout without dimensions and produces layout shift.
