@@ -56,15 +56,15 @@
     ]
   },
   "mITyStudio": {
-    "tag": "v1.1.18",
-    "date": "2026-07-23T20:13:10Z",
-    "changelog": "## mITyStudio v1.1.18\n\nAutomated Windows build of `master` @ 54d043e.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/54d043ee7ae808f53c4aa66b77034fb4a5c0066c/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/54d043ee7ae808f53c4aa66b77034fb4a5c0066c/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/54d043ee7ae808f53c4aa66b77034fb4a5c0066c/docs/screenshots/voices.png)\n\n### Changes\nAgentic improvement loop + local learning: the studio hill-climbs a measured score and fits the user\n\nAnswers \"make the agent learn and re-evaluate before delivering\" — but the\nhonest, measured version, not the model grading itself.\n\nRe-evaluate before delivering (arrangement_metrics + song_pipeline):\n- score(): a composite 0-1 quality number from measurable dimensions\n  (completeness, key adherence, dynamic arrangement, headroom/no-clipping,\n  density sanity, full-song, has-ending, has-mix), plus the weakest\n  dimensions so a fix can be targeted.\n- The single critic pass is now an agentic LOOP (cap 3): measure → have the\n  producer fix the WEAKEST dimensions → re-measure → keep the round only if\n  the score climbed by MIN_GAIN, else revert it and stop. It also stops once\n  the score clears QUALITY_TARGET (0.9). So the model can never make a song\n  worse, and it does not burn LLM calls polishing a song that is already\n  good — which, because the deterministic skeleton+mix+ending already scores\n  ~0.99, is the common case. The loop earns its keep on genuinely weak output\n  (off-key composer parts, an unfilled section). Score before/after and the\n  round log go to the ledger.\n\nLearn from what the user keeps/edits (preferences.py, local + deterministic):\n- observe() runs ONLY on the user's",
+    "tag": "v1.1.19",
+    "date": "2026-08-08T08:07:57Z",
+    "changelog": "## mITyStudio v1.1.19\n\nAutomated Windows build of `master` @ ff0e822.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/voices.png)\n\n### Changes\nTimeline: pin the bars/time ruler while the track lanes scroll\n\nReported: with several track lanes, scrolling down loses the bars/time bar.\nIt was just the first rows inside the scroll container, so it scrolled away\nwith everything else — you couldn't tell which bar a clip sat on once you\nscrolled past the top.\n\nWrapped the ruler row and the section lane in a `.lane-header` that is\n`position: sticky; top: 0`, so the two-row header stays pinned to the top of\nthe scroll area while the lanes move under it. z-index 8 sits above the\ntrack labels (5) and playhead (4), and an opaque background stops lanes\nbleeding through as they pass behind it. The track labels keep their existing\nleft-sticky behaviour, so the top-left \"Bars\" corner stays put under both\nvertical and horizontal scroll.\n\nLive-verified with 7 lanes: after scrolling 300px down / 200px right the\nruler stays at offset 0 (position: sticky, stayedPinned), the \"Bars\" corner\nstays top-left, and the header paints opaque (rgb(28,31,38)).\n\nvue-tsc clean.\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>\n",
     "assets": [
       {
-        "name": "mITyStudio-Setup-1.1.18.exe",
-        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.18/mITyStudio-Setup-1.1.18.exe",
-        "size": 153063771,
-        "downloads": 51,
+        "name": "mITyStudio-Setup-1.1.19.exe",
+        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.19/mITyStudio-Setup-1.1.19.exe",
+        "size": 153063744,
+        "downloads": 1,
         "platform": "Windows"
       }
     ]
