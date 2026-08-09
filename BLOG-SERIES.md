@@ -1,7 +1,18 @@
 # Blog series — AURA on a Reachy Mini
 
-Plan for a series about putting agentic AI to work on real hardware: where AI is
-taking software work, and what happens when you give a team of agents a body.
+A series about putting agentic AI to work on real hardware: where AI is taking
+software work, and what happens when you give a team of agents a body.
+
+**Status: all sixteen posts are written**, in `src/content/blog/`, every one
+`draft: true` — verified excluded from the build and absent from the sitemap.
+Publish by flipping `draft` and setting a real `date`.
+
+Still to do per post: a cover image at `public/blog/<slug>/cover.webp` and a
+`cover:` line in the frontmatter (omitted for now because the images do not
+exist yet — the schema treats it as optional).
+
+The outlines below are kept as the editorial record: thesis, hook and beats for
+each post, so a rewrite has something to argue with.
 
 **Where the evidence lives.** The project itself is a separate public repo:
 [janvanwassenhove/aura](https://github.com/janvanwassenhove/aura). Its build
