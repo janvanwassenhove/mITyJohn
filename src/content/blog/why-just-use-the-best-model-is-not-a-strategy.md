@@ -57,8 +57,9 @@ together. So you could select an embedding model for conversation. It would sit
 there looking plausible and fail on first use with a message about the endpoint
 not supporting it.
 
-The fix was classification: tag each model as `chat`, `vision` or `realtime`,
-drop anything that is none of those, and give each role exactly its own list.
+The fix was classification: work out for each model whether it can hold a text
+conversation, look at an image, or run a live speech session — drop anything
+that does none of the three — and give each role exactly the list it can use.
 Conversation gets chat models, screen control gets vision models, voice gets
 realtime.
 

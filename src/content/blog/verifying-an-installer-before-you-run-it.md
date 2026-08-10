@@ -51,17 +51,15 @@ Interpolate that into a quoted command and the quoting breaks, and the part afte
 the break is executed. Classic injection, in a place I had not thought of as a
 place where injection happens, because "it is just a filename".
 
-The fix is a whitelist, not an escape:
+The fix is a whitelist rather than an escape. Before that name is used for
+anything at all, it has to match a deliberately boring shape: letters, digits,
+dots, dashes and underscores, and nothing else. No spaces, no quotes, no path
+separators, no traversal. Anything else is refused outright.
 
-```js
-function safeAssetName(name) {
-  return /^[A-Za-z0-9._-]+$/.test(String(name || '')) ? String(name) : null
-}
-```
-
-Anything that is not a plain filename is refused outright. No spaces, no quotes,
-no path separators, no traversal. Escaping is a game you can lose; refusing is
-not.
+The distinction matters. Escaping means enumerating everything dangerous and
+neutralising it, and you lose that game the day someone finds a character you
+forgot. Refusing means enumerating everything *safe*, which is a much shorter
+list that does not grow.
 
 ## 2. Staging in a world-writable directory
 
@@ -72,7 +70,7 @@ there for hours, waiting for someone to click "install now".
 — potentially long — where the file that was about to be executed with elevated
 privileges could be replaced by anything else on the machine.
 
-Fixed by staging inside the application's own `userData` directory. Not a
+Fixed by staging inside the application's own per-user data folder. Not a
 security boundary against a fully compromised account, but it removes the casual
 window, and it costs nothing.
 
@@ -112,7 +110,7 @@ The assertions that matter:
 
 - Matching checksum → accepted.
 - **Tampered file → refused.** The whole reason the feature exists.
-- No checksum list → reported as `no-checksums`, never a silent pass.
+- No checksum list → reported as its own distinct outcome, never a silent pass.
 - Asset not listed → refused.
 - Six shapes of dangerous filename → refused: spaces, quotes, ampersands, path
   traversal, empty, null.

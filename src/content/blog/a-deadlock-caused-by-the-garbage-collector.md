@@ -59,7 +59,9 @@ File "concurrent/futures/_base.py", line 451 in result
 File "threading.py", line 355 in wait
 ```
 
-`__del__` → `close()` → waiting on a worker future. Blocked.
+Read from the bottom up: the object's finaliser had called the library's own
+shutdown routine, which was waiting on a background worker to acknowledge it.
+Waiting, with no timeout, on a thread that was never going to answer.
 
 And where was this happening? Look at the frames above it:
 
@@ -110,12 +112,12 @@ in perpetuity.
 
 Two parts, and both matter.
 
-**Release it deliberately.** An explicit `close()` on the detector, idempotent,
-and guaranteed not to raise — because it runs during shutdown, and an exception
-in teardown turns one problem into two. It is called from the application's
-lifespan teardown. Once the object has been closed, its finaliser has nothing
-left to do, so the garbage collector can run it at any inconvenient moment
-without consequence.
+**Release it deliberately.** The detector gained a way to shut its model down on
+demand — safe to call twice, and guaranteed never to raise, because it runs
+during shutdown and an exception in teardown turns one problem into two. The
+application now calls it as part of stopping. Once that has happened the
+finaliser has nothing left to do, so the collector can run it at whatever
+inconvenient moment it likes, with no consequence.
 
 **Do not build it when you do not need it.** The test suite now defaults gesture
 detection off. Loading an 8 MB machine-learning model to test an unrelated HTTP
@@ -124,11 +126,12 @@ minutes, no stall.
 
 ## What generalises
 
-**`__del__` is not a destructor.** It is a hint that runs whenever the collector
-feels like it, possibly on a different thread, possibly during unrelated work,
-possibly never. Any resource with real teardown semantics — native threads, file
-handles, sockets, GPU contexts — needs an explicit release. If a library gives
-you a `close()`, the finaliser is a safety net and not a plan.
+**A finaliser is not a destructor.** In Python it is a hint that runs whenever
+the collector feels like it: possibly on another thread, possibly in the middle
+of unrelated work, possibly never at all. Any resource with real teardown
+semantics — native threads, file handles, sockets, GPU contexts — needs a
+release you call yourself, at a moment you chose. Where a library offers one,
+the finaliser is a safety net and not a plan.
 
 **Deterministic-in-suite, fine-in-isolation means shared state.** Global state,
 import-time side effects, or — as here — accumulated garbage. It is never really

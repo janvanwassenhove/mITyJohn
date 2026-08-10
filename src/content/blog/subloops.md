@@ -35,17 +35,20 @@ IDLE → LISTENING → TRANSCRIBING → THINKING → SPEAKING
                         └──── INTERRUPTED ←──────┘
 ```
 
-`INTERRUPTED` is a first-class state, not an exception path. That is the whole
-design decision. If interruption is an error you handle, you get an assistant
-that stops badly; if it is a state you transition through, you get one that can
-be cut off mid-word and pick up coherently — including telling the model, once,
-that its previous answer was cut off so it does not cheerfully resume a sentence
+Being interrupted is a state of its own, not an error path. That is the whole
+design decision. If interruption is an exception you catch, you get an assistant
+that stops badly; if it is a state you pass through, you get one that can be cut
+off mid-word and pick up coherently — including telling the model, once, that
+its previous answer was cut off, so it does not cheerfully resume a sentence
 nobody is still listening to.
 
-Every transition is logged with the turn id and the flags that matter
-(`tts_playing`, `llm_active`, `cancel_requested`) and never with audio or
-secrets. When something goes wrong in a voice system, the transition log is the
-only artefact that makes it explicable after the fact.
+Every transition is logged with the turn it belongs to and the three things you
+need in order to reconstruct what happened: whether audio was playing, whether a
+model call was in flight, and whether a cancellation had been requested. Never
+the audio itself, and never secrets.
+
+When something goes wrong in a voice system, that transition log is the only
+artefact that makes it explicable afterwards.
 
 **Maintenance** runs every five minutes and asks small, boring questions. Is the
 robot reachable? Is there an LLM key and does it work? Is text-to-speech

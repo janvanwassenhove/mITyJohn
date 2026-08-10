@@ -74,8 +74,8 @@ feels natural". Without it, the model has no idea it was interrupted and will
 happily resume the point nobody is still listening to. With it, you get the
 human behaviour: acknowledge, drop it, move on.
 
-`INTERRUPTED` being a first-class state rather than an exception path is what
-makes this tractable. If interruption is an error you catch, you get an assistant
+Treating interruption as a state of its own rather than an error to catch is
+what makes this tractable. If interruption is an error you catch, you get an assistant
 that stops badly. If it is a state you transition through, it stops the way a
 person does.
 

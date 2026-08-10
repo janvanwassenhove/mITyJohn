@@ -21,31 +21,23 @@ to answer the question *"who is allowed to know this?"*
 ## Three kinds of memory, deliberately separate
 
 **Facts** are explicit. Someone typed them, or the assistant asked and was told.
-`role: family`, `drinks: espresso, no sugar`. They are editable in the interface
-and they are exactly what they look like.
+*Family, not a guest. Drinks espresso, no sugar.* They are editable in the
+interface and they are exactly what they look like.
 
 **Signals** are observed. Nobody typed them; the assistant noticed. And crucially
-a signal is never simply true — it carries a confidence, an evidence count, and
-an expiry:
+a signal is never simply true. Alongside what was noticed — *prefers short
+answers*, say — it carries three things: how sure the assistant is, how many
+times it has seen this, and when the observation should be treated as stale.
 
-```
-kind: prefers_short_answers
-value: true
-confidence: 0.7
-evidence_count: 7
-last_seen: ...
-decay_at: ...
-```
-
-Every time the same observation recurs, confidence goes up by 0.1, capped at
-1.0, and the evidence count increments. Below **0.55** a signal is not shown to
-the language model at all.
+Every time the same thing is observed again, the confidence rises by a tenth,
+the count goes up, and the expiry moves out. Below a confidence of **0.55** a
+signal is not shown to the language model at all.
 
 That threshold does more work than any other number in the system. It means a
 single coincidence never becomes a belief. You have to do something roughly five
-times before the assistant will act on having noticed it — and because
-`decay_at` exists, a habit you have dropped fades back out instead of haunting
-you for ever.
+times before the assistant will act on having noticed it — and because every
+observation carries an expiry, a habit you have dropped fades back out instead
+of haunting you for ever.
 
 **Skills** are procedures. Not "Nora likes espresso" but *"when he asks for a
 specific track, do not guess with generic media control — search first, confirm
@@ -64,9 +56,10 @@ corrects you, or tells you how they work, consider writing that down.*
 
 It cannot save one.
 
-`save_skill` is an approval-gated tool. The agent drafts the skill, I see the
-full text, and I approve or deny. Deny and nothing is written — that path is
-tested, because "the deny button mostly works" is not a security model.
+Writing a skill to disk is an approval-gated action. The agent drafts the text,
+I see the whole thing, and I approve or refuse. Refuse and nothing is written at
+all — not a partial file, not a draft kept "for later". That path has a test of
+its own, because "the refuse button mostly works" is not a security model.
 
 I want to be precise about why, because "human in the loop" is often decoration.
 A skill is not a note; it is a **standing instruction that changes future
@@ -104,8 +97,8 @@ There is a fourth rule that applies to everyone: raw biometrics and bulk profile
 dumps never leave the machine. Face embeddings exist only encrypted; what the
 cloud model gets is a paragraph of natural language, not a dossier.
 
-And there is one entry that leads all the others: a `memory` fact, distinct from
-ordinary facts, holding a distillation of past conversations. Continuity is what
+And there is one entry that leads all the others, kept separate from ordinary
+facts: a distillation of past conversations. Continuity is what
 makes an assistant feel like it knows you, far more than any preference does.
 
 ## Why a paragraph rather than everything

@@ -23,9 +23,9 @@ I ran a full audit of this project — interface, accessibility, performance,
 security — mostly expecting to tidy up. Two findings in the security section
 were about the encryption I was proudest of.
 
-**The key sat beside the data.** `KNOWLEDGE_PASSPHRASE` lived in a `.env` file
-in `%APPDATA%/aura-desktop`. The ciphertext lived in
-`%APPDATA%/aura-desktop/data`. A sibling directory. Anything that could read one
+**The key sat beside the data.** The passphrase lived in a plain settings file
+in the application's data folder. The ciphertext lived in a directory
+immediately below it — siblings, same permissions. Anything that could read one
 could read the other.
 
 So what threat did the encryption actually defend against? Not a copied folder —
@@ -55,8 +55,8 @@ data that exist nowhere else.
 
 ## The design that made it safe
 
-**Put the parameters in the stored state.** The salt and work factor now live in
-a `key-params.json` file sitting next to the ciphertext. Data and the
+**Put the parameters in the stored state.** The salt and the work factor now
+live in a small file sitting next to the ciphertext. Data and the
 description of how to open it travel together. This is the whole trick: a store
 that carries its own parameters can be migrated, because you can always read how
 it was written before deciding how to rewrite it.
@@ -97,8 +97,8 @@ My first implementation aborted on the first one it could not open, which meant
 one bad record made the upgrade permanently impossible. Now unreadable records
 are carried across untouched and reported.
 
-**One foreign file took the whole system down.** A `recognition.enc.json` left
-over from a different installation caused the entire brain to refuse to start.
+**One foreign file took the whole system down.** A store of face embeddings left
+over from a different installation made the whole assistant refuse to start.
 Fixed by deciding which failures are fatal: the *knowledge* store failing to
 open is fatal, because carrying on would show an empty profile list and invite
 someone to start typing over data that is perfectly intact. Face embeddings are

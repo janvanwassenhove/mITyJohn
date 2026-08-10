@@ -67,8 +67,9 @@ A pre-commit hook is a courtesy, not a control:
 - Any tool that commits programmatically may not run it.
 
 So the same scanner runs in continuous integration, over the whole tree, as an
-enforced backstop. One implementation, two entry points: `--staged` for the hook
-and `--all` for CI. Not two scanners that drift.
+enforced backstop. One implementation with two entry points — one that checks
+only what you are about to commit, for speed, and one that sweeps the whole tree.
+Not two scanners that drift apart.
 
 There is a satisfying detail here: the scanner has its own tests, and CI runs
 those too. A scanner nobody tests is a scanner that quietly stops matching.
@@ -84,17 +85,18 @@ Two hatches:
 `.env.example` with empty values, a production config containing only localhost
 URLs. Content rules still apply to them.
 
-**A `privacy-ok` marker** on an individual line, for a reviewed false positive.
-A documented fake key in a test, say.
+**A marker on an individual line**, for a reviewed false positive — a documented
+fake key in a test, say. It sits in the source, so the next person to read that
+line can see the judgement was made deliberately.
 
 Both appear in the diff. Someone adding an exception is making a visible,
 reviewable claim rather than a private decision. Compare that to the usual
 alternative — `--no-verify` — which leaves no trace at all.
 
-Which, I should say, was not a hypothetical. Writing this series, my own hook
+Which, I should say, was not hypothetical. Writing this series, my own hook
 stopped a commit of mine: two test passphrases in a new test file. They were
-fake, they were fine, and the correct move was to mark them `privacy-ok` on the
-line so the next reader can see the judgement was made deliberately.
+fake, they were fine, and the right move was to mark those two lines as
+reviewed — not to bypass the check.
 
 ## Does it work?
 

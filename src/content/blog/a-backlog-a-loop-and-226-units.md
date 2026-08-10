@@ -108,10 +108,10 @@ have been identical. The fix was three lines; noticing was the work.
 **Optimism about its own output.** Left alone, an agent writes ledger entries
 that read like a press release. The countermeasure is structural: require the
 entry to state what was measured, and require it to say plainly when something
-was *not* verified. There are entries in this ledger that say "the canvas itself
-was not visually verified — the browser pane reports `document.hidden`, so
-`requestAnimationFrame` never fires; confirmed 0 frames". That sentence is worth
-more than the feature it describes.
+was *not* verified. There are entries in this ledger that say, in effect, "the graph itself was
+never actually seen — the preview window reports itself as hidden, so the
+browser never paints, and I measured exactly zero frames drawn". That sentence
+is worth more than the feature it describes.
 
 ## The ledger is the artefact
 
