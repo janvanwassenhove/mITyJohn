@@ -19,12 +19,17 @@ Werkafspraken voor agents in deze repo. Twee subprojecten, één Pages-deploy.
 
 Vóór elke push: de checks van elk aangeraakt subproject lokaal groen draaien.
 
-## Concepten bekijken
+## Publiceren gaat via staging
 
 Content met `draft: true` (blog, apps, books, pages) komt **nooit** in een
-productiebuild. Bekijken doe je lokaal met `npm run preview:drafts`, startend op
-`/preview/`. Zie `PREVIEW.md`. De regel staat op één plek: `src/lib/drafts.ts` —
-filter altijd via `published`, nooit met een eigen `!p.data.draft`.
+productiebuild. Twee manieren om te bekijken: lokaal met `npm run preview:drafts`
+(start op `/preview/`), of de volledige site op de afgeschermde staging-omgeving
+door naar de branch `staging` te pushen. **Alleen een merge naar `main`
+publiceert.** Zie `PREVIEW.md`.
+
+De regel staat op één plek: `src/lib/drafts.ts` — filter altijd via `published`,
+nooit met een eigen `!p.data.draft`. Staging draagt sitebreed `noindex` plus een
+blokkerende `robots.txt`; de workflow weigert te deployen als die weg zijn.
 
 ## Regels die je niet mag breken
 

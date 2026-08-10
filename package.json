@@ -14,7 +14,8 @@
     "sync:releases": "node scripts/fetch-releases.mjs",
     "sync:instagram": "node scripts/fetch-instagram.mjs",
     "redirects": "node scripts/build-redirects.mjs",
-    "preview:drafts": "node scripts/preview-drafts.mjs"
+    "preview:drafts": "node scripts/preview-drafts.mjs",
+    "build:staging": "node scripts/build-staging.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

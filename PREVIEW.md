@@ -1,67 +1,145 @@
-# Previewing unpublished content
+# Reviewing before publishing
 
-Write a post, an app page, a book or a page, mark it as draft, and review it in
-the real site — without any of it reaching mityjohn.com.
+Nothing reaches mityjohn.com until you have seen it and merged it yourself.
 
-## Mark it as draft
+Two tools, for two different moments:
 
-Add one line to the frontmatter:
+| | What it gives you | When |
+|---|---|---|
+| `npm run preview:drafts` | the site on your own machine, drafts included | while writing |
+| **staging** | the whole site on a private URL, from any device | before publishing |
+
+---
+
+## Marking something as draft
+
+One line in the frontmatter, on any of the four collections (`blog/`, `apps/`,
+`books/`, `pages/`):
 
 ```yaml
 draft: true
 ```
 
-Works on all four collections: `src/content/blog/`, `apps/`, `books/`, `pages/`.
+A production build never emits draft content: no page, no listing entry, no feed
+item, no sitemap URL. Publishing is `draft: false`, and the URL does not change —
+what you reviewed is the address it ships at.
 
-## Look at it
+---
+
+## While writing: local preview
 
 ```bash
 npm run preview:drafts
 ```
 
-That builds the site **with** drafts and serves it from your machine. Open the
-URL it prints, and start at **`/preview/`** — the list of everything currently
-in draft, with a link to each one.
+Builds with drafts and serves from your machine, on the local network too, so a
+phone on the same wifi can open it. Start at **`/preview/`** for the list of
+everything currently in draft.
 
-It also listens on your local network, so a phone on the same wifi can open it
-at `http://<your-machine-ip>:4321/preview/`. Handy for checking how something
-reads on a small screen.
+---
 
-In this build drafts behave exactly like published content: they appear in the
-blog index, on the homepage grid, in the store. That is the point — you are
-judging the card and the listing, not just the page.
+## Before publishing: staging
 
-## Publish it
+Push to the `staging` branch. That builds the complete site — including the cards
+app — with drafts included, and deploys it to a Cloudflare Pages project that
+sits behind Cloudflare Access. Only the email addresses you allow can open it.
 
-Set `draft: false`, or delete the line, then commit. **The URL does not change**:
-the preview already ran at the address the page will ship at.
+```bash
+git switch -c staging      # first time
+git push -u origin staging
+```
 
-## What "not visible to others" means here
+Review it, on whatever device you like. When you are happy:
 
-A normal build — `npm run build`, and therefore every deploy — does not emit
-draft content at all:
+```bash
+git switch main
+git merge staging
+git push                   # this is the moment it goes public
+```
 
-| | production build | preview build |
-|---|---|---|
-| Page at its URL | not built | built |
-| Blog index, homepage, store | absent | shown |
-| RSS, sitemap | absent | present (never deployed) |
-| `/preview/` hub | does not exist | built |
+Merging into `main` is the only thing that publishes. Staging never touches
+mityjohn.com.
 
-Nothing is uploaded, so there is nothing to find. This is stronger than an
-"unlisted" URL, where the page is live and merely unlinked — anyone with the
-address can read those. Drafts never leave your machine.
+### Staging is fenced off three ways
 
-Two things to keep in mind:
+Access is the lock. The other two are there for the day the lock is
+misconfigured:
 
-- **The repo is public.** A draft you *commit* is readable on GitHub even though
-  it is not on the website. For something genuinely sensitive, keep the file out
-  of the repo until it is ready (see the drafts folder used for blog posts).
-- Draft pages also carry `noindex` and a loud orange banner, so a draft can never
-  be mistaken for the live page if you leave a preview tab open.
+1. **Cloudflare Access** — login required, per email address.
+2. **`noindex` on every page** — nothing can enter a search index.
+3. **`robots.txt` disallows everything** — crawlers are told to stay out.
+
+Plus a standing purple banner on every staging page, so you can never mistake it
+for the live site. CI refuses to deploy if any of those guards go missing.
+
+To check what staging will look like without deploying:
+
+```bash
+npm run build:staging && npx astro preview
+```
+
+---
+
+## One-time setup
+
+Do these **in order**. Step 3 must be finished before step 4, or the first
+deploy lands on a public URL.
+
+**1. Create the Pages project**
+
+Cloudflare dashboard → Workers & Pages → Create → Pages → *Use direct upload* →
+name it `mityjohn-staging`. Do not upload anything.
+
+**2. Create an API token**
+
+My Profile → API Tokens → Create Token → *Custom token*:
+
+- Permission: **Account · Cloudflare Pages · Edit**
+- Account resources: your account
+
+Copy the token once.
+
+**3. Lock it with Access — before the first deploy**
+
+Zero Trust → Access → Applications → Add an application → *Self-hosted*:
+
+- Application domain: `mityjohn-staging.pages.dev` (and `*.mityjohn-staging.pages.dev`
+  so per-deploy preview URLs are covered too)
+- Policy: *Allow*, rule **Emails** → your address. Add anyone else who should
+  review here.
+
+Open the URL in a private window and confirm you are asked to log in.
+
+**4. Add the GitHub secrets**
+
+Repo → Settings → Secrets and variables → Actions:
+
+- `CLOUDFLARE_API_TOKEN` — the token from step 2
+- `CLOUDFLARE_ACCOUNT_ID` — Cloudflare dashboard, right-hand sidebar
+
+**5. Push the branch**
+
+```bash
+git switch -c staging
+git push -u origin staging
+```
+
+The workflow runs, and the site appears at `https://mityjohn-staging.pages.dev`
+behind the login.
+
+---
+
+## A note on the public repo
+
+Drafts you *commit* are readable on GitHub even before they are on the website,
+because the repo is public. Staging does not change that. For something that
+must stay unseen until launch, keep the file out of the repo until it is ready —
+the way blog posts are drafted in `mityjohn-content/drafts/`.
+
+---
 
 ## Under the hood
 
-`src/lib/drafts.ts` holds the single rule. Every listing, feed and route filters
-through its `published` helper, so there is one place to reason about — and one
-place to change if the policy ever moves.
+`src/lib/drafts.ts` holds both switches: `PREVIEW_DRAFTS` (include drafts) and
+`STAGING` (guards on). Every listing filters through its `published` helper, so
+there is one place to reason about, and one place to change.

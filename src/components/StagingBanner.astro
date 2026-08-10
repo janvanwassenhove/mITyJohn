@@ -1,0 +1,37 @@
+---
+// Standing bar on every staging page. Deliberately unmissable: staging carries
+// unpublished work, and the one mistake that matters is thinking you are looking
+// at mityjohn.com. Only rendered when STAGING=1, so it costs production nothing.
+---
+
+<div class="staging-banner">
+  <span class="dot"></span>
+  <strong>Staging</strong>
+  <span class="sep">·</span>
+  <span class="what">not the live site — drafts included, hidden from search</span>
+  <a href="https://mityjohn.com/">go to the live site →</a>
+</div>
+
+<style>
+  .staging-banner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 9px clamp(16px, 4vw, 32px);
+    background: #5b2f6e;
+    color: #f6ecfb;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    border-bottom: 1px solid #7a419230;
+  }
+  .staging-banner strong { letter-spacing: 0.14em; text-transform: uppercase; }
+  .staging-banner .sep { opacity: 0.5; }
+  .staging-banner .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #e0a4ff; flex-shrink: 0;
+  }
+  .staging-banner a { margin-left: auto; color: #e0a4ff; white-space: nowrap; }
+  .staging-banner a:hover { color: #fff; }
+  @media (max-width: 560px) { .staging-banner .what { display: none; } }
+</style>

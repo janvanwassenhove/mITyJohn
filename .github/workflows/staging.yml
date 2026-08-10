@@ -1,0 +1,58 @@
+# Staging — the whole site (plus the cards app) with drafts included, deployed to
+# a Cloudflare Pages project that sits behind Cloudflare Access.
+#
+# Flow: push to `staging` -> review at the protected URL -> merge into `main`,
+# which is what actually publishes to mityjohn.com.
+#
+# Nothing here runs until a `staging` branch exists, so the first deploy cannot
+# happen before Access is configured. See PREVIEW.md for the setup order.
+#
+# R4: third-party actions pinned to commit SHAs. Cloudflare is driven with npx
+# wrangler rather than an action, so there is no third party to pin here.
+name: Staging
+on:
+  push:
+    branches: [staging]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: staging
+  cancel-in-progress: true
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      STAGING: '1'
+      PREVIEW_DRAFTS: '1'
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with: { node-version: 22, cache: npm }
+
+      - run: npm ci
+      - run: npm run build
+
+      # Cards-app, same as the production deploy so staging is the whole site.
+      - run: npm ci
+        working-directory: cards
+      - run: npm run build
+        working-directory: cards
+      - run: cp -r cards/dist dist/cards
+
+      # Refuse to publish a build that lost its guards — a staging site without
+      # noindex, or with a crawlable robots.txt, is exactly the leak we are
+      # avoiding. Cheap check, catches a regression before it is public.
+      - name: Verify staging guards
+        run: |
+          grep -q 'Disallow: /' dist/robots.txt || { echo '::error::robots.txt is not blocking crawlers'; exit 1; }
+          grep -q 'content="noindex' dist/index.html || { echo '::error::homepage is missing noindex'; exit 1; }
+          grep -q 'staging-banner' dist/index.html || { echo '::error::staging banner missing'; exit 1; }
+          echo "guards ok"
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler@4 pages deploy dist --project-name=mityjohn-staging --branch=staging
