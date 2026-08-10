@@ -3,8 +3,12 @@
 A series about putting agentic AI to work on real hardware: where AI is taking
 software work, and what happens when you give a team of agents a body.
 
-**Status: all seventeen posts are written**, in `src/content/blog/`, every one
+**Status: sixteen posts are written**, in `src/content/blog/`, every one
 `draft: true` — verified excluded from the build and absent from the sitemap.
+
+Two posts were cut on review — a repository-visibility story and an
+installer-wiped-its-own-data story — because neither earned its place beside
+the rest. One post was added: how the assistant learns, which was the gap.
 Publish by flipping `draft` and setting a real `date`.
 
 Still to do per post: a cover image at `public/blog/<slug>/cover.webp` and a
@@ -629,11 +633,10 @@ sparingly. Calm, analogue, precise. No people, no 3D render gloss, no neon.
 | `looking-for-a-robot-that-was-there-the-whole-time` | A grid of 254 small empty squares like a survey map, nine faintly marked, one ringed in rust-orange near the middle. A brass magnifying glass at the edge. |
 | `noise-echo-and-the-microphone-problem` | A cross-section of a loudspeaker and a microphone in one housing, with reflected sound paths bouncing off room walls; a waveform with a decaying echo tail and a fader scale. |
 | `a-deadlock-caused-by-the-garbage-collector` | Two parallel thread lanes drawn as railway tracks meeting at a junction where both signals show stop; a small chain with one closed link. A stopped pocket watch at the edge. |
+| `teaching-an-assistant-without-training-a-model` | A card index drawn in cutaway: one drawer of typed cards, one of pencilled observations each with a small tally of marks beside it, and a third of folded procedure sheets. A rubber stamp reading nothing legible rests on the third drawer. |
 | `envelope-encryption-and-what-delete-should-mean` | Nested envelopes drawn in cutaway, the outer sealing a ring of smaller sealed envelopes, each holding a tiny key. A wax seal and a burnt match at the edge. |
 | `the-hollow-promise` | A heavy strongbox drawn in precise line work, firmly padlocked — with its key hanging on a small hook mounted on the outside of the same box. One rust-orange line points at the key. |
 | `a-privacy-scanner-in-your-pre-commit-hook` | A stream of small document icons falling through a fine mesh sieve; three are caught and marked, the rest pass. A rubber stamp lying face-up at the edge. |
-| `i-thought-my-repo-was-private` | A window drawn in elevation with its shutters wide open and daylight falling through, while a small "closed" latch sits unfastened beside it. A padlock lying open at the edge. |
-| `the-update-that-deleted-its-own-face-recognition` | A filing drawer being pulled out and replaced wholesale, while a small paper tag on a string remains attached to the empty frame. A torn label at the edge. |
 | `verifying-an-installer-before-you-run-it` | A sealed parcel with a wax seal and a tag bearing a long row of abstracted characters; a magnifying glass held over the tag comparing it to a second tag. |
 
 ### Editing the real assembly photographs

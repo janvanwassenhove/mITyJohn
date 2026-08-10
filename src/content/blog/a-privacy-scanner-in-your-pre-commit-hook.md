@@ -112,11 +112,6 @@ That is not luck. That is what a class-based deny rule buys you over three
 hundred commits: the categories of mistake it covers simply did not happen,
 including the ones I would certainly have made at eleven at night.
 
-It also meant that when I did find something in that history, it was a
-completely different kind of problem — real first names used as test fixtures,
-which no path rule and no content rule will ever catch. That is the next post,
-and it is the more uncomfortable one.
-
 ## What to steal
 
 **Deny by class.** Enumerate what must never be committed as *categories of
@@ -138,6 +133,5 @@ than mine.
 
 ---
 
-*Next: what the scanner cannot catch, and the afternoon I spent preparing a
-repository for publication before discovering it had been public the whole
-time.*
+*Next, and last: verifying an installer before you run it — because
+auto-update is remote code execution you have opted into.*

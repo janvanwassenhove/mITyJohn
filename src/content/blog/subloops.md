@@ -139,6 +139,6 @@ lying to you politely.
 
 ---
 
-*Next: the day the assistant started answering questions nobody had asked,
-because its own voice was hallucinating its own wake word back into its own
-input.*
+*Next: how it learns — accumulating evidence about people rather than
+fine-tuning a model, and deciding what a language model is allowed to be told
+about the person standing in front of it.*

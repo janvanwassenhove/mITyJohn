@@ -146,10 +146,9 @@ It does not catch the failure that spans units. My worst regression was
 introduced by one unit and only became visible in another, and both were
 individually correct — a whole post is coming about that.
 
-And it does not save you from the assumption you never articulated. There is a
-post at the end of this series about a repository I spent an afternoon
-preparing for publication, before discovering it had been public the entire
-time. No amount of loop discipline catches that. Only checking does.
+And it does not save you from an assumption you never articulated. The loop
+checks what you told it to check; the thing you never thought to state is
+exactly the thing nobody verifies.
 
 ---
 

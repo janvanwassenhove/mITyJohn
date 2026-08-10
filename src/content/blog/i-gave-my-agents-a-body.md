@@ -130,17 +130,14 @@ their key, a scanner in the pre-commit hook, and the day I discovered the
 encryption I was proud of was protecting nothing — because the passphrase was
 sitting in a file next to the ciphertext, with the same permissions.
 
-And **shipping**: the update that deleted its own face recognition, twice, for
-two different reasons.
+And **shipping**: auto-update is remote code execution you have opted into, so
+what arrives had better be what the release published.
 
-There is one more post in there that I considered leaving out. Near the end of
-all this I sat down to prepare the repository for going public — auditing the
-history properly, because publishing is irreversible and takes everything with
-it. I did the work. Then I checked, and the repository had been public the whole
-time.
-
-That one is about assumptions you never state, so you never check them. It is
-the least technical post in the series and probably the most useful.
+There is one post in the middle that I think matters most, and it is the one
+that sounds least dramatic: how the thing actually learns. Not by fine-tuning a
+model — by accumulating structured evidence about people, adapting what it says
+to who is standing there, and writing down skills that I approve one at a time.
+That is where "assistant" stops being a word and starts being a design.
 
 ---
 
