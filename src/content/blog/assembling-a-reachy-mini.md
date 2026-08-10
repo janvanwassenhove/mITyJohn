@@ -38,11 +38,10 @@ It is also, I should say, the more expensive trade in evenings.
 ## The build
 
 <figure>
-  <img src="/blog/assembling-a-reachy-mini/unboxing.webp"
-       alt="The opened shipping box: nested cardboard compartments printed with line drawings of the robot, and a Getting Started booklet."
+  <img src="/blog/assembling-a-reachy-mini/1-unboxing.webp"
+       alt="The opened shipping box: nested cardboard compartments printed with line drawings of the robot, beside a Getting Started booklet."
        width="1200" height="1200" loading="lazy" />
-  <figcaption>Nested compartments, each printed with the part it holds. The
-  packaging is the first half of the instructions.</figcaption>
+  <figcaption>Nested compartments, each printed with the part it holds. The packaging is the first half of the instructions.</figcaption>
 </figure>
 
 The assembly is genuinely pleasant. Pollen's
@@ -63,32 +62,28 @@ of the physical object to think with. That model came from an hour with a screwd
 and I do not think I would have got it from a datasheet.
 
 <figure>
-  <img src="/blog/assembling-a-reachy-mini/head-mechanism.webp"
-       alt="The head platform seen from above: six polished steel linkages radiating from a central hub, with motor blocks and looms of black cable beneath."
+  <img src="/blog/assembling-a-reachy-mini/2-base.webp"
+       alt="The open base: a blue battery pack, the power board and the cable runs laid out inside the circular chassis."
        width="1200" height="1200" loading="lazy" />
-  <figcaption>Six linkages, one platform. You do not forget how the head moves
-  after putting this together.</figcaption>
-</figure>
-
-That is the part I would have skipped if it had arrived pre-assembled, and it
-is the part I referred back to most. The head is not on a pan-tilt bracket; it
-sits on a platform driven by six independent linkages. Which explains, months
-later, why some motions read as *looking* and others read as *mechanism*.
-
-<figure>
-  <img src="/blog/assembling-a-reachy-mini/board-on-platform.webp"
-       alt="The main board mounted above the head platform, connected by ribbon and power cables, with the linkages visible below."
-       width="1200" height="1200" loading="lazy" />
-  <figcaption>The board goes on top of the mechanism, not beside it. Space is
-  the scarcest material in here.</figcaption>
+  <figcaption>The base first: battery, power board, and the cable runs that have to survive a head turning above them.</figcaption>
 </figure>
 
 <figure>
-  <img src="/blog/assembling-a-reachy-mini/base-internals.webp"
-       alt="The open base with the battery, power board and cable runs laid out inside the circular chassis."
+  <img src="/blog/assembling-a-reachy-mini/3-platform.webp"
+       alt="The head platform lifted out of the base shell on six polished steel linkages."
        width="1200" height="1200" loading="lazy" />
-  <figcaption>The base: battery, power board, and the cable runs that have to
-  survive a head turning above them.</figcaption>
+  <figcaption>Then the platform rises out of the shell on six linkages.</figcaption>
+</figure>
+
+That is the part I would have skipped if it had arrived pre-assembled, and
+it is the part I referred back to most. The head is not on a pan-tilt
+bracket; it sits on a platform driven by six independent linkages.
+
+<figure>
+  <img src="/blog/assembling-a-reachy-mini/4-linkages.webp"
+       alt="The same platform seen from directly above: six linkages radiating from a central hub, with motor blocks and looms of black cable beneath."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>Six linkages, one platform. Which explains, months later, why some motions read as looking and others read as mechanism.</figcaption>
 </figure>
 
 ## The moment it stops being a kit
@@ -99,11 +94,10 @@ components, after it was a robot, and nothing had changed except that the shape
 was now complete.
 
 <figure>
-  <img src="/blog/assembling-a-reachy-mini/finished.webp"
+  <img src="/blog/assembling-a-reachy-mini/5-finished.webp"
        alt="The assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, two coiled wire antennae, and a single power cable running off to the side."
        width="1200" height="1200" loading="lazy" />
-  <figcaption>Every part in this photograph passed through my hands an hour
-  earlier. That is the whole difference.</figcaption>
+  <figcaption>Every part in this photograph passed through my hands an hour earlier. That is the whole difference.</figcaption>
 </figure>
 
 That transition matters more than it should for something as pragmatic as
