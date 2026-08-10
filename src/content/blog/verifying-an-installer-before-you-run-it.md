@@ -1,5 +1,5 @@
 ---
-title: "Verifying an installer before you run it"
+title: "AURA 16 · Verifying an installer before you run it"
 date: 2026-11-29
 tags: ["security", "development", "electron"]
 cover: "/blog/verifying-an-installer-before-you-run-it/cover.webp"

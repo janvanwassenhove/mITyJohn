@@ -1,5 +1,5 @@
 ---
-title: "Subloops: the parts that run whether you are talking or not"
+title: "AURA 05 · Subloops: the parts that run whether you are talking or not"
 date: 2026-09-06
 tags: ["ai", "development", "agents", "architecture"]
 cover: "/blog/subloops/cover.webp"
@@ -76,7 +76,7 @@ crypto being live, and the gate is structural rather than a check somebody
 remembers to write.
 
 This has a consequence that looked like a bug for an entire evening. When a
-release wiped the app's data directory (a story for a later post), the
+release wiped the app's data directory, the
 passphrase went with it, the store fell back to unencrypted, and face
 recognition simply refused to start. The report I got was "the robot cannot
 recognise me any more". The cause was three layers away, and the system was
@@ -100,8 +100,8 @@ performance post later in this series.
 
 **One loop's output as another's input.** The conversation loop speaks. The
 perception path hears. If you do not think about that carefully, the assistant
-listens to itself, and I will show you exactly how badly that goes in the next
-post.
+listens to itself, and I will show you exactly how badly that goes two posts
+from here.
 
 **Lifetime and teardown.** Every loop holds resources — a camera stream, a
 native model with its own threads, an HTTP client. Starting them is easy;
@@ -133,9 +133,9 @@ dramatically better than a hang, because a degraded system tells you something
 and a hung one tells you nothing.
 
 There is a related discipline that took me longer to accept: **when a loop
-degrades, it must be loud about it.** The nastiest bug in this project — the one
-in the post after next — was a total failure of every conversational turn,
-hidden entirely by a fallback that was working exactly as designed.
+degrades, it must be loud about it.** The nastiest bug in this project — coming
+later in this series — was a total failure of every conversational turn, hidden
+entirely by a fallback that was working exactly as designed.
 
 Graceful degradation without visibility is not resilience. It is a system
 lying to you politely.

@@ -1,5 +1,5 @@
 ---
-title: "From an assembled robot to a running service"
+title: "AURA 03 · From an assembled robot to a running service"
 date: 2026-08-27
 tags: ["robotics", "hardware", "raspberry-pi", "development"]
 cover: "/blog/from-robot-to-running-service/cover.webp"

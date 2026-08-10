@@ -1,5 +1,5 @@
 ---
-title: "Teaching an assistant without training a model"
+title: "AURA 06 · Teaching an assistant without training a model"
 date: 2026-09-10
 tags: ["ai", "development", "agents", "privacy"]
 cardTag: "AI · Agents"

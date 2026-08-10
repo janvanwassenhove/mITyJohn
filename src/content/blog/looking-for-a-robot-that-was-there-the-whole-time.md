@@ -1,5 +1,5 @@
 ---
-title: "Looking for a robot that was there the whole time"
+title: "AURA 10 · Looking for a robot that was there the whole time"
 date: 2026-10-04
 tags: ["hardware", "networking", "robotics"]
 cover: "/blog/looking-for-a-robot-that-was-there-the-whole-time/cover.webp"

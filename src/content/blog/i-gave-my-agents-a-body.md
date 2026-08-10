@@ -1,5 +1,5 @@
 ---
-title: "I gave my agents a body"
+title: "AURA 01 · I gave my agents a body"
 date: 2026-08-16
 tags: ["ai", "development", "robotics", "agents"]
 cover: "/blog/i-gave-my-agents-a-body/cover.webp"
@@ -19,6 +19,35 @@ robot on my desk that looks up when I walk into the room.
 It is called AURA, it runs on a Reachy Mini, and this is the first of a series
 about building it — including the parts that went badly, which is most of the
 interesting parts.
+
+## The name is the specification
+
+I named it before I built it, which sounds like vanity and turned out to be the
+most useful thing I did. **AURA** stands for **Adaptive, Unified, Robotic
+Assistant**, and each of those four words is a constraint I had to keep meeting.
+
+**Adaptive.** It adjusts to the person in front of it, the context and the
+situation. Not a settings screen with a "tone" dropdown — the assistant knows
+who walked in, what it has learned about them, and what it is allowed to know.
+A guest gets a name and a polite greeting; a family member gets continuity; a
+child gets only what they were explicitly told, never anything inferred.
+
+**Unified.** One conversation over mail, calendar, chat, tasks, memory and
+agents, rather than seven assistants that each know a quarter of your day. This
+is the least glamorous word and the one that generates the most work, because
+"unified" is where all the integration lives.
+
+**Robotic.** Physically embodied, through a Reachy Mini. Not a metaphor and not
+a mascot: a device with a camera, a microphone array and motors, which means
+every latency figure in this series has a face attached to it.
+
+**Assistant.** A copilot, not a chatbot. The difference is whether it can *act*
+— and therefore whether it needs approval gates, an audit trail, and a stop
+button that works mid-sentence.
+
+Keeping the name honest turned out to be a decent test. Every time I was tempted
+to build something clever, I could ask which of those four words it served. More
+than once the answer was "none", and the feature did not get built.
 
 ## The question everyone is asking is the wrong one
 
