@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 59,
+        "downloads": 60,
         "platform": "Windows"
       },
       {
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.19.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.19/mITyStudio-Setup-1.1.19.exe",
         "size": 153063744,
-        "downloads": 1,
+        "downloads": 4,
         "platform": "Windows"
       }
     ]
@@ -76,57 +76,57 @@
     "assets": []
   },
   "PiBeat": {
-    "tag": "v0.2.1",
-    "date": "2026-03-20T22:10:07Z",
+    "tag": "v0.3.1",
+    "date": "2026-08-09T07:16:28Z",
     "changelog": "## 🎵 PiBeat\n\nDesktop music live-coding — write Sonic Pi code and hear it instantly.\n\n### Screenshots\n\n| Editor & Waveform | Agent Chat |\n|:-:|:-:|\n| ![Editor](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/editor.png) | ![Agent Chat](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/agent-chat.png) |\n\n| Timeline View | Band Visualizer |\n|:-:|:-:|\n| ![Timeline](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/timeline.png) | ![Band Visualizer](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/band-visualizer.png) |\n\n### 📥 Downloads\n\n| Platform | File | Notes |\n|----------|------|-------|\n| 🪟 Windows | `.msi` / `.exe` | Windows 10+ |\n| 🍎 macOS | `.dmg` (Universal) | Intel + Apple Silicon |\n| 🐧 Linux | `.deb` / `.AppImage` | Ubuntu 22.04+ |\n\n### ✨ Highlights\n- Sonic Pi-compatible live coding editor with Monaco\n- Real-time waveform visualization (wave, bars, lissajous)\n- 42 synth types, 13 effects, built-in sample library\n- AI assistant (OpenAI / Anthropic / Gemini) for code generation\n- Detachable panels, timeline view, band visualizer\n- SuperCollider integration for professional sound quality\n\n### 🚀 First-time Setup\n1. Download and install for your platform\n2. Open the editor and start writing Sonic Pi code\n3. *(Optional)* Open Settings in Agent Chat to configure an AI provider",
     "assets": [
       {
-        "name": "pibeat_0.2.1_x64_en-US.msi",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64_en-US.msi",
-        "size": 3981312,
-        "downloads": 41,
-        "platform": "Windows"
-      },
-      {
-        "name": "pibeat-0.2.1-1.x86_64.rpm",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat-0.2.1-1.x86_64.rpm",
-        "size": 5175700,
-        "downloads": 40,
+        "name": "pibeat_0.3.1_amd64.deb",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
+        "size": 7104614,
+        "downloads": 2,
         "platform": "Linux"
       },
       {
-        "name": "pibeat_0.2.1_amd64.AppImage",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.AppImage",
-        "size": 82516472,
-        "downloads": 40,
+        "name": "pibeat-0.3.1-1.x86_64.rpm",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
+        "size": 7104674,
+        "downloads": 1,
         "platform": "Linux"
       },
       {
-        "name": "pibeat_0.2.1_universal.dmg",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_universal.dmg",
-        "size": 8024119,
-        "downloads": 40,
+        "name": "pibeat_0.3.1_amd64.AppImage",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
+        "size": 84371960,
+        "downloads": 1,
+        "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.3.1_universal.dmg",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
+        "size": 11551883,
+        "downloads": 1,
         "platform": "macOS"
       },
       {
-        "name": "pibeat_0.2.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_x64-setup.exe",
-        "size": 2676977,
-        "downloads": 40,
+        "name": "pibeat_0.3.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
+        "size": 4402036,
+        "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "pibeat_0.2.1_amd64.deb",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_0.2.1_amd64.deb",
-        "size": 5175636,
-        "downloads": 39,
-        "platform": "Linux"
+        "name": "pibeat_0.3.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
+        "size": 5890048,
+        "downloads": 1,
+        "platform": "Windows"
       },
       {
         "name": "pibeat_universal.app.tar.gz",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.2.1/pibeat_universal.app.tar.gz",
-        "size": 7949711,
-        "downloads": 41
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_universal.app.tar.gz",
+        "size": 11465744,
+        "downloads": 1
       }
     ]
   },
