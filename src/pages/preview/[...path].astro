@@ -1,0 +1,90 @@
+---
+// The drafts index — your review desk. Only emitted by a preview build
+// (`npm run preview:drafts`); a production build returns no paths, so this page
+// does not exist on mityjohn.com at all.
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { SHOW_DRAFTS } from '../../lib/drafts';
+
+export async function getStaticPaths() {
+  return SHOW_DRAFTS ? [{ params: { path: undefined } }] : [];
+}
+
+type Item = { title: string; href: string; kind: string; note?: string };
+
+const isDraft = (e: { data: { draft?: boolean } }) => e.data.draft === true;
+
+const posts = (await getCollection('blog')).filter(isDraft);
+const apps = (await getCollection('apps')).filter(isDraft);
+const books = (await getCollection('books')).filter(isDraft);
+const pages = (await getCollection('pages')).filter(isDraft);
+
+const items: Item[] = [
+  ...posts.map((p) => ({
+    title: p.data.title,
+    href: `/blog/${p.id}/`,
+    kind: 'post',
+    note: p.data.date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }),
+  })),
+  ...apps.map((a) => ({ title: a.data.name, href: `/apps/${a.id}/`, kind: 'app', note: a.data.cat })),
+  ...books.map((b) => ({ title: b.data.title, href: '/books/', kind: 'book', note: b.data.series })),
+  ...pages.map((p) => ({ title: p.data.title, href: `/${p.id}/`, kind: 'page' })),
+];
+---
+
+<Base title="Drafts — preview build" noindex>
+  <section class="preview">
+    <div class="kicker">// preview build · local only</div>
+    <h1>Drafts awaiting review</h1>
+    <p class="lead">
+      Everything here has <code>draft: true</code>. It is built into this local preview so you can
+      read it in place, and it is left out of every production build — no page, no listing, no feed
+      entry, no sitemap URL. Nothing to leak, because nothing is uploaded.
+    </p>
+
+    {items.length === 0 ? (
+      <p class="empty">Nothing in draft right now. Add <code>draft: true</code> to a post, app, book or page.</p>
+    ) : (
+      <ul class="list">
+        {items.map((i) => (
+          <li>
+            <a href={i.href}>
+              <span class="kind">{i.kind}</span>
+              <span class="title">{i.title}</span>
+              {i.note && <span class="note">{i.note}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <p class="foot">
+      To publish: set <code>draft: false</code> (or remove the line), then commit. The URL does not
+      change — this preview is already the address it will ship at.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .preview { max-width: 820px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) var(--section-pad-x) var(--section-pad-y); }
+  .kicker { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--accent); letter-spacing: var(--tracking-caps); text-transform: uppercase; margin-bottom: 14px; }
+  h1 { font-family: var(--font-display); font-size: var(--text-h2); font-weight: 700; letter-spacing: var(--tracking-display); margin: 0 0 16px; }
+  .lead { color: var(--muted); line-height: var(--leading-relaxed); margin: 0 0 32px; text-wrap: pretty; }
+  .empty { font-family: var(--font-mono); font-size: var(--text-small); color: var(--muted2); border: 1px dashed var(--border2); border-radius: var(--radius-card); padding: 20px; }
+  .list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .list a {
+    display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+    padding: 14px 16px;
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-card);
+    color: var(--text);
+  }
+  .list a:hover { border-color: var(--border3); border-left-color: var(--accent); }
+  .kind { font-family: var(--font-mono); font-size: var(--text-caption-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); }
+  .title { font-weight: 600; flex: 1; min-width: 200px; }
+  .note { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
+  .foot { margin-top: 32px; font-size: var(--text-small); color: var(--muted2); }
+  code { font-family: var(--font-mono); font-size: 0.9em; background: var(--chip); border: 1px solid var(--border2); border-radius: 6px; padding: 2px 6px; }
+</style>

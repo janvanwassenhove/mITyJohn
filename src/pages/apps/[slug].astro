@@ -4,17 +4,19 @@
 // when the app has a repo with releases (§9); otherwise the designed fallback CTAs.
 import Base from '../../layouts/Base.astro';
 import ArcadeStrip from '../../components/ArcadeStrip.astro';
+import DraftBanner from '../../components/DraftBanner.astro';
 import { getCollection, render } from 'astro:content';
+import { published } from '../../lib/drafts';
 import releases from '../../data/releases.json';
 
 export async function getStaticPaths() {
-  const apps = await getCollection('apps');
+  const apps = await getCollection('apps', published);
   return apps.map((app) => ({ params: { slug: app.id }, props: { app } }));
 }
 
 const { app } = Astro.props;
 const { Content } = await render(app);
-const { name, code, tag, blurb, repo, demoUrl, cat } = app.data;
+const { name, code, tag, blurb, repo, demoUrl, cat, draft } = app.data;
 
 type Asset = { name: string; url: string; size: number; platform?: string };
 type Release = { tag?: string; date?: string; assets?: Asset[] };
@@ -23,7 +25,8 @@ const gh = repo ? `https://github.com/janvanwassenhove/${repo}` : undefined;
 const fmtSize = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.round(b / 1024) + ' KB');
 ---
 
-<Base title={`${name} — mITy.John`} description={blurb}>
+<Base title={`${name} — mITy.John`} description={blurb} noindex={draft}>
+  {draft && <DraftBanner />}
   <ArcadeStrip variant={cat === 'lab' ? 'scrum' : 'store'} />
   <article>
     <header class="hero-card">

@@ -1,6 +1,7 @@
 ---
 // Static pages (about, artist) from the pages collection — §5.1 /{slug}/.
 import { getCollection, render } from 'astro:content';
+import { published } from '../lib/drafts';
 import Page from '../layouts/Page.astro';
 import Quotes from '../components/Quotes.astro';
 import NameOrigin from '../components/NameOrigin.astro';
@@ -8,7 +9,7 @@ import AboutDig from '../components/AboutDig.astro';
 import AboutProfile from '../components/AboutProfile.astro';
 
 export async function getStaticPaths() {
-  const pages = await getCollection('pages');
+  const pages = await getCollection('pages', published);
   return pages.map((page) => ({ params: { slug: page.id }, props: { page } }));
 }
 
@@ -21,7 +22,7 @@ const { Content } = await render(page);
 const isAbout = page.id === 'about';
 ---
 
-<Page title={page.data.title} description={page.data.description}>
+<Page title={page.data.title} description={page.data.description} draft={page.data.draft}>
   {isAbout && <AboutProfile />}
   {isAbout && <AboutDig />}
   {isAbout && <NameOrigin />}

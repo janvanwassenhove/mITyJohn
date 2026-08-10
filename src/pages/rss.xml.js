@@ -1,9 +1,10 @@
 // RSS at /rss.xml (§5.1). /feed/ redirects here (astro.config + Cloudflare rule).
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
+import { published } from '../lib/drafts';
 
 export async function GET(context) {
-  const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
+  const posts = (await getCollection('blog', published)).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
   return rss({

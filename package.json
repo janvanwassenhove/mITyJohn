@@ -13,7 +13,8 @@
     "wp:export": "node scripts/wp-export.mjs",
     "sync:releases": "node scripts/fetch-releases.mjs",
     "sync:instagram": "node scripts/fetch-instagram.mjs",
-    "redirects": "node scripts/build-redirects.mjs"
+    "redirects": "node scripts/build-redirects.mjs",
+    "preview:drafts": "node scripts/preview-drafts.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",

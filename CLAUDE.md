@@ -19,6 +19,13 @@ Werkafspraken voor agents in deze repo. Twee subprojecten, één Pages-deploy.
 
 Vóór elke push: de checks van elk aangeraakt subproject lokaal groen draaien.
 
+## Concepten bekijken
+
+Content met `draft: true` (blog, apps, books, pages) komt **nooit** in een
+productiebuild. Bekijken doe je lokaal met `npm run preview:drafts`, startend op
+`/preview/`. Zie `PREVIEW.md`. De regel staat op één plek: `src/lib/drafts.ts` —
+filter altijd via `published`, nooit met een eigen `!p.data.draft`.
+
 ## Regels die je niet mag breken
 
 - `public/wp-content/uploads/**` is een byte-identieke spiegel — nooit herstructureren

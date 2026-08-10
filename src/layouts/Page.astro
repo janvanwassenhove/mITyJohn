@@ -1,12 +1,14 @@
 ---
 // Static page layout (about, artist) — prose on the design's type system.
 import Base from './Base.astro';
+import DraftBanner from '../components/DraftBanner.astro';
 
-interface Props { title: string; description?: string }
-const { title, description } = Astro.props;
+interface Props { title: string; description?: string; draft?: boolean }
+const { title, description, draft = false } = Astro.props;
 ---
 
-<Base title={`${title} — mITy.John`} description={description}>
+<Base title={`${title} — mITy.John`} description={description} noindex={draft}>
+  {draft && <DraftBanner />}
   <article>
     <h1>{title}</h1>
     <div class="prose">

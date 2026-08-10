@@ -8,6 +8,8 @@ interface Props {
   description?: string;
   ogImage?: string;
   ogType?: string;
+  /** Draft/preview pages: keep them out of search results entirely. */
+  noindex?: boolean;
 }
 
 const {
@@ -15,6 +17,7 @@ const {
   description = 'mITy.John — a one-person lab exploring where software has been and where it is going. Apps, music, books and one gloriously unnecessary programming language.',
   ogImage = '/wp-content/uploads/2023/12/logo_title.png',
   ogType = 'website',
+  noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -27,6 +30,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="sitemap" href="/sitemap-index.xml" />

@@ -1,0 +1,42 @@
+---
+// Shown on any page whose content is still draft: true. Deliberately loud, so a
+// draft can never be mistaken for the live page. Not rendered for published
+// content, so it costs nothing in production.
+---
+
+<div class="draft-banner">
+  <span class="dot"></span>
+  <strong>Draft</strong>
+  <span class="sep">·</span>
+  <span>not published — hidden from search, feeds and every listing</span>
+  <a href="/preview/">all drafts →</a>
+</div>
+
+<style>
+  .draft-banner {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 10px clamp(16px, 4vw, 32px);
+    background: #7a4a12;
+    color: #fdf3e3;
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    border-bottom: 1px solid #9a5f1a;
+  }
+  .draft-banner strong { letter-spacing: 0.14em; text-transform: uppercase; }
+  .draft-banner .sep { opacity: 0.5; }
+  .draft-banner .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffcf7a;
+    flex-shrink: 0;
+  }
+  .draft-banner a { margin-left: auto; color: #ffcf7a; white-space: nowrap; }
+  .draft-banner a:hover { color: #fff; }
+</style>

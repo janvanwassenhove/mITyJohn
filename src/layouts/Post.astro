@@ -6,10 +6,11 @@
 import Base from './Base.astro';
 import type { CollectionEntry } from 'astro:content';
 import imageDims from '../data/image-dims.json';
+import DraftBanner from '../components/DraftBanner.astro';
 
 interface Props { post: CollectionEntry<'blog'> }
 const { post } = Astro.props;
-const { title, date, tags, cover, ogImage } = post.data;
+const { title, date, tags, cover, ogImage, draft } = post.data;
 const fmt = date.toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' });
 // Same rule as the markdown images (astro.config): size from the WordPress
 // `-WxH` suffix, else the measured lookup. The cover is the LCP element, so it
@@ -20,7 +21,8 @@ const coverDims = suffix
   : (cover ? (imageDims as Record<string, number[] | undefined>)[cover.split('?')[0]] : undefined);
 ---
 
-<Base title={`${title} — mITy.John`} ogImage={ogImage ?? cover} ogType="article">
+<Base title={`${title} — mITy.John`} ogImage={ogImage ?? cover} ogType="article" noindex={draft}>
+  {draft && <DraftBanner />}
   <article>
     <header>
       <div class="meta">

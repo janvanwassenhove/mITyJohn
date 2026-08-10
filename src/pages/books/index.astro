@@ -6,8 +6,9 @@ import SectionHeader from '../../components/SectionHeader.astro';
 import BookCard from '../../components/BookCard.astro';
 import ArcadeStrip from '../../components/ArcadeStrip.astro';
 import { getCollection } from 'astro:content';
+import { published } from '../../lib/drafts';
 
-const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+const books = (await getCollection('books', published)).sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Base title="Books — mITy.John" description="Reimagined classics and picture books, in paperback and Kindle on Amazon.">

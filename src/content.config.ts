@@ -17,7 +17,10 @@ const blog = defineCollection({
     wpId: z.number().optional(),
     wpSlug: z.string().optional(),
     cardTag: z.string().optional(),
-    draft: z.boolean().default(false), // excluded from the build; see blog index
+    // Draft content still builds, at its real URL, so it can be reviewed before
+    // it goes live — but it carries noindex, is kept out of every listing, feed
+    // and the sitemap, and is only reachable from /preview/. See PREVIEW.md.
+    draft: z.boolean().default(false),
   }),
 });
 
@@ -35,6 +38,7 @@ const apps = defineCollection({
     isNew: z.boolean().default(false), // shows a NEW flag on the store card
     wpId: z.number().optional(),
     wpSlug: z.string().optional(),
+    draft: z.boolean().default(false), // see the draft note on the blog schema
   }),
 });
 
@@ -50,6 +54,7 @@ const books = defineCollection({
     cover: z.string().optional(),
     order: z.number().default(99),
     isNew: z.boolean().default(false),
+    draft: z.boolean().default(false), // see the draft note on the blog schema
   }),
 });
 
@@ -60,6 +65,7 @@ const pages = defineCollection({
     description: z.string().optional(),
     wpId: z.number().optional(),
     wpSlug: z.string().optional(),
+    draft: z.boolean().default(false), // see the draft note on the blog schema
   }),
 });
 
