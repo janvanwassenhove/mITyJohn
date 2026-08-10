@@ -105,10 +105,24 @@ Zero Trust → Access → Applications → Add an application → *Self-hosted*:
 
 - Application domain: `mityjohn-staging.pages.dev` (and `*.mityjohn-staging.pages.dev`
   so per-deploy preview URLs are covered too)
-- Policy: *Allow*, rule **Emails** → your address. Add anyone else who should
-  review here.
+- Policy: *Allow*, rule **Emails** → `vanwassenhove.jan@gmail.com`. Add anyone
+  else who should review here.
 
 Open the URL in a private window and confirm you are asked to log in.
+
+*How you log in* is a separate choice, and both options let exactly the same
+people in:
+
+- **One-time PIN** is on by default and needs no setup: Cloudflare mails a code
+  to the allowed address.
+- **Google login** is one click instead. Zero Trust → Settings → Authentication →
+  Login methods → Add new → *Google*. It wants a Client ID and Secret from an
+  OAuth client you create in the Google Cloud Console, with the redirect URI
+  Cloudflare shows you (`https://<your-team>.cloudflareaccess.com/cdn-cgi/access/callback`).
+  Then pick Google as the login method on the application.
+
+Start with the PIN if you want staging working today; switching to Google later
+changes nothing about who has access.
 
 **4. Add the GitHub secrets**
 
