@@ -158,5 +158,5 @@ was me, on my own software, and I still had to look it up.
 
 ---
 
-*Next: sound. Why the robot was inaudible, why loudness consistency beats peak
-loudness, and the acoustic problem I have not solved.*
+*Next: what "encrypted at rest" should actually buy you, and why deleting a
+person here destroys a key rather than a row.*

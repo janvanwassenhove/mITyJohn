@@ -1,5 +1,5 @@
 ---
-title: "AURA 14 · The hollow promise: encryption whose key sat next to the ciphertext"
+title: "AURA 12 · The hollow promise: encryption whose key sat next to the ciphertext"
 date: 2026-11-01
 tags: ["security", "privacy", "development"]
 cover: "/blog/the-hollow-promise/cover.webp"
@@ -158,5 +158,26 @@ Deliberate slowness in exactly one place.
 
 ---
 
-*Next: the scanner that sits in my pre-commit hook and refuses to let personal
-data reach git — and why the hook alone is not enough.*
+That is where this series ends, and it ends here deliberately.
+
+The first post argued that when you delegate work to an agent, the hard part
+stops being production and becomes verification. Everything since has been a
+variation on that: a cache that was correct and useless, a diagnosis delivered
+with confidence and built on the wrong question, a security property I was proud
+of that protected nothing at all.
+
+None of those were caught by the loop that produced them. They were caught by
+measuring on the real device, by asking what a number would look like if
+everything were broken, and by writing down what was actually observed instead
+of what was intended.
+
+That is the whole method, and it is not sophisticated. It just has to be done.
+
+---
+
+*Everything in this series — the numbers, the failures, the code — is in the
+[public repository](https://github.com/janvanwassenhove/aura), along with the
+build ledger that recorded it while it was happening. There are
+[installers](https://github.com/janvanwassenhove/aura/releases/latest) for
+Windows, macOS and Linux, and the whole stack runs without a robot if you just
+want to poke at it.*

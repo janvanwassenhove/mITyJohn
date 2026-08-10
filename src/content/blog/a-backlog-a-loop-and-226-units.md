@@ -82,9 +82,9 @@ decisions in this project came from being able to build two versions and measure
 them, which I would never have done by hand.
 
 **Writing the test I would have skipped.** This is the underrated one. The test
-that asserts the tampered installer is *refused*, the one that proves the
-migration leaves data untouched when the passphrase is wrong — those exist
-because writing them cost nothing.
+that proves a key migration leaves the data untouched when the passphrase is
+wrong, the one that checks a refusal actually refuses — those exist because
+writing them cost nothing.
 
 ## What it is bad at
 
@@ -151,6 +151,9 @@ checks what you told it to check; the thing you never thought to state is
 exactly the thing nobody verifies.
 
 ---
+
+*Next: the loops that keep running whether or not anyone is talking to it — and
+the bugs that live between them rather than inside any one of them.*
 
 *The ledger is [here](https://github.com/janvanwassenhove/aura/blob/master/docs/implementation-backlog.md).
 It is long, it is candid, and it is in Dutch — the working language of the

@@ -122,7 +122,7 @@ unit by unit, each one committed, tested and released.
 ## The numbers, and what they are worth
 
 Roughly 226 units. 287 commits. About 50 releases. A test suite that runs on
-every push and a privacy scanner that refuses to let personal data reach git.
+every push, and a scan that refuses to let personal data reach git.
 
 Those numbers are real but they are not the point, and I want to say that
 plainly because throughput is the easiest thing to brag about and the least
@@ -150,17 +150,13 @@ started answering questions nobody had asked, because its own voice was
 hallucinating its own wake word back into its own input.
 
 The **hardware**, which fights back: taking camera latency from 1554 ms to
-131 ms, hunting for a robot that was on the network the entire time while my
-diagnostic tools confidently told me it was not, and the microphone problem
-nobody solves in a weekend.
+131 ms, and hunting for a robot that was on the network the entire time while my
+diagnostic tools confidently told me it was not.
 
-**Privacy as engineering**: envelope encryption where deleting a person destroys
-their key, a scanner in the pre-commit hook, and the day I discovered the
-encryption I was proud of was protecting nothing — because the passphrase was
-sitting in a file next to the ciphertext, with the same permissions.
-
-And **shipping**: auto-update is remote code execution you have opted into, so
-what arrives had better be what the release published.
+And **privacy as engineering**: envelope encryption where deleting a person
+destroys their key rather than a row — and the day I discovered the encryption I
+was proud of was protecting nothing, because the passphrase was sitting in a
+file next to the ciphertext, with the same permissions.
 
 There is one post in the middle that I think matters most, and it is the one
 that sounds least dramatic: how the thing actually learns. Not by fine-tuning a
