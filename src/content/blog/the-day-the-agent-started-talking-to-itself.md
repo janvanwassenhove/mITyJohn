@@ -9,120 +9,128 @@ draft: true
 
 The robot answered a question nobody had asked.
 
-Not a wrong answer to a real question — that is ordinary. A complete, polite,
-generic answer to nothing at all, delivered to an empty room. Then, a little
-later, it did it again.
+Not a wrong answer to a real question. That is ordinary, that is Tuesday. This
+was a complete, polite, faintly corporate answer, delivered at conversational
+volume, to an empty room.
 
-This is my favourite bug in the whole project, because every single component
-involved was working correctly.
+Then it did it again.
 
-## The symptom
+I would like to report that I responded with the composure of a professional.
+What I actually did was stand very still in my own kitchen at half past ten at
+night, waiting to see whether it would do it a third time.
 
-"Ghost conversations." The assistant would produce a reply with no preceding
-input, the reply would be bland and non-committal in a way that felt like the
-model had been handed almost nothing, and it had a tendency to repeat.
+It did.
 
-The first instinct is to suspect the microphone: stray noise being transcribed
-into something. That is roughly right and almost entirely unhelpful, because the
-interesting question is not *whether* noise got in but what shape the noise had
-to be to make it all the way to a spoken answer.
+## Nobody was in the room, which narrows things
 
-## The chain
+The first theory is always the microphone. Some noise got in, something got
+transcribed, the machine did as it was told. That is roughly right and
+completely useless, because it does not explain the *shape* of the thing.
 
-Here is what was actually happening, in order.
+Ambient noise does not produce a conversation. For the assistant to answer,
+something had to reach it looking exactly like a request — well formed enough to
+survive the wake-word check, the echo guard, and every other piece of defensive
+plumbing between the microphone and the model.
 
-**1. The speech-to-text prompt hint.** Whisper accepts a prompt to bias
-transcription toward expected vocabulary. I had given it the wake word,
-"Richie", so it would reliably catch the name rather than producing "ritchy" or
-"rich e". This measurably improved wake-word recognition. It is standard
-practice and it worked.
+Something in my house was being extremely articulate.
 
-**2. The bias fired on nothing.** With that hint in place, ambient noise — and,
-worse, the robot's own voice coming back through the microphone — was
-occasionally transcribed as exactly the biased token. The model had been told
-this word is likely. Given something ambiguous, it produced the likely word.
-Doing precisely what it was configured to do.
+## Six reasonable decisions in a row
 
-**3. The echo guard did its job.** There is a guard for the robot hearing
-itself. When it detects self-hearing, it strips the echoed content and returns
-what remains. What remained, in this case, was the bare wake word.
+Here is the chain. I want it in order, because not one link in it is a mistake.
 
-**4. The bare wake word became a command.** And here is the bug. Downstream code
-took the post-guard transcript and treated it as user input. A transcript
-consisting of nothing but the wake word was passed to the language model as a
-command: `"richie"`.
+**One.** Whisper accepts a prompt that biases transcription toward expected
+vocabulary. I had given it the wake word, "Richie", so it would catch the name
+reliably instead of producing "ritchy" or "rich e". This measurably improved
+wake-word accuracy. It is standard practice. It worked.
 
-**5. The model answered.** Of course it did. Handed a single word with no
-content, it produced something generic and conversational.
+**Two.** With that hint in place, ambiguous audio began resolving to the biased
+token. Ambient noise. The fridge. And — this is the one that matters — the
+robot's own voice, arriving back through its own microphone. The model had been
+told this word was likely. Handed something unclear, it produced the likely
+word. Doing precisely what it was configured to do.
 
-**6. The robot spoke the answer out loud.** Which the microphone heard. Which
-could be transcribed as the wake word again.
+**Three.** The echo guard noticed the robot was hearing itself and stripped the
+echoed content out, exactly as designed. What remained was the wake word. Alone.
 
-Six steps. Every one defensible in isolation. The bug did not live in any of
-them — it lived in the composition, in the assumption that a transcript which
-survived the guard was necessarily a *request*.
+**Four.** Downstream, that surviving transcript was treated as user input. Which
+is to say the assistant received, as a command, the single word: *"richie"*.
 
-## Why it took a while to see
+**Five.** The model answered it. Of course it did. Handed one word and no
+content, a language model produces something pleasant and non-committal, which
+is roughly what you would do if someone said your name and then stopped.
 
-Because I kept looking for the broken component.
+**Six.** The robot said that answer out loud. Into the room. Where the
+microphone was.
 
-I checked the microphone gain. I checked the echo guard's thresholds. I checked
-whether the wake-word detector was firing spuriously — it was not; it was firing
-*correctly* on input that genuinely contained the wake word, because the
-transcriber had put it there.
+Return to step two.
 
-Every component passed inspection. That is the signature of a composition bug,
-and I now treat "all the parts look fine" as a positive finding rather than a
-dead end. It tells you to stop testing components and start drawing the path.
+## Everything was working perfectly, which was the problem
 
-The other thing that slowed me down: I did not have *the loop* in my head as a
-loop. I had a pipeline in my head — audio in, text, model, speech out. Pipelines
-have ends. This one did not; the output was physically connected back to the
-input by the air in the room.
+I went looking for the broken component, and that is the part worth stealing,
+because it cost me an hour.
 
-## The fix
+I checked the microphone gain. Fine. I checked the echo guard's thresholds.
+Correct. I checked whether the wake-word detector was firing spuriously — it was
+not. It was firing accurately, on input that genuinely contained the wake word,
+because the transcriber had helpfully put one there.
 
-Trivial, once seen:
+Every component passed inspection.
 
-> A command that has fewer than two characters left after stripping the wake
-> word never reaches the language model.
+I now treat that as a *positive finding* rather than a dead end. When all the
+parts are individually fine, the fault lives in the composition, and the useful
+move is to stop testing components and start drawing the path.
 
-Strip "Richie" (and the common mis-transcription "Ritchie"). If what remains is
-empty or near-empty, discard it. `"Richie play some music"` becomes
-`"play some music"` and proceeds. A bare `"richie"` — whether from noise, from
-echo, or from someone genuinely saying just the name — is dropped.
+The second thing that slowed me down is more embarrassing. I had a pipeline in
+my head — audio in, text, model, speech out — and pipelines have ends. This one
+did not. The output was physically connected back to the input by the air in the
+room, and my mental diagram stopped politely at the loudspeaker.
 
-Four lines. Tested in both directions: bare and echoed wake words are ignored,
-a real command with the wake word attached still works.
+## Four lines
 
-## What I actually take from this
+The fix, once seen:
 
-**Draw the loop your outputs close.** In any system whose output re-enters its
-own input — a speaker near a microphone, an agent that writes files it later
-reads, a bot posting to a channel it monitors — there is a cycle, and you should
-draw it explicitly rather than discovering it.
+> A command with fewer than two characters left after the wake word is stripped
+> never reaches the language model.
+
+Strip "Richie", and the common mis-hearing "Ritchie" while we are here. If what
+remains is empty or near-empty, discard it. *"Richie, play some music"* becomes
+*"play some music"* and proceeds. A bare *"richie"* — from noise, from echo, or
+from a real person who said the name and then thought better of it — goes
+nowhere.
+
+Four lines. Tested in both directions: bare and echoed wake words ignored, real
+commands unaffected.
+
+One hour of investigation. Four lines. A certain amount of dignity.
+
+## What it actually taught me
+
+**Draw the loop your outputs close.** Any system whose output re-enters its own
+input has a cycle — a speaker near a microphone, an agent that writes files it
+later reads, a bot posting into a channel it monitors. Draw it on purpose,
+before it introduces itself.
 
 **Gate where the loop closes, not where the symptom appears.** My instinct was
-to make the echo guard smarter, because the echo guard was where the noise came
-from. That would have been a fragile arms race of thresholds. The right place
-was the boundary where a transcript becomes a *command*, because that is where
-the cycle actually closes. The guard's job is to remove echo; deciding what
-counts as a request was never its responsibility.
+to make the echo guard cleverer, because the echo guard was where the noise came
+from. That would have been an arms race against a fridge. The right place was
+the boundary where a transcript becomes a *command*, because that is where the
+cycle actually closes. Removing echo was the guard's job. Deciding what counts
+as a request was never its responsibility.
 
 **Beware the well-intentioned bias.** The prompt hint made the system better at
-the thing I measured (wake-word accuracy) and worse at something I had not
-thought to measure (false positives on noise). Any time you bias a recogniser
-toward an expected token, you have increased the rate at which ambiguous input
-becomes that token. That is not a bug in the technique. It is the technique.
+the thing I measured and worse at something I had not thought to measure. Any
+time you bias a recogniser toward an expected token, you increase the rate at
+which ambiguous input becomes that token. That is not a flaw in the technique.
+That *is* the technique.
 
-**"Empty" is a value that needs handling.** A surprising number of bugs in this
-project reduce to something empty being treated as something meaningful — an
+**"Empty" is a value, and it needs handling.** A surprising number of bugs in
+this project reduce to something empty being treated as something meaningful: an
 empty transcript as a command, an absent checksum as a passing check, a missing
 marker as proof of completion. Every boundary where content becomes action
-deserves an explicit answer to "what if there is nothing here?"
+deserves an explicit answer to *what if there is nothing here?*
 
-The assistant is quiet in an empty room now. It took four lines, and about two
-hours of staring at components that were all working perfectly.
+The kitchen is quiet now. The robot no longer reacts to hearing its own name,
+which is a form of maturity that took me considerably longer to acquire.
 
 ---
 

@@ -119,6 +119,17 @@ holds no keys, no tokens and no profiles, so stealing it gets you motors.
 And it was built the way this post is about: by an agent loop working a backlog,
 unit by unit, each one committed, tested and released.
 
+It was also built, for the first several months, **without the robot**. I had
+ordered one; it had not arrived. So the loop built against a fake — a stub that
+moved no motors, saw nothing, and heard nothing — until the ledger recorded, a
+fortnight before delivery, that the *"software runway"* was fully exhausted and
+every remaining item needed the physical device.
+
+That is an unusual way round. Most projects of this kind start with hardware on
+a desk and work out what to do with it. This one had a finished assistant
+waiting for a body, which meant that when the body finally turned up, everything
+it broke was informative.
+
 ## The numbers, and what they are worth
 
 Roughly 226 units. 287 commits. About 50 releases. A test suite that runs on

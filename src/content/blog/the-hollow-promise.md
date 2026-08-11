@@ -7,31 +7,40 @@ cardTag: "Security · Privacy"
 draft: true
 ---
 
+Picture a safe. Proper one: steel, riveted, a lock you could not pick with a
+week and a diagram.
+
+Now picture a small brass hook, screwed to the outside of that safe, with the
+key hanging on it.
+
+That was my encryption.
+
 The entire point of encrypting the profiles is that a copy of the folder is
-worthless. Somebody grabs the data directory — a stolen laptop, a synced backup,
-a stray zip — and they have ciphertext.
+worthless. Somebody takes the data directory — a stolen laptop, a synced backup,
+a stray zip — and they have ciphertext and a headache.
 
-I had built that. AES-256-GCM, per-person keys, cryptographic erasure, the works.
-I had written a post's worth of design about it.
+I had built that. AES-256-GCM, per-person keys, cryptographic erasure, the
+works. I had written a post's worth of design about it, and I was, I will admit,
+a little pleased with myself.
 
-The passphrase was in a file next to that folder. Same parent directory. Same
-permissions.
+The passphrase was in a plain text file in the folder next door.
 
-## What an audit is for
+## I went looking for typos
 
 I ran a full audit of this project — interface, accessibility, performance,
-security — mostly expecting to tidy up. Two findings in the security section
-were about the encryption I was proudest of.
+security — expecting to come away with a tidy list of small things. Two findings
+in the security section were about the encryption I was proudest of.
 
 **The key sat beside the data.** The passphrase lived in a plain settings file
 in the application's data folder. The ciphertext lived in a directory
 immediately below it — siblings, same permissions. Anything that could read one
 could read the other.
 
-So what threat did the encryption actually defend against? Not a copied folder —
-the copy carries its own key. Not a stolen laptop, for the same reason. Really
-only against someone who reads the data file and, for no reason, declines to
-read the file next to it.
+So what threat did this actually defend against? Not a copied folder — the copy
+carries its own key. Not a stolen laptop, for the same reason. Realistically it
+protected me against an attacker who reads one file, notices a second file
+sitting beside it with an obvious name, and decides against opening it out of
+politeness.
 
 A security property is only real against a specific threat. Mine was real
 against essentially nothing it would plausibly meet.
@@ -80,7 +89,7 @@ demonstrably decrypted the current contents. If neither key opens the knowledge
 store, the migration aborts having touched nothing, and says the passphrase is
 probably wrong.
 
-## Three mistakes I caught before they touched real data
+## Three mistakes the tests caught before the data did
 
 I wrote tests before running any of this, and they earned their keep.
 
@@ -145,7 +154,7 @@ If the answer is "the same", it is not a verification.
 The corrected check confirmed all 14 embeddings decrypt to valid 512-dimension
 vectors. Now it means something.
 
-## The cost, and why it is a feature
+## Eight times slower, on purpose
 
 Key derivation went from about 55 ms to about 422 ms on this laptop.
 

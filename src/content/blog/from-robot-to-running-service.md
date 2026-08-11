@@ -68,11 +68,21 @@ line.** Because the robot holds nothing and does nothing clever, the interface
 between "brain" and "body" is a small, explicit network API. Which means the
 entire system runs without hardware.
 
-There is a `FakeRobot` adapter, and it is the *primary* development target.
-Everything gets built and tested against it; the real robot is where you find out
-which of your assumptions about the physical world were wrong. That is not a
-compromise, it is the correct order — and it exists because of a security
-decision, not a testing one.
+There is a fake robot adapter, and for months it was the *only* development
+target — not as a discipline I chose, but because the real one was still in a
+warehouse somewhere. The entire assistant was built against a stub that moved
+no motors and saw nothing.
+
+I would like to claim that as foresight. It was circumstance. But it turned out
+to be the right order anyway, and I would now do it deliberately: building
+against a fake forces you to define the boundary between brain and body as an
+explicit contract, instead of letting it grow into whatever the vendor's SDK
+happened to expose. When the real hardware finally arrived, it plugged into a
+seam that already existed.
+
+What the hardware then did was tell me which of my assumptions about the
+physical world were wrong. There were a lot of them, and the rest of this series
+is largely a list.
 
 If your answer to "which machine holds secrets" is "both", you have not decided
 yet.
@@ -131,9 +141,10 @@ in ways that look exactly like the device being dead.
 **Decide the trust boundary before you write code.** It determines your
 architecture, not just your security posture.
 
-**Build against a fake first.** Not for purity — for iteration speed, and because
-it forces you to define the interface between brain and body instead of letting
-it grow into whatever the SDK happened to expose.
+**Build against a fake first, even if you own the hardware.** I did it because I
+had no choice. I would do it again on purpose: it forces the boundary between
+brain and body to be an explicit contract rather than whatever the vendor's SDK
+happened to expose, and it means a delivery delay costs you nothing.
 
 **Treat "fixed by a reboot" as an open ticket.** Write down what you learned from
 the fact that it worked.

@@ -7,12 +7,24 @@ cardTag: "Robotics · Hardware"
 draft: true
 ---
 
-A box arrived containing a robot in pieces. This is what it was like to put it
-together, and what I thought about while doing it.
+A box arrived containing a robot in pieces. By then the software had been
+waiting for it for months.
 
-There is a second post after this one about getting the assembled thing to
-actually *do* something, which turned out to be a completely different kind of
-work. This one is just the build.
+That is the wrong way round, and it was not by choice. I ordered the Reachy Mini
+well before it shipped, and rather than wait I started building the assistant
+anyway — against a fake robot, because a real one was not available to me. The
+build ledger has a line in it from a fortnight before delivery that I have
+become quite fond of:
+
+> **Software runway fully exhausted** — every remaining unit needs the physical
+> device or a live key.
+
+I had, quite literally, run out of things I could do without hardware. Then a
+box turned up.
+
+This post is the build itself. The one after it is about getting the assembled
+thing to actually *do* something, which turned out to be a completely different
+kind of work.
 
 ## What a Reachy Mini is
 
