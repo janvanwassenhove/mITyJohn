@@ -1,6 +1,6 @@
 ---
 title: "AURA 01 · I gave my agents a body"
-date: 2026-08-16
+date: 2026-08-11
 tags: ["ai", "development", "robotics", "agents"]
 cover: "/blog/i-gave-my-agents-a-body/cover.webp"
 cardTag: "AI · Robotics"

@@ -1,6 +1,6 @@
 ---
 title: "AURA 03 · Assembling a Reachy Mini"
-date: 2026-08-23
+date: 2026-08-18
 tags: ["robotics", "hardware", "raspberry-pi"]
 cover: "/blog/assembling-a-reachy-mini/cover.webp"
 cardTag: "Robotics · Hardware"

@@ -1,6 +1,6 @@
 ---
 title: "AURA 13 · Looking for a robot that was there the whole time"
-date: 2026-09-27
+date: 2026-09-22
 tags: ["hardware", "networking", "robotics"]
 cover: "/blog/looking-for-a-robot-that-was-there-the-whole-time/cover.webp"
 cardTag: "Hardware · Networking"
