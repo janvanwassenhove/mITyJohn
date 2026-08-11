@@ -102,9 +102,11 @@ tool calls run concurrently; anything that needs approval serialises, because
 approval is a conversation with a human and humans do not parallelise.
 
 **Anything that touches the world stops and asks.** Sending a message, writing a
-file, committing, spending money, deleting a person. Every time — not the first
-time with a "remember this" checkbox. And queued actions never fire on
-reconnect, because approval is not a token you can bank.
+file, committing, spending money, deleting a person. Every time, unless you have
+explicitly told it to stop asking for that one tool — a checkbox that writes
+itself into your settings file, which is a decision the interface should make
+you feel. And queued actions never fire on reconnect, because approval is not a
+token you can bank.
 
 **Then it speaks**, and while it speaks it keeps listening, so you can cut it
 off mid-word.

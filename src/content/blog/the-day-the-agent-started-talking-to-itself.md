@@ -64,6 +64,20 @@ microphone was.
 
 Return to step two.
 
+There was a second version of the same fault, and it is worse in a way I find
+funny now and did not find funny then. The hint I gave the transcriber was not a
+bare word, it was a *sentence*: something to the effect of "a conversation with
+the robot Richie; address it as 'Richie, …'". Handed genuinely unclear audio, the
+transcriber sometimes returned the hint itself — and downstream, that arrived as
+a perfectly well-formed thing for a person to have said. The assistant then
+explained, courteously, how one addresses Richie.
+
+So it had two ways to talk to itself: one where the priming word survived alone,
+and one where the priming *instruction* came back as speech. Both are the same
+mistake wearing different clothes. Text I had written to help the machine hear
+was travelling the same road as text a human had spoken, and nothing in between
+knew the difference.
+
 ## Everything was working perfectly, which was the problem
 
 I went looking for the broken component, and that is the part worth stealing,
@@ -100,6 +114,16 @@ nowhere.
 
 Four lines. Tested in both directions: bare and echoed wake words ignored, real
 commands unaffected.
+
+The sentence-shaped version of the fault needed its own two answers, both of the
+same kind. The hint went back to being a bare word rather than an instruction —
+there is nothing for a transcriber to hand back as speech if you never wrote a
+sentence. And a transcript that consists of nothing but the priming words is now
+discarded the same way a bare wake word is. Later, when the assistant kept
+finding its own last reply coming back at it through the follow-up window, the
+same principle got a third application: a transcript that overlaps its own
+previous answer by more than about sixty per cent is treated as the room, not as
+a person.
 
 One hour of investigation. Four lines. A certain amount of dignity.
 

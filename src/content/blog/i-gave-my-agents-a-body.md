@@ -227,7 +227,8 @@ they were a costume rather than a design.
 
 The **agent loop** itself: how a backlog-driven loop is structured, where the
 hard edges go, and the rule that made it survivable — the loop may run twenty
-rounds, but every sensitive action still asks me, every time. Then what happens
+rounds, but every sensitive action still asks me, unless I have explicitly
+switched that one tool off myself. Then what happens
 when that agent is allowed to *delegate*: sub-agents that can read but never
 write, a round budget, and a depth limit of exactly two.
 

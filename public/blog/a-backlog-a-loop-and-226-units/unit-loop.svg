@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 900" role="img"
-     aria-label="One unit through the loop. A backlog of numbered units hands over a unit. The loop picks and builds it, tests it, commits it, releases it, and finally writes a ledger entry — which returns to the backlog for the next unit. Committing and releasing both divert through an approval gate that stops and asks the owner every time, on round one and on round twenty, because the gate is code in the tool path rather than a line in the prompt. A panel at the bottom contrasts a vague ledger entry with a measured one.">
+     aria-label="One unit through the loop. A backlog of numbered units hands over a unit. The loop picks and builds it, tests it, commits it, releases it, and finally writes a ledger entry — which returns to the backlog for the next unit. Committing and releasing both divert through an approval gate that stops and asks the owner every time, on round one and on round twenty, because the gate is code in the tool path rather than a line in the prompt. The one way out is a checkbox that silences a single named tool by writing it into the settings file. A panel at the bottom contrasts a vague ledger entry with a measured one.">
   <defs>
     <pattern id="g7" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M24 0H0V24" fill="none" stroke="#c9b998" stroke-width="0.5" opacity="0.35"/>
@@ -68,10 +68,10 @@
   <text x="584" y="482" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#34302b">the outside world stops</text>
   <text x="584" y="508" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#34302b">here and asks the owner</text>
   <text x="584" y="534" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">on round 1 and on round 20</text>
-
-  <text x="584" y="596" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">it is code in the path,</text>
-  <text x="584" y="622" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">not a line in the prompt —</text>
-  <text x="584" y="648" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">a prompt can be argued with</text>
+  <text x="584" y="588" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">it is code in the path, not a line</text>
+  <text x="584" y="612" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">in the prompt — a prompt argues back</text>
+  <text x="584" y="650" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#c0522d">one door out: a checkbox that silences</text>
+  <text x="584" y="674" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#c0522d">one named tool, in your settings file</text>
 
   <!-- what step 6 must contain -->
   <line x1="48" y1="700" x2="952" y2="700" stroke="#b8933f" stroke-width="1"/>

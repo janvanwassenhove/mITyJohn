@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 900" role="img"
-     aria-label="One conversational turn. Someone speaks. Round one runs a fast model on a short context — who is talking, a handful of facts about them, and the message — and most turns end there, going straight to speaking while still listening. If tools are needed, round two onwards switches to a stronger model that orchestrates: independent tool calls run concurrently, while anything approval-gated serialises through an approval gate that stops and asks the owner every time, and never banks that approval for later.">
+     aria-label="One conversational turn. Someone speaks. Round one runs a fast model on a short context — who is talking, a handful of facts about them, and the message — and most turns end there, going straight to speaking while still listening. If tools are needed, round two onwards switches to a stronger model that orchestrates: independent tool calls run concurrently, while anything approval-gated serialises through an approval gate that stops and asks the owner every time — unless the owner has switched that one tool off themselves — and never banks that approval for later.">
   <defs>
     <pattern id="g2" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M24 0H0V24" fill="none" stroke="#c9b998" stroke-width="0.5" opacity="0.35"/>
@@ -58,10 +58,11 @@
 
   <!-- gate -->
   <line x1="338" y1="698" x2="338" y2="738" stroke="#c0522d" stroke-width="2.5" marker-end="url(#a2r)"/>
-  <rect x="48" y="740" width="580" height="120" fill="#f6e5dc" stroke="#c0522d" stroke-width="3"/>
+  <rect x="48" y="740" width="580" height="134" fill="#f6e5dc" stroke="#c0522d" stroke-width="3"/>
   <text x="72" y="778" font-family="Consolas, ui-monospace, monospace" font-size="20" letter-spacing="2" fill="#c0522d">APPROVAL GATE</text>
-  <text x="72" y="812" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#34302b">does it touch the world? then it stops</text>
-  <text x="72" y="840" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#34302b">and asks the owner — every single time</text>
+  <text x="72" y="806" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#34302b">does it touch the world? then it stops</text>
+  <text x="72" y="832" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#34302b">and asks the owner — every single time,</text>
+  <text x="72" y="856" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#c0522d">unless you switched that one tool off yourself</text>
 
   <!-- gate returns to speaking -->
   <path d="M628 800 L755 800 L755 500" fill="none" stroke="#34302b" stroke-width="2.5" marker-end="url(#a2)"/>

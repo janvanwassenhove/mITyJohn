@@ -56,10 +56,18 @@ live.
 **The loop may run twenty rounds. Every sensitive action still asks the owner,
 every time.**
 
-Not "asks the first time and remembers". Not "asks unless it is confident". Not
-"asks in a batch at the end". Every time, for every action that touches the
-outside world: sending a message, writing a file outside the workspace,
-committing, pushing, spending money, deleting a person from the knowledge store.
+Not "asks unless it is confident". Not "asks in a batch at the end". Every time,
+for every action that touches the outside world: sending a message, writing a
+file outside the workspace, committing, pushing, spending money, deleting a
+person from the knowledge store.
+
+There is exactly one way out of that, and it is deliberately a small door: a
+checkbox on the approval itself, *always allow this tool*, which writes the tool
+name into your settings file where it survives restarts. I built it because on
+the twentieth `read_file` of an evening the ritual stops being a safeguard and
+starts being noise. But it is the one place where a decision you made once keeps
+applying while you are not watching, so it should feel like a decision — not a
+convenience you click past.
 
 Two details matter more than the rule itself.
 
