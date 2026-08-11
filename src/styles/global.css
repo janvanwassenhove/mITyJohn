@@ -80,6 +80,13 @@ a:hover { color: var(--text); }
 .prose th { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted2); }
 .prose iframe { max-width: 100%; border: 0; border-radius: var(--radius-embed); }
 
+/* Hand-drawn diagrams sit at the text measure like any other figure — they are
+   drawn on a 1000-wide canvas with type sized to survive that reduction. Below
+   the measure they pan rather than shrink further: a diagram you can scroll
+   beats one you can only squint at. */
+.prose figure.diagram .diagram-scroll { overflow-x: auto; border-radius: var(--radius-cover); }
+.prose figure.diagram img { width: 100%; min-width: 560px; }
+
 /* About page — profile card + alternating media rows. Authored as raw HTML in
    about.md, so the styles live here (global) rather than in a scoped block. */
 .about-profile {

@@ -16,6 +16,23 @@ export const SHOW_DRAFTS = process.env.PREVIEW_DRAFTS === '1';
 // still does not put unpublished work into search results.
 export const IS_STAGING = process.env.STAGING === '1';
 
-/** Collection filter: keeps drafts out unless this is a preview build. */
-export const published = (entry: { data: { draft?: boolean } }): boolean =>
-  SHOW_DRAFTS || !entry.data.draft;
+/**
+ * Collection filter: keeps out anything that is not finished *and* anything
+ * whose turn has not come.
+ *
+ * Two different questions. `draft` is the author's switch — not ready, not for
+ * anyone. The date is the schedule — ready, but dated later. A series written
+ * in advance needs the second one, otherwise taking it out of draft puts every
+ * post and every feed item live in the same second, which is not a series.
+ *
+ * The nightly rebuild (.github/workflows/deploy.yml) is what makes the schedule
+ * real: a post appears on the first build after its date. Collections without a
+ * date (apps, books) are unaffected.
+ *
+ * A preview or staging build shows everything, including the future.
+ */
+export const published = (entry: { data: { draft?: boolean; date?: Date } }): boolean => {
+  if (SHOW_DRAFTS) return true;
+  if (entry.data.draft) return false;
+  return !entry.data.date || entry.data.date.valueOf() <= Date.now();
+};

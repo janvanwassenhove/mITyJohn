@@ -1,0 +1,159 @@
+---
+title: "AURA 07 · Subloops: the parts that run whether you are talking or not"
+date: 2026-09-06
+tags: ["ai", "development", "agents", "architecture"]
+cover: "/blog/subloops/cover.webp"
+cardTag: "AI · Architecture"
+draft: false
+---
+
+A chatbot is a request/response system. You say something, it thinks, it
+answers, and between your messages it does not exist.
+
+An embodied assistant is not that. It is several loops running at different
+frequencies whether or not anyone is talking to it, and the moment you add the
+second loop you have a distributed system on one machine — with all the
+coordination problems that implies and none of the tooling, because it does not
+look like a distributed system.
+
+This is the architecture that emerged, and the failures that shaped it.
+
+## Three loops, three clocks
+
+<figure class="diagram">
+  <div class="diagram-scroll">
+    <img src="/blog/subloops/three-loops.svg"
+         alt="Diagram of three loops on three clocks. Perception runs continuously: frame, downscale, embedding, match. Conversation is event-driven and moves through idle, listening, transcribing, thinking and speaking, returning to idle when done, with interrupted drawn as a state of its own rather than an error path. Maintenance runs every five minutes, checking whether the robot is reachable, the key valid and the store encrypted. Below, two panels show where the bugs actually live: shared hardware, where face recognition and gesture detection want the same camera frame, and output becoming input, where the speaker sits next to the microphone."
+         width="1000" height="1000" loading="lazy" />
+  </div>
+  <figcaption>Three loops on three clocks. The interesting failures are in the
+  white space between the boxes, not inside any of them.</figcaption>
+</figure>
+
+**Perception** runs continuously against the camera. A frame comes in, gets
+downscaled, gets turned into a face embedding, and the embedding is matched
+against the encrypted gallery. It runs whether anyone is speaking, because
+knowing who walked into the room is not a response to a question — it is
+context that must already exist when the question arrives.
+
+**Conversation** is event-driven and, crucially, is a real state machine rather
+than a chain of awaits — which is why *interrupted* appears in the diagram above
+as a box like any other.
+
+Being interrupted is a state of its own, not an error path. That is the whole
+design decision. If interruption is an exception you catch, you get an assistant
+that stops badly; if it is a state you pass through, you get one that can be cut
+off mid-word and pick up coherently — including telling the model, once, that
+its previous answer was cut off, so it does not cheerfully resume a sentence
+nobody is still listening to.
+
+Every transition is logged with the turn it belongs to and the three things you
+need in order to reconstruct what happened: whether audio was playing, whether a
+model call was in flight, and whether a cancellation had been requested. Never
+the audio itself, and never secrets.
+
+When something goes wrong in a voice system, that transition log is the only
+artefact that makes it explicable afterwards.
+
+**Maintenance** runs every five minutes and asks small, boring questions. Is the
+robot reachable? Is there an LLM key and does it work? Is text-to-speech
+configured? Is the knowledge store actually encrypted? It reconnects the robot
+by itself when the link has dropped, and it emits a report onto the event bus
+that shows up in the console.
+
+That last part is the design principle: **self-healing that reports what it
+healed.** A system that silently fixes itself is indistinguishable from one that
+was never broken, right up until it fixes itself in a way you would not have
+chosen. If the robot has been reconnected eleven times this morning, I want to
+know that, even though everything "works".
+
+<figure>
+  <img src="/blog/subloops/app-logs.webp"
+       alt="The console with the event log open along the bottom, showing timestamped events published by the running loops: a robot mode change and two drafted responses."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>The loops publish rather than whisper — every transition lands here with a timestamp. This is one quiet turn in a demo build; on a working day the list is long, and that is the point. If something healed itself eleven times this morning, you want to be able to find that out.</figcaption>
+</figure>
+
+## The gate between capability and crypto
+
+Here is a coupling I did not anticipate but would keep.
+
+Perception starts at boot. Face *recognition* does not — it only joins once the
+knowledge store is encrypted and unlocked.
+
+The reason is a policy, not a performance concern: a face embedding is
+biometric data, and in this system biometric data may not exist on disk
+unencrypted. Ever. So the capability that produces embeddings is gated on the
+crypto being live, and the gate is structural rather than a check somebody
+remembers to write.
+
+This has a consequence that looked like a bug for an entire evening. When a
+release wiped the app's data directory, the
+passphrase went with it, the store fell back to unencrypted, and face
+recognition simply refused to start. The report I got was "the robot cannot
+recognise me any more". The cause was three layers away, and the system was
+behaving exactly as designed.
+
+I still think the design is right. What was wrong was that it did not *say* so.
+The current version tells you plainly that recognition is off because the store
+is not encrypted, and gives you the button to fix it. A correct refusal that
+cannot explain itself is a bad refusal.
+
+## Where the bugs actually live
+
+Not in the loops. Between them.
+
+**Shared hardware.** Gesture detection and face recognition both want camera
+frames. Naively, that is two consumers each grabbing their own frame at their
+own rate, which doubles the load on the slowest part of the system for no
+benefit — both would happily use the same picture. Fixing that meant a shared
+frame with a short time-to-live, and getting that wrong is the subject of the
+performance post later in this series.
+
+**One loop's output as another's input.** The conversation loop speaks. The
+perception path hears. If you do not think about that carefully, the assistant
+listens to itself, and I will show you exactly how badly that goes two posts
+from here.
+
+**Lifetime and teardown.** Every loop holds resources — a camera stream, a
+native model with its own threads, an HTTP client. Starting them is easy;
+stopping them in the right order, when a shutdown may arrive at any point, is
+where the hangs come from. This project has a shutdown sequence that explicitly
+stops the voice loop, then maintenance, then the robot bridge, then perception,
+then the heartbeat, then closes the clients — in that order, because a loop that
+is stopped while something it depends on is already gone will wait forever on
+something that is never coming.
+
+I learned that one the hard way. A camera reader held an open stream to the
+robot, and shutdown waited on a connection that does not end on its own. The app
+looked like it had frozen on quit. It had.
+
+## Degrade, do not freeze
+
+The property I would keep above all others: **every loop must have a defined
+behaviour for "the thing I depend on is not answering"**, and that behaviour
+must never be "block".
+
+The robot goes offline: the conversation loop keeps working, text-only, and says
+so. The internet dies: a local model takes over, and if that is unavailable a
+regex fallback handles the handful of commands worth handling offline. The brain
+becomes unreachable entirely: the robot runs its own small behaviour loop on the
+Pi so it stays polite rather than becoming a statue.
+
+Each of those is a worse experience than the full system. All of them are
+dramatically better than a hang, because a degraded system tells you something
+and a hung one tells you nothing.
+
+There is a related discipline that took me longer to accept: **when a loop
+degrades, it must be loud about it.** The nastiest bug in this project — coming
+later in this series — was a total failure of every conversational turn, hidden
+entirely by a fallback that was working exactly as designed.
+
+Graceful degradation without visibility is not resilience. It is a system
+lying to you politely.
+
+---
+
+*Next: how it learns — accumulating evidence about people rather than
+fine-tuning a model, and deciding what a language model is allowed to be told
+about the person standing in front of it.*
