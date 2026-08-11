@@ -202,7 +202,8 @@ it broke was informative.
 
 ## The numbers, and what they are worth
 
-Roughly 226 units. 287 commits. About 50 releases. A test suite that runs on
+Roughly 226 units at the time of writing. Nearly 300 commits. More than fifty
+releases. A test suite that runs on
 every push, and a scan that refuses to let personal data reach git.
 
 Those numbers are real but they are not the point, and I want to say that

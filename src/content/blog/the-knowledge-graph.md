@@ -1,6 +1,6 @@
 ---
 title: "AURA 09 · A graph of people, and the wiki-links that build it"
-date: 2026-09-17
+date: 2026-09-13
 tags: ["ai", "development", "architecture", "privacy"]
 cover: "/blog/the-knowledge-graph/cover.webp"
 cardTag: "AI · Architecture"

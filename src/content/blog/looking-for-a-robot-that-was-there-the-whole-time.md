@@ -140,7 +140,7 @@ The fix is a two-pass scan:
    is the expensive part; doing it 254 times to find one device is the actual
    cost.
 
-Bounded on purpose: own subnet only, one second per host, 64 at a time. A few
+Bounded on purpose: own subnet only, one second per host, the whole /24 in flight at once. A few
 seconds, not a background service, and never beyond the owner's own network.
 
 **48 s → about 1.4 s.** Same information. The difference between a background

@@ -30,8 +30,9 @@ code path that runs every tool call. If a tool is not on the list, it is
 refused, *including when the current mode would otherwise permit it*. The
 sub-agent cannot write files, cannot commit, cannot send anything.
 
-**Its own round budget.** Six rounds. Then it returns whatever it has. There is
-no "just one more look".
+**Its own round budget.** Four rounds by default, six at the very most — the
+main loop may ask for fewer but cannot ask for more. Then it returns whatever it
+has. There is no "just one more look".
 
 **No onward delegation.** A sub-agent cannot spawn a sub-agent. The tree is
 exactly two levels deep, always, by construction.
