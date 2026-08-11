@@ -8,5 +8,5 @@ preview: "/books/reimagining-punk/Reimagining_Punk_teaser_fr.pdf"
 cover: "/books/reimagining-punk-fr.jpg"
 isNew: true
 order: 8
-draft: true
+draft: false
 ---

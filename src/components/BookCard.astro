@@ -18,7 +18,11 @@ const Cover = buy ? 'a' : 'div';
     target={buy ? '_blank' : undefined}
     rel={buy ? 'noopener' : undefined}
   >
-    {isNew && <span class="new-flag">NEW</span>}
+    {/* A book that cannot be bought yet is not "new" — it is announced. The flag
+        says which, so the card never promises something the shop cannot deliver. */}
+    {!buy && releases
+      ? <span class="new-flag soon-flag">IN THE OVEN</span>
+      : isNew && <span class="new-flag">NEW</span>}
     {cover ? (
       <img src={cover} alt={`Cover of ${title}`} loading="lazy" decoding="async" width="600" height="948" />
     ) : (
@@ -95,6 +99,13 @@ const Cover = buy ? 'a' : 'div';
     border-radius: var(--radius-pill);
     padding: 3px 9px;
     box-shadow: 0 4px 14px -4px var(--accent-2);
+  }
+  /* Announced, not released: a quieter flag than NEW (declared after .new-flag so it wins), in the level colour rather
+     than the accent, so a shelf of coming titles does not shout over the ones
+     you can actually buy. */
+  .soon-flag {
+    color: var(--ink-on-level-books);
+    background: var(--level-books);
   }
   .inner { position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
   .series {
