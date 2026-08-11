@@ -1,5 +1,5 @@
 ---
-title: "AURA 06 · Teaching an assistant without training a model"
+title: "AURA 08 · Teaching an assistant without training a model"
 date: 2026-09-10
 tags: ["ai", "development", "agents", "privacy"]
 cardTag: "AI · Agents"
@@ -170,6 +170,5 @@ experiment I have not run.
 
 ---
 
-*Next: the day the assistant started answering questions nobody had asked,
-because its own voice was hallucinating its own wake word back into its own
-input.*
+*Next: what all of that accumulates into — a graph of people, facts and the
+topics they turn out to share.*

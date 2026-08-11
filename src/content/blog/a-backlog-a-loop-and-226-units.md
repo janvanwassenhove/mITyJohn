@@ -1,5 +1,5 @@
 ---
-title: "AURA 04 · A backlog, a loop, and 226 units"
+title: "AURA 05 · A backlog, a loop, and 226 units"
 date: 2026-08-30
 tags: ["ai", "development", "agents", "sdlc"]
 cover: "/blog/a-backlog-a-loop-and-226-units/cover.webp"
@@ -152,8 +152,8 @@ exactly the thing nobody verifies.
 
 ---
 
-*Next: the loops that keep running whether or not anyone is talking to it — and
-the bugs that live between them rather than inside any one of them.*
+*Next: what happens when the agent is allowed to delegate — hooks that fire
+whether the model likes it or not, and sub-agents on a leash.*
 
 *The ledger is [here](https://github.com/janvanwassenhove/aura/blob/master/docs/implementation-backlog.md).
 It is long, it is candid, and it is in Dutch — the working language of the

@@ -1,5 +1,5 @@
 ---
-title: "AURA 09 · From 1554 ms to 131 ms: making a camera feel live"
+title: "AURA 12 · From 1554 ms to 131 ms: making a camera feel live"
 date: 2026-09-27
 tags: ["hardware", "performance", "robotics", "python"]
 cover: "/blog/making-a-camera-feel-live/cover.webp"

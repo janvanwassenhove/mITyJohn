@@ -105,19 +105,78 @@ indistinguishable from working unless you look. I once broke every single
 conversational turn — every one — and the system kept answering. It answered
 with an echo of the question, politely, for days.
 
-## So I gave it a body
+## So what happens to the rest of us
 
-You can address all three of those on paper. I have read the blog posts. I have
-written some of them. What I had not done was put an agent somewhere it could
-embarrass me in front of my family.
+This is the question underneath the question, and the honest answer starts by
+being precise about what is actually being automated.
 
-A robot is unusually good at this. It sits on the desk. When the camera
-pipeline is slow you do not read it in a dashboard, you watch it turn its head
-a second and a half after you have already left. When speech recognition
-mis-hears, it says something wrong *out loud*. When a release wipes its own
-data, the person asking "where did my profile go?" is standing in front of you.
+It is not "coding". It never was. What an agent is genuinely good at is the
+**middle** — the translation of a clear intent into working mechanism. Given a
+sharp specification and a way to check the result, it will produce the
+mechanism, tirelessly, at four in the morning, across forty files, without
+getting bored on file thirty-one.
 
-AURA is what came out of that. It recognises who is in the room and adapts to
+Which means the parts on either side of that middle become the job.
+
+**Developers** stop being paid to produce mechanism and start being paid to
+decide what "done" means precisely enough that something else can check it. That
+is not a smaller job. It is a harder one, and it uses a different muscle — the
+one that asks "how would I know if this were wrong?" rather than "how do I make
+this work?" Several posts in this series are that muscle failing: a cache I
+shipped with a zero percent hit rate, a verification that would have reported
+success on completely corrupted data.
+
+**Designers** face the same shift one layer up. Generating twenty variations is
+now free. Knowing which one is right, and why, and what it costs the person on
+the other end — that got no cheaper at all, and it just became the entire value.
+
+**Infrastructure** is the one I find most interesting, because it does not
+shrink, it *inverts*. When the thing running in your environment can act, the
+job stops being "keep the servers up" and becomes "design the box the agent runs
+inside". What can it reach? How many rounds may it take? What must stop and ask?
+That is a real engineering discipline, it is closer to safety engineering than
+to operations, and almost nobody is trained for it yet. There is a whole post in
+this series about exactly that, and every mechanism in it is a bound rather than
+a capability.
+
+I do not think these roles disappear. I think the ratio changes — sharply, and
+towards the things that were always the hard part and were always easiest to
+skip. The uncomfortable version of that prediction is that the shift rewards
+people who enjoy specifying and verifying, and those are not the same people who
+got into this because they enjoy building.
+
+## And then I made it physical
+
+Which brings me to the part that sounds like a gimmick and is the actual
+argument.
+
+If an agent can hold a goal for hours and act on the world, then a chat window
+is the wrong shape for it. A chat window is a thing you visit. A colleague is a
+thing that is *there* — that notices you came in, that knows what you were doing
+yesterday, that can be interrupted mid-sentence and does not lose the thread.
+
+So I put one in the room. Not as decoration: as a forcing function. A robot on a
+desk cannot hide behind a good demo. It has a face, so latency becomes rudeness.
+It has a speaker, so a mis-hearing is something a family member witnesses. It
+recognises people, so getting privacy wrong stops being a policy question and
+becomes a question about your own household.
+
+Every constraint in this project got sharper the moment it had a body. That is
+the thesis, and the rest of the series is what it cost.
+
+Concretely: when the camera pipeline is slow you do not read it in a dashboard,
+you watch the head turn a second and a half after you have already walked past.
+When speech recognition mis-hears, it says something wrong *out loud*. When a
+release wipes its own data, the person asking "where did my profile go?" is
+standing in front of you.
+
+You can address all three of the failures above on paper. I have read those blog
+posts. I have written some of them. What I had not done was put an agent
+somewhere it could embarrass me in front of my family.
+
+## What that turned into
+
+AURA is what came out of it. It recognises who is in the room and adapts to
 them. It holds a spoken conversation you can interrupt mid-sentence. It reaches
 into mail, calendar, chat and tasks, with an approval gate on anything that
 matters. Everything personal is encrypted on my own laptop; the robot itself
@@ -158,23 +217,31 @@ Every post is anchored to something you can check in the
 [public repository](https://github.com/janvanwassenhove/aura) — a measured
 number, a commit, or a failure recorded while it was still embarrassing.
 
+The **architecture**, and the day I deleted five of my six services because
+they were a costume rather than a design.
+
 The **agent loop** itself: how a backlog-driven loop is structured, where the
 hard edges go, and the rule that made it survivable — the loop may run twenty
-rounds, but every sensitive action still asks me, every time.
+rounds, but every sensitive action still asks me, every time. Then what happens
+when that agent is allowed to *delegate*: sub-agents that can read but never
+write, a round budget, and a depth limit of exactly two.
 
-The **subloops**: perception, conversation and maintenance running at different
-frequencies, and the bugs that live in between them. Including the day the robot
-started answering questions nobody had asked, because its own voice was
+The **brain**: how it learns without any fine-tuning, what a language model is
+actually allowed to be told about the person in front of it, and the graph that
+all of it accumulates into.
+
+The **subloops** — perception, conversation and maintenance running at different
+frequencies — and the bugs that live in between them. Including the day the
+robot started answering questions nobody had asked, because its own voice was
 hallucinating its own wake word back into its own input.
 
-The **hardware**, which fights back: taking camera latency from 1554 ms to
-131 ms, and hunting for a robot that was on the network the entire time while my
-diagnostic tools confidently told me it was not.
+The **hardware**, which fights back: camera latency from 1554 ms to 131 ms, and
+hunting for a robot that was on the network the entire time while my diagnostic
+tools confidently told me it was not.
 
-And **privacy as engineering**: envelope encryption where deleting a person
-destroys their key rather than a row — and the day I discovered the encryption I
-was proud of was protecting nothing, because the passphrase was sitting in a
-file next to the ciphertext, with the same permissions.
+And **privacy as engineering**: encryption where deleting a person destroys
+their key rather than a row — and the day I found the key to my own safe hanging
+on a hook on the outside of it.
 
 There is one post in the middle that I think matters most, and it is the one
 that sounds least dramatic: how the thing actually learns. Not by fine-tuning a

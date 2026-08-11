@@ -1,5 +1,5 @@
 ---
-title: "AURA 08 · Why \"just use the best model\" is not a strategy"
+title: "AURA 11 · Why \"just use the best model\" is not a strategy"
 date: 2026-09-20
 tags: ["ai", "generative-ai", "development"]
 cover: "/blog/why-just-use-the-best-model-is-not-a-strategy/cover.webp"

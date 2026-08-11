@@ -3,7 +3,7 @@
 A series about putting agentic AI to work on real hardware: where AI is taking
 software work, and what happens when you give a team of agents a body.
 
-**Status: twelve posts are written**, in `src/content/blog/`, every one
+**Status: fourteen posts are written**, in `src/content/blog/`, every one
 `draft: true` — verified excluded from the build and absent from the sitemap.
 
 Six posts were cut on review, in two rounds. The first pair (a
@@ -659,3 +659,44 @@ node scripts/build-image-dims.mjs
 ```
 
 Skipping that leaves the layout without dimensions and produces layout shift.
+
+
+---
+
+## Round three — what changed and why
+
+Three gaps and one bad post, all found by review rather than by me.
+
+**The opening post was answering a smaller question than the one asked.** It
+argued that delegation moves the hard part from production to verification,
+which is true, and skipped the question underneath: what happens to developers,
+designers and infrastructure when the middle of the work is automated. That
+section now exists, and it lands on infrastructure inverting rather than
+shrinking — the job becomes designing the box the agent runs inside, which is
+closer to safety engineering than to operations.
+
+**There was no architecture post.** Now there is, and it opens on the six
+microservices I deleted, because that is the honest version: I built the shape I
+had read about rather than the shape the problem had.
+
+**There was nothing about delegation.** Also now written, from a real unit in
+the ledger: sub-agents with a hard read-only allowlist enforced in the tool path
+rather than the prompt, a six-round budget, and no onward delegation — the tree
+is exactly two levels deep by construction. Plus hooks, which are policy and
+therefore fire whether the model likes it or not.
+
+**And the two privacy posts became one.** The second was half migration
+mechanics and reported a count of face embeddings that meant nothing to a
+reader. Merged: the design, then the failure, then the two ideas worth keeping —
+that a security property is only real against a named threat, and that a
+verification which would report the same number on completely broken data is not
+a verification.
+
+### Covers still needed
+
+| Slug | Subject |
+|---|---|
+| `the-architecture` | A cutaway of a mid-century building in two halves: a heavy vaulted strongroom on one side holding filing drawers and key rings, a light open workshop on the other holding only tools and levers, joined by a single labelled conduit. |
+| `hooks-subagents-and-a-delegation-budget` | A drawing-office scene: one large drafting table with a smaller one beside it, connected by a short chain with a visible end stop. On the small table, a tray of reading instruments and no pens at all. A brass counter showing a low number. |
+| `teaching-an-assistant-without-training-a-model` | A card index drawn in cutaway: one drawer of typed cards, one of pencilled observations each with a small tally of marks beside it, and a third of folded procedure sheets. A rubber stamp rests on the third drawer. |
+| `the-knowledge-graph` | A constellation chart on cream paper: labelled nodes of unequal size joined by fine ruled lines, one node noticeably larger with the densest connections, drawn with the restraint of an astronomical plate rather than a network diagram. |

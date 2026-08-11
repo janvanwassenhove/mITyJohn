@@ -1,5 +1,5 @@
 ---
-title: "AURA 05 · Subloops: the parts that run whether you are talking or not"
+title: "AURA 07 · Subloops: the parts that run whether you are talking or not"
 date: 2026-09-06
 tags: ["ai", "development", "agents", "architecture"]
 cover: "/blog/subloops/cover.webp"
