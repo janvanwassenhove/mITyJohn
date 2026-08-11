@@ -15,14 +15,14 @@
         "name": "LoveFlix-1.0.0.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
         "size": 101216735,
-        "downloads": 50,
+        "downloads": 51,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 41,
+        "downloads": 42,
         "platform": "macOS"
       },
       {
@@ -40,16 +40,16 @@
     "changelog": "# mITyGuitar Desktop 0.0.1\r\n\r\n## What's New\r\n- Desktop application release for Windows\r\n- Full featured guitar learning and practice application\r\n- Chord mapping and song chart support\r\n- Controller integration for interactive practice\r\n\r\n## Downloads\r\n\r\n### Windows Installers\r\n- **MSI Package**: `mITyGuitar_0.0.1_x64_en-US.msi` - Windows Installer Package (recommended for most users)\r\n- **NSIS Setup**: `mITyGuitar_0.0.1_x64-setup.exe` - Nullsoft Installer (alternative option)\r\n\r\nBoth installers include the complete application with all dependencies.\r\n\r\n## System Requirements\r\n- Windows 10/11 (64-bit)\r\n- Audio device (headphones/speakers recommended)\r\n- Optional: MIDI controller for enhanced interaction\r\n\r\n## Installation\r\n1. Download your preferred installer\r\n2. Run the installer as administrator\r\n3. Follow the setup wizard\r\n4. Launch mITyGuitar from Start Menu or Desktop\r\n\r\n## Issues & Support\r\nIf you encounter any issues, please report them on our [GitHub Issues](https://github.com/janvanwassenhove/mITyGuitar/issues) page.\r\n\r\n---\r\nGenerated on 2026-01-04 23:17:33 UTC",
     "assets": [
       {
-        "name": "mITyGuitar_0.0.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
-        "size": 113233473,
-        "downloads": 42,
-        "platform": "Windows"
-      },
-      {
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
+        "downloads": 43,
+        "platform": "Windows"
+      },
+      {
+        "name": "mITyGuitar_0.0.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
+        "size": 113233473,
         "downloads": 42,
         "platform": "Windows"
       }
@@ -84,29 +84,22 @@
         "name": "pibeat_0.3.1_amd64.deb",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
         "size": 7104614,
-        "downloads": 2,
+        "downloads": 3,
         "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.3.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
+        "size": 5890048,
+        "downloads": 2,
+        "platform": "Windows"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
-        "downloads": 1,
+        "downloads": 2,
         "platform": "Linux"
-      },
-      {
-        "name": "pibeat_0.3.1_amd64.AppImage",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
-        "size": 84371960,
-        "downloads": 1,
-        "platform": "Linux"
-      },
-      {
-        "name": "pibeat_0.3.1_universal.dmg",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
-        "size": 11551883,
-        "downloads": 1,
-        "platform": "macOS"
       },
       {
         "name": "pibeat_0.3.1_x64-setup.exe",
@@ -116,11 +109,18 @@
         "platform": "Windows"
       },
       {
-        "name": "pibeat_0.3.1_x64_en-US.msi",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
-        "size": 5890048,
+        "name": "pibeat_0.3.1_universal.dmg",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
+        "size": 11551883,
         "downloads": 1,
-        "platform": "Windows"
+        "platform": "macOS"
+      },
+      {
+        "name": "pibeat_0.3.1_amd64.AppImage",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
+        "size": 84371960,
+        "downloads": 1,
+        "platform": "Linux"
       },
       {
         "name": "pibeat_universal.app.tar.gz",
@@ -139,14 +139,14 @@
         "name": "GhostsInTheMachine-1.0.5-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg",
         "size": 136227827,
-        "downloads": 41,
+        "downloads": 42,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg",
         "size": 134457974,
-        "downloads": 40,
+        "downloads": 41,
         "platform": "macOS"
       },
       {
@@ -204,6 +204,60 @@
         "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.tar.gz",
         "size": 1069463,
         "downloads": 41
+      }
+    ]
+  },
+  "aura": {
+    "tag": "v2.0.59",
+    "date": "2026-08-11T22:10:42Z",
+    "changelog": "## AURA v2.0.59\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.58...v2.0.59",
+    "assets": [
+      {
+        "name": "AURA-2.0.59-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-windows-setup.exe",
+        "size": 82517972,
+        "downloads": 0,
+        "platform": "Windows"
+      },
+      {
+        "name": "AURA-2.0.59-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-mac-arm64.dmg",
+        "size": 99116779,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "AURA-2.0.59-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-mac-x64.dmg",
+        "size": 103697782,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "AURA-2.0.59-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-linux-amd64.deb",
+        "size": 75362472,
+        "downloads": 0,
+        "platform": "Linux"
+      },
+      {
+        "name": "AURA-2.0.59-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-linux-x86_64.AppImage",
+        "size": 108814870,
+        "downloads": 0,
+        "platform": "Linux"
+      },
+      {
+        "name": "AURA-2.0.59-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-mac-arm64.zip",
+        "size": 95713811,
+        "downloads": 0
+      },
+      {
+        "name": "AURA-2.0.59-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.59/AURA-2.0.59-mac-x64.zip",
+        "size": 100341004,
+        "downloads": 0
       }
     ]
   }

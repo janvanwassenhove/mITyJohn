@@ -180,5 +180,23 @@
       "src": "/screenshots/cards-4.webp",
       "alt": "cards screenshot 4"
     }
+  ],
+  "aura": [
+    {
+      "src": "/screenshots/aura-1.webp",
+      "alt": "aura screenshot 1"
+    },
+    {
+      "src": "/screenshots/aura-2.webp",
+      "alt": "aura screenshot 2"
+    },
+    {
+      "src": "/screenshots/aura-3.webp",
+      "alt": "aura screenshot 3"
+    },
+    {
+      "src": "/screenshots/aura-4.webp",
+      "alt": "aura screenshot 4"
+    }
   ]
 }

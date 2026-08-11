@@ -19,6 +19,7 @@ const OUT = new URL('src/data/screenshots.json', ROOT);
 // Curated per app: repo + the in-repo image paths worth showing, in order.
 // Hand-picked rather than globbed so we never surface icons, sprites or noise.
 const SOURCES = {
+  aura: { repo: 'aura', files: ['docs/screenshots/console.webp', 'docs/screenshots/brain-person.webp', 'docs/screenshots/knowledge-graph.webp', 'docs/screenshots/reachy-mini.webp'] },
   mitystudio: { repo: 'mITyStudio', files: ['docs/screenshots/studio.png', 'docs/screenshots/voices.png', 'docs/screenshots/assets.png', 'docs/screenshots/onboarding.png'] },
   'music-agent': { repo: 'MusicAgent', files: ['Assets/WebApp/CreativeMode.png', 'Assets/WebApp/SonicPi_Visualisation.png', 'Assets/WebApp/samples_playback.png'] },
   mityguitar: { repo: 'mITyGuitar', files: ['docs/images/splashscreen.png', 'docs/images/controller.png', 'docs/images/dongle.png'] },

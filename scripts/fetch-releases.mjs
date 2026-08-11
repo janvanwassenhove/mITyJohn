@@ -23,6 +23,12 @@ const PLATFORM = [
 ];
 const platformOf = (name) => PLATFORM.find(([re]) => re.test(name))?.[1];
 
+// Which installer leads when downloads cannot decide. A fresh release has zero
+// of everything, so without this the headline button is whatever GitHub happens
+// to list first — alphabetically, which means a .deb.
+const PREFERENCE = ['Windows', 'macOS', 'Linux', 'Android'];
+const preferenceOf = (p) => { const i = PREFERENCE.indexOf(p); return i === -1 ? PREFERENCE.length : i; };
+
 const headers = { 'User-Agent': 'mityjohn-site-sync', Accept: 'application/vnd.github+json' };
 if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
 
@@ -53,8 +59,14 @@ for (const repo of repos) {
           downloads: a.download_count,
           platform: platformOf(a.name),
         }))
-        // installers with a recognised platform first, biggest download count as tiebreak
-        .sort((a, b) => (b.platform ? 1 : 0) - (a.platform ? 1 : 0) || b.downloads - a.downloads),
+        // installers with a recognised platform first, then what people actually
+        // download, and only then the fixed preference above
+        .sort(
+          (a, b) =>
+            (b.platform ? 1 : 0) - (a.platform ? 1 : 0) ||
+            b.downloads - a.downloads ||
+            preferenceOf(a.platform) - preferenceOf(b.platform),
+        ),
     };
     ok++;
   } catch (e) {
