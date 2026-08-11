@@ -167,7 +167,7 @@ Deliberate slowness in exactly one place.
 
 ---
 
-That is where this series ends, and it ends here deliberately.
+That is a reasonable place to pause, and it pauses here deliberately.
 
 The first post argued that when you delegate work to an agent, the hard part
 stops being production and becomes verification. Everything since has been a
@@ -180,13 +180,18 @@ measuring on the real device, by asking what a number would look like if
 everything were broken, and by writing down what was actually observed instead
 of what was intended.
 
-That is the whole method, and it is not sophisticated. It just has to be done.
+That is the whole method. It is not sophisticated. It just has to be done.
+
+AURA is still running on my desk and still changing, which means there will be
+more of these — the acoustic echo problem I have not solved, whatever the next
+release breaks, and the parts that are still more idea than software. This
+particular arc is finished. The project is not.
 
 ---
 
 *Everything in this series — the numbers, the failures, the code — is in the
 [public repository](https://github.com/janvanwassenhove/aura), along with the
-build ledger that recorded it while it was happening. There are
+build ledger that is still recording as this continues. There are
 [installers](https://github.com/janvanwassenhove/aura/releases/latest) for
 Windows, macOS and Linux, and the whole stack runs without a robot if you just
 want to poke at it.*
