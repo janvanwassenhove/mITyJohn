@@ -4,7 +4,7 @@ date: 2026-09-10
 tags: ["ai", "development", "agents", "privacy"]
 cover: "/blog/teaching-an-assistant-without-training-a-model/cover.webp"
 cardTag: "AI · Agents"
-draft: true
+draft: false
 ---
 
 When people hear that an assistant "learns about you", they picture fine-tuning.

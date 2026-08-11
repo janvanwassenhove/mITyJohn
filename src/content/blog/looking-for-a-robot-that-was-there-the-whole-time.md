@@ -1,10 +1,10 @@
 ---
 title: "AURA 13 · Looking for a robot that was there the whole time"
-date: 2026-10-04
+date: 2026-09-27
 tags: ["hardware", "networking", "robotics"]
 cover: "/blog/looking-for-a-robot-that-was-there-the-whole-time/cover.webp"
 cardTag: "Hardware · Networking"
-draft: true
+draft: false
 ---
 
 I swept the entire subnet. Two hundred and fifty-four addresses. Nine devices

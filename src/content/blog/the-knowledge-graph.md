@@ -4,7 +4,7 @@ date: 2026-09-13
 tags: ["ai", "development", "architecture", "privacy"]
 cover: "/blog/the-knowledge-graph/cover.webp"
 cardTag: "AI · Architecture"
-draft: true
+draft: false
 ---
 
 The previous post was about *how* the assistant learns. This one is about what

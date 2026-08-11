@@ -1,10 +1,10 @@
 ---
 title: "AURA 14 · Encryption, and the key I left beside it"
-date: 2026-11-01
+date: 2026-10-01
 tags: ["security", "privacy", "development"]
 cover: "/blog/encryption-and-the-key-i-left-beside-it/cover.webp"
 cardTag: "Security · Privacy"
-draft: true
+draft: false
 ---
 
 Picture a safe. A proper one: steel, riveted, a lock you would not pick with a

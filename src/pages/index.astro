@@ -16,10 +16,11 @@ import { getCollection } from 'astro:content';
 import urlMap from '../../url-map.json';
 import talks from '../data/talks.json';
 import insta from '../data/instagram.json';
+import { publishedPosts } from '../lib/posts';
 
 const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order || a.data.name.localeCompare(b.data.name));
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
-const allPosts = (await getCollection('blog', (p) => !p.data.draft || import.meta.env.DEV)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const allPosts = await publishedPosts();
 const posts = allPosts.slice(0, 8); // two rows of four on the home grid
 
 // "New" is a cross-cutting filter (data-new), not a category — an app is music

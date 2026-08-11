@@ -4,7 +4,7 @@ date: 2026-09-20
 tags: ["ai", "generative-ai", "development"]
 cover: "/blog/why-just-use-the-best-model-is-not-a-strategy/cover.webp"
 cardTag: "AI · GenAI"
-draft: true
+draft: false
 ---
 
 I broke every conversational turn in my assistant. Every single one, for days.

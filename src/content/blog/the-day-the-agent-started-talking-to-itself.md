@@ -4,7 +4,7 @@ date: 2026-09-17
 tags: ["ai", "development", "agents", "voice"]
 cover: "/blog/the-day-the-agent-started-talking-to-itself/cover.webp"
 cardTag: "AI · Voice"
-draft: true
+draft: false
 ---
 
 The robot answered a question nobody had asked.

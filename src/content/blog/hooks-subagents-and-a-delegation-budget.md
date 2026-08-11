@@ -4,7 +4,7 @@ date: 2026-09-03
 tags: ["ai", "development", "agents", "architecture"]
 cover: "/blog/hooks-subagents-and-a-delegation-budget/cover.webp"
 cardTag: "AI · Agents"
-draft: true
+draft: false
 ---
 
 Give an agent tools and it will use them. Give an agent the ability to spawn

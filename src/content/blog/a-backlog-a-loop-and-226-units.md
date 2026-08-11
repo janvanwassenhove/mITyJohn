@@ -4,7 +4,7 @@ date: 2026-08-30
 tags: ["ai", "development", "agents", "sdlc"]
 cover: "/blog/a-backlog-a-loop-and-226-units/cover.webp"
 cardTag: "AI · SDLC"
-draft: true
+draft: false
 ---
 
 An agent that can hold a conversation is a demo. An agent that can hold a *goal*

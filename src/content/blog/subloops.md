@@ -4,7 +4,7 @@ date: 2026-09-06
 tags: ["ai", "development", "agents", "architecture"]
 cover: "/blog/subloops/cover.webp"
 cardTag: "AI · Architecture"
-draft: true
+draft: false
 ---
 
 A chatbot is a request/response system. You say something, it thinks, it

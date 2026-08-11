@@ -4,7 +4,7 @@ date: 2026-08-27
 tags: ["robotics", "hardware", "raspberry-pi", "development"]
 cover: "/blog/from-robot-to-running-service/cover.webp"
 cardTag: "Robotics · Hardware"
-draft: true
+draft: false
 ---
 
 The robot was built. It powered on, the head moved, the demo behaviours ran.

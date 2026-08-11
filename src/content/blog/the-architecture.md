@@ -4,7 +4,7 @@ date: 2026-08-20
 tags: ["ai", "development", "architecture", "robotics"]
 cover: "/blog/the-architecture/cover.webp"
 cardTag: "AI · Architecture"
-draft: true
+draft: false
 ---
 
 I built this as six microservices in Docker. Six containers, six health checks,

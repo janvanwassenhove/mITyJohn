@@ -1,13 +1,12 @@
 // RSS at /rss.xml (§5.1). /feed/ redirects here (astro.config + Cloudflare rule).
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { publishedPosts } from '../lib/posts';
 
 export async function GET(context) {
-  // Drafts stay out of the feed even in dev: a feed item that escapes is
-  // not retractable. Preview drafts in the browser, never here.
-  const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
-    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
-  );
+  // Drafts and not-yet-due posts stay out of the feed even in dev: a feed
+  // item that escapes is not retractable. Preview them in the browser, never
+  // here — hence respectDev: false.
+  const posts = await publishedPosts({ respectDev: false });
   return rss({
     title: 'mITy.John',
     description:

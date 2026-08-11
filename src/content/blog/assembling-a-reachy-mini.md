@@ -4,7 +4,7 @@ date: 2026-08-23
 tags: ["robotics", "hardware", "raspberry-pi"]
 cover: "/blog/assembling-a-reachy-mini/cover.webp"
 cardTag: "Robotics · Hardware"
-draft: true
+draft: false
 ---
 
 A box arrived containing a robot in pieces. By then the software had been

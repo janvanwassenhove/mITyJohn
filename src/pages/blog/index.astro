@@ -5,9 +5,9 @@ import Base from '../../layouts/Base.astro';
 import SectionHeader from '../../components/SectionHeader.astro';
 import PostCard from '../../components/PostCard.astro';
 import ArcadeStrip from '../../components/ArcadeStrip.astro';
-import { getCollection } from 'astro:content';
+import { publishedPosts } from '../../lib/posts';
 
-const posts = (await getCollection('blog', (p) => !p.data.draft || import.meta.env.DEV)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const posts = await publishedPosts();
 ---
 
 <Base title="Blog — mITy.John" description="Field notes from the lab: essays and experiments on AI, software delivery, music tech and retro IT.">

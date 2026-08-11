@@ -4,7 +4,7 @@ date: 2026-08-16
 tags: ["ai", "development", "robotics", "agents"]
 cover: "/blog/i-gave-my-agents-a-body/cover.webp"
 cardTag: "AI · Robotics"
-draft: true
+draft: false
 ---
 
 There is a version of agentic AI you have already met. It lives in a chat
