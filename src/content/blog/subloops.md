@@ -69,9 +69,9 @@ know that, even though everything "works".
 
 <figure>
   <img src="/blog/subloops/app-logs.webp"
-       alt="The console with the application log panel open, showing timestamped entries from the running loops."
+       alt="The console with the event log open along the bottom, showing timestamped events published by the running loops: a robot mode change and two drafted responses."
        width="1600" height="1000" loading="lazy" />
-  <figcaption>The loops report rather than whisper. If something healed itself eleven times this morning, that is a thing you want to be able to find out.</figcaption>
+  <figcaption>The loops publish rather than whisper — every transition lands here with a timestamp. This is one quiet turn in a demo build; on a working day the list is long, and that is the point. If something healed itself eleven times this morning, you want to be able to find that out.</figcaption>
 </figure>
 
 ## The gate between capability and crypto
