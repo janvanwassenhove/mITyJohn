@@ -38,6 +38,13 @@ So the first fix was to make the error say what actually happened:
 
 Better. And it immediately exposed the next problem.
 
+<figure>
+  <img src="/blog/looking-for-a-robot-that-was-there-the-whole-time/robot-offline.webp"
+       alt="The console with the robot offline: a diagnosis explaining that the connection was refused, an address field pre-filled, and a button labelled Find the robot."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>What it does now: says what actually failed, offers the field to fix it right there in the error, and — finally — offers to go and look for the robot itself.</figcaption>
+</figure>
+
 ## Advice with nowhere to act on it
 
 That message tells the owner to set an environment variable. The environment

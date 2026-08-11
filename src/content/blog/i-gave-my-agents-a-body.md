@@ -49,6 +49,13 @@ Keeping the name honest turned out to be a decent test. Every time I was tempted
 to build something clever, I could ask which of those four words it served. More
 than once the answer was "none", and the feature did not get built.
 
+<figure>
+  <img src="/blog/i-gave-my-agents-a-body/console.webp"
+       alt="The AURA console: robot state and camera on the left, a conversation in the middle, and the brain panel on the right listing people and skills."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>The whole thing in one window: what the robot is doing, what it can see, what you are saying to it, and what it knows. Captured from a demo build — the only profile in it is fictional.</figcaption>
+</figure>
+
 ## The question everyone is asking is the wrong one
 
 "How good will the models get" is not the question that decides what happens to

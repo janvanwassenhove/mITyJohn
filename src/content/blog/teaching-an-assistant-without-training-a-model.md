@@ -49,6 +49,13 @@ Three memory types, three lifecycles. Conflating them is the mistake I would
 most want to warn someone off. A fact you were told and a pattern you inferred
 should never carry the same weight, and neither is a procedure.
 
+<figure>
+  <img src="/blog/teaching-an-assistant-without-training-a-model/brain-profile.webp"
+       alt="The brain panel showing a person's profile: a demo badge, twenty-two facts grouped by category, each with wiki-style links to topics."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>Everything the assistant believes about someone, in one editable list. This is the fictional demo profile that ships with the app — note the badge, and note that every fact is a row you can delete.</figcaption>
+</figure>
+
 ## The part where it teaches itself, and the part where it does not
 
 The assistant can propose a skill. The system prompt nudges it: *when the owner
@@ -71,6 +78,13 @@ approving.
 So the loop is: it notices, it drafts, I approve. The learning is real and the
 authorship is mine. In practice this costs about five seconds and it is the
 single feature I would keep if I could keep only one.
+
+<figure>
+  <img src="/blog/teaching-an-assistant-without-training-a-model/skills-library.webp"
+       alt="The skills library: procedures stored as cards, each with its trigger phrases listed beneath."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>Skills are procedures, not facts — each with the phrases that trigger it. The assistant may propose one of these. It may not save one.</figcaption>
+</figure>
 
 ## What the model is actually told about you
 

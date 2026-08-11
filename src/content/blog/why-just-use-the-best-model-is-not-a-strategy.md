@@ -73,6 +73,13 @@ against id patterns, not against a live account.** If a provider names something
 unusually, it lands in the wrong bucket. I know that, and it is written down
 where someone can find it.
 
+<figure>
+  <img src="/blog/why-just-use-the-best-model-is-not-a-strategy/model-roles.webp"
+       alt="The settings dialog showing four model roles — conversation, voice, tasks and tools, screen control — each with its own dropdown."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>Four roles, four lists, and the sentence at the bottom that this whole post is about: only Voice takes a realtime model, because the others go through chat-completions and a realtime model cannot serve those.</figcaption>
+</figure>
+
 ## The third bug: the one that broke everything
 
 Now the interesting one, which was entirely my own doing.

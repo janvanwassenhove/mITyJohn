@@ -62,6 +62,13 @@ was never broken, right up until it fixes itself in a way you would not have
 chosen. If the robot has been reconnected eleven times this morning, I want to
 know that, even though everything "works".
 
+<figure>
+  <img src="/blog/subloops/app-logs.webp"
+       alt="The console with the application log panel open, showing timestamped entries from the running loops."
+       width="1600" height="1000" loading="lazy" />
+  <figcaption>The loops report rather than whisper. If something healed itself eleven times this morning, that is a thing you want to be able to find out.</figcaption>
+</figure>
+
 ## The gate between capability and crypto
 
 Here is a coupling I did not anticipate but would keep.
