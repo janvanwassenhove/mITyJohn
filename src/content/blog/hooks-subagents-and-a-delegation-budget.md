@@ -2,6 +2,7 @@
 title: "AURA 06 · Hooks, sub-agents, and a budget for delegation"
 date: 2026-09-03
 tags: ["ai", "development", "agents", "architecture"]
+cover: "/blog/hooks-subagents-and-a-delegation-budget/cover.webp"
 cardTag: "AI · Agents"
 draft: true
 ---
