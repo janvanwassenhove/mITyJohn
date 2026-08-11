@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 60,
+        "downloads": 62,
         "platform": "Windows"
       },
       {
@@ -56,15 +56,15 @@
     ]
   },
   "mITyStudio": {
-    "tag": "v1.1.19",
-    "date": "2026-08-08T08:07:57Z",
-    "changelog": "## mITyStudio v1.1.19\n\nAutomated Windows build of `master` @ ff0e822.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/ff0e822a6ca2c4b42377308ebe077b57e6a50d97/docs/screenshots/voices.png)\n\n### Changes\nTimeline: pin the bars/time ruler while the track lanes scroll\n\nReported: with several track lanes, scrolling down loses the bars/time bar.\nIt was just the first rows inside the scroll container, so it scrolled away\nwith everything else — you couldn't tell which bar a clip sat on once you\nscrolled past the top.\n\nWrapped the ruler row and the section lane in a `.lane-header` that is\n`position: sticky; top: 0`, so the two-row header stays pinned to the top of\nthe scroll area while the lanes move under it. z-index 8 sits above the\ntrack labels (5) and playhead (4), and an opaque background stops lanes\nbleeding through as they pass behind it. The track labels keep their existing\nleft-sticky behaviour, so the top-left \"Bars\" corner stays put under both\nvertical and horizontal scroll.\n\nLive-verified with 7 lanes: after scrolling 300px down / 200px right the\nruler stays at offset 0 (position: sticky, stayedPinned), the \"Bars\" corner\nstays top-left, and the header paints opaque (rgb(28,31,38)).\n\nvue-tsc clean.\n\nCo-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>\n",
+    "tag": "v1.1.20",
+    "date": "2026-08-10T13:01:21Z",
+    "changelog": "## mITyStudio v1.1.20\n\nAutomated Windows build of `master` @ 6c8646c.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/voices.png)\n\n### Changes\nNav: icons instead of labels, so Assets/Voices/Settings stay reachable\n\nReported: could no longer navigate to Assets, Voices or Settings.\n\nCause: .topnav is a single flex row with no wrap and no overflow handling.\nBrand + four translated labels + three panel toggles + theme + about +\nlanguage select + a status label (\"backend verbonden\") exceed the width of a\nnarrower window — and on desktop the title-bar overlay eats the right side\ntoo — so the last items were pushed out of reach with no way to scroll to\nthem. Dutch and German labels are the longest, which is why it showed up\nhere first.\n\nThe four destinations are now icons (audio lines / library / mic / sliders)\nwith their translated names as tooltip + aria-label, which is both what was\nasked for and ~200px narrower. Made the bar structurally overflow-proof\nrather than just smaller: brand, buttons, toggles and the language select\nare flex:none, and the status label is the only element allowed to collapse\n(its text hides under 900px, leaving the coloured dot). The active route now\nreads as an accent-tinted pill instead of bold text.\n\nAlso stop swallowing stem load failures in playback: a stem that 404s or\nfails to decode meant a track you silently could not hear, which is a\nmiserable thing to report (\"the vocal is missing\"). Failures n",
     "assets": [
       {
-        "name": "mITyStudio-Setup-1.1.19.exe",
-        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.19/mITyStudio-Setup-1.1.19.exe",
-        "size": 153063744,
-        "downloads": 4,
+        "name": "mITyStudio-Setup-1.1.20.exe",
+        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
+        "size": 153064141,
+        "downloads": 0,
         "platform": "Windows"
       }
     ]
