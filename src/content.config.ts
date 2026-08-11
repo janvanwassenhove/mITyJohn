@@ -49,7 +49,10 @@ const books = defineCollection({
     series: z.string(),
     badge: z.string(),
     desc: z.string(),
-    buy: z.string().url(),
+    // Optional: a book can be announced, with a preview, before it is on sale.
+    // BookCard shows the release line instead of a dead Buy button when it is absent.
+    buy: z.string().url().optional(),
+    releases: z.string().optional(), // human-readable, e.g. "25 August 2026"
     preview: z.string().optional(),
     cover: z.string().optional(),
     order: z.number().default(99),

@@ -4,11 +4,20 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props { book: CollectionEntry<'books'> }
 const { book } = Astro.props;
-const { title, series, badge, desc, buy, preview, cover, isNew } = book.data;
+const { title, series, badge, desc, buy, releases, preview, cover, isNew } = book.data;
+
+// A book can be announced, with a preview, before it is on sale. Everything that
+// would point at a shop is then left out rather than rendered dead.
+const Cover = buy ? 'a' : 'div';
 ---
 
 <div class="book" data-reveal>
-  <a class={`cover${cover ? ' has-art' : ''}`} href={buy} target="_blank" rel="noopener">
+  <Cover
+    class={`cover${cover ? ' has-art' : ''}`}
+    href={buy}
+    target={buy ? '_blank' : undefined}
+    rel={buy ? 'noopener' : undefined}
+  >
     {isNew && <span class="new-flag">NEW</span>}
     {cover ? (
       <img src={cover} alt={`Cover of ${title}`} loading="lazy" decoding="async" width="600" height="948" />
@@ -21,12 +30,14 @@ const { title, series, badge, desc, buy, preview, cover, isNew } = book.data;
         </div>
       </div>
     )}
-  </a>
+  </Cover>
   <div class="meta">
     <div class="name">{title}</div>
     <p>{desc}</p>
     <div class="ctas">
-      <a class="buy" href={buy} target="_blank" rel="noopener">Buy on Amazon</a>
+      {buy
+        ? <a class="buy" href={buy} target="_blank" rel="noopener">Buy on Amazon</a>
+        : releases && <span class="soon">Out {releases}</span>}
       {preview && (
         preview.endsWith('.pdf') ? (
           /* Read in a lightbox rather than downloading the file. data-pdf-poster is
@@ -107,6 +118,20 @@ const { title, series, badge, desc, buy, preview, cover, isNew } = book.data;
   .name { font-family: var(--font-display); font-size: var(--text-card-title-xs); font-weight: 600; margin-bottom: 5px; }
   p { font-size: var(--text-small); line-height: var(--leading-body); color: var(--muted2); margin: 0 0 12px; text-wrap: pretty; }
   .ctas { display: flex; gap: 8px; }
+  /* Stands where the Buy button would be, so an announced book keeps the row's
+     shape instead of leaving a gap next to Preview. */
+  .soon {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border: 1px dashed var(--border3);
+    border-radius: var(--radius-btn-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    font-weight: 600;
+    color: var(--accent-2);
+    white-space: nowrap;
+  }
   .buy {
     flex: 1;
     text-align: center;

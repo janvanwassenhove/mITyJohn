@@ -34,7 +34,9 @@ const filters = [
   { id: 'lab', label: 'Lab' },
 ];
 
-const inPrint = books.filter((b) => b.data.series !== 'Coming soon').length;
+// On sale, not merely announced: a book with a preview but no shop link is
+// still in the oven, and counting it would overstate the shelf by four.
+const inPrint = books.filter((b) => b.data.buy && b.data.series !== 'Coming soon').length;
 
 const stats = [
   { n: String(apps.length), label: 'apps in the lab' },
