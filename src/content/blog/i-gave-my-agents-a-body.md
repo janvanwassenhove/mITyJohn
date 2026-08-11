@@ -20,6 +20,17 @@ It is called AURA, it runs on a Reachy Mini, and this is the first of a series
 about building it — including the parts that went badly, which is most of the
 interesting parts.
 
+<figure>
+  <img src="/blog/i-gave-my-agents-a-body/robot.webp"
+       alt="The assembled Reachy Mini: a white rounded body with a head that tilts forward, two dark camera lenses for eyes, and two coiled wire antennae standing up from the top."
+       width="1200" height="1200" loading="lazy" />
+  <figcaption>The thing itself. About the size of a desk plant: a Raspberry Pi
+  with motors, a camera behind each eye, a microphone array and a speaker — and
+  two antennae that turn out to carry more personality than anything else on
+  it. Assembling this is post three; what it was like to be looked at by it is
+  the rest of the series.</figcaption>
+</figure>
+
 ## The name is the specification
 
 I named it before I built it, which sounds like vanity and turned out to be the
