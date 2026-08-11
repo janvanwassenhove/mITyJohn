@@ -8,6 +8,7 @@ import DraftBanner from '../../components/DraftBanner.astro';
 import { getCollection, render } from 'astro:content';
 import { published } from '../../lib/drafts';
 import releases from '../../data/releases.json';
+import screenshots from '../../data/screenshots.json';
 
 export async function getStaticPaths() {
   const apps = await getCollection('apps', published);
@@ -17,6 +18,14 @@ export async function getStaticPaths() {
 const { app } = Astro.props;
 const { Content } = await render(app);
 const { name, code, tag, blurb, repo, demoUrl, cat, draft } = app.data;
+
+// Apps migrated from WordPress illustrate themselves: their body carries the
+// screenshots the old page had. The ones written since have none, so the shots
+// synced from the repo stand in. Showing both would say everything twice.
+type Shot = { src: string; alt: string };
+const shots = ((screenshots as Record<string, Shot[]>)[app.id] ?? []);
+const bodyHasImages = /!\[[^\]]*\]\(|<img\s/.test(app.body ?? '');
+const gallery = bodyHasImages ? [] : shots;
 
 type Asset = { name: string; url: string; size: number; platform?: string };
 type Release = { tag?: string; date?: string; assets?: Asset[] };
@@ -56,6 +65,15 @@ const fmtSize = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' :
         )}
       </div>
     </header>
+    {gallery.length > 0 && (
+      <div class="shots">
+        {gallery.map((s) => (
+          <a href={s.src} class="shot">
+            <img src={s.src} alt={s.alt} loading="lazy" decoding="async" width="560" height="315" />
+          </a>
+        ))}
+      </div>
+    )}
     <div class="prose">
       <Content />
     </div>
@@ -63,6 +81,18 @@ const fmtSize = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' :
 </Base>
 
 <style>
+  /* Repo screenshots, shown only when the page body brings none of its own. */
+  .shots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 14px;
+    margin: 0 0 clamp(28px, 4vw, 44px);
+  }
+  .shot { display: block; border-radius: var(--radius-card); overflow: hidden; border: 1px solid var(--border); }
+  .shot img { width: 100%; height: auto; display: block; transition: transform var(--hover-duration) var(--hover-ease); }
+  .shot:hover { border-color: var(--border3); }
+  .shot:hover img { transform: scale(1.02); }
+  @media (prefers-reduced-motion: reduce) { .shot:hover img { transform: none; } }
   article { max-width: 820px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) var(--section-pad-x) var(--section-pad-y); }
   .hero-card {
     position: relative;

@@ -80,7 +80,7 @@
   "hipster": [
     {
       "src": "/screenshots/hipster-1.webp",
-      "alt": "hipster screenshot 1"
+      "alt": "Illustration: four people laughing around a table, one holding up a vinyl record, cards dated 2007 and tokens laid out in front of them"
     }
   ],
   "loveflix": [
@@ -148,19 +148,19 @@
   "spritelab": [
     {
       "src": "/screenshots/spritelab-1.webp",
-      "alt": "spritelab screenshot 1"
+      "alt": "The pixel-art editor: drawing canvas in the middle, layer stack and colour palette either side"
     },
     {
       "src": "/screenshots/spritelab-2.webp",
-      "alt": "spritelab screenshot 2"
+      "alt": "The animation timeline, a row of frames with onion-skin preview"
     },
     {
       "src": "/screenshots/spritelab-3.webp",
-      "alt": "spritelab screenshot 3"
+      "alt": "Hitbox, hurtbox and pushbox overlays drawn on a sprite"
     },
     {
       "src": "/screenshots/spritelab-4.webp",
-      "alt": "spritelab screenshot 4"
+      "alt": "The AI generation panel: a text prompt, a quality selector and a live cost estimate"
     }
   ],
   "cards": [
@@ -184,19 +184,19 @@
   "aura": [
     {
       "src": "/screenshots/aura-1.webp",
-      "alt": "aura screenshot 1"
+      "alt": "The AURA console: robot state and camera on the left, the conversation in the middle, and the brain panel on the right"
     },
     {
       "src": "/screenshots/aura-2.webp",
-      "alt": "aura screenshot 2"
+      "alt": "A person's profile in the brain panel: facts grouped by category, each with wiki-style links to topics"
     },
     {
       "src": "/screenshots/aura-3.webp",
-      "alt": "aura screenshot 3"
+      "alt": "The knowledge graph: a person node surrounded by facts, skills and the topics they mention"
     },
     {
       "src": "/screenshots/aura-4.webp",
-      "alt": "aura screenshot 4"
+      "alt": "An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae"
     }
   ]
 }

@@ -19,17 +19,38 @@ const OUT = new URL('src/data/screenshots.json', ROOT);
 // Curated per app: repo + the in-repo image paths worth showing, in order.
 // Hand-picked rather than globbed so we never surface icons, sprites or noise.
 const SOURCES = {
-  aura: { repo: 'aura', files: ['docs/screenshots/console.webp', 'docs/screenshots/brain-person.webp', 'docs/screenshots/knowledge-graph.webp', 'docs/screenshots/reachy-mini.webp'] },
+  aura: {
+    repo: 'aura',
+    files: [
+      { path: 'docs/screenshots/console.webp', alt: 'The AURA console: robot state and camera on the left, the conversation in the middle, and the brain panel on the right' },
+      { path: 'docs/screenshots/brain-person.webp', alt: "A person's profile in the brain panel: facts grouped by category, each with wiki-style links to topics" },
+      { path: 'docs/screenshots/knowledge-graph.webp', alt: 'The knowledge graph: a person node surrounded by facts, skills and the topics they mention' },
+      { path: 'docs/screenshots/reachy-mini.webp', alt: 'An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae' },
+    ],
+  },
   mitystudio: { repo: 'mITyStudio', files: ['docs/screenshots/studio.png', 'docs/screenshots/voices.png', 'docs/screenshots/assets.png', 'docs/screenshots/onboarding.png'] },
   'music-agent': { repo: 'MusicAgent', files: ['Assets/WebApp/CreativeMode.png', 'Assets/WebApp/SonicPi_Visualisation.png', 'Assets/WebApp/samples_playback.png'] },
   mityguitar: { repo: 'mITyGuitar', files: ['docs/images/splashscreen.png', 'docs/images/controller.png', 'docs/images/dongle.png'] },
   pibeat: { repo: 'PiBeat', files: ['screenshots/timeline.png', 'screenshots/editor.png', 'screenshots/band-visualizer.png', 'screenshots/agent-chat.png'] },
   typix: { repo: 'Typix', files: ['docs/assets/discovery.png', 'docs/assets/enneagram.png', 'docs/assets/disc-profile-sample.png'] },
-  hipster: { repo: 'Hipster', files: ['public/hipster.png'] },
+  hipster: {
+    repo: 'Hipster',
+    files: [
+      { path: 'public/hipster.png', alt: 'Illustration: four people laughing around a table, one holding up a vinyl record, cards dated 2007 and tokens laid out in front of them' },
+    ],
+  },
   loveflix: { repo: 'LoveFlix', files: ['LoveFlix.png'] },
   mitylex: { repo: 'mITyLex', files: ['public/lexy.png'] },
   'scrum-programming': { repo: 'scrum', files: ['asset/banner.png'] },
-  spritelab: { repo: 'SpriteLab', files: ['docs/screenshots/editor.png', 'docs/screenshots/timeline.png', 'docs/screenshots/hitboxes.png', 'docs/screenshots/ai-generation.png'] },
+  spritelab: {
+    repo: 'SpriteLab',
+    files: [
+      { path: 'docs/screenshots/editor.png', alt: 'The pixel-art editor: drawing canvas in the middle, layer stack and colour palette either side' },
+      { path: 'docs/screenshots/timeline.png', alt: 'The animation timeline, a row of frames with onion-skin preview' },
+      { path: 'docs/screenshots/hitboxes.png', alt: 'Hitbox, hurtbox and pushbox overlays drawn on a sprite' },
+      { path: 'docs/screenshots/ai-generation.png', alt: 'The AI generation panel: a text prompt, a quality selector and a live cost estimate' },
+    ],
+  },
 };
 
 // Apps whose repos hold no usable screenshot (only sprites/icons/frames). These
@@ -111,12 +132,16 @@ let fetched = 0, cached = 0, failed = 0;
 
 for (const [slug, { repo, files }] of Object.entries(SOURCES)) {
   const shots = [];
-  for (const [i, path] of files.entries()) {
+  for (const [i, entry] of files.entries()) {
+    // A file is either a path, or a path with alt text. Alt matters where the
+    // shot is shown large — app detail pages that have no images of their own —
+    // and "aura screenshot 2" tells a screen reader nothing.
+    const { path, alt } = typeof entry === 'string' ? { path: entry, alt: null } : entry;
     const name = `${slug}-${i + 1}.webp`;
     try {
       const r = await grab(repo, path, new URL(name, SHOT_DIR));
       r === 'fetched' ? fetched++ : cached++;
-      shots.push({ src: `/screenshots/${name}`, alt: `${slug} screenshot ${i + 1}` });
+      shots.push({ src: `/screenshots/${name}`, alt: alt ?? `${slug} screenshot ${i + 1}` });
     } catch (e) {
       failed++;
       console.error(`  ${slug} <- ${repo}/${path}: ${e.message}`);
