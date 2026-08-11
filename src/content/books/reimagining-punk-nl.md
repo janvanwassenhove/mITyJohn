@@ -1,5 +1,6 @@
 ---
 title: "Reimagining Punk"
+lang: "NL"
 series: "🇳🇱 Nederlands · Kunstboek"
 badge: "Iconische punkalbums, opnieuw verbeeld"
 desc: "Honderd iconische punkalbums, hertekend en opnieuw verbeeld — met bij elk album het verhaal erachter. Van de geboorte van punk tot hardcore, ska en europunk."

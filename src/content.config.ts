@@ -53,6 +53,10 @@ const books = defineCollection({
     // BookCard shows the release line instead of a dead Buy button when it is absent.
     buy: z.string().url().optional(),
     releases: z.string().optional(), // human-readable, e.g. "25 August 2026"
+    // Edition language. `series` carries it too, but only shows on the
+    // typographic fallback card — every book has cover art now, so the
+    // language needs a badge of its own.
+    lang: z.enum(['NL', 'EN', 'DE', 'FR']).optional(),
     preview: z.string().optional(),
     cover: z.string().optional(),
     order: z.number().default(99),

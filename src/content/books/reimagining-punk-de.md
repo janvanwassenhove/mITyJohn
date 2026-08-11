@@ -1,5 +1,6 @@
 ---
 title: "Reimagining Punk"
+lang: "DE"
 series: "🇩🇪 Deutsch · Kunstbuch"
 badge: "Ikonische Punk-Alben, neu interpretiert"
 desc: "Hundert ikonische Punk-Alben, neu gezeichnet und neu interpretiert — jedes mit der Geschichte dahinter. Von der Geburt des Punk über Hardcore und Ska bis Europunk."

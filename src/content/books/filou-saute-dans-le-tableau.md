@@ -1,5 +1,6 @@
 ---
 title: "Filou saute dans le tableau !"
+lang: "FR"
 series: "🇫🇷 Français · Livre illustré"
 badge: "Paperback · Kindle"
 desc: "De Bruegel à Matisse — douze chefs-d'œuvre pour petits curieux. Un chat espiègle saute dans un tableau, deux enfants plongent à sa suite."

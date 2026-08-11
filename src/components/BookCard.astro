@@ -4,7 +4,7 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props { book: CollectionEntry<'books'> }
 const { book } = Astro.props;
-const { title, series, badge, desc, buy, releases, preview, cover, isNew } = book.data;
+const { title, series, badge, desc, buy, releases, lang, preview, cover, isNew } = book.data;
 
 // A book can be announced, with a preview, before it is on sale. Everything that
 // would point at a shop is then left out rather than rendered dead.
@@ -18,6 +18,9 @@ const Cover = buy ? 'a' : 'div';
     target={buy ? '_blank' : undefined}
     rel={buy ? 'noopener' : undefined}
   >
+    {/* Which edition this is. Opposite corner from the status flag so the two
+        never collide on a narrow card. */}
+    {lang && <span class="lang-flag">{lang}</span>}
     {/* A book that cannot be bought yet is not "new" — it is announced. The flag
         says which, so the card never promises something the shop cannot deliver. */}
     {!buy && releases
@@ -107,6 +110,24 @@ const Cover = buy ? 'a' : 'div';
     color: var(--ink-on-level-books);
     background: var(--level-books);
   }
+  /* Language sits top-left, quieter than the status flag: it is a fact about the
+     edition, not news. Same pill shape so the two read as one family. */
+  .lang-flag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--text);
+    background: rgba(13, 12, 11, 0.72);
+    border: 1px solid var(--border3);
+    border-radius: var(--radius-pill);
+    padding: 2px 8px;
+  }
+  :root[data-theme='light'] .lang-flag { background: rgba(255, 255, 255, 0.82); }
   .inner { position: absolute; inset: 0; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; }
   .series {
     font-family: var(--font-mono);

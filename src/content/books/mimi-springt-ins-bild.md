@@ -1,5 +1,6 @@
 ---
 title: "Mimi springt ins Bild!"
+lang: "DE"
 series: "🇩🇪 Deutsch · Bilderbuch"
 badge: "Paperback · Kindle"
 desc: "Von Bruegel bis Matisse — zwölf Meisterwerke für kleine Betrachter. Eine freche Katze springt in ein Gemälde, zwei Kinder hinterher."

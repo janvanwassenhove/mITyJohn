@@ -1,5 +1,6 @@
 ---
 title: "Nel springt erin!"
+lang: "NL"
 series: "🇳🇱 Nederlands · Prentenboek"
 badge: "Paperback · Kindle"
 desc: "Van Bruegel tot Matisse — twaalf meesterwerken voor kleine kijkers. Een ondeugende kat springt een schilderij in, en twee kinderen duiken erachteraan."

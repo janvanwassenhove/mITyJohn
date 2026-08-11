@@ -1,5 +1,6 @@
 ---
 title: "Réimaginer le punk"
+lang: "FR"
 series: "🇫🇷 Français · Livre d'art"
 badge: "Albums punk cultes, réimaginés"
 desc: "Cent albums punk cultes, redessinés et réimaginés — chacun accompagné de son histoire. De la naissance du punk au hardcore, au ska et à l'europunk."

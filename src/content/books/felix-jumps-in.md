@@ -1,5 +1,6 @@
 ---
 title: "Felix Jumps In!"
+lang: "EN"
 series: "🇬🇧 English · Picture book"
 badge: "Paperback · Kindle"
 desc: "From Bruegel to Matisse — twelve masterpieces for little viewers. A mischievous cat leaps into a painting and two children dive in after her."
