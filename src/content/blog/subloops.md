@@ -20,6 +20,16 @@ This is the architecture that emerged, and the failures that shaped it.
 
 ## Three loops, three clocks
 
+<figure class="diagram">
+  <div class="diagram-scroll">
+    <img src="/blog/subloops/three-loops.svg"
+         alt="Diagram of three loops on three clocks. Perception runs continuously: frame, downscale, embedding, match. Conversation is event-driven and moves through idle, listening, transcribing, thinking and speaking, returning to idle when done, with interrupted drawn as a state of its own rather than an error path. Maintenance runs every five minutes, checking whether the robot is reachable, the key valid and the store encrypted. Below, two panels show where the bugs actually live: shared hardware, where face recognition and gesture detection want the same camera frame, and output becoming input, where the speaker sits next to the microphone."
+         width="1200" height="600" loading="lazy" />
+  </div>
+  <figcaption>Three loops on three clocks. The interesting failures are in the
+  white space between the boxes, not inside any of them.</figcaption>
+</figure>
+
 **Perception** runs continuously against the camera. A frame comes in, gets
 downscaled, gets turned into a face embedding, and the embedding is matched
 against the encrypted gallery. It runs whether anyone is speaking, because
@@ -27,13 +37,8 @@ knowing who walked into the room is not a response to a question — it is
 context that must already exist when the question arrives.
 
 **Conversation** is event-driven and, crucially, is a real state machine rather
-than a chain of awaits:
-
-```
-IDLE → LISTENING → TRANSCRIBING → THINKING → SPEAKING
-                        ↑                        │
-                        └──── INTERRUPTED ←──────┘
-```
+than a chain of awaits — which is why *interrupted* appears in the diagram above
+as a box like any other.
 
 Being interrupted is a state of its own, not an error path. That is the whole
 design decision. If interruption is an exception you catch, you get an assistant

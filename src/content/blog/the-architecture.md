@@ -34,6 +34,16 @@ data whatsoever.
 
 Steal the robot and you get motors.
 
+<figure class="diagram">
+  <div class="diagram-scroll">
+    <img src="/blog/the-architecture/two-hosts.svg"
+         alt="Diagram of the trust boundary. The laptop holds the API keys, OAuth tokens, encrypted profiles, face embeddings, conversation history and skills, and runs the orchestrator, conversation, connectors, memory and identity modules on one event bus. The robot — a Raspberry Pi — has motors, a speaker, a microphone array and a camera, and stores nothing: no keys, no tokens, no profiles. Between them a LAN carries only move, speak and frame; no secrets cross it."
+         width="1200" height="660" loading="lazy" />
+  </div>
+  <figcaption>The trust boundary and the software boundary are the same line —
+  which is the only reason the whole thing also runs with no robot at all.</figcaption>
+</figure>
+
 That sentence is the whole security model, and everything downstream falls out
 of it. A robot is a physically accessible computer standing in a room other
 people walk through, pick up, and occasionally take home to show someone. Any
@@ -89,6 +99,16 @@ reconnect, because approval is not a token you can bank.
 
 **Then it speaks**, and while it speaks it keeps listening, so you can cut it
 off mid-word.
+
+<figure class="diagram">
+  <div class="diagram-scroll">
+    <img src="/blog/the-architecture/one-turn.svg"
+         alt="Flowchart of one conversational turn. Someone speaks; round one runs a fast model with a short context of who is talking plus a few facts. A decision asks whether tools are needed: most turns answer no and go straight to speaking while still listening. If yes, round two onwards uses a stronger model, running independent tools concurrently while anything approval-gated diverts to an approval gate that stops and asks the owner every time."
+         width="1200" height="560" loading="lazy" />
+  </div>
+  <figcaption>Two rounds, one gate. The expensive model is only reached by turns
+  that actually need it, and the gate is the only door to the outside world.</figcaption>
+</figure>
 
 ## The desktop app is a lie, and that is deliberate
 

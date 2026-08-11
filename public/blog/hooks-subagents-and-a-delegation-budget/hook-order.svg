@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img"
+     aria-label="Where a hook sits. The model asks for a tool. A blocking hook may replace the call entirely and return its own message, which the model reads on the next round. If nothing blocks, an approval gate stops anything that touches the outside world and asks the owner. The tool then runs, and a trailing hook appends a note to the result before the model sees it. Every stage is code in the tool path, so it fires whether the model likes it or not.">
+  <defs>
+    <pattern id="g8" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0V24" fill="none" stroke="#c9b998" stroke-width="0.5" opacity="0.35"/>
+    </pattern>
+    <marker id="a8" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#34302b"/>
+    </marker>
+    <marker id="a8r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#c0522d"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="600" fill="#f4efe3"/>
+  <rect width="1200" height="600" fill="url(#g8)"/>
+  <rect x="14" y="14" width="1172" height="572" fill="none" stroke="#b8933f" stroke-width="1.2"/>
+  <rect x="22" y="22" width="1156" height="556" fill="none" stroke="#b8933f" stroke-width="0.6" opacity="0.6"/>
+
+  <text x="52" y="66" font-family="Consolas, ui-monospace, monospace" font-size="15" letter-spacing="3" fill="#8a7a55">FIG. 2 — WHERE A HOOK SITS</text>
+
+  <!-- model -->
+  <rect x="52" y="146" width="150" height="88" fill="#34302b"/>
+  <text x="127" y="182" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#f4efe3">THE MODEL</text>
+  <text x="127" y="206" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c9b998">asks for a tool</text>
+
+  <line x1="202" y1="190" x2="256" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+
+  <!-- blocking hook -->
+  <rect x="256" y="146" width="186" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2.5"/>
+  <text x="349" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">BLOCKING HOOK</text>
+  <text x="349" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">rule matches?</text>
+
+  <!-- blocked path -->
+  <path d="M349 234 L349 296 L127 296 L127 236" fill="none" stroke="#c0522d" stroke-width="2" marker-end="url(#a8r)"/>
+  <text x="380" y="286" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c0522d">rule matches — the call is REPLACED, not discouraged:</text>
+  <text x="380" y="306" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c0522d">the model reads why it was stopped, and adapts next round</text>
+
+  <line x1="442" y1="190" x2="496" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+  <text x="469" y="176" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="11" fill="#8a7a55">no</text>
+
+  <!-- approval gate -->
+  <rect x="496" y="146" width="186" height="88" fill="#f6e5dc" stroke="#c0522d" stroke-width="2.5"/>
+  <text x="589" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#c0522d">APPROVAL GATE</text>
+  <text x="589" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#34302b">touches the world?</text>
+
+  <line x1="682" y1="190" x2="736" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+
+  <!-- tool -->
+  <rect x="736" y="146" width="150" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2"/>
+  <text x="811" y="186" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">THE TOOL</text>
+  <text x="811" y="208" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">actually runs</text>
+
+  <line x1="886" y1="190" x2="940" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+
+  <!-- trailing hook -->
+  <rect x="940" y="146" width="208" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2.5"/>
+  <text x="1044" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">TRAILING HOOK</text>
+  <text x="1044" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">appends a note</text>
+
+  <!-- result back -->
+  <path d="M1044 234 L1044 356 L127 356 L127 236" fill="none" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+  <text x="700" y="380" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#8a7a55">result + note — advice at the moment it is relevant, not in a prompt nobody re-reads by round nine</text>
+
+  <line x1="52" y1="416" x2="1148" y2="416" stroke="#b8933f" stroke-width="1"/>
+  <text x="52" y="450" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#34302b">A hook is a line of JSON, editable while the system runs. A blocking one does not</text>
+  <text x="52" y="472" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#34302b">discourage the call — it takes its place, and returns a message instead.</text>
+  <text x="52" y="510" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#c0522d">Every box in this row is code in the tool path. That is the whole point: a prompt</text>
+  <text x="52" y="532" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#c0522d">works most of the time, which is exactly the failure profile you cannot build on.</text>
+</svg>
