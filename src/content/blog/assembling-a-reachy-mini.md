@@ -34,6 +34,19 @@ desk plant. It has a head that moves with real degrees of freedom, two small
 antennae that turn out to carry a surprising amount of personality, and a face
 that is mostly camera.
 
+There are two versions, and which one you get changes the architecture rather
+than just the price. The **Lite** is a shell that must stay tethered to a
+computer: no Pi of its own, no battery, no radio. The **Wireless** — the one in
+this box — has the Raspberry Pi 5, the battery and the Wi-Fi inside the robot,
+so it is a computer on your network rather than a peripheral on your desk.
+
+That matters for everything that follows. Because the robot is its own host, the
+line between brain and body can be a network contract instead of a USB cable,
+which is what lets the brain live on the laptop and keep every secret there.
+It also means the robot can be picked up and carried into another room while
+still answering — and that a robot walking around the house holding no
+credentials is a deliberate design, not a happy accident.
+
 [Pollen Robotics](https://pollen-robotics.com/reachy-mini/) ship it as an open
 platform rather than a finished product, and that distinction is the whole
 reason I bought one.

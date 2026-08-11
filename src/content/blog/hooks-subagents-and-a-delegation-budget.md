@@ -49,7 +49,7 @@ enough to lose track.
   <div class="diagram-scroll">
     <img src="/blog/hooks-subagents-and-a-delegation-budget/delegation-bounds.svg"
          alt="Diagram of delegation bounds. Level one is the main loop, which may read, may write with approval, and may delegate. It delegates to a level-two sub-agent, which may read but may never write and may never delegate onward, and which returns a summary rather than a context. A level three is drawn crossed out: it does not exist, by construction. Below, the three bounds on a sub-agent are listed: a read-only allowlist checked in the tool path, a budget of six rounds, and a depth limit of two levels."
-         width="1200" height="620" loading="lazy" />
+         width="1000" height="985" loading="lazy" />
   </div>
   <figcaption>Two levels, three bounds, and a level three that was never built.
   None of these makes the agent smarter; all of them make it survivable.</figcaption>
@@ -80,7 +80,7 @@ The important property, and the reason these exist at all:
   <div class="diagram-scroll">
     <img src="/blog/hooks-subagents-and-a-delegation-budget/hook-order.svg"
          alt="Diagram of where a hook sits. The model asks for a tool. A blocking hook checks whether a rule matches; if it does, the call is replaced and the model reads why it was stopped and adapts on the next round. Otherwise the call reaches the approval gate, which stops anything touching the outside world, then the tool actually runs, then a trailing hook appends a note before the result returns to the model."
-         width="1200" height="600" loading="lazy" />
+         width="1000" height="830" loading="lazy" />
   </div>
   <figcaption>Every box in that row is code in the tool path. A prompt that says
   "always run the tests first" works most of the time, which is exactly the

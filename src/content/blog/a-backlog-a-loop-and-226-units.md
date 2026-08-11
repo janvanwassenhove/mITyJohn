@@ -40,7 +40,7 @@ each request had already fetched."* Not "improved latency" — *"1554 ms → 131
   <div class="diagram-scroll">
     <img src="/blog/a-backlog-a-loop-and-226-units/unit-loop.svg"
          alt="Diagram of one unit passing through the loop. The backlog of numbered units feeds steps one and two, pick and build, then test, then commit, then release, then a ledger entry, which returns to the backlog for the next unit. Commit and release both divert through an approval gate that stops and asks the owner every time, on round one and on round twenty, enforced by code in the tool path rather than a line in the prompt. A side panel contrasts a vague ledger entry with a measured one."
-         width="1200" height="640" loading="lazy" />
+         width="1000" height="900" loading="lazy" />
   </div>
   <figcaption>Six steps, one of which does most of the work — and one gate that
   every step touching the outside world has to pass through.</figcaption>

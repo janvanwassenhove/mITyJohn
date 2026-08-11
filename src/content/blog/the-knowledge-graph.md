@@ -41,7 +41,7 @@ designed. Nobody sat down and decided the taxonomy. It accreted.
   <div class="diagram-scroll">
     <img src="/blog/the-knowledge-graph/node-model.svg"
          alt="Diagram of the four node types. A person node, which holds a key, points to three fact nodes — sport, likes and habit — and to a skill node drawn with a dashed border because a skill may belong to one person or to everybody. The facts point onward to shared topic circles: running, espresso and Java 21. Espresso is reached from two different facts, illustrating that shared topics are the cheapest possible context. A note records that topics are never entered by anyone: they exist because a fact mentioned them."
-         width="1200" height="600" loading="lazy" />
+         width="1000" height="780" loading="lazy" />
   </div>
   <figcaption>Four node types and two edge types. The vocabulary on the right
   was never designed — it accreted, one fact at a time.</figcaption>

@@ -24,7 +24,7 @@ This is the architecture that emerged, and the failures that shaped it.
   <div class="diagram-scroll">
     <img src="/blog/subloops/three-loops.svg"
          alt="Diagram of three loops on three clocks. Perception runs continuously: frame, downscale, embedding, match. Conversation is event-driven and moves through idle, listening, transcribing, thinking and speaking, returning to idle when done, with interrupted drawn as a state of its own rather than an error path. Maintenance runs every five minutes, checking whether the robot is reachable, the key valid and the store encrypted. Below, two panels show where the bugs actually live: shared hardware, where face recognition and gesture detection want the same camera frame, and output becoming input, where the speaker sits next to the microphone."
-         width="1200" height="600" loading="lazy" />
+         width="1000" height="1000" loading="lazy" />
   </div>
   <figcaption>Three loops on three clocks. The interesting failures are in the
   white space between the boxes, not inside any of them.</figcaption>

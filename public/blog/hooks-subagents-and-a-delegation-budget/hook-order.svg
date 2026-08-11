@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img"
-     aria-label="Where a hook sits. The model asks for a tool. A blocking hook may replace the call entirely and return its own message, which the model reads on the next round. If nothing blocks, an approval gate stops anything that touches the outside world and asks the owner. The tool then runs, and a trailing hook appends a note to the result before the model sees it. Every stage is code in the tool path, so it fires whether the model likes it or not.">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 830" role="img"
+     aria-label="Where a hook sits. The model asks for a tool. A blocking hook checks whether a rule matches: if it does, the call is replaced and the hook's message goes back to the model, which reads why it was stopped and adapts on the next round. If nothing matches, the call reaches the approval gate, which stops anything touching the outside world and asks the owner. Then the tool actually runs, and a trailing hook appends a note to the result before the model sees it. Every stage is code in the tool path.">
   <defs>
     <pattern id="g8" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M24 0H0V24" fill="none" stroke="#c9b998" stroke-width="0.5" opacity="0.35"/>
@@ -12,59 +12,63 @@
     </marker>
   </defs>
 
-  <rect width="1200" height="600" fill="#f4efe3"/>
-  <rect width="1200" height="600" fill="url(#g8)"/>
-  <rect x="14" y="14" width="1172" height="572" fill="none" stroke="#b8933f" stroke-width="1.2"/>
-  <rect x="22" y="22" width="1156" height="556" fill="none" stroke="#b8933f" stroke-width="0.6" opacity="0.6"/>
+  <rect width="1000" height="830" fill="#f4efe3"/>
+  <rect width="1000" height="830" fill="url(#g8)"/>
+  <rect x="12" y="12" width="976" height="806" fill="none" stroke="#b8933f" stroke-width="1.4"/>
+  <rect x="21" y="21" width="958" height="788" fill="none" stroke="#b8933f" stroke-width="0.7" opacity="0.6"/>
 
-  <text x="52" y="66" font-family="Consolas, ui-monospace, monospace" font-size="15" letter-spacing="3" fill="#8a7a55">FIG. 2 — WHERE A HOOK SITS</text>
+  <text x="48" y="70" font-family="Consolas, ui-monospace, monospace" font-size="20" letter-spacing="3" fill="#8a7a55">FIG. 2 — WHERE A HOOK SITS</text>
 
   <!-- model -->
-  <rect x="52" y="146" width="150" height="88" fill="#34302b"/>
-  <text x="127" y="182" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#f4efe3">THE MODEL</text>
-  <text x="127" y="206" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c9b998">asks for a tool</text>
-
-  <line x1="202" y1="190" x2="256" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+  <rect x="48" y="100" width="520" height="80" fill="#34302b"/>
+  <text x="72" y="134" font-family="Consolas, ui-monospace, monospace" font-size="22" fill="#f4efe3">THE MODEL</text>
+  <text x="72" y="164" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c9b998">asks for a tool</text>
+  <line x1="308" y1="180" x2="308" y2="216" stroke="#34302b" stroke-width="2.5" marker-end="url(#a8)"/>
 
   <!-- blocking hook -->
-  <rect x="256" y="146" width="186" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2.5"/>
-  <text x="349" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">BLOCKING HOOK</text>
-  <text x="349" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">rule matches?</text>
+  <rect x="48" y="218" width="520" height="86" fill="#efe7d6" stroke="#34302b" stroke-width="3"/>
+  <text x="72" y="252" font-family="Consolas, ui-monospace, monospace" font-size="22" fill="#34302b">A BLOCKING HOOK</text>
+  <text x="72" y="284" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#6f6659">does a rule match?</text>
 
-  <!-- blocked path -->
-  <path d="M349 234 L349 296 L127 296 L127 236" fill="none" stroke="#c0522d" stroke-width="2" marker-end="url(#a8r)"/>
-  <text x="380" y="286" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c0522d">rule matches — the call is REPLACED, not discouraged:</text>
-  <text x="380" y="306" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#c0522d">the model reads why it was stopped, and adapts next round</text>
+  <!-- blocked: straight back to the model -->
+  <path d="M568 261 L618 261 L618 150 L570 150" fill="none" stroke="#c0522d" stroke-width="2.5" marker-end="url(#a8r)"/>
+  <text x="730" y="170" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">yes: the call is</text>
+  <text x="730" y="196" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">REPLACED, not just</text>
+  <text x="730" y="222" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">discouraged &#8212; the</text>
+  <text x="730" y="248" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">model reads why,</text>
+  <text x="730" y="274" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#c0522d">and adapts next round</text>
 
-  <line x1="442" y1="190" x2="496" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
-  <text x="469" y="176" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="11" fill="#8a7a55">no</text>
+  <line x1="308" y1="304" x2="308" y2="344" stroke="#34302b" stroke-width="2.5" marker-end="url(#a8)"/>
+  <text x="328" y="330" font-family="Consolas, ui-monospace, monospace" font-size="17" fill="#8a7a55">no</text>
 
   <!-- approval gate -->
-  <rect x="496" y="146" width="186" height="88" fill="#f6e5dc" stroke="#c0522d" stroke-width="2.5"/>
-  <text x="589" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#c0522d">APPROVAL GATE</text>
-  <text x="589" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#34302b">touches the world?</text>
+  <rect x="48" y="346" width="520" height="86" fill="#f6e5dc" stroke="#c0522d" stroke-width="3"/>
+  <text x="72" y="380" font-family="Consolas, ui-monospace, monospace" font-size="22" letter-spacing="1" fill="#c0522d">THE APPROVAL GATE</text>
+  <text x="72" y="412" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#34302b">does this touch the world?</text>
+  <text x="730" y="392" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">a hook never</text>
+  <text x="730" y="418" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">replaces this gate</text>
 
-  <line x1="682" y1="190" x2="736" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+  <line x1="308" y1="432" x2="308" y2="472" stroke="#34302b" stroke-width="2.5" marker-end="url(#a8)"/>
 
   <!-- tool -->
-  <rect x="736" y="146" width="150" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2"/>
-  <text x="811" y="186" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">THE TOOL</text>
-  <text x="811" y="208" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">actually runs</text>
+  <rect x="48" y="474" width="520" height="80" fill="#efe7d6" stroke="#34302b" stroke-width="3"/>
+  <text x="72" y="508" font-family="Consolas, ui-monospace, monospace" font-size="22" fill="#34302b">THE TOOL</text>
+  <text x="72" y="538" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#6f6659">actually runs</text>
 
-  <line x1="886" y1="190" x2="940" y2="190" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
+  <line x1="308" y1="554" x2="308" y2="594" stroke="#34302b" stroke-width="2.5" marker-end="url(#a8)"/>
 
   <!-- trailing hook -->
-  <rect x="940" y="146" width="208" height="88" fill="#efe7d6" stroke="#34302b" stroke-width="2.5"/>
-  <text x="1044" y="178" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="14" fill="#34302b">TRAILING HOOK</text>
-  <text x="1044" y="202" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#6f6659">appends a note</text>
+  <rect x="48" y="596" width="520" height="86" fill="#efe7d6" stroke="#34302b" stroke-width="3"/>
+  <text x="72" y="630" font-family="Consolas, ui-monospace, monospace" font-size="22" fill="#34302b">A TRAILING HOOK</text>
+  <text x="72" y="662" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#6f6659">appends a note to the result</text>
 
-  <!-- result back -->
-  <path d="M1044 234 L1044 356 L127 356 L127 236" fill="none" stroke="#34302b" stroke-width="2" marker-end="url(#a8)"/>
-  <text x="700" y="380" text-anchor="middle" font-family="Consolas, ui-monospace, monospace" font-size="12" fill="#8a7a55">result + note — advice at the moment it is relevant, not in a prompt nobody re-reads by round nine</text>
+  <path d="M568 639 L700 639 L700 120 L570 120" fill="none" stroke="#34302b" stroke-width="2.5" marker-end="url(#a8)"/>
+  <text x="730" y="606" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">advice at the moment</text>
+  <text x="730" y="632" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">it is relevant, not in</text>
+  <text x="730" y="658" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">a system prompt nobody</text>
+  <text x="730" y="684" font-family="Consolas, ui-monospace, monospace" font-size="18" fill="#8a7a55">re-reads by round nine</text>
 
-  <line x1="52" y1="416" x2="1148" y2="416" stroke="#b8933f" stroke-width="1"/>
-  <text x="52" y="450" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#34302b">A hook is a line of JSON, editable while the system runs. A blocking one does not</text>
-  <text x="52" y="472" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#34302b">discourage the call — it takes its place, and returns a message instead.</text>
-  <text x="52" y="510" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#c0522d">Every box in this row is code in the tool path. That is the whole point: a prompt</text>
-  <text x="52" y="532" font-family="Consolas, ui-monospace, monospace" font-size="13" fill="#c0522d">works most of the time, which is exactly the failure profile you cannot build on.</text>
+  <line x1="48" y1="726" x2="952" y2="726" stroke="#b8933f" stroke-width="1"/>
+  <text x="48" y="764" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#34302b">A hook is a line of JSON, editable while the system runs.</text>
+  <text x="48" y="796" font-family="Consolas, ui-monospace, monospace" font-size="19" fill="#c0522d">Every box in this column is code in the tool path — which is the whole point.</text>
 </svg>

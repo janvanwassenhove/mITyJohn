@@ -28,17 +28,25 @@ The **laptop** holds all of it: the API keys, the OAuth tokens, the encrypted
 profiles, the face embeddings, the conversation history, the language-model
 calls, the decisions.
 
-The **robot** — a Raspberry Pi 5 inside a Reachy Mini — moves motors, plays
-audio, and serves camera frames. It holds no keys, no tokens, and no personal
-data whatsoever.
+The **robot** — a Reachy Mini *Wireless*, which is a Raspberry Pi 5 with a
+battery and a radio inside a robot — moves motors, plays audio, and serves
+camera frames over Wi-Fi. It holds no keys, no tokens, and no personal data
+whatsoever.
+
+The wireless part is not a convenience feature here, it is the reason this split
+is possible at all. The tethered version is a peripheral: it needs a computer at
+the end of a cable, and the temptation is then to let that computer be the
+robot. The wireless one is a host on the network with its own address, so brain
+and body can be two machines that agree on a small contract — and one of them
+can be the machine holding nothing worth stealing.
 
 Steal the robot and you get motors.
 
 <figure class="diagram">
   <div class="diagram-scroll">
     <img src="/blog/the-architecture/two-hosts.svg"
-         alt="Diagram of the trust boundary. The laptop holds the API keys, OAuth tokens, encrypted profiles, face embeddings, conversation history and skills, and runs the orchestrator, conversation, connectors, memory and identity modules on one event bus. The robot — a Raspberry Pi — has motors, a speaker, a microphone array and a camera, and stores nothing: no keys, no tokens, no profiles. Between them a LAN carries only move, speak and frame; no secrets cross it."
-         width="1200" height="660" loading="lazy" />
+         alt="Diagram of the trust boundary. The laptop holds the API keys, OAuth tokens, encrypted profiles, face embeddings, conversation history and skills, and runs the orchestrator, conversation, connectors, memory and identity modules on one event bus. The robot — a Reachy Mini Wireless with a Raspberry Pi 5 inside — has motors, a speaker, a microphone array and a camera, and stores nothing: no keys, no tokens, no profiles. Between them a Wi-Fi link carries only move, speak and frame; no secrets cross it."
+         width="1000" height="880" loading="lazy" />
   </div>
   <figcaption>The trust boundary and the software boundary are the same line —
   which is the only reason the whole thing also runs with no robot at all.</figcaption>
@@ -104,7 +112,7 @@ off mid-word.
   <div class="diagram-scroll">
     <img src="/blog/the-architecture/one-turn.svg"
          alt="Flowchart of one conversational turn. Someone speaks; round one runs a fast model with a short context of who is talking plus a few facts. A decision asks whether tools are needed: most turns answer no and go straight to speaking while still listening. If yes, round two onwards uses a stronger model, running independent tools concurrently while anything approval-gated diverts to an approval gate that stops and asks the owner every time."
-         width="1200" height="560" loading="lazy" />
+         width="1000" height="900" loading="lazy" />
   </div>
   <figcaption>Two rounds, one gate. The expensive model is only reached by turns
   that actually need it, and the gate is the only door to the outside world.</figcaption>

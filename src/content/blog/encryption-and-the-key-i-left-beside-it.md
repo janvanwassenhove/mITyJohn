@@ -38,7 +38,7 @@ encrypted form, wrapped by the owner key.
   <div class="diagram-scroll">
     <img src="/blog/encryption-and-the-key-i-left-beside-it/envelope.svg"
          alt="Diagram of envelope encryption. A passphrase held in the OS keyring derives an owner key, which is never stored. The owner key wraps one key per person. Each person's key encrypts only that person's records: facts, signals and embeddings. A third person's key is drawn destroyed, and their records remain on disk as ciphertext nobody can read. A note records that rotating the owner key re-wraps the small keys and never touches the records."
-         width="1200" height="620" loading="lazy" />
+         width="1000" height="800" loading="lazy" />
   </div>
   <figcaption>Three layers. The consequence worth staring at is the right-hand
   column: deletion that is a statement about physics rather than a promise about

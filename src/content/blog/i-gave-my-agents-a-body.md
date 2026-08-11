@@ -37,9 +37,13 @@ agents, rather than seven assistants that each know a quarter of your day. This
 is the least glamorous word and the one that generates the most work, because
 "unified" is where all the integration lives.
 
-**Robotic.** Physically embodied, through a Reachy Mini. Not a metaphor and not
-a mascot: a device with a camera, a microphone array and motors, which means
-every latency figure in this series has a face attached to it.
+**Robotic.** Physically embodied, through a Reachy Mini Wireless. Not a metaphor
+and not a mascot: a device with a camera, a microphone array and motors, which
+means every latency figure in this series has a face attached to it. Wireless
+matters more than it sounds — the robot has its own Raspberry Pi, its own
+battery and its own address on the network, so it is a second computer rather
+than something plugged into the first one. Half the architecture follows from
+that single fact.
 
 **Assistant.** A copilot, not a chatbot. The difference is whether it can *act*
 — and therefore whether it needs approval gates, an audit trail, and a stop
