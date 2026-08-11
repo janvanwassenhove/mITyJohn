@@ -16,7 +16,8 @@ keeps going after you stop watching. Approval gates on anything that touches
 the world. And, because I wanted the feedback to be impossible to ignore, a
 robot on my desk that looks up when I walk into the room.
 
-It is called AURA, it runs on a Reachy Mini, and this is the first of a series
+It is called AURA, it runs on a [Reachy Mini](https://pollen-robotics.com/reachy-mini/),
+and this is the first of a series
 about building it — including the parts that went badly, which is most of the
 interesting parts.
 

@@ -29,8 +29,8 @@ The **laptop** holds all of it: the API keys, the OAuth tokens, the encrypted
 profiles, the face embeddings, the conversation history, the language-model
 calls, the decisions.
 
-The **robot** — a Reachy Mini *Wireless*, which is a Raspberry Pi 5 with a
-battery and a radio inside a robot — moves motors, plays audio, and serves
+The **robot** — a [Reachy Mini *Wireless*](https://pollen-robotics.com/reachy-mini/),
+which is a Raspberry Pi 5 with a battery and a radio inside a robot — moves motors, plays audio, and serves
 camera frames over Wi-Fi. It holds no keys, no tokens, and no personal data
 whatsoever.
 

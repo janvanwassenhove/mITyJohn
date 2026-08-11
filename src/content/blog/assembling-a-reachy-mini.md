@@ -47,9 +47,12 @@ It also means the robot can be picked up and carried into another room while
 still answering — and that a robot walking around the house holding no
 credentials is a deliberate design, not a happy accident.
 
-[Pollen Robotics](https://pollen-robotics.com/reachy-mini/) ship it as an open
-platform rather than a finished product, and that distinction is the whole
-reason I bought one.
+[Pollen Robotics](https://pollen-robotics.com/reachy-mini/) — since 2025 part of
+[Hugging Face](https://huggingface.co/blog/reachy-mini), which is how an open
+robot ends up with a model hub attached to it — ship it as an open platform
+rather than a finished product, and that distinction is the whole reason I
+bought one. Their code, and the community's, sits at
+[huggingface.co/pollen-robotics](https://huggingface.co/pollen-robotics).
 
 A product decides what you may do with it. You get an app, a cloud account, and
 a set of behaviours somebody else chose. A platform hands you a Pi with an SSH
@@ -175,6 +178,14 @@ is an SSH port and a documented API.
 I have spent more evenings on this than I planned. I have also learned more
 about the gap between "works on my machine" and "works in a room where people
 live" than any purely-software project has ever taught me.
+
+**Where to look if you want one.** The robot itself is at
+[pollen-robotics.com/reachy-mini](https://pollen-robotics.com/reachy-mini/), the
+announcement and the reasoning behind an open robot are on
+[Hugging Face](https://huggingface.co/blog/reachy-mini), and the SDK my adapter
+talks to is [pollen-robotics/reachy_mini](https://github.com/pollen-robotics/reachy_mini)
+on GitHub. Nothing in this series is affiliated with either of them — I bought
+the robot and wrote software for it.
 
 ---
 

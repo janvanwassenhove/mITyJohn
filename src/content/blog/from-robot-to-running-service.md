@@ -53,8 +53,8 @@ The answer: the laptop. All of it. API keys, OAuth tokens, encrypted profiles,
 face embeddings, conversation history. The Pi runs a small service that moves
 motors, plays audio and serves camera frames, and holds none of it.
 
-The question only exists in this shape because this is the *wireless* Reachy
-Mini: the Pi is inside the robot, on the Wi-Fi, with an address of its own. A
+The question only exists in this shape because this is the *wireless*
+[Reachy Mini](https://pollen-robotics.com/reachy-mini/): the Pi is inside the robot, on the Wi-Fi, with an address of its own. A
 tethered robot would have made the question disappear and taken the good answer
 with it — when the body is a peripheral of the brain's machine, there is no
 boundary to put the secrets on the right side of.
