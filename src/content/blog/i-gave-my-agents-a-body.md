@@ -267,6 +267,17 @@ model — by accumulating structured evidence about people, adapting what it say
 to who is standing there, and writing down skills that I approve one at a time.
 That is where "assistant" stops being a word and starts being a design.
 
+<figure>
+  <img src="/blog/i-gave-my-agents-a-body/on-my-desk.webp"
+       alt="The robot standing on a wooden desk against a white wall: a power cable running to a socket, a pot of pencils and some artificial tulips beside it."
+       width="1400" height="1867" loading="lazy" />
+  <figcaption>And here it is, actually there. A wooden desk, a plug socket, a
+  pot of pencils, some fake tulips — and a machine that looks up when I walk in.
+  Every other photograph in this series was styled to match it. This one is just
+  the thing, in the room, which is the whole argument for giving agents a body
+  in the first place.</figcaption>
+</figure>
+
 ---
 
 *AURA is [open source](https://github.com/janvanwassenhove/aura) (Apache-2.0)
