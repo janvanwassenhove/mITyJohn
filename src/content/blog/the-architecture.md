@@ -1,6 +1,6 @@
 ---
 title: "AURA 02 · The architecture, and the day I deleted five services"
-date: 2026-08-15
+date: 2026-08-12
 tags: ["ai", "development", "architecture", "robotics"]
 cover: "/blog/the-architecture/cover.webp"
 cardTag: "AI · Architecture"

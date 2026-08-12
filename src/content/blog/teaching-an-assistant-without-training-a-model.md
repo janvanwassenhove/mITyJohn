@@ -1,6 +1,6 @@
 ---
 title: "AURA 08 · Teaching an assistant without training a model"
-date: 2026-09-05
+date: 2026-08-18
 tags: ["ai", "development", "agents", "privacy"]
 cover: "/blog/teaching-an-assistant-without-training-a-model/cover.webp"
 cardTag: "AI · Agents"

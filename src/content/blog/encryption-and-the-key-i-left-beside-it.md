@@ -1,6 +1,6 @@
 ---
 title: "AURA 14 · Encryption, and the key I left beside it"
-date: 2026-09-26
+date: 2026-08-24
 tags: ["security", "privacy", "development"]
 cover: "/blog/encryption-and-the-key-i-left-beside-it/cover.webp"
 cardTag: "Security · Privacy"

@@ -1,6 +1,6 @@
 ---
 title: "AURA 10 · The day the agent started talking to itself"
-date: 2026-09-12
+date: 2026-08-20
 tags: ["ai", "development", "agents", "voice"]
 cover: "/blog/the-day-the-agent-started-talking-to-itself/cover.webp"
 cardTag: "AI · Voice"

@@ -1,6 +1,6 @@
 ---
 title: "AURA 05 · A backlog, a loop, and 226 units"
-date: 2026-08-25
+date: 2026-08-15
 tags: ["ai", "development", "agents", "sdlc"]
 cover: "/blog/a-backlog-a-loop-and-226-units/cover.webp"
 cardTag: "AI · SDLC"
