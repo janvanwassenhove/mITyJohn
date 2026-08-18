@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 63,
+        "downloads": 64,
         "platform": "Windows"
       },
       {
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 9,
+        "downloads": 11,
         "platform": "Windows"
       }
     ]
@@ -208,73 +208,61 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.77",
-    "date": "2026-08-16T09:37:19Z",
-    "changelog": "## AURA v2.0.77\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/01-operator-console.png)\n\n![02-richies-brain.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/02-richies-brain.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/03-knowledge-graph.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.76...v2.0.77",
+    "tag": "v2.0.79",
+    "date": "2026-08-17T08:22:57Z",
+    "changelog": "## AURA v2.0.79\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/01-operator-console.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.78...v2.0.79",
     "assets": [
       {
-        "name": "AURA-2.0.77-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-windows-setup.exe",
-        "size": 82550212,
+        "name": "AURA-2.0.79-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-windows-setup.exe",
+        "size": 82965006,
         "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.77-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-mac-arm64.dmg",
-        "size": 99121880,
+        "name": "AURA-2.0.79-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-mac-arm64.dmg",
+        "size": 99566168,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.77-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-mac-x64.dmg",
-        "size": 103744228,
+        "name": "AURA-2.0.79-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-mac-x64.dmg",
+        "size": 104160632,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.77-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-linux-amd64.deb",
-        "size": 75473070,
+        "name": "AURA-2.0.79-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-linux-amd64.deb",
+        "size": 75861824,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.77-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-linux-x86_64.AppImage",
-        "size": 108851736,
+        "name": "AURA-2.0.79-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-linux-x86_64.AppImage",
+        "size": 109270068,
         "downloads": 0,
         "platform": "Linux"
       },
       {
         "name": "01-operator-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/01-operator-console.png",
-        "size": 173663,
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/01-operator-console.png",
+        "size": 109300,
         "downloads": 0
       },
       {
-        "name": "02-richies-brain.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/02-richies-brain.png",
-        "size": 173031,
+        "name": "AURA-2.0.79-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-mac-arm64.zip",
+        "size": 96168479,
         "downloads": 0
       },
       {
-        "name": "03-knowledge-graph.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/03-knowledge-graph.png",
-        "size": 404658,
-        "downloads": 0
-      },
-      {
-        "name": "AURA-2.0.77-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-mac-arm64.zip",
-        "size": 95750476,
-        "downloads": 0
-      },
-      {
-        "name": "AURA-2.0.77-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.77/AURA-2.0.77-mac-x64.zip",
-        "size": 100377669,
+        "name": "AURA-2.0.79-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.79/AURA-2.0.79-mac-x64.zip",
+        "size": 100795672,
         "downloads": 0
       }
     ]
