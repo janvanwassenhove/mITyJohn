@@ -208,61 +208,55 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.83",
-    "date": "2026-08-18T21:55:52Z",
-    "changelog": "## AURA v2.0.83\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/01-operator-console.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.82...v2.0.83",
+    "tag": "v2.0.87",
+    "date": "2026-08-19T21:42:51Z",
+    "changelog": "## AURA v2.0.87\n\n> _No screenshots in this release: the demo-stack capture did not complete._\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.86...v2.0.87",
     "assets": [
       {
-        "name": "AURA-2.0.83-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-windows-setup.exe",
-        "size": 82966850,
+        "name": "AURA-2.0.87-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-windows-setup.exe",
+        "size": 82988119,
         "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.83-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-mac-arm64.dmg",
-        "size": 99555725,
+        "name": "AURA-2.0.87-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-mac-arm64.dmg",
+        "size": 99585980,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.83-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-mac-x64.dmg",
-        "size": 104147942,
+        "name": "AURA-2.0.87-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-mac-x64.dmg",
+        "size": 104177425,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.83-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-linux-amd64.deb",
-        "size": 75892706,
+        "name": "AURA-2.0.87-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-linux-amd64.deb",
+        "size": 75873652,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.83-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-linux-x86_64.AppImage",
-        "size": 109270005,
+        "name": "AURA-2.0.87-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-linux-x86_64.AppImage",
+        "size": 109294594,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "01-operator-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/01-operator-console.png",
-        "size": 109365,
+        "name": "AURA-2.0.87-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-mac-arm64.zip",
+        "size": 96193173,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.83-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-mac-arm64.zip",
-        "size": 96170594,
-        "downloads": 0
-      },
-      {
-        "name": "AURA-2.0.83-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.83/AURA-2.0.83-mac-x64.zip",
-        "size": 100797787,
+        "name": "AURA-2.0.87-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.87/AURA-2.0.87-mac-x64.zip",
+        "size": 100820366,
         "downloads": 0
       }
     ]
