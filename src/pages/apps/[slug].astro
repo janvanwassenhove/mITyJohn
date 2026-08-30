@@ -50,11 +50,15 @@ const fmtSize = (b: number) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' :
         <h1>{name}</h1>
         <p>{blurb}</p>
         <div class="actions">
+          {/* No binaries, no download button: "Get ↓" used to lead to an empty
+              releases page for every app that has none, a web game included. */}
           {rel?.assets?.length
             ? <a class="primary" href={rel.assets[0].url}>Download {rel.assets[0].name} ({fmtSize(rel.assets[0].size)})</a>
-            : gh && <a class="primary" href={`${gh}/releases`} target="_blank" rel="noopener">Get ↓</a>}
-          {demoUrl && <a href={demoUrl} target="_blank" rel="noopener">{cat === 'games' ? 'Play ↗' : 'Web ↗'}</a>}
-          {gh && <a href={gh} target="_blank" rel="noopener">Code</a>}
+            : demoUrl && <a class="primary" href={demoUrl} target="_blank" rel="noopener">{cat === 'games' ? 'Play ↗' : 'Web ↗'}</a>}
+          {rel?.assets?.length && demoUrl
+            ? <a href={demoUrl} target="_blank" rel="noopener">{cat === 'games' ? 'Play ↗' : 'Web ↗'}</a>
+            : null}
+          {gh && <a class={!rel?.assets?.length && !demoUrl ? 'primary' : ''} href={gh} target="_blank" rel="noopener">Code</a>}
         </div>
         {rel?.assets && rel.assets.length > 1 && (
           <div class="assets">

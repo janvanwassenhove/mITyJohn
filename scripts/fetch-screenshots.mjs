@@ -53,6 +53,24 @@ const SOURCES = {
   },
 };
 
+// Apps with no images anywhere: not in the repo, not in the WordPress mirror.
+// BullyOff is a web game, so the screenshots were captured from the running site
+// with Playwright and committed straight to public/screenshots/. Listed here so
+// this file stays the one place that says where every shot comes from, and so
+// the alt text lives beside the others rather than in the JSON.
+//
+// To refresh: play through to the screen, capture at 1440x900 (device scale 2),
+// resize to 560 wide and overwrite the webp. The entries below are not derived
+// from anything, so nothing regenerates them.
+const CAPTURED = {
+  bullyoff: [
+    { file: 'bullyoff-1.webp', alt: 'A match in progress: the pitch seen from the side with both teams as numbered discs, a tactics panel on the left and live possession, circle entries and shot counts on the right' },
+    { file: 'bullyoff-2.webp', alt: 'The club picker: two tiers of invented clubs with their crests, founding years and squad levels, and a detail panel for the selected club' },
+    { file: 'bullyoff-3.webp', alt: 'A generated world: 24 clubs, 698 players, 20 seasons and zero real names, beside a ledger of invented champions going back to 2010' },
+    { file: 'bullyoff-4.webp', alt: 'The title screen: a floodlit pitch being watered at dusk, over the line "Take the bench on Saturday"' },
+  ],
+};
+
 // Apps whose repos hold no usable screenshot (only sprites/icons/frames). These
 // come from the WordPress mirror instead — the same images the app's own page uses.
 const LOCAL = {
@@ -175,6 +193,11 @@ for (const [slug, paths] of Object.entries(LOCAL)) {
 }
 
 // Monorepo-subprojecten: kaartformaat (560) + paginaformaat (900) uit dezelfde bron.
+// Captured shots: already the right size and format, so this only records them.
+for (const [slug, files] of Object.entries(CAPTURED)) {
+  index[slug] = files.map(({ file, alt }) => ({ src: `/screenshots/${file}`, alt }));
+}
+
 for (const [slug, { dir, card, page }] of Object.entries(MONOREPO)) {
   const encode = async (rel, name, width) => {
     const dest = fileURLToPath(new URL(name, SHOT_DIR));

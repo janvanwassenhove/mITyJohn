@@ -198,5 +198,23 @@
       "src": "/screenshots/aura-4.webp",
       "alt": "An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae"
     }
+  ],
+  "bullyoff": [
+    {
+      "src": "/screenshots/bullyoff-1.webp",
+      "alt": "A match in progress: the pitch seen from the side with both teams as numbered discs, a tactics panel on the left and live possession, circle entries and shot counts on the right"
+    },
+    {
+      "src": "/screenshots/bullyoff-2.webp",
+      "alt": "The club picker: two tiers of invented clubs with their crests, founding years and squad levels, and a detail panel for the selected club"
+    },
+    {
+      "src": "/screenshots/bullyoff-3.webp",
+      "alt": "A generated world: 24 clubs, 698 players, 20 seasons and zero real names, beside a ledger of invented champions going back to 2010"
+    },
+    {
+      "src": "/screenshots/bullyoff-4.webp",
+      "alt": "The title screen: a floodlit pitch being watered at dusk, over the line \"Take the bench on Saturday\""
+    }
   ]
 }

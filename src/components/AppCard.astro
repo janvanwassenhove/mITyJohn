@@ -2,6 +2,7 @@
 // Store card — exactly the designed card: header art with code badge + tag,
 // name, blurb, action row. Actions derived from frontmatter (gap-list G1 note).
 import type { CollectionEntry } from 'astro:content';
+import releases from '../data/releases.json';
 import shots from '../data/screenshots.json';
 
 interface Props {
@@ -17,11 +18,18 @@ const gallery = ((shots as Record<string, { src: string; alt: string }[]>)[app.i
 
 const gh = (r: string) => `https://github.com/janvanwassenhove/${r}`;
 type Action = { label: string; href: string; primary?: boolean; external?: boolean };
+// "Get ↓" only when there is something to get. Ten of the apps have a repo but
+// no published binaries — a web game never will — and the button used to send
+// people to an empty releases page. Whatever comes first becomes the primary
+// action, so those apps lead with Play or Web instead.
+const downloads = repo ? ((releases as Record<string, { assets?: unknown[] }>)[repo]?.assets?.length ?? 0) : 0;
+
 const actions: Action[] = [];
-if (repo) actions.push({ label: 'Get ↓', href: `${gh(repo)}/releases`, primary: true, external: true });
-if (demoUrl) actions.push({ label: actions.length === 0 ? (cat === 'games' ? 'Play ↗' : 'Web ↗') : cat === 'games' ? 'Play ↗' : 'Web ↗', href: demoUrl, primary: actions.length === 0, external: true });
+if (downloads > 0) actions.push({ label: 'Get ↓', href: `${gh(repo!)}/releases`, external: true });
+if (demoUrl) actions.push({ label: cat === 'games' ? 'Play ↗' : 'Web ↗', href: demoUrl, external: true });
 if (repo) actions.push({ label: 'Code', href: gh(repo), external: true });
 actions.push({ label: 'Info', href: `/apps/${app.id}/` });
+if (actions.length) actions[0].primary = true;
 ---
 
 <div class="card" data-reveal data-cat={cat} data-new={String(isNew)}>
