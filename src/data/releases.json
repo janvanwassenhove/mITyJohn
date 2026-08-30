@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 22,
+        "downloads": 23,
         "platform": "Windows"
       }
     ]
@@ -208,61 +208,61 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.97",
-    "date": "2026-08-26T20:36:39Z",
-    "changelog": "## AURA v2.0.97\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/01-operator-console.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.96...v2.0.97",
+    "tag": "v2.0.98",
+    "date": "2026-08-29T20:12:59Z",
+    "changelog": "## AURA v2.0.98\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/01-operator-console.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.97...v2.0.98",
     "assets": [
       {
-        "name": "AURA-2.0.97-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-windows-setup.exe",
-        "size": 83005822,
+        "name": "AURA-2.0.98-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-windows-setup.exe",
+        "size": 83006265,
         "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.97-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-mac-arm64.dmg",
-        "size": 99596409,
+        "name": "AURA-2.0.98-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-arm64.dmg",
+        "size": 99584820,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.97-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-mac-x64.dmg",
-        "size": 104186002,
+        "name": "AURA-2.0.98-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-x64.dmg",
+        "size": 104195094,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.97-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-linux-amd64.deb",
-        "size": 75881870,
+        "name": "AURA-2.0.98-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-linux-amd64.deb",
+        "size": 75884932,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.97-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-linux-x86_64.AppImage",
-        "size": 109311139,
+        "name": "AURA-2.0.98-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-linux-x86_64.AppImage",
+        "size": 109311048,
         "downloads": 0,
         "platform": "Linux"
       },
       {
         "name": "01-operator-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/01-operator-console.png",
-        "size": 110595,
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/01-operator-console.png",
+        "size": 110607,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.97-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-mac-arm64.zip",
-        "size": 96211766,
+        "name": "AURA-2.0.98-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-arm64.zip",
+        "size": 96212225,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.97-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.97/AURA-2.0.97-mac-x64.zip",
-        "size": 100838959,
+        "name": "AURA-2.0.98-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-x64.zip",
+        "size": 100839418,
         "downloads": 0
       }
     ]
