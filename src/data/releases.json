@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 23,
+        "downloads": 27,
         "platform": "Windows"
       }
     ]
@@ -160,19 +160,19 @@
         "name": "02-campaign.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
         "size": 60247,
-        "downloads": 47
+        "downloads": 48
       },
       {
         "name": "01-main-menu.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
         "size": 867069,
-        "downloads": 46
+        "downloads": 47
       },
       {
         "name": "03-gameplay.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
         "size": 239706,
-        "downloads": 46
+        "downloads": 47
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
@@ -208,63 +208,69 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.98",
-    "date": "2026-08-29T20:12:59Z",
-    "changelog": "## AURA v2.0.98\n\n### Screenshots\n_Captured from a fresh demo instance (fictional demo profile only — no personal data)._\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/01-operator-console.png)\n\n### Installatie\n| Platform | Bestand |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` of `.deb` |\n\n> macOS/Linux: eerste start installeert de Python-runtime (uv) automatisch; macOS-builds zijn niet genotariseerd — open via rechtsklik → Open.\n\n\n\n**Full Changelog**: https://github.com/janvanwassenhove/aura/compare/v2.0.97...v2.0.98",
+    "tag": "v2.0.104",
+    "date": "2026-08-30T21:28:56Z",
+    "changelog": "# AURA v2.0.104\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **1 improvement**, each one from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- Release notes in English, built from the commit log\n\n## What it looks like\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/01-operator-console.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all of it stays on your own machine**. No subscription, no cloud profile: your keys and your memories are encrypted on this computer.\n\n---\n\nThe full technical history of every change is in [docs/implementation-backlog.md](https://github.com/janvanwassenhove/aura/blob/master/docs/implementation-backlog.md).\n",
     "assets": [
       {
-        "name": "AURA-2.0.98-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-windows-setup.exe",
-        "size": 83006265,
+        "name": "AURA-2.0.104-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-windows-setup.exe",
+        "size": 83029853,
         "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.98-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-arm64.dmg",
-        "size": 99584820,
+        "name": "AURA-2.0.104-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-mac-arm64.dmg",
+        "size": 99610814,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.98-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-x64.dmg",
-        "size": 104195094,
+        "name": "AURA-2.0.104-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-mac-x64.dmg",
+        "size": 104206868,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.98-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-linux-amd64.deb",
-        "size": 75884932,
+        "name": "AURA-2.0.104-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-linux-amd64.deb",
+        "size": 75901472,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.98-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-linux-x86_64.AppImage",
-        "size": 109311048,
+        "name": "AURA-2.0.104-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-linux-x86_64.AppImage",
+        "size": 109339755,
         "downloads": 0,
         "platform": "Linux"
       },
       {
         "name": "01-operator-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/01-operator-console.png",
-        "size": 110607,
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/01-operator-console.png",
+        "size": 110590,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.98-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-arm64.zip",
-        "size": 96212225,
+        "name": "AURA-2.0.104-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-mac-arm64.zip",
+        "size": 96237668,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.98-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.98/AURA-2.0.98-mac-x64.zip",
-        "size": 100839418,
+        "name": "AURA-2.0.104-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.104/AURA-2.0.104-mac-x64.zip",
+        "size": 100864861,
         "downloads": 0
       }
     ]
+  },
+  "BullyOff": {
+    "tag": "v1.0.0",
+    "date": "2026-08-30T11:39:31Z",
+    "changelog": "**BULLY OFF** — a deterministic field-hockey manager. Coach a fictional Belgian club through a season that is really played, minute by minute, in your browser: https://janvanwassenhove.github.io/BullyOff/\n\nOffline-first PWA · no accounts, no telemetry, no real clubs or people · NL / EN / FR.\n\n## Versions\n\n- Engine **0.8.0** (sandbox golden `7511507816fd5c49`) — deterministic, dependency-free, SI units end to end.\n- Save format **v4** (linear migrations from v1; team sheet, PC battery and captain live in the save).\n\n## Calibration (96 matches per profile, level 12 ± 2, watered turf)\n\n- **Men: 14/15 bands · Women: 12/15 — every directly-measured metric passes in both.**\n- Men: 5.20 goals/match, 10.1 penalty corners, 34 % of goals from PC+PS, strokes 0.25 at 67 % conversion, cards in band.\n- Women: 3.66 goals/match, 8.5 corners, 31 % PC share, stroke conversion 76 %.\n- Known deviations (all at the edge of *estimated* bands, full log in `docs/rules/calibration.md`): women's circle entries and restart volume a whisker under, shots a whisker over; the men's scoreline-shape test flips with the seed set (a ±2-level league is genuinely top-heavy).\n\n## What the coach gets\n\nTeam sheet with bench and rest days, signed before kick-off · tactics board on a to-scale FIH pitch with the real press and back lines · penalty-corner battery, variants picked in-match from the players actually on the pitch · opponent scouting that only reports what was actually played · in-match coaching with rolling subs · a rulebook with pitch and figure animations checked against the FIH rules, plus verified explainer videos · an academy that teaches the game the engine actually plays · works on phone, tablet and laptop, as webapp and installed PWA.\n\n## Owed human reviews (do not block the build — `KICKOFF.md`)\n\nThe on-phone manual checklist in `docs/release.md` (install, offline relaunch, 60 fps coached match, save export/import, update banner) awaits Jan's device pass.\n",
+    "assets": []
   }
 }
