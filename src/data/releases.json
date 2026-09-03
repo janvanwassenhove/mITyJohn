@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 27,
+        "downloads": 29,
         "platform": "Windows"
       }
     ]
@@ -172,7 +172,7 @@
         "name": "03-gameplay.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
         "size": 239706,
-        "downloads": 48
+        "downloads": 49
       },
       {
         "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
@@ -208,61 +208,61 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.108",
-    "date": "2026-09-01T21:55:21Z",
-    "changelog": "# AURA v2.0.108\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- He saw one person, and listened in the language of the house\n\n## What it looks like\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/01-operator-console.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all of it stays on your own machine**. No subscription, no cloud profile: your keys and your memories are encrypted on this computer.\n\n---\n\nThe full technical history of every change is in [docs/implementation-backlog.md](https://github.com/janvanwassenhove/aura/blob/master/docs/implementation-backlog.md).\n",
+    "tag": "v2.0.112",
+    "date": "2026-09-02T20:38:20Z",
+    "changelog": "# AURA v2.0.112\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- I handed him a sentence to hide behind\n\n## What it looks like\n\n![01-operator-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/01-operator-console.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all of it stays on your own machine**. No subscription, no cloud profile: your keys and your memories are encrypted on this computer.\n\n---\n\nThe full technical history of every change is in [docs/implementation-backlog.md](https://github.com/janvanwassenhove/aura/blob/master/docs/implementation-backlog.md).\n",
     "assets": [
       {
-        "name": "AURA-2.0.108-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-windows-setup.exe",
-        "size": 83033361,
+        "name": "AURA-2.0.112-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-windows-setup.exe",
+        "size": 83035084,
         "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.108-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-mac-arm64.dmg",
-        "size": 99613285,
+        "name": "AURA-2.0.112-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-mac-arm64.dmg",
+        "size": 99623128,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.108-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-mac-x64.dmg",
-        "size": 104221421,
+        "name": "AURA-2.0.112-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-mac-x64.dmg",
+        "size": 104227960,
         "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.108-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-linux-amd64.deb",
-        "size": 75917316,
+        "name": "AURA-2.0.112-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-linux-amd64.deb",
+        "size": 75918858,
         "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.108-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-linux-x86_64.AppImage",
-        "size": 109343857,
+        "name": "AURA-2.0.112-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-linux-x86_64.AppImage",
+        "size": 109343832,
         "downloads": 0,
         "platform": "Linux"
       },
       {
         "name": "01-operator-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/01-operator-console.png",
-        "size": 110715,
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/01-operator-console.png",
+        "size": 110712,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.108-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-mac-arm64.zip",
-        "size": 96241224,
+        "name": "AURA-2.0.112-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-mac-arm64.zip",
+        "size": 96243043,
         "downloads": 0
       },
       {
-        "name": "AURA-2.0.108-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.108/AURA-2.0.108-mac-x64.zip",
-        "size": 100868417,
+        "name": "AURA-2.0.112-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.112/AURA-2.0.112-mac-x64.zip",
+        "size": 100870236,
         "downloads": 0
       }
     ]
