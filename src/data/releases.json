@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 29,
+        "downloads": 32,
         "platform": "Windows"
       }
     ]
@@ -157,16 +157,16 @@
         "platform": "Windows"
       },
       {
+        "name": "01-main-menu.png",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
+        "size": 867069,
+        "downloads": 50
+      },
+      {
         "name": "02-campaign.png",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
         "size": 60247,
         "downloads": 50
-      },
-      {
-        "name": "01-main-menu.png",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
-        "size": 867069,
-        "downloads": 49
       },
       {
         "name": "03-gameplay.png",
