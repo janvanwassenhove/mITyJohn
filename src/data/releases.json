@@ -88,6 +88,13 @@
         "platform": "Linux"
       },
       {
+        "name": "pibeat_0.3.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
+        "size": 4402036,
+        "downloads": 2,
+        "platform": "Windows"
+      },
+      {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
@@ -100,13 +107,6 @@
         "size": 7104674,
         "downloads": 2,
         "platform": "Linux"
-      },
-      {
-        "name": "pibeat_0.3.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
-        "size": 4402036,
-        "downloads": 1,
-        "platform": "Windows"
       },
       {
         "name": "pibeat_0.3.1_universal.dmg",
