@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 42,
+        "downloads": 43,
         "platform": "Windows"
       }
     ]
@@ -102,18 +102,18 @@
         "platform": "Windows"
       },
       {
+        "name": "pibeat_0.3.1_universal.dmg",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
+        "size": 11551883,
+        "downloads": 2,
+        "platform": "macOS"
+      },
+      {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
         "downloads": 2,
         "platform": "Linux"
-      },
-      {
-        "name": "pibeat_0.3.1_universal.dmg",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
-        "size": 11551883,
-        "downloads": 1,
-        "platform": "macOS"
       },
       {
         "name": "pibeat_0.3.1_amd64.AppImage",
