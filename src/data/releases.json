@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 43,
+        "downloads": 47,
         "platform": "Windows"
       }
     ]
@@ -88,25 +88,25 @@
         "platform": "Linux"
       },
       {
-        "name": "pibeat_0.3.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
-        "size": 4402036,
-        "downloads": 2,
-        "platform": "Windows"
-      },
-      {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
-        "downloads": 2,
+        "downloads": 3,
         "platform": "Windows"
       },
       {
         "name": "pibeat_0.3.1_universal.dmg",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
         "size": 11551883,
-        "downloads": 2,
+        "downloads": 3,
         "platform": "macOS"
+      },
+      {
+        "name": "pibeat_0.3.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
+        "size": 4402036,
+        "downloads": 2,
+        "platform": "Windows"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
@@ -251,31 +251,31 @@
         "name": "01-console.png",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.130/01-console.png",
         "size": 124940,
-        "downloads": 1
+        "downloads": 2
       },
       {
         "name": "02-brain-person.png",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.130/02-brain-person.png",
         "size": 148241,
-        "downloads": 1
+        "downloads": 2
       },
       {
         "name": "03-knowledge-graph.png",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.130/03-knowledge-graph.png",
         "size": 314131,
-        "downloads": 1
+        "downloads": 2
       },
       {
         "name": "04-skills.png",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.130/04-skills.png",
         "size": 87201,
-        "downloads": 1
+        "downloads": 2
       },
       {
         "name": "05-settings.png",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.130/05-settings.png",
         "size": 122553,
-        "downloads": 1
+        "downloads": 2
       },
       {
         "name": "AURA-2.0.130-mac-arm64.zip",
