@@ -40,17 +40,17 @@
     "changelog": "# mITyGuitar Desktop 0.0.1\r\n\r\n## What's New\r\n- Desktop application release for Windows\r\n- Full featured guitar learning and practice application\r\n- Chord mapping and song chart support\r\n- Controller integration for interactive practice\r\n\r\n## Downloads\r\n\r\n### Windows Installers\r\n- **MSI Package**: `mITyGuitar_0.0.1_x64_en-US.msi` - Windows Installer Package (recommended for most users)\r\n- **NSIS Setup**: `mITyGuitar_0.0.1_x64-setup.exe` - Nullsoft Installer (alternative option)\r\n\r\nBoth installers include the complete application with all dependencies.\r\n\r\n## System Requirements\r\n- Windows 10/11 (64-bit)\r\n- Audio device (headphones/speakers recommended)\r\n- Optional: MIDI controller for enhanced interaction\r\n\r\n## Installation\r\n1. Download your preferred installer\r\n2. Run the installer as administrator\r\n3. Follow the setup wizard\r\n4. Launch mITyGuitar from Start Menu or Desktop\r\n\r\n## Issues & Support\r\nIf you encounter any issues, please report them on our [GitHub Issues](https://github.com/janvanwassenhove/mITyGuitar/issues) page.\r\n\r\n---\r\nGenerated on 2026-01-04 23:17:33 UTC",
     "assets": [
       {
-        "name": "mITyGuitar_0.0.1_x64_en-US.msi",
-        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
-        "size": 184893440,
+        "name": "mITyGuitar_0.0.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
+        "size": 113233473,
         "downloads": 43,
         "platform": "Windows"
       },
       {
-        "name": "mITyGuitar_0.0.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
-        "size": 113233473,
-        "downloads": 42,
+        "name": "mITyGuitar_0.0.1_x64_en-US.msi",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
+        "size": 184893440,
+        "downloads": 43,
         "platform": "Windows"
       }
     ]
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 47,
+        "downloads": 49,
         "platform": "Windows"
       }
     ]
@@ -88,6 +88,13 @@
         "platform": "Linux"
       },
       {
+        "name": "pibeat_0.3.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
+        "size": 4402036,
+        "downloads": 3,
+        "platform": "Windows"
+      },
+      {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
@@ -100,13 +107,6 @@
         "size": 11551883,
         "downloads": 3,
         "platform": "macOS"
-      },
-      {
-        "name": "pibeat_0.3.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
-        "size": 4402036,
-        "downloads": 2,
-        "platform": "Windows"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
