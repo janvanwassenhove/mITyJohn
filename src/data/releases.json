@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 66,
+        "downloads": 67,
         "platform": "Windows"
       },
       {
@@ -88,16 +88,16 @@
         "platform": "Linux"
       },
       {
-        "name": "pibeat_0.3.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
-        "size": 4402036,
-        "downloads": 3,
-        "platform": "Windows"
-      },
-      {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
+        "downloads": 4,
+        "platform": "Windows"
+      },
+      {
+        "name": "pibeat_0.3.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64-setup.exe",
+        "size": 4402036,
         "downloads": 3,
         "platform": "Windows"
       },
@@ -119,72 +119,72 @@
         "name": "pibeat_0.3.1_amd64.AppImage",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
         "size": 84371960,
-        "downloads": 1,
+        "downloads": 2,
         "platform": "Linux"
       },
       {
         "name": "pibeat_universal.app.tar.gz",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_universal.app.tar.gz",
         "size": 11465744,
-        "downloads": 2
+        "downloads": 3
       }
     ]
   },
   "ghostsinthemachine": {
-    "tag": "v1.0.5",
-    "date": "2026-07-14T09:19:33Z",
-    "changelog": "**Ghosts in the Machine v1.0.5** — a haunted IT management sim. Run a paranormal IT\nsupport company: build rooms, hire staff of questionable qualification, and route an\nendless queue of absurd tickets while juggling money, client trust, technical debt\nand the coffee supply.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/ghostsinthemachine/\n\n## Download\n\n| Platform | Installer |\n| --- | --- |\n| Windows (x64) | [`GhostsInTheMachine-1.0.5-win-x64.exe`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-win-x64.exe) |\n| macOS (Apple Silicon) | [`GhostsInTheMachine-1.0.5-mac-arm64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg) |\n| macOS (Intel) | [`GhostsInTheMachine-1.0.5-mac-x64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg) |\n\nThe Windows build **updates itself**: if an older version is installed it downloads the\nnew one in the background and applies it on quit.\n\n> **macOS is unsigned.** On first launch, right-click the app → *Open* to get past\n> Gatekeeper. macOS auto-update is disabled until the app is signed and notarized.\n\n## Screenshots\n\n| Main menu | Campaign |\n| --- | --- |\n| ![Main menu](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png) | ![Campaign](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png) |\n\n![Gameplay](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png)\n\n## What's changed\n\n- Cap rooms at two staff; a second worker reliably speeds up the room\n\n\n**Full changelog:** https://github.com/janvanwassenhove/ghostsinthemachine/compare/v1.0.4...v1.0.5\n",
+    "tag": "v1.0.6",
+    "date": "2026-09-13T18:36:28Z",
+    "changelog": "**Ghosts in the Machine v1.0.6** — a haunted IT management sim. Run a paranormal IT\nsupport company: build rooms, hire staff of questionable qualification, and route an\nendless queue of absurd tickets while juggling money, client trust, technical debt\nand the coffee supply.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/ghostsinthemachine/\n\n## Download\n\n| Platform | Installer |\n| --- | --- |\n| Windows (x64) | [`GhostsInTheMachine-1.0.6-win-x64.exe`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-win-x64.exe) |\n| macOS (Apple Silicon) | [`GhostsInTheMachine-1.0.6-mac-arm64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg) |\n| macOS (Intel) | [`GhostsInTheMachine-1.0.6-mac-x64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg) |\n\nThe Windows build **updates itself**: if an older version is installed it downloads the\nnew one in the background and applies it on quit.\n\n> **macOS is unsigned.** On first launch, right-click the app → *Open* to get past\n> Gatekeeper. macOS auto-update is disabled until the app is signed and notarized.\n\n## Screenshots\n\n| Main menu | Campaign |\n| --- | --- |\n| ![Main menu](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/01-main-menu.png) | ![Campaign](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/02-campaign.png) |\n\n![Gameplay](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/03-gameplay.png)\n\n## What's changed\n\n- Build artifacts stop piling up in Actions storage\n\n\n**Full changelog:** https://github.com/janvanwassenhove/ghostsinthemachine/compare/v1.0.5...v1.0.6\n",
     "assets": [
       {
-        "name": "GhostsInTheMachine-1.0.5-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.dmg",
-        "size": 136227827,
-        "downloads": 42,
-        "platform": "macOS"
-      },
-      {
-        "name": "GhostsInTheMachine-1.0.5-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.dmg",
-        "size": 134457974,
-        "downloads": 41,
-        "platform": "macOS"
-      },
-      {
-        "name": "GhostsInTheMachine-1.0.5-win-x64.exe",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-win-x64.exe",
-        "size": 114125603,
-        "downloads": 40,
+        "name": "GhostsInTheMachine-1.0.6-win-x64.exe",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-win-x64.exe",
+        "size": 114126056,
+        "downloads": 0,
         "platform": "Windows"
       },
       {
+        "name": "GhostsInTheMachine-1.0.6-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg",
+        "size": 134457962,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.6-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg",
+        "size": 136227729,
+        "downloads": 0,
+        "platform": "macOS"
+      },
+      {
         "name": "01-main-menu.png",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/01-main-menu.png",
-        "size": 867069,
-        "downloads": 50
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/01-main-menu.png",
+        "size": 867676,
+        "downloads": 0
       },
       {
         "name": "02-campaign.png",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/02-campaign.png",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/02-campaign.png",
         "size": 60247,
-        "downloads": 50
+        "downloads": 0
       },
       {
         "name": "03-gameplay.png",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/03-gameplay.png",
-        "size": 239706,
-        "downloads": 49
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/03-gameplay.png",
+        "size": 236014,
+        "downloads": 0
       },
       {
-        "name": "GhostsInTheMachine-1.0.5-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-arm64.zip",
-        "size": 134372890,
-        "downloads": 39
+        "name": "GhostsInTheMachine-1.0.6-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.zip",
+        "size": 134372900,
+        "downloads": 0
       },
       {
-        "name": "GhostsInTheMachine-1.0.5-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.5/GhostsInTheMachine-1.0.5-mac-x64.zip",
-        "size": 136209268,
-        "downloads": 39
+        "name": "GhostsInTheMachine-1.0.6-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.zip",
+        "size": 136209278,
+        "downloads": 0
       }
     ]
   },
@@ -208,86 +208,93 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.137",
-    "date": "2026-09-12T14:03:04Z",
-    "changelog": "# AURA v2.0.137\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- He reacts with his antennae, not only with his head\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and ",
+    "tag": "v2.0.166",
+    "date": "2026-09-13T22:25:54Z",
+    "changelog": "# AURA v2.0.166\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- Follow-me, checked before the fix went to the robot\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and ",
     "assets": [
       {
-        "name": "AURA-2.0.137-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-windows-setup.exe",
-        "size": 83069799,
-        "downloads": 2,
+        "name": "AURA-2.0.166-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-windows-setup.exe",
+        "size": 83095322,
+        "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.137-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-mac-arm64.dmg",
-        "size": 99645076,
-        "downloads": 1,
+        "name": "AURA-2.0.166-windows.msi",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-windows.msi",
+        "size": 93494552,
+        "downloads": 0,
+        "platform": "Windows"
+      },
+      {
+        "name": "AURA-2.0.166-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-mac-arm64.dmg",
+        "size": 99707495,
+        "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.137-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-mac-x64.dmg",
-        "size": 104271680,
-        "downloads": 1,
+        "name": "AURA-2.0.166-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-mac-x64.dmg",
+        "size": 104284051,
+        "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.137-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-linux-amd64.deb",
-        "size": 75918294,
-        "downloads": 1,
+        "name": "AURA-2.0.166-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-linux-amd64.deb",
+        "size": 75956504,
+        "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.137-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-linux-x86_64.AppImage",
-        "size": 109380737,
-        "downloads": 1,
+        "name": "AURA-2.0.166-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-linux-x86_64.AppImage",
+        "size": 109409495,
+        "downloads": 0,
         "platform": "Linux"
       },
       {
         "name": "01-console.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/01-console.png",
-        "size": 123344,
-        "downloads": 1
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/01-console.png",
+        "size": 123327,
+        "downloads": 0
       },
       {
         "name": "02-brain-person.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/02-brain-person.png",
-        "size": 148228,
-        "downloads": 1
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/02-brain-person.png",
+        "size": 148232,
+        "downloads": 0
       },
       {
         "name": "03-knowledge-graph.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/03-knowledge-graph.png",
-        "size": 314310,
-        "downloads": 1
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/03-knowledge-graph.png",
+        "size": 314350,
+        "downloads": 0
       },
       {
         "name": "04-skills.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/04-skills.png",
-        "size": 87207,
-        "downloads": 1
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/04-skills.png",
+        "size": 87217,
+        "downloads": 0
       },
       {
         "name": "05-settings.png",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/05-settings.png",
-        "size": 122677,
-        "downloads": 1
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/05-settings.png",
+        "size": 124459,
+        "downloads": 0
       },
       {
-        "name": "AURA-2.0.137-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-mac-arm64.zip",
-        "size": 96279948,
-        "downloads": 1
+        "name": "AURA-2.0.166-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-mac-arm64.zip",
+        "size": 96307311,
+        "downloads": 0
       },
       {
-        "name": "AURA-2.0.137-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.137/AURA-2.0.137-mac-x64.zip",
-        "size": 100907141,
-        "downloads": 1
+        "name": "AURA-2.0.166-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.166/AURA-2.0.166-mac-x64.zip",
+        "size": 100934504,
+        "downloads": 0
       }
     ]
   },
