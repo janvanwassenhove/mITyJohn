@@ -69,6 +69,15 @@ const CAPTURED = {
     { file: 'bullyoff-3.webp', alt: 'A generated world: 24 clubs, 698 players, 20 seasons and zero real names, beside a ledger of invented champions going back to 2010' },
     { file: 'bullyoff-4.webp', alt: 'The title screen: a floodlit pitch being watered at dusk, over the line "Take the bench on Saturday"' },
   ],
+  // HockeyEleven's repo is private, so the raw fetch above cannot reach its
+  // screenshots — and the ones in it are in Dutch. Captured from the live build
+  // with the interface set to English instead.
+  hockeyeleven: [
+    { file: 'hockeyeleven-1.webp', alt: 'An 11v11 match on a blue water pitch: both teams in the middle third, the scoreboard reading BEL 0 - 0 NED, a radar of the whole pitch along the bottom and the keyboard controls bottom right' },
+    { file: 'hockeyeleven-2.webp', alt: 'Indoor hockey: a dark six-a-side rink with white side boards, the ball being carried out of the circle past the goalkeeper' },
+    { file: 'hockeyeleven-3.webp', alt: 'The nation picker: a searchable grid of flags with three-letter codes and ratings, filtered to Europe, over the line "All 133 FIH associations"' },
+    { file: 'hockeyeleven-4.webp', alt: 'The match setup screen: the three formats side by side, the two line-ups with their world ranks, and pickers for formation, venue, weather, squad, length and level' },
+  ],
 };
 
 // Apps whose repos hold no usable screenshot (only sprites/icons/frames). These
