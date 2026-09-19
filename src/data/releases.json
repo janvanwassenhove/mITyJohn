@@ -15,14 +15,14 @@
         "name": "LoveFlix-1.0.0.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
         "size": 101216735,
-        "downloads": 52,
+        "downloads": 54,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 42,
+        "downloads": 46,
         "platform": "macOS"
       },
       {
@@ -40,16 +40,16 @@
     "changelog": "# mITyGuitar Desktop 0.0.1\r\n\r\n## What's New\r\n- Desktop application release for Windows\r\n- Full featured guitar learning and practice application\r\n- Chord mapping and song chart support\r\n- Controller integration for interactive practice\r\n\r\n## Downloads\r\n\r\n### Windows Installers\r\n- **MSI Package**: `mITyGuitar_0.0.1_x64_en-US.msi` - Windows Installer Package (recommended for most users)\r\n- **NSIS Setup**: `mITyGuitar_0.0.1_x64-setup.exe` - Nullsoft Installer (alternative option)\r\n\r\nBoth installers include the complete application with all dependencies.\r\n\r\n## System Requirements\r\n- Windows 10/11 (64-bit)\r\n- Audio device (headphones/speakers recommended)\r\n- Optional: MIDI controller for enhanced interaction\r\n\r\n## Installation\r\n1. Download your preferred installer\r\n2. Run the installer as administrator\r\n3. Follow the setup wizard\r\n4. Launch mITyGuitar from Start Menu or Desktop\r\n\r\n## Issues & Support\r\nIf you encounter any issues, please report them on our [GitHub Issues](https://github.com/janvanwassenhove/mITyGuitar/issues) page.\r\n\r\n---\r\nGenerated on 2026-01-04 23:17:33 UTC",
     "assets": [
       {
-        "name": "mITyGuitar_0.0.1_x64-setup.exe",
-        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
-        "size": 113233473,
-        "downloads": 43,
-        "platform": "Windows"
-      },
-      {
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
+        "downloads": 46,
+        "platform": "Windows"
+      },
+      {
+        "name": "mITyGuitar_0.0.1_x64-setup.exe",
+        "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64-setup.exe",
+        "size": 113233473,
         "downloads": 43,
         "platform": "Windows"
       }
@@ -84,22 +84,36 @@
         "name": "pibeat_0.3.1_amd64.deb",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
         "size": 7104614,
-        "downloads": 6,
+        "downloads": 8,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
-        "downloads": 4,
+        "downloads": 6,
         "platform": "Windows"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
-        "downloads": 4,
+        "downloads": 6,
         "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.3.1_amd64.AppImage",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
+        "size": 84371960,
+        "downloads": 6,
+        "platform": "Linux"
+      },
+      {
+        "name": "pibeat_0.3.1_universal.dmg",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
+        "size": 11551883,
+        "downloads": 5,
+        "platform": "macOS"
       },
       {
         "name": "pibeat_0.3.1_x64-setup.exe",
@@ -107,20 +121,6 @@
         "size": 4402036,
         "downloads": 3,
         "platform": "Windows"
-      },
-      {
-        "name": "pibeat_0.3.1_universal.dmg",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
-        "size": 11551883,
-        "downloads": 3,
-        "platform": "macOS"
-      },
-      {
-        "name": "pibeat_0.3.1_amd64.AppImage",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
-        "size": 84371960,
-        "downloads": 3,
-        "platform": "Linux"
       },
       {
         "name": "pibeat_universal.app.tar.gz",
@@ -136,25 +136,25 @@
     "changelog": "**Ghosts in the Machine v1.0.6** — a haunted IT management sim. Run a paranormal IT\nsupport company: build rooms, hire staff of questionable qualification, and route an\nendless queue of absurd tickets while juggling money, client trust, technical debt\nand the coffee supply.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/ghostsinthemachine/\n\n## Download\n\n| Platform | Installer |\n| --- | --- |\n| Windows (x64) | [`GhostsInTheMachine-1.0.6-win-x64.exe`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-win-x64.exe) |\n| macOS (Apple Silicon) | [`GhostsInTheMachine-1.0.6-mac-arm64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg) |\n| macOS (Intel) | [`GhostsInTheMachine-1.0.6-mac-x64.dmg`](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg) |\n\nThe Windows build **updates itself**: if an older version is installed it downloads the\nnew one in the background and applies it on quit.\n\n> **macOS is unsigned.** On first launch, right-click the app → *Open* to get past\n> Gatekeeper. macOS auto-update is disabled until the app is signed and notarized.\n\n## Screenshots\n\n| Main menu | Campaign |\n| --- | --- |\n| ![Main menu](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/01-main-menu.png) | ![Campaign](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/02-campaign.png) |\n\n![Gameplay](https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/03-gameplay.png)\n\n## What's changed\n\n- Build artifacts stop piling up in Actions storage\n\n\n**Full changelog:** https://github.com/janvanwassenhove/ghostsinthemachine/compare/v1.0.5...v1.0.6\n",
     "assets": [
       {
-        "name": "GhostsInTheMachine-1.0.6-win-x64.exe",
-        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-win-x64.exe",
-        "size": 114126056,
-        "downloads": 0,
-        "platform": "Windows"
-      },
-      {
         "name": "GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "size": 134457962,
-        "downloads": 0,
+        "downloads": 3,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "size": 136227729,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "macOS"
+      },
+      {
+        "name": "GhostsInTheMachine-1.0.6-win-x64.exe",
+        "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-win-x64.exe",
+        "size": 114126056,
+        "downloads": 0,
+        "platform": "Windows"
       },
       {
         "name": "01-main-menu.png",
@@ -213,46 +213,46 @@
     "changelog": "# AURA v2.0.171\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- Twenty megabytes of log, and not one beat in it\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all ",
     "assets": [
       {
-        "name": "AURA-2.0.171-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-windows-setup.exe",
-        "size": 83099673,
-        "downloads": 0,
-        "platform": "Windows"
-      },
-      {
         "name": "AURA-2.0.171-windows.msi",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-windows.msi",
         "size": 93498725,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "Windows"
       },
       {
         "name": "AURA-2.0.171-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-mac-arm64.dmg",
         "size": 99683846,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "macOS"
       },
       {
         "name": "AURA-2.0.171-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-mac-x64.dmg",
         "size": 104280121,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "macOS"
       },
       {
         "name": "AURA-2.0.171-linux-amd64.deb",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-linux-amd64.deb",
         "size": 75963370,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "Linux"
       },
       {
         "name": "AURA-2.0.171-linux-x86_64.AppImage",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-linux-x86_64.AppImage",
         "size": 109413533,
-        "downloads": 0,
+        "downloads": 2,
         "platform": "Linux"
+      },
+      {
+        "name": "AURA-2.0.171-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.171/AURA-2.0.171-windows-setup.exe",
+        "size": 83099673,
+        "downloads": 0,
+        "platform": "Windows"
       },
       {
         "name": "01-console.png",
