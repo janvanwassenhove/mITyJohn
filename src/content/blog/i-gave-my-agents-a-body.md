@@ -26,7 +26,7 @@ interesting parts.
        alt="The assembled Reachy Mini: a white rounded body with a head that tilts forward, two dark camera lenses for eyes, and two coiled wire antennae standing up from the top."
        width="1200" height="1200" loading="lazy" />
   <figcaption>The thing itself. About the size of a desk plant: a Raspberry Pi
-  with motors, a camera behind each eye, a microphone array and a speaker — and
+  with motors, a wide-angle camera, a microphone array and a speaker — and
   two antennae that turn out to carry more personality than anything else on
   it. Assembling this is post three; what it was like to be looked at by it is
   the rest of the series.</figcaption>
@@ -111,8 +111,7 @@ had measured the thing that mattered.
 **Verification costs more than the work.** This is the real tax. Anyone can
 generate a change; the expensive part is knowing it did what you wanted on your
 machine, with your data. On this project the answer was a test suite that gates
-every unit — currently 346 tests for the brain alone, plus the console, schemas
-and connectors — and a rule that a unit is not done until the ledger records
+every unit — the brain, the console, the schemas and the connectors — and a rule that a unit is not done until the ledger records
 what was *measured*, not what was intended.
 
 **Failure is silent.** This is the one that nearly ruined the project. A
@@ -212,16 +211,15 @@ a desk and work out what to do with it. This one had a finished assistant
 waiting for a body, which meant that when the body finally turned up, everything
 it broke was informative.
 
-## The numbers, and what they are worth
+## Throughput, and what it is worth
 
-Roughly 226 units at the time of writing. Nearly 300 commits. More than fifty
-releases. A test suite that runs on
-every push, and a scan that refuses to let personal data reach git.
+Hundreds of units. Hundreds of commits. A new release most days. A test suite
+that runs on every push, and a scan that refuses to let personal data reach git.
 
-Those numbers are real but they are not the point, and I want to say that
-plainly because throughput is the easiest thing to brag about and the least
-interesting thing to know. A loop that produces 226 units of confident nonsense
-is worse than no loop. What makes the number mean anything is the ledger sitting
+None of that is the point, and I want to say so plainly because throughput is
+the easiest thing to brag about and the least interesting thing to know. A loop
+that produces hundreds of units of confident nonsense is worse than no loop.
+What makes the output mean anything is the ledger sitting
 next to it: every unit recorded with what was measured, including the entries
 that say *this was not visually verified* or *my first three attempts were
 wrong*.
@@ -238,8 +236,8 @@ The **architecture**, and the day I deleted five of my six services because
 they were a costume rather than a design.
 
 The **agent loop** itself: how a backlog-driven loop is structured, where the
-hard edges go, and the rule that made it survivable — the loop may run twenty
-rounds, but every sensitive action still asks me, unless I have explicitly
+hard edges go, and the rule that made it survivable — however many rounds the
+loop runs, every sensitive action still asks me, unless I have explicitly
 switched that one tool off myself. Then what happens
 when that agent is allowed to *delegate*: sub-agents that can read but never
 write, a round budget, and a depth limit of exactly two.

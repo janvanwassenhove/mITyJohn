@@ -34,7 +34,8 @@ The first honest number:
 
 A second and a half to fetch one frame so that a face-recognition model could
 look at it. And there in the second row, sitting quietly, drawing no attention
-to itself whatsoever: **1366 KB**. A full-resolution JPEG. Crossing a domestic
+to itself whatsoever: **1366 KB**. A full-resolution image, re-encoded as PNG on the way out because
+of a comment nobody had questioned. Crossing a domestic
 network. So a model could decide whether the shape in it was me.
 
 ## Fix one: stop posting pixels nobody asked for

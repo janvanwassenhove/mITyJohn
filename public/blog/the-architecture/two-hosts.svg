@@ -55,7 +55,7 @@
   <rect x="48" y="494" width="904" height="270" fill="#efe7d6" stroke="#34302b" stroke-width="2.5" stroke-dasharray="9 6"/>
   <rect x="48" y="494" width="904" height="54" fill="#4a423a"/>
   <text x="72" y="531" font-family="Consolas, ui-monospace, monospace" font-size="24" letter-spacing="2" fill="#f4efe3">ROBOT</text>
-  <text x="252" y="529" font-family="Consolas, ui-monospace, monospace" font-size="17" letter-spacing="1" fill="#d8c9a4">REACHY MINI WIRELESS &#183; RASPBERRY PI 5 INSIDE</text>
+  <text x="252" y="529" font-family="Consolas, ui-monospace, monospace" font-size="17" letter-spacing="1" fill="#d8c9a4">REACHY MINI WIRELESS &#183; RASPBERRY PI INSIDE</text>
 
   <text x="72" y="584" font-family="Consolas, ui-monospace, monospace" font-size="16" letter-spacing="2" fill="#8a7a55">HAS</text>
   <g font-family="Consolas, ui-monospace, monospace" font-size="20" fill="#34302b">

@@ -1,5 +1,5 @@
 ---
-title: "AURA 05 · A backlog, a loop, and 226 units"
+title: "AURA 05 · A backlog, a loop, and a ledger"
 date: 2026-08-15
 tags: ["ai", "development", "agents", "sdlc"]
 cover: "/blog/a-backlog-a-loop-and-226-units/cover.webp"
@@ -18,7 +18,7 @@ rather than merely impressive.
 ## The shape
 
 There is a file called `implementation-backlog.md`. It contains numbered units,
-`U1` through `U226` at the time of writing, and it is the most important file in
+one after another, and it is the most important file in
 the project — more important than any source file, because it is the only thing
 that makes the source trustworthy.
 
@@ -53,8 +53,8 @@ live.
 
 ## The rule that makes it survivable
 
-**The loop may run twenty rounds. Every sensitive action still asks the owner,
-every time.**
+**However many rounds the loop runs, every sensitive action still asks the
+owner, every time.**
 
 Not "asks unless it is confident". Not "asks in a batch at the end". Every time,
 for every action that touches the outside world: sending a message, writing a

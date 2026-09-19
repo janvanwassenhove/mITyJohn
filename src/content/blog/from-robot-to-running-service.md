@@ -166,4 +166,4 @@ ornament.
 ---
 
 *Next: the agent loop that built everything on top of this — a backlog, hard
-edges, and 226 units.*
+edges, and a ledger that tells the truth.*

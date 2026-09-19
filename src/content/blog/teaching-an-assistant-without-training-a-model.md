@@ -35,8 +35,8 @@ the count goes up, and the expiry moves out. Below a confidence of **0.55** a
 signal is not shown to the language model at all.
 
 That threshold does more work than any other number in the system. It means a
-single coincidence never becomes a belief. You have to do something roughly five
-times before the assistant will act on having noticed it — and because every
+single coincidence never becomes a belief. You have to do something more than
+once before the assistant will act on having noticed it — and because every
 observation carries an expiry, a habit you have dropped fades back out instead
 of haunting you for ever.
 
@@ -159,7 +159,7 @@ identically on a good day. The difference only shows up on a bad one.
 **Confidence is a counter, not a probability.** Plus 0.1 per observation is a
 heuristic that happens to work at household scale. It has no calibration behind
 it, and I would not defend the number 0.55 as anything other than a value that
-behaved sensibly in a house with four people in it.
+behaved sensibly in one household.
 
 **Skills accumulate faster than they are pruned.** Writing one is five seconds;
 noticing that two of them now contradict each other is not automatic. There is a

@@ -31,7 +31,7 @@ profiles, the face embeddings, the conversation history, the language-model
 calls, the decisions.
 
 The **robot** — a [Reachy Mini *Wireless*](https://pollen-robotics.com/reachy-mini/),
-which is a Raspberry Pi 5 with a battery and a radio inside a robot — moves motors, plays audio, and serves
+which is a Raspberry Pi with a battery and a radio inside a robot — moves motors, plays audio, and serves
 camera frames over Wi-Fi. It holds no keys, no tokens, and no personal data
 whatsoever.
 
@@ -47,7 +47,7 @@ Steal the robot and you get motors.
 <figure class="diagram">
   <div class="diagram-scroll">
     <img src="/blog/the-architecture/two-hosts.svg"
-         alt="Diagram of the trust boundary. The laptop holds the API keys, OAuth tokens, encrypted profiles, face embeddings, conversation history and skills, and runs the orchestrator, conversation, connectors, memory and identity modules on one event bus. The robot — a Reachy Mini Wireless with a Raspberry Pi 5 inside — has motors, a speaker, a microphone array and a camera, and stores nothing: no keys, no tokens, no profiles. Between them a Wi-Fi link carries only move, speak and frame; no secrets cross it."
+         alt="Diagram of the trust boundary. The laptop holds the API keys, OAuth tokens, encrypted profiles, face embeddings, conversation history and skills, and runs the orchestrator, conversation, connectors, memory and identity modules on one event bus. The robot — a Reachy Mini Wireless with a Raspberry Pi inside — has motors, a speaker, a microphone array and a camera, and stores nothing: no keys, no tokens, no profiles. Between them a Wi-Fi link carries only move, speak and frame; no secrets cross it."
          width="1000" height="880" loading="lazy" />
   </div>
   <figcaption>The trust boundary and the software boundary are the same line —

@@ -28,7 +28,7 @@ kind of work.
 
 ## What a Reachy Mini is
 
-A Raspberry Pi 5 with motors, a camera, a microphone array and a speaker, in a
+A Raspberry Pi with motors, a wide-angle camera, a microphone array and a speaker, in a
 body designed to be expressive rather than industrial. Roughly the size of a
 desk plant. It has a head that moves with real degrees of freedom, two small
 antennae that turn out to carry a surprising amount of personality, and a face
@@ -37,7 +37,7 @@ that is mostly camera.
 There are two versions, and which one you get changes the architecture rather
 than just the price. The **Lite** is a shell that must stay tethered to a
 computer: no Pi of its own, no battery, no radio. The **Wireless** — the one in
-this box — has the Raspberry Pi 5, the battery and the Wi-Fi inside the robot,
+this box — has the Raspberry Pi, the battery and the Wi-Fi inside the robot,
 so it is a computer on your network rather than a peripheral on your desk.
 
 That matters for everything that follows. Because the robot is its own host, the
