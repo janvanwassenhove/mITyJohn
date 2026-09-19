@@ -22,7 +22,7 @@ const SOURCES = {
   aura: {
     repo: 'aura',
     files: [
-      { path: 'docs/screenshots/console.webp', alt: 'The AURA console: robot state and camera on the left, the conversation in the middle, and the brain panel on the right' },
+      { path: 'docs/screenshots/console.webp', alt: 'The AURA console: a navigation rail on the left, the conversation in the middle, and the robot’s camera and live activity on the right' },
       { path: 'docs/screenshots/brain-person.webp', alt: "A person's profile in the brain panel: facts grouped by category, each with wiki-style links to topics" },
       { path: 'docs/screenshots/knowledge-graph.webp', alt: 'The knowledge graph: a person node surrounded by facts, skills and the topics they mention' },
       { path: 'docs/screenshots/reachy-mini.webp', alt: 'An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae' },
@@ -42,6 +42,15 @@ const SOURCES = {
   loveflix: { repo: 'LoveFlix', files: ['LoveFlix.png'] },
   mitylex: { repo: 'mITyLex', files: ['public/lexy.png'] },
   'scrum-programming': { repo: 'scrum', files: ['asset/banner.png'] },
+  'please-do-not-throw-richie': {
+    repo: 'PleaseDoNotThrowRichie',
+    files: [
+      { path: 'docs/screenshots/hero.jpg', alt: 'The exhibition floor at Devoxx Belgium: sponsor stands along the walls, a few developers, and Richie small and white in the middle of the carpet' },
+      { path: 'docs/screenshots/voxxy.jpg', alt: 'Richie beside Voxxy on the exhibition floor, with the prompt E: Voxxy can help' },
+      { path: 'docs/screenshots/staircase.jpg', alt: 'Richie at the foot of the grand staircase, which climbs to the foyer and cinema level' },
+      { path: 'docs/screenshots/auditorium.jpg', alt: 'The auditorium: rows of red seats and an audience facing the lit screen, while security shouts Hey! No robots!' },
+    ],
+  },
   spritelab: {
     repo: 'SpriteLab',
     files: [
@@ -68,6 +77,14 @@ const CAPTURED = {
     { file: 'bullyoff-2.webp', alt: 'The club picker: two tiers of invented clubs with their crests, founding years and squad levels, and a detail panel for the selected club' },
     { file: 'bullyoff-3.webp', alt: 'A generated world: 24 clubs, 698 players, 20 seasons and zero real names, beside a ledger of invented champions going back to 2010' },
     { file: 'bullyoff-4.webp', alt: 'The title screen: a floodlit pitch being watered at dusk, over the line "Take the bench on Saturday"' },
+  ],
+  // Runtime Rumble's repo keeps no screenshots — its browser checks keep theirs
+  // as a CI artifact — so these were captured from the live game with Playwright.
+  'runtime-rumble': [
+    { file: 'runtime-rumble-1.webp', alt: 'The title screen: RUNTIME RUMBLE over the closed exhibition hall, the five robots lined up in front of the booths, and the arcade, versus and chaos modes on the right' },
+    { file: 'runtime-rumble-2.webp', alt: 'Voxxy and Droid fighting in front of the Robo-Barista and Gadget Lab booths, health bars along the top and a 2 hit combo in the middle' },
+    { file: 'runtime-rumble-3.webp', alt: 'The fighter select: Voxxy, Droid, Biggy, Richie Mini and Microduck side by side, with speed, power, mass and reach for the selected one' },
+    { file: 'runtime-rumble-4.webp', alt: 'Two Biggys fighting in the auditorium in front of a seated crowd, under a sign reading Please silence your robots' },
   ],
   // HockeyEleven's repo is private, so the raw fetch above cannot reach its
   // screenshots — and the ones in it are in Dutch. Captured from the live build

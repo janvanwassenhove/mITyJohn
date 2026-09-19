@@ -184,7 +184,7 @@
   "aura": [
     {
       "src": "/screenshots/aura-1.webp",
-      "alt": "The AURA console: robot state and camera on the left, the conversation in the middle, and the brain panel on the right"
+      "alt": "The AURA console: a navigation rail on the left, the conversation in the middle, and the robot’s camera and live activity on the right"
     },
     {
       "src": "/screenshots/aura-2.webp",
@@ -233,6 +233,42 @@
     {
       "src": "/screenshots/hockeyeleven-4.webp",
       "alt": "The match setup screen: the three formats side by side, the two line-ups with their world ranks, and pickers for formation, venue, weather, squad, length and level"
+    }
+  ],
+  "please-do-not-throw-richie": [
+    {
+      "src": "/screenshots/please-do-not-throw-richie-1.webp",
+      "alt": "The exhibition floor at Devoxx Belgium: sponsor stands along the walls, a few developers, and Richie small and white in the middle of the carpet"
+    },
+    {
+      "src": "/screenshots/please-do-not-throw-richie-2.webp",
+      "alt": "Richie beside Voxxy on the exhibition floor, with the prompt E: Voxxy can help"
+    },
+    {
+      "src": "/screenshots/please-do-not-throw-richie-3.webp",
+      "alt": "Richie at the foot of the grand staircase, which climbs to the foyer and cinema level"
+    },
+    {
+      "src": "/screenshots/please-do-not-throw-richie-4.webp",
+      "alt": "The auditorium: rows of red seats and an audience facing the lit screen, while security shouts Hey! No robots!"
+    }
+  ],
+  "runtime-rumble": [
+    {
+      "src": "/screenshots/runtime-rumble-1.webp",
+      "alt": "The title screen: RUNTIME RUMBLE over the closed exhibition hall, the five robots lined up in front of the booths, and the arcade, versus and chaos modes on the right"
+    },
+    {
+      "src": "/screenshots/runtime-rumble-2.webp",
+      "alt": "Voxxy and Droid fighting in front of the Robo-Barista and Gadget Lab booths, health bars along the top and a 2 hit combo in the middle"
+    },
+    {
+      "src": "/screenshots/runtime-rumble-3.webp",
+      "alt": "The fighter select: Voxxy, Droid, Biggy, Richie Mini and Microduck side by side, with speed, power, mass and reach for the selected one"
+    },
+    {
+      "src": "/screenshots/runtime-rumble-4.webp",
+      "alt": "Two Biggys fighting in the auditorium in front of a seated crowd, under a sign reading Please silence your robots"
     }
   ]
 }

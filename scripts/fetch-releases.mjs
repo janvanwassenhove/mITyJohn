@@ -50,8 +50,12 @@ for (const repo of repos) {
       date: r.published_at,
       changelog: (r.body || '').slice(0, 2000),
       assets: (r.assets || [])
-        // real user downloads only — drop electron-updater metadata and blockmaps
-        .filter((a) => !/\.(yml|yaml|blockmap|sig|txt)$/i.test(a.name))
+        // real user downloads only — drop electron-updater metadata and blockmaps,
+        // the screenshots some releases attach for their notes, and a web game's
+        // zipped build (its Play link is the way in). Counted as downloads, those
+        // put a Get button on a card that has nothing to install.
+        .filter((a) => !/\.(yml|yaml|blockmap|sig|txt|png|jpe?g|webp|gif)$/i.test(a.name))
+        .filter((a) => !/-web\.zip$/i.test(a.name))
         .map((a) => ({
           name: a.name,
           url: a.browser_download_url,
