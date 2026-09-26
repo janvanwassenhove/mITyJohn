@@ -190,63 +190,63 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.172",
-    "date": "2026-09-19T21:12:21Z",
-    "changelog": "# AURA v2.0.172\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- A child's memory, handed to the model as a fact\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all ",
+    "tag": "v2.0.181",
+    "date": "2026-09-25T21:54:59Z",
+    "changelog": "# AURA v2.0.181\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **3 improvements**, each one from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- Claim and name a unit in its own commit, verify after committing\n- The two units the chain let through, named by tests\n- The traceability checks only ever judged the tip commit in CI\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rathe",
     "assets": [
       {
-        "name": "AURA-2.0.172-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-windows-setup.exe",
-        "size": 83100456,
-        "downloads": 0,
+        "name": "AURA-2.0.181-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-windows-setup.exe",
+        "size": 83105117,
+        "downloads": 2,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.172-windows.msi",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-windows.msi",
-        "size": 93498725,
-        "downloads": 0,
+        "name": "AURA-2.0.181-windows.msi",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-windows.msi",
+        "size": 93515273,
+        "downloads": 1,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.172-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-mac-arm64.dmg",
-        "size": 99704160,
-        "downloads": 0,
+        "name": "AURA-2.0.181-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-arm64.dmg",
+        "size": 99690043,
+        "downloads": 1,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.172-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-mac-x64.dmg",
-        "size": 104280618,
-        "downloads": 0,
+        "name": "AURA-2.0.181-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-x64.dmg",
+        "size": 104285603,
+        "downloads": 1,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.172-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-linux-amd64.deb",
-        "size": 75969714,
-        "downloads": 0,
+        "name": "AURA-2.0.181-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-linux-amd64.deb",
+        "size": 76021942,
+        "downloads": 1,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.172-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-linux-x86_64.AppImage",
-        "size": 109417603,
-        "downloads": 0,
+        "name": "AURA-2.0.181-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-linux-x86_64.AppImage",
+        "size": 109421739,
+        "downloads": 1,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.172-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-mac-arm64.zip",
-        "size": 96312869,
-        "downloads": 0
+        "name": "AURA-2.0.181-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-arm64.zip",
+        "size": 96317860,
+        "downloads": 1
       },
       {
-        "name": "AURA-2.0.172-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.172/AURA-2.0.172-mac-x64.zip",
-        "size": 100940062,
-        "downloads": 0
+        "name": "AURA-2.0.181-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-x64.zip",
+        "size": 100945053,
+        "downloads": 1
       }
     ]
   },
