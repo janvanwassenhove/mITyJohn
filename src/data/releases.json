@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 72,
+        "downloads": 73,
         "platform": "Windows"
       },
       {
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 61,
+        "downloads": 62,
         "platform": "Windows"
       }
     ]
@@ -190,63 +190,63 @@
     ]
   },
   "aura": {
-    "tag": "v2.0.181",
-    "date": "2026-09-25T21:54:59Z",
-    "changelog": "# AURA v2.0.181\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **3 improvements**, each one from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- Claim and name a unit in its own commit, verify after committing\n- The two units the chain let through, named by tests\n- The traceability checks only ever judged the tip commit in CI\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rathe",
+    "tag": "v2.0.183",
+    "date": "2026-09-26T14:45:51Z",
+    "changelog": "# AURA v2.0.183\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **2 improvements**, each one from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- The same desktop rung on a Mac\n- He finds his own way on the desktop — any app, its window, its keys\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him",
     "assets": [
       {
-        "name": "AURA-2.0.181-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-windows-setup.exe",
-        "size": 83105117,
-        "downloads": 2,
+        "name": "AURA-2.0.183-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-windows-setup.exe",
+        "size": 83116369,
+        "downloads": 0,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.181-windows.msi",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-windows.msi",
-        "size": 93515273,
-        "downloads": 1,
+        "name": "AURA-2.0.183-windows.msi",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-windows.msi",
+        "size": 93519447,
+        "downloads": 0,
         "platform": "Windows"
       },
       {
-        "name": "AURA-2.0.181-mac-arm64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-arm64.dmg",
-        "size": 99690043,
-        "downloads": 1,
+        "name": "AURA-2.0.183-mac-arm64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-mac-arm64.dmg",
+        "size": 99706141,
+        "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.181-mac-x64.dmg",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-x64.dmg",
-        "size": 104285603,
-        "downloads": 1,
+        "name": "AURA-2.0.183-mac-x64.dmg",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-mac-x64.dmg",
+        "size": 104310823,
+        "downloads": 0,
         "platform": "macOS"
       },
       {
-        "name": "AURA-2.0.181-linux-amd64.deb",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-linux-amd64.deb",
-        "size": 76021942,
-        "downloads": 1,
+        "name": "AURA-2.0.183-linux-amd64.deb",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-linux-amd64.deb",
+        "size": 76035742,
+        "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.181-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-linux-x86_64.AppImage",
-        "size": 109421739,
-        "downloads": 1,
+        "name": "AURA-2.0.183-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-linux-x86_64.AppImage",
+        "size": 109434027,
+        "downloads": 0,
         "platform": "Linux"
       },
       {
-        "name": "AURA-2.0.181-mac-arm64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-arm64.zip",
-        "size": 96317860,
-        "downloads": 1
+        "name": "AURA-2.0.183-mac-arm64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-mac-arm64.zip",
+        "size": 96329605,
+        "downloads": 0
       },
       {
-        "name": "AURA-2.0.181-mac-x64.zip",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.181/AURA-2.0.181-mac-x64.zip",
-        "size": 100945053,
-        "downloads": 1
+        "name": "AURA-2.0.183-mac-x64.zip",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-mac-x64.zip",
+        "size": 100956798,
+        "downloads": 0
       }
     ]
   },
@@ -257,9 +257,9 @@
     "assets": []
   },
   "PleaseDoNotThrowRichie": {
-    "tag": "v1.0.18",
-    "date": "2026-09-22T22:25:57Z",
-    "changelog": "**Please Do Not Throw Richie v1.0.18** — an irresponsible Devoxx physics game.\nRichie has a keynote. Richie has no legs. Get him from registration to the keynote\nstage on hops alone, with help from Voxxy, Droid, Biggy and an audience that should\nknow better.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/PleaseDoNotThrowRichie/\n\n## Download\n\n| What | File |\n| --- | --- |\n| The playable build, as a static site | [`PleaseDoNotThrowRichie-1.0.18-web.zip`](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/PleaseDoNotThrowRichie-1.0.18-web.zip) |\n\nUnzip it and serve the folder over HTTP — it is plain static files with no backend,\nand it works from a subpath. Opening `index.html` straight off disk does not work:\nES modules and the physics WebAssembly need an HTTP origin.\n\n## Screenshots\n\n| The pitch | The problem |\n| --- | --- |\n| ![Title](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/01-title.png) | ![Opening](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/02-opening.png) |\n| ![Exhibition floor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/03-exhibition.png) | ![Voxxy](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/04-voxxy.png) |\n| ![Security](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/05-security.png) | ![Grand staircase](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/06-staircase.png) |\n| ![Cinema corridor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/07-corridor.png) | ![Auditorium 8](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/08-auditorium.png) |\n\n![The briefing](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.18/11-briefing.png)\n\n![On a phone](https://github.com/janvanw",
+    "tag": "v1.0.21",
+    "date": "2026-09-26T18:55:31Z",
+    "changelog": "**Please Do Not Throw Richie v1.0.21** — an irresponsible Devoxx physics game.\nRichie has a keynote. Richie has no legs. Get him from registration to the keynote\nstage on hops alone, with help from Voxxy, Droid, Biggy and an audience that should\nknow better.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/PleaseDoNotThrowRichie/\n\n## Download\n\n| What | File |\n| --- | --- |\n| The playable build, as a static site | [`PleaseDoNotThrowRichie-1.0.21-web.zip`](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/PleaseDoNotThrowRichie-1.0.21-web.zip) |\n\nUnzip it and serve the folder over HTTP — it is plain static files with no backend,\nand it works from a subpath. Opening `index.html` straight off disk does not work:\nES modules and the physics WebAssembly need an HTTP origin.\n\n## Screenshots\n\n| The pitch | The problem |\n| --- | --- |\n| ![Title](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/01-title.png) | ![Opening](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/02-opening.png) |\n| ![Exhibition floor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/03-exhibition.png) | ![Voxxy](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/04-voxxy.png) |\n| ![Security](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/05-security.png) | ![Grand staircase](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/06-staircase.png) |\n| ![Cinema corridor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/07-corridor.png) | ![Auditorium 8](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/08-auditorium.png) |\n\n![The briefing](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/11-briefing.png)\n\n![On a phone](https://github.com/janvanw",
     "assets": []
   }
 }
