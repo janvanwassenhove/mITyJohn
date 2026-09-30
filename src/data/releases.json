@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 62,
+        "downloads": 64,
         "platform": "Windows"
       }
     ]
@@ -198,7 +198,7 @@
         "name": "AURA-2.0.183-windows-setup.exe",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.183/AURA-2.0.183-windows-setup.exe",
         "size": 83116369,
-        "downloads": 0,
+        "downloads": 1,
         "platform": "Windows"
       },
       {
@@ -257,9 +257,9 @@
     "assets": []
   },
   "PleaseDoNotThrowRichie": {
-    "tag": "v1.0.21",
-    "date": "2026-09-26T18:55:31Z",
-    "changelog": "**Please Do Not Throw Richie v1.0.21** — an irresponsible Devoxx physics game.\nRichie has a keynote. Richie has no legs. Get him from registration to the keynote\nstage on hops alone, with help from Voxxy, Droid, Biggy and an audience that should\nknow better.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/PleaseDoNotThrowRichie/\n\n## Download\n\n| What | File |\n| --- | --- |\n| The playable build, as a static site | [`PleaseDoNotThrowRichie-1.0.21-web.zip`](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/PleaseDoNotThrowRichie-1.0.21-web.zip) |\n\nUnzip it and serve the folder over HTTP — it is plain static files with no backend,\nand it works from a subpath. Opening `index.html` straight off disk does not work:\nES modules and the physics WebAssembly need an HTTP origin.\n\n## Screenshots\n\n| The pitch | The problem |\n| --- | --- |\n| ![Title](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/01-title.png) | ![Opening](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/02-opening.png) |\n| ![Exhibition floor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/03-exhibition.png) | ![Voxxy](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/04-voxxy.png) |\n| ![Security](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/05-security.png) | ![Grand staircase](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/06-staircase.png) |\n| ![Cinema corridor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/07-corridor.png) | ![Auditorium 8](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/08-auditorium.png) |\n\n![The briefing](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.21/11-briefing.png)\n\n![On a phone](https://github.com/janvanw",
+    "tag": "v1.0.22",
+    "date": "2026-09-29T18:56:28Z",
+    "changelog": "**Please Do Not Throw Richie v1.0.22** — an irresponsible Devoxx physics game.\nRichie has a keynote. Richie has no legs. Get him from registration to the keynote\nstage on hops alone, with help from Voxxy, Droid, Biggy and an audience that should\nknow better.\n\n▶ **Play in your browser:** https://janvanwassenhove.github.io/PleaseDoNotThrowRichie/\n\n## Download\n\n| What | File |\n| --- | --- |\n| The playable build, as a static site | [`PleaseDoNotThrowRichie-1.0.22-web.zip`](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/PleaseDoNotThrowRichie-1.0.22-web.zip) |\n\nUnzip it and serve the folder over HTTP — it is plain static files with no backend,\nand it works from a subpath. Opening `index.html` straight off disk does not work:\nES modules and the physics WebAssembly need an HTTP origin.\n\n## Screenshots\n\n| The pitch | The problem |\n| --- | --- |\n| ![Title](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/01-title.png) | ![Opening](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/02-opening.png) |\n| ![Exhibition floor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/03-exhibition.png) | ![Voxxy](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/04-voxxy.png) |\n| ![Security](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/05-security.png) | ![Grand staircase](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/06-staircase.png) |\n| ![Cinema corridor](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/07-corridor.png) | ![Auditorium 8](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/08-auditorium.png) |\n\n![The briefing](https://github.com/janvanwassenhove/PleaseDoNotThrowRichie/releases/download/v1.0.22/11-briefing.png)\n\n![On a phone](https://github.com/janvanw",
     "assets": []
   }
 }
