@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 76,
+        "downloads": 77,
         "platform": "Windows"
       }
     ]
@@ -195,6 +195,13 @@
     "changelog": "# AURA v2.0.214\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- A talk's lines are on the robot before their cue\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all",
     "assets": [
       {
+        "name": "AURA-2.0.214-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/AURA-2.0.214-linux-x86_64.AppImage",
+        "size": 109491454,
+        "downloads": 1,
+        "platform": "Linux"
+      },
+      {
         "name": "AURA-2.0.214-windows-setup.exe",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/AURA-2.0.214-windows-setup.exe",
         "size": 83169837,
@@ -226,13 +233,6 @@
         "name": "AURA-2.0.214-linux-amd64.deb",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/AURA-2.0.214-linux-amd64.deb",
         "size": 76112292,
-        "downloads": 0,
-        "platform": "Linux"
-      },
-      {
-        "name": "AURA-2.0.214-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.214/AURA-2.0.214-linux-x86_64.AppImage",
-        "size": 109491454,
         "downloads": 0,
         "platform": "Linux"
       },
