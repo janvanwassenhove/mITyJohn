@@ -19,15 +19,6 @@ const OUT = new URL('src/data/screenshots.json', ROOT);
 // Curated per app: repo + the in-repo image paths worth showing, in order.
 // Hand-picked rather than globbed so we never surface icons, sprites or noise.
 const SOURCES = {
-  aura: {
-    repo: 'aura',
-    files: [
-      { path: 'docs/screenshots/console.webp', alt: 'The AURA console: a navigation rail on the left, the conversation in the middle, and the robot’s camera and live activity on the right' },
-      { path: 'docs/screenshots/brain-person.webp', alt: "A person's profile in the brain panel: facts grouped by category, each with wiki-style links to topics" },
-      { path: 'docs/screenshots/knowledge-graph.webp', alt: 'The knowledge graph: a person node surrounded by facts, skills and the topics they mention' },
-      { path: 'docs/screenshots/reachy-mini.webp', alt: 'An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae' },
-    ],
-  },
   mitystudio: { repo: 'mITyStudio', files: ['docs/screenshots/studio.png', 'docs/screenshots/voices.png', 'docs/screenshots/assets.png', 'docs/screenshots/onboarding.png'] },
   'music-agent': { repo: 'MusicAgent', files: ['Assets/WebApp/CreativeMode.png', 'Assets/WebApp/SonicPi_Visualisation.png', 'Assets/WebApp/samples_playback.png'] },
   mityguitar: { repo: 'mITyGuitar', files: ['docs/images/splashscreen.png', 'docs/images/controller.png', 'docs/images/dongle.png'] },
@@ -85,6 +76,18 @@ const CAPTURED = {
     { file: 'runtime-rumble-2.webp', alt: 'Voxxy and Droid fighting in front of the Robo-Barista and Gadget Lab booths, health bars along the top and a 2 hit combo in the middle' },
     { file: 'runtime-rumble-3.webp', alt: 'The fighter select: Voxxy, Droid, Biggy, Richie Mini and Microduck side by side, with speed, power, mass and reach for the selected one' },
     { file: 'runtime-rumble-4.webp', alt: 'Two Biggys fighting in the auditorium in front of a seated crowd, under a sign reading Please silence your robots' },
+  ],
+  // AURA's release pipeline photographs a throwaway install for every release,
+  // which is fresher than the copies kept in docs/screenshots. It runs without
+  // an API key, so the console and settings captures show the echo provider;
+  // those two are left out rather than shown as if that were how it talks.
+  // Re-take from the latest release's 0N-*.png assets; the robot photo is
+  // docs/screenshots/reachy-mini.webp.
+  aura: [
+    { file: 'aura-1.webp', alt: 'The knowledge graph of the fictional demo profile, Mila Kovač: her facts radiating out to the topics they mention — Java, espresso, trail running, Ljubljana — with shared topics drawn as nodes of their own' },
+    { file: 'aura-2.webp', alt: 'Mila Kovač’s profile: what it knows about her as editable cards — age, profession, roots, languages, sport, habits — with tabs for memory, sources and skills' },
+    { file: 'aura-3.webp', alt: 'The skills library: plain-language procedures for driving Chrome, Spotify, VS Code and AI chat apps on the desktop, each with the phrases that trigger it' },
+    { file: 'aura-4.webp', alt: 'An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae' },
   ],
   // HockeyEleven's repo is private, so the raw fetch above cannot reach its
   // screenshots — and the ones in it are in Dutch. Captured from the live build

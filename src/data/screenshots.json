@@ -184,15 +184,15 @@
   "aura": [
     {
       "src": "/screenshots/aura-1.webp",
-      "alt": "The AURA console: a navigation rail on the left, the conversation in the middle, and the robot’s camera and live activity on the right"
+      "alt": "The knowledge graph of the fictional demo profile, Mila Kovač: her facts radiating out to the topics they mention — Java, espresso, trail running, Ljubljana — with shared topics drawn as nodes of their own"
     },
     {
       "src": "/screenshots/aura-2.webp",
-      "alt": "A person's profile in the brain panel: facts grouped by category, each with wiki-style links to topics"
+      "alt": "Mila Kovač’s profile: what it knows about her as editable cards — age, profession, roots, languages, sport, habits — with tabs for memory, sources and skills"
     },
     {
       "src": "/screenshots/aura-3.webp",
-      "alt": "The knowledge graph: a person node surrounded by facts, skills and the topics they mention"
+      "alt": "The skills library: plain-language procedures for driving Chrome, Spotify, VS Code and AI chat apps on the desktop, each with the phrases that trigger it"
     },
     {
       "src": "/screenshots/aura-4.webp",
