@@ -15,9 +15,9 @@ The interesting part is where things live. Every key, every profile, every face 
 
 <figure>
   <video controls preload="none" playsinline width="1280" height="720"
-         poster="/video/aura-crawl-poster.webp"
+         poster="/video/aura-crawl-poster.webp?v=2"
          aria-label="AURA's opening crawl: one minute of text scrolling away into a starfield, introducing what the assistant does">
-    <source src="/video/aura-crawl.mp4" type="video/mp4" />
+    <source src="/video/aura-crawl.mp4?v=2" type="video/mp4" />
   </video>
   <figcaption>One minute, in its own words: the opening crawl from the Devoxx
   talk. No sound.</figcaption>
