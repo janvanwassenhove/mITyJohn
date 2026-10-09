@@ -23,9 +23,10 @@ personal knowledge base — because the moment two people are both linked to
   same and is nobody else's business.</figcaption>
 </figure>
 
-## Four kinds of node, and only one of them is a person
+## Five kinds of node, and only one of them is a person
 
-The graph has exactly four node types, which is fewer than I expected to need.
+The graph started with four node types, which was fewer than I expected to need.
+It has five now.
 
 **People.** The centre of everything, and the unit of both privacy and deletion.
 
@@ -38,14 +39,25 @@ designed. Nobody sat down and decided the taxonomy. It accreted.
 
 **Skills.** Procedures, which may be general or attached to one person.
 
+**Memory.** Added later, after someone asked whether the graph showed what it
+remembered at all. It did — as a single dot, labelled with the first few words of
+everything it had ever remembered about a person, cut off mid-sentence. Now each
+remembered line is its own node, in its own colour, labelled with the words that
+set it apart, and a word that turns up in several lines becomes a node of its
+own. That is how three separate memories about the same subject show up as a
+cluster. No model is involved: it is plain word counting, because it runs on
+every frame while you drag the graph around, and a clever guess that changes
+between frames is worse than a blunt one that does not.
+
 <figure class="diagram">
   <div class="diagram-scroll">
     <img src="/blog/the-knowledge-graph/node-model.svg"
          alt="Diagram of the four node types. A person node, which holds a key, points to three fact nodes — sport, likes and habit — and to a skill node drawn with a dashed border because a skill may belong to one person or to everybody. The facts point onward to shared topic circles: running, espresso and Java 21. Espresso is reached from two different facts, illustrating that shared topics are the cheapest possible context. A note records that topics are never entered by anyone: they exist because a fact mentioned them."
          width="1000" height="780" loading="lazy" />
   </div>
-  <figcaption>Four node types and two edge types. The vocabulary on the right
-  was never designed — it accreted, one fact at a time.</figcaption>
+  <figcaption>The four node types the graph started with, and two edge types.
+  The vocabulary on the right was never designed — it accreted, one fact at a
+  time.</figcaption>
 </figure>
 
 Edges are equally boring: a person has facts, a fact mentions topics, a skill

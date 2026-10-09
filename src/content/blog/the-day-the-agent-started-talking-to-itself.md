@@ -99,6 +99,15 @@ my head — audio in, text, model, speech out — and pipelines have ends. This 
 did not. The output was physically connected back to the input by the air in the
 room, and my mental diagram stopped politely at the loudspeaker.
 
+<figure>
+  <img src="/blog/the-day-the-agent-started-talking-to-itself/through-the-air.webp"
+       alt="Drawing titled the loop that closed through the air: a small robot on a kitchen counter, labelled speaker and microphone, with an arrow arcing from it towards a fridge marked it speaks, out loud, into the room, and a red arrow coming back from the fridge to the robot marked and hears itself, the air in the room. The fridge hums, sometimes, in a way a biased transcriber finds suggestive."
+       width="1600" height="1248" loading="lazy" />
+  <figcaption>The arrow that is in no architecture diagram, drawn for the
+  conference talk. We draw the software; the room is not in the
+  software.</figcaption>
+</figure>
+
 ## Four lines
 
 The fix, once seen:
@@ -155,6 +164,37 @@ deserves an explicit answer to *what if there is nothing here?*
 
 The kitchen is quiet now. The robot no longer reacts to hearing its own name,
 which is a form of maturity that took me considerably longer to acquire.
+
+## Update: the television
+
+The kitchen stayed quiet. The living room did not.
+
+One evening it acted on a string of sentences nobody had said to it — in
+German, in Turkish, in half a dozen languages. This time it was not its own
+voice: every reply that came back through its microphone was caught and filed as
+self-hearing, exactly as the fix above intended. It was the room. A television,
+a video, people talking.
+
+The way in was a door I had built on purpose. After an answer there is a short
+window in which you can carry on without saying its name, because that is what
+makes it a conversation rather than a series of summonses. The window has a cap:
+a couple of answers, then you have to address it again. But one of its
+characters may be interrupted by any plausible voice, and that path did two
+things on its own: it reopened the window, and it handed whatever interrupted as
+the next question. With a television on, every answer was interrupted and every
+interruption became a question. The cap was never consulted.
+
+The log alone could not prove it, so it was reproduced instead: the real
+listening loop, a clock moved by hand, a robot that always hears the room, and a
+transcriber handing back that evening's fragments. It answered every single time
+it listened. Now an interruption that does not use its name counts against the
+same cap — it still stops talking, but it does not answer — and the expensive
+live session only opens when it was actually addressed.
+
+Same lesson, different room. Each feature was correct on its own: *carry on
+without its name*, and *you may interrupt it*. The loop lived in the
+composition, again, and the thing that closed it this time was not the air but
+somebody else's evening television.
 
 ---
 

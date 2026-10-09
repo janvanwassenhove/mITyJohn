@@ -18,6 +18,15 @@ full price of microservices and receiving, in return, none of the decoupling.
 
 For a single-user robot on a desk, that is not an architecture. It is a costume.
 
+<figure>
+  <img src="/blog/the-architecture/six-services.webp"
+       alt="Drawing titled six services, one robot: six identical columns for orchestrator, conversation, connectors, memory, identity and robot runtime, each with its own Dockerfile, health check and in-process event bus, and each talking to the others over plain HTTP. A small robot sits below them with the line one robot, one desk, one user."
+       width="1600" height="1312" loading="lazy" />
+  <figcaption>The costume, drawn for the conference talk. Six of everything,
+  each with an event bus nobody else could subscribe to — the full price of
+  microservices, and none of the decoupling.</figcaption>
+</figure>
+
 So this post is the shape the thing settled into, and why — because "how is it
 put together" turns out to be almost entirely a series of decisions about
 **where the trust boundaries are**, and only incidentally about code.
@@ -204,6 +213,11 @@ that would let it try. During a live session the reply arrives in segments and
 each one is played as it lands rather than buffering the whole sentence, which
 is the difference between a reply that starts when you stop talking and one that
 starts a beat later.
+
+There is now also a switch to have the laptop play that voice instead, for a
+room the robot's small speaker cannot fill. It plays *his* voice — the same
+character, the same words — rather than handing the text to the operating
+system's own reader, which would have been easier and a different product.
 
 <figure class="diagram">
   <div class="diagram-scroll">

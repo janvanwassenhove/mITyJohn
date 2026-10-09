@@ -164,6 +164,15 @@ It does not catch the failure that spans units. My worst regression was
 introduced by one unit and only became visible in another, and both were
 individually correct — a whole post is coming about that.
 
+It does not notice when its own checks stop counting. For a stretch of releases
+the test build was red on every push, and nothing said so — I found out by
+asking. The release workflow kept its own, shorter list of what had to pass, and
+that list was green, so installers kept arriving in the usual place while the
+checks beside them failed. The fix was not another test. It was one list: a
+single gate that both the checks and the release depend on, plus a test that
+walks the repository and fails if any suite is missing from it. Two lists of
+what must pass will drift; the only safe number of lists is one.
+
 And it does not save you from an assumption you never articulated. The loop
 checks what you told it to check; the thing you never thought to state is
 exactly the thing nobody verifies.

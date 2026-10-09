@@ -40,6 +40,14 @@ once before the assistant will act on having noticed it — and because every
 observation carries an expiry, a habit you have dropped fades back out instead
 of haunting you for ever.
 
+I should be precise about where that stands, because this is the design and the
+running system has not caught up with all of it. The counter, the threshold and
+the rule that a child gets none of it are built, and the threshold decides what
+reaches the model. Two pieces are not: nothing in the running system writes a
+signal on its own yet — today they only arrive by import — and nothing acts on
+the expiry. The learning that actually happens between conversations is the
+distilled memory further down this post.
+
 **Skills** are procedures. Not "Nora likes espresso" but *"when he asks for a
 specific track, do not guess with generic media control — search first, confirm
 the match, then play."* They live as markdown files with a little frontmatter:
@@ -75,6 +83,13 @@ behaviour**. An assistant that writes its own standing instructions from its own
 inferences is one bad inference away from confidently doing the wrong thing for
 ever, and — worse — from doing it *plausibly*, in a file nobody remembers
 approving.
+
+Since then it offers one more kind. At first it only proposed a skill when I
+corrected it or showed it how I work, so a route it worked out for itself — find
+the app, open it, type into it, press Enter — lived for exactly one turn and was
+gone. Now, when nothing it knew covered the request and it found a way anyway, it
+offers the steps that actually worked, once, at the end of that turn. Same
+approval card. Nothing is saved without me.
 
 So the loop is: it notices, it drafts, I approve. The learning is real and the
 authorship is mine. In practice this costs about five seconds and it is the
@@ -115,6 +130,13 @@ cloud model gets is a paragraph of natural language, not a dossier.
 And there is one entry that leads all the others, kept separate from ordinary
 facts: a distillation of past conversations. Continuity is what
 makes an assistant feel like it knows you, far more than any preference does.
+
+For a child that distillation is not written at all unless the owner opted in —
+and that rule arrived later than it should have. For two months the distiller
+summarised a child's conversations like anybody else's, and the judgment layer
+passed the summary on as if somebody had typed it. A model's summary is
+inference wearing a fact's clothes, and the guard had only ever looked at
+signals. It looks at the memory now, too.
 
 ## Why a paragraph rather than everything
 

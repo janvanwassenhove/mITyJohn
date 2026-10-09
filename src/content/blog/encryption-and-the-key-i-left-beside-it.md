@@ -87,6 +87,14 @@ accessibility, performance, security — expecting a tidy list of small things.
 folder. The encrypted records lived in a directory immediately below it.**
 Siblings. Same permissions. Anything that could read one could read the other.
 
+<figure>
+  <img src="/blog/encryption-and-the-key-i-left-beside-it/threat-model.webp"
+       alt="Drawing titled the threat model: a heavy riveted safe with a combination dial, labelled AES-256-GCM, one key per person, owner key never stored. A small brass hook is screwed to its side, and a red key hangs from it, labelled the passphrase, in a settings file, in the folder next door. The caption reads the safe was excellent, the hook was mine."
+       width="1600" height="1376" loading="lazy" />
+  <figcaption>The picture from the opening of this post, drawn for the
+  conference talk.</figcaption>
+</figure>
+
 So what threat did all of the above actually defend against?
 
 Not a copied folder — the copy carries its own key. Not a stolen laptop, for the
