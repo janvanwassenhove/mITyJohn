@@ -25,12 +25,28 @@ The interesting part is where things live. Every key, every profile, every face 
 
 ## The name is the promise
 
-| | |
-|---|---|
-| **Adaptive** | Adapts behaviour and interaction to the person, the context and the situation. |
-| **Unified** | Brings conversation, mail, Teams, calendar, todos, memory and agents together in one place. |
-| **Robotic** | Physically embodied through Reachy Mini — it looks at you, reacts, gestures. |
-| **Assistant** | A personal assistant and copilot, not just another chatbot. |
+<ul class="acronym">
+  <li>
+    <span class="acronym-letter" aria-hidden="true">A</span>
+    <span class="acronym-word">Adaptive</span>
+    <span class="acronym-text">Adapts behaviour and interaction to the person, the context and the situation.</span>
+  </li>
+  <li>
+    <span class="acronym-letter" aria-hidden="true">U</span>
+    <span class="acronym-word">Unified</span>
+    <span class="acronym-text">Brings conversation, mail, Teams, calendar, todos, memory and agents together in one place.</span>
+  </li>
+  <li>
+    <span class="acronym-letter" aria-hidden="true">R</span>
+    <span class="acronym-word">Robotic</span>
+    <span class="acronym-text">Physically embodied through Reachy Mini — it looks at you, reacts, gestures.</span>
+  </li>
+  <li>
+    <span class="acronym-letter" aria-hidden="true">A</span>
+    <span class="acronym-word">Assistant</span>
+    <span class="acronym-text">A personal assistant and copilot, not just another chatbot.</span>
+  </li>
+</ul>
 
 ## Why it feels different
 

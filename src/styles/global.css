@@ -329,3 +329,82 @@ a:hover { color: var(--text); }
 .embed-facade[data-embed-provider='soundcloud'] .ef-glyph { background: var(--accent); color: var(--ink-on-accent); }
 .embed-facade .ef-title { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
 .embed-facade .ef-note { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
+
+/* Acronym block — AURA's four initials and what each one promises. Authored as
+   raw HTML in apps/aura.md, like the about page, so the styles live here rather
+   than in a scoped block.
+
+   It was a two-column markdown table, which fought the content two ways: the
+   `| | |` header row rendered as an empty strip across the top, and the initials
+   carried no more weight than the body copy, so nothing told you the four rows
+   spell the product name. Here the initials get their own column and stay
+   aligned at every width, which is the whole point of the section. */
+.prose .acronym {
+  list-style: none;
+  margin: 1.5em 0 2em;
+  padding: 0 clamp(16px, 2.6vw, 26px);
+  /* a faint accent glow behind the initials, echoing the lockup in the crawl.
+     Declared twice: a browser without color-mix() drops the whole shorthand,
+     and the panel would lose its surface along with the glow. */
+  background: linear-gradient(140deg, var(--s2), var(--s1));
+  background:
+    radial-gradient(320px 200px at 6% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),
+    linear-gradient(140deg, var(--s2), var(--s1));
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-panel);
+}
+.prose .acronym li {
+  display: grid;
+  grid-template-columns: clamp(38px, 6vw, 56px) minmax(0, 1fr);
+  grid-template-areas:
+    'letter word'
+    'letter text';
+  column-gap: clamp(14px, 2.4vw, 22px);
+  align-items: baseline;
+  margin: 0;
+  padding: clamp(15px, 2.2vw, 20px) 0;
+  border-top: 1px solid var(--line);
+}
+.prose .acronym li:first-child { border-top: 0; }
+
+.acronym-letter {
+  grid-area: letter;
+  align-self: start;
+  font-family: var(--font-display);
+  font-size: clamp(34px, 5.4vw, 50px);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: var(--tracking-display);
+  color: var(--accent);
+  /* the initials read as one vertical word, so they hang on a common left edge
+     instead of being centred in their column */
+  text-align: left;
+}
+.acronym-word {
+  grid-area: word;
+  font-family: var(--font-display);
+  font-size: var(--text-card-title);
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--text);
+}
+.acronym-text {
+  grid-area: text;
+  margin-top: 5px;
+  font-size: var(--text-body-lg);
+  line-height: 1.55;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* Under ~420px the letter column costs more than it gives: the descriptions
+   wrap to four or five lines beside it. The initials move above the word and
+   keep their colour and weight, so the acronym still reads top to bottom. */
+@media (max-width: 420px) {
+  .prose .acronym li {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'letter' 'word' 'text';
+    row-gap: 5px;
+  }
+  .acronym-letter { font-size: 30px; line-height: 1; }
+}
