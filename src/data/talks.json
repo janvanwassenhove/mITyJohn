@@ -1,6 +1,37 @@
 [
   {
     "year": 2026,
+    "date": "8 October 2026",
+    "event": "Devoxx 2026",
+    "location": "Antwerp, Belgium",
+    "kind": "Lunch Talk",
+    "link": "https://m.devoxx.com/events/dvbe26/talks/52103/details",
+    "video": "NT0wyPM58G8",
+    "title": "The Devoxx Robot Games — presenting my entry, Please Do Not Throw Richie",
+    "with": "Stephan Janssen"
+  },
+  {
+    "year": 2026,
+    "date": "7 October 2026",
+    "event": "Devoxx 2026",
+    "location": "Antwerp, Belgium",
+    "kind": "Conference",
+    "link": "https://m.devoxx.com/events/dvbe26/talks/8156/details",
+    "video": "P14Fy05Gs38",
+    "title": "I Hired a Real Robot as My Junior Dev — and Now My Kids Don't Want to Learn Java Anymore"
+  },
+  {
+    "year": 2026,
+    "date": "7 October 2026",
+    "event": "Devoxx 2026",
+    "location": "Antwerp, Belgium",
+    "kind": "Keynote",
+    "link": "https://m.devoxx.com/events/dvbe26/talks/50102/details",
+    "video": "ZDocIlx7Zvg",
+    "title": "From Brainless to Brilliant — Giving an Open-Source Robot a Mind of Its Own"
+  },
+  {
+    "year": 2026,
     "event": "The Future Of the SDLC",
     "location": "Munich, Germany",
     "title": "Rethinking the SDLC in an AI-first world",

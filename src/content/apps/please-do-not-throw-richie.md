@@ -35,6 +35,12 @@ Registration, the exhibition floor, Voxxy's gap, the grand staircase, Biggy's la
 
 And security gives chase: four guards with real vision cones and real line of sight, who throw back.
 
+## At Devoxx
+
+The game was my entry for the Devoxx Belgium 2026 Robot Games, and I presented it on stage during *The Devoxx Robot Games*, Stephan Janssen's lunch talk.
+
+<button type="button" class="embed-facade" data-embed-src="https://www.youtube-nocookie.com/embed/NT0wyPM58G8" data-embed-h="360" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">The Devoxx Robot Games</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
+
 ## Play it
 
 One build, two editions: on a laptop it is keyboard and mouse with the full lighting pass; on a phone the controls rebuild themselves around a stick and a big **HOP** button. *Add to Home Screen* installs it, and after one visit it plays with no signal at all.
