@@ -270,5 +270,23 @@
       "src": "/screenshots/runtime-rumble-4.webp",
       "alt": "Two Biggys fighting in the auditorium in front of a seated crowd, under a sign reading Please silence your robots"
     }
+  ],
+  "tankrush": [
+    {
+      "src": "/screenshots/tankrush-1.webp",
+      "alt": "The tank picker: a list of five aquariums beside a 3D view of the Amazon blackwater tank standing on its cabinet in a living room, planted with roots and sword plants"
+    },
+    {
+      "src": "/screenshots/tankrush-2.webp",
+      "alt": "A race in the Costa Rica terrarium: a small yellow buggy passing a striped checkpoint gate between tall green plants, with position, lap and time at the top, a course minimap bottom left and the speed in the middle"
+    },
+    {
+      "src": "/screenshots/tankrush-3.webp",
+      "alt": "The Coral Triangle reef tank selected in the picker: a curved-front aquarium glowing blue, with coral arches inside"
+    },
+    {
+      "src": "/screenshots/tankrush-4.webp",
+      "alt": "A race in the reef aquarium: a yellow mini submarine with a propeller heading for a striped checkpoint gate in deep blue water"
+    }
   ]
 }

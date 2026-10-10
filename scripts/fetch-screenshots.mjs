@@ -89,6 +89,14 @@ const CAPTURED = {
     { file: 'aura-3.webp', alt: 'The skills library: plain-language procedures for driving Chrome, Spotify, VS Code and AI chat apps on the desktop, each with the phrases that trigger it' },
     { file: 'aura-4.webp', alt: 'An assembled Reachy Mini: a white rounded body, a head with two dark camera eyes, and two coiled wire antennae' },
   ],
+  // TankRush's repo is private and keeps no screenshots; captured from the live
+  // game with the interface in English.
+  tankrush: [
+    { file: 'tankrush-1.webp', alt: 'The tank picker: a list of five aquariums beside a 3D view of the Amazon blackwater tank standing on its cabinet in a living room, planted with roots and sword plants' },
+    { file: 'tankrush-2.webp', alt: 'A race in the Costa Rica terrarium: a small yellow buggy passing a striped checkpoint gate between tall green plants, with position, lap and time at the top, a course minimap bottom left and the speed in the middle' },
+    { file: 'tankrush-3.webp', alt: 'The Coral Triangle reef tank selected in the picker: a curved-front aquarium glowing blue, with coral arches inside' },
+    { file: 'tankrush-4.webp', alt: 'A race in the reef aquarium: a yellow mini submarine with a propeller heading for a striped checkpoint gate in deep blue water' },
+  ],
   // HockeyEleven's repo is private, so the raw fetch above cannot reach its
   // screenshots — and the ones in it are in Dutch. Captured from the live build
   // with the interface set to English instead.
