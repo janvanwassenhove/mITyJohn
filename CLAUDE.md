@@ -52,6 +52,14 @@ blokkerende `robots.txt`; de workflow weigert te deployen als die weg zijn.
   de storetegel en de app-pagina op mityjohn.com meelopen. Elke release note krijgt
   screenshots — zie `RELEASING.md`.
 
+## Video's
+
+YouTube staat overal achter een click-to-load facade: niets gaat naar YouTube
+vóór de klik. De preview is de thumbnail van de video zelf, maar lokaal
+gehost. Nieuwe video toegevoegd (talks.json `video`, of een embed in content)?
+Draai `npm run sync:video-thumbs` en commit `public/thumbs/youtube/` en
+`src/data/video-thumbs.json` mee — anders blijft die speler zonder preview.
+
 ## Deploy
 
 `deploy.yml` bouwt site + cards en deployt naar GitHub Pages bij push naar `main`

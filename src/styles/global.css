@@ -329,6 +329,28 @@ a:hover { color: var(--text); }
 .embed-facade[data-embed-provider='soundcloud'] .ef-glyph { background: var(--accent); color: var(--ink-on-accent); }
 .embed-facade .ef-title { font-family: var(--font-display); font-size: 19px; font-weight: 600; }
 .embed-facade .ef-note { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
+/* With a preview: the video's own thumbnail at 16:9, darkened towards the bottom
+   so the play button and the title stay legible on any frame. --thumb is set by
+   the facade script in Base.astro, only for videos that have a local thumbnail. */
+.embed-facade.has-thumb {
+  aspect-ratio: 16 / 9;
+  min-height: 0;
+  color: #fff;
+  background:
+    linear-gradient(180deg, rgba(10, 10, 12, 0.18) 0%, rgba(10, 10, 12, 0.35) 45%, rgba(10, 10, 12, 0.82) 100%),
+    var(--thumb) center / cover no-repeat,
+    var(--s1);
+}
+.embed-facade.has-thumb .ef-glyph {
+  width: 68px;
+  height: 68px;
+  font-size: 24px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s ease;
+}
+.embed-facade.has-thumb:hover .ef-glyph { transform: scale(1.08); }
+.embed-facade.has-thumb .ef-title { text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6); }
+.embed-facade.has-thumb .ef-note { color: rgba(255, 255, 255, 0.78); text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6); }
 
 /* Acronym block — AURA's four initials and what each one promises. Authored as
    raw HTML in apps/aura.md, like the about page, so the styles live here rather

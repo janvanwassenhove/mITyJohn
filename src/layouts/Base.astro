@@ -76,19 +76,40 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       <div class="pdf-frame"></div>
     </dialog>
     <script>
+      import thumbs from '../data/video-thumbs.json';
       // Click-to-load third-party embeds in converted content (§8.1, D5). The
       // provider is contacted only after the visitor clicks; sandboxed so an
       // embed cannot navigate this page (the eager Spotify iframe used to).
+      //
+      // YouTube facades get a preview image. It is the video's own thumbnail,
+      // downloaded at build time (scripts/fetch-video-thumbs.mjs) and served from
+      // this site, so showing it still contacts nobody. A video without one keeps
+      // the plain facade.
+      const ytId = (src = '') => src.match(/youtube(?:-nocookie)?\.com\/embed\/([A-Za-z0-9_-]{11})/)?.[1];
+      document.querySelectorAll<HTMLElement>('.embed-facade[data-embed-provider="youtube"]').forEach((btn) => {
+        const thumb = (thumbs as Record<string, string>)[ytId(btn.dataset.embedSrc) ?? ''];
+        if (!thumb) return;
+        btn.style.setProperty('--thumb', `url("${thumb}")`);
+        btn.classList.add('has-thumb');
+      });
       document.addEventListener('click', (e) => {
         const btn = (e.target as HTMLElement).closest('.embed-facade') as HTMLElement | null;
         if (!btn) return;
+        const youtube = btn.dataset.embedProvider === 'youtube';
+        const src = new URL(btn.dataset.embedSrc!, location.href);
+        // The click was the decision to watch: start playing rather than ask for
+        // a second click on YouTube's own button.
+        if (youtube) src.searchParams.set('autoplay', '1');
         const f = document.createElement('iframe');
-        f.src = btn.dataset.embedSrc!;
+        f.src = src.toString();
         f.title = btn.querySelector('.ef-title')?.textContent ?? 'Embedded player';
         f.loading = 'lazy';
         f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
         f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation allow-popups');
-        f.style.cssText = `display:block;width:100%;height:${btn.dataset.embedH || 352}px;border:0;border-radius:var(--radius-embed);margin:1.6em 0;`;
+        // Keep the facade's own margins (the talks timeline uses tighter ones), and
+        // give a video the 16:9 its preview had instead of a fixed height.
+        const size = youtube ? 'aspect-ratio:16/9;height:auto' : `height:${btn.dataset.embedH || 352}px`;
+        f.style.cssText = `display:block;width:100%;${size};border:0;border-radius:var(--radius-embed);margin:${getComputedStyle(btn).margin};`;
         btn.replaceWith(f);
       });
     </script>
