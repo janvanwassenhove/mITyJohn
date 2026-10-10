@@ -37,7 +37,7 @@ And security gives chase: four guards with real vision cones and real line of si
 
 ## At Devoxx
 
-The game was my entry for the Devoxx Belgium 2026 Robot Games, and I presented it on stage during *The Devoxx Robot Games*, Stephan Janssen's lunch talk.
+The game was my entry for the Devoxx Belgium 2026 Robot Games, and I presented it on stage during *The Devoxx Robot Games*, Stephan Janssen's lunch talk. The story of how it was made — the brief, the tools, and what none of them caught — is in the blog post [Please Do Not Throw Richie](/blog/please-do-not-throw-richie/).
 
 <button type="button" class="embed-facade" data-embed-src="https://www.youtube-nocookie.com/embed/NT0wyPM58G8" data-embed-h="360" data-embed-provider="youtube"><span class="ef-glyph">▶</span><span class="ef-title">The Devoxx Robot Games</span><span class="ef-note">Loads youtube.com — nothing is requested until you click.</span></button>
 

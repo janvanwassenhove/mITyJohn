@@ -170,5 +170,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         els.forEach((el) => el.classList.add('is-revealed'));
       }
     </script>
+    <script>
+      // Looping clips in posts (video[data-loop]) stand in for GIFs at a tenth of
+      // the weight. They load and play only while on screen, and a reader who has
+      // asked for less motion gets the still frame and the controls instead.
+      const loops = document.querySelectorAll<HTMLVideoElement>('video[data-loop]');
+      const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (loops.length) {
+        if (still || !('IntersectionObserver' in window)) {
+          loops.forEach((v) => (v.controls = true));
+        } else {
+          const vio = new IntersectionObserver(
+            (entries) => {
+              for (const e of entries) {
+                const v = e.target as HTMLVideoElement;
+                if (e.isIntersecting) v.play().catch(() => (v.controls = true));
+                else v.pause();
+              }
+            },
+            { threshold: 0.35 },
+          );
+          loops.forEach((v) => vio.observe(v));
+        }
+      }
+    </script>
   </body>
 </html>
