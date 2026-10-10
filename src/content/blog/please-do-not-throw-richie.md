@@ -157,45 +157,6 @@ which is handy on a train and essential at a conference where the Wi-Fi belongs
 to everybody. Every push to GitHub tests it, builds it, cuts a release and puts
 it live on GitHub Pages by itself.
 
-## What the tools did not catch
-
-The generated code was good. The interesting part of the development log is the
-section headed *observed problems*, because almost none of those were found by
-whatever wrote the code.
-
-**The black frame.** With bloom switched on, most of the frame went black. The
-obvious suspect was overflowing highlights. It was NaN: Richie's simplified mesh
-carried a few dozen zero-length normals, each one a single black pixel nobody had
-ever noticed, until a blur smeared them across the screen. It was found by
-reading the bloom's bright-pass target back as raw half-floats and looking for
-the NaN underneath Richie.
-
-**The unreachable finale.** The end trigger fired again on every physics step and
-reset the finale timer each time, so a real run could never reach the results
-card. The finale was lovely. Nobody could get to it.
-
-**The crowd that cheered too early.** The auditorium started out hyped, before
-anything had happened. Not enthusiasm: the first animation frame could carry a
-timestamp from before the game started its own clock, which made the first frame
-delta negative and ran the excitement decay backwards.
-
-**The screenshots that were not there.** The README images would have been
-broken on GitHub while everything looked fine locally, because a `.gitignore`
-line meant for one folder quietly matched every folder with that name.
-
-And the human contribution was mostly the word *no*. The app icon went through
-four flat mock-ups (*make Richie more realistic*), four photoreal renders (*more
-app icon, not photorealistic*), and three in app-icon style, of which the two
-funniest were combined: a security guard holding Richie by an antenna while his
-coffee and croissant sail on. It is the picture at the top of this post. A
-painted face texture for the crowd lasted about an hour, under the verdict
-*these faces look really ugly*.
-
-If you take one thing from this, take the shape of that log. For every iteration:
-the goal, the tool, what it generated, what was observed to be wrong, and the
-human decision. The last column is the one that turns a pile of generated code
-into a game somebody actually chose to make.
-
 ## The finale
 
 Get Richie to the stage and the other robots run in from the wings, the confetti
