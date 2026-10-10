@@ -97,16 +97,27 @@ people in a Devoxx audience own a phone and a competitive streak.
 Here is the uncomfortable parallel. The game could not get itself to the stage
 either. It got thrown.
 
+<figure>
+  <video data-loop muted loop playsinline preload="none" width="1280" height="720"
+         poster="/blog/please-do-not-throw-richie/checkpoints-poster.webp"
+         aria-label="Slide animation titled five checkpoints to release: a small cartoon Richie hops along a route of five checkpoints, and at each one a card rises in — registration, ChatGPT, a brainstorm and a brief of 1,800 lines; exhibition floor, Codex with GPT-6 Astra, the physics, the hop and the route; grand staircase, Claude Code with Opus 5.5, robots, venue, security and finale; cinema corridor, ChatGPT image generation, booths and Duke, driven by Claude; auditorium 8, Sonic Pi plus AI, Synaptic Drift. A different booth poster appears above Richie at every stop.">
+    <source src="/blog/please-do-not-throw-richie/checkpoints.mp4" type="video/mp4" />
+  </video>
+  <figcaption>From the Robot Games talk: five checkpoints, one booth each. Rubber
+  Duck AI listens and judges; the Robo-Barista 9000 now comes with 40% fewer
+  burns.</figcaption>
+</figure>
+
 **First the brief.** A brainstorm with ChatGPT turned into a design brief of
 around eighteen hundred lines: the route, the robots, the physics, the jokes. It
 is in the repository, and everything that came after was held up against it.
 
-**Then Codex, for the physics.** The first iteration had one goal, recorded in
+**Then Codex, with GPT-6 Astra, for the physics.** The first iteration had one goal, recorded in
 the development log with admirable economy: *SPACE → BOING → BONK*. A fixed-step
 Rapier world, a charged hop, a little control in the air, and getting up again
 after a tumble.
 
-**Then Claude Code, for nearly everything else**: the venue, the three robots
+**Then Claude Code, on Opus 5.5, for nearly everything else**: the venue, the three robots
 rebuilt against the official Robot Games model sheets, Richie converted from
 Pollen's real Reachy Mini geometry, the crowd, security, the finale, the hosting,
 and a release pipeline that publishes a new version with screenshots on every
@@ -114,17 +125,37 @@ push.
 
 **The textures came from ChatGPT image generation** — the grey exhibition
 carpet, the confetti carpet upstairs, booths selling robot gadgets nobody asked
-for — with Claude Code driving the prompts through my own ChatGPT session.
+for — with Claude Code driving the prompts through my own ChatGPT session. I did
+not drive. Self-driving, all the way down.
 
 **And the music is mine.** The track is *Synaptic Drift*, written in Sonic Pi
 code with [PiBeat](/apps/pibeat/) doing the generating, then recorded and
 dropped into the game.
 
-The stack is small on purpose: TypeScript and Vite, Three.js for everything you
-see, Rapier for gravity and everything that bounces, and GitHub Pages to host it
-for nothing. It installs from the browser as an app and plays offline after the
-first visit, which is handy on a train and essential at a conference where the
-Wi-Fi belongs to everybody.
+## How it runs
+
+Every game is one loop, and this one is small enough to say out loud. You press
+a key, or tap the screen — the touch buttons press the same keys, so the physics
+never knows which device it is on. Rapier moves the world: gravity, the hop,
+Richie bouncing off whatever is in the way. Three.js draws the picture. Then
+round again, sixty times a second, about seventeen milliseconds a lap.
+
+<figure>
+  <video data-loop muted loop playsinline preload="none" width="1280" height="720"
+         poster="/blog/please-do-not-throw-richie/architecture-poster.webp"
+         aria-label="Slide animation titled one loop, sixty times a second: three steps joined by arrows that draw themselves into a circle — step 1, you press, keyboard or touch; step 2, the world moves, Rapier physics, gravity, hops and bumps; step 3, you see it, Three.js draws the picture — with sixty times a second, one lap about 17 milliseconds, in the middle and dots running round the loop. On the right, who lives in that world: Richie, Voxxy, Biggy and Droid, security, and Kinepolis. Along the bottom: built with TypeScript and Vite; every push tests, builds and releases to GitHub Pages; in your browser, no backend, offline.">
+    <source src="/blog/please-do-not-throw-richie/architecture.mp4" type="video/mp4" />
+  </video>
+  <figcaption>The architecture, as it was on the slide: one loop, and everything
+  else lives inside it.</figcaption>
+</figure>
+
+Everything else — Richie, the three robots, security, the building — lives
+inside that loop. It is TypeScript, built with Vite, and all of it runs in the
+browser: no backend, no account, and after the first visit no network either,
+which is handy on a train and essential at a conference where the Wi-Fi belongs
+to everybody. Every push to GitHub tests it, builds it, cuts a release and puts
+it live on GitHub Pages by itself.
 
 ## What the tools did not catch
 
