@@ -31,6 +31,27 @@ const cols = [
   },
 ];
 const year = new Date().getFullYear();
+
+// The two places to find Jan, as icon buttons beside the statement. Line glyphs
+// on a 24px grid in currentColor, so they take the site's colours and hover
+// rather than each network's own. The name is on the link (aria-label, title);
+// the drawing itself is decorative.
+const socials = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/jan-van-wassenhove-9b49893/',
+    icon:
+      '<rect x="3" y="3" width="18" height="18" rx="3.5"/><path d="M8 11v6M12 17v-3.6c0-1.4 1.1-2.4 2.5-2.4S17 12 17 13.4V17M12 11v6"/>' +
+      '<circle cx="8" cy="7.6" r="1.1" fill="currentColor" stroke="none"/>',
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/mity.john/',
+    icon:
+      '<rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/>' +
+      '<circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/>',
+  },
+];
 ---
 
 <footer id="about">
@@ -43,7 +64,14 @@ const year = new Date().getFullYear();
         then uses it as an excuse to build far too many things.
         <span class="aside">And now you know.</span>
       </p>
-      <a class="more" href="/about/">Read the full story →</a>
+      <div class="actions">
+        <a class="more" href="/about/">Read the full story →</a>
+        {socials.map((s) => (
+          <a class="social" href={s.href} target="_blank" rel="noopener me" aria-label={`${s.label} — Jan Van Wassenhove`} title={s.label}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><Fragment set:html={s.icon} /></svg>
+          </a>
+        ))}
+      </div>
     </div>
     {cols.map((col) => (
       <div>
@@ -98,11 +126,11 @@ const year = new Date().getFullYear();
   }
   .hl { color: var(--accent); }
   .aside { color: var(--muted2); }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
   .more {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    margin-top: 22px;
     font-family: var(--font-mono);
     font-size: var(--text-small);
     padding: 11px 18px;
@@ -110,6 +138,20 @@ const year = new Date().getFullYear();
     border-radius: var(--radius-btn);
   }
   .more:hover { border-color: var(--border3); }
+  /* square siblings of .more: same height, border and radius */
+  .social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: var(--muted);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-btn);
+    transition: color var(--hover-duration) var(--hover-ease), border-color var(--hover-duration) var(--hover-ease);
+  }
+  .social:hover { color: var(--accent); border-color: var(--accent); }
+  .social svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .col-title {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
