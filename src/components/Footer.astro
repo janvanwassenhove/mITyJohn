@@ -32,7 +32,7 @@ const cols = [
 ];
 const year = new Date().getFullYear();
 
-// The two places to find Jan, as icon buttons beside the statement. Line glyphs
+// The two places to find Jan, as icon buttons in the legal row. Line glyphs
 // on a 24px grid in currentColor, so they take the site's colours and hover
 // rather than each network's own. The name is on the link (aria-label, title);
 // the drawing itself is decorative.
@@ -64,14 +64,7 @@ const socials = [
         then uses it as an excuse to build far too many things.
         <span class="aside">And now you know.</span>
       </p>
-      <div class="actions">
-        <a class="more" href="/about/">Read the full story →</a>
-        {socials.map((s) => (
-          <a class="social" href={s.href} target="_blank" rel="noopener me" aria-label={`${s.label} — Jan Van Wassenhove`} title={s.label}>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><Fragment set:html={s.icon} /></svg>
-          </a>
-        ))}
-      </div>
+      <a class="more" href="/about/">Read the full story →</a>
     </div>
     {cols.map((col) => (
       <div>
@@ -86,7 +79,16 @@ const socials = [
   </div>
   <div class="legal">
     <span>© {year} miTy John — the IT archeologist</span>
-    <span>Enforce innovation by learning from our development history.</span>
+    <div class="legal-end">
+      <span>Enforce innovation by learning from our development history.</span>
+      <div class="socials">
+        {socials.map((s) => (
+          <a class="social" href={s.href} target="_blank" rel="noopener me" aria-label={`${s.label} — Jan Van Wassenhove`} title={s.label}>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><Fragment set:html={s.icon} /></svg>
+          </a>
+        ))}
+      </div>
+    </div>
   </div>
 </footer>
 
@@ -126,11 +128,11 @@ const socials = [
   }
   .hl { color: var(--accent); }
   .aside { color: var(--muted2); }
-  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
   .more {
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-top: 22px;
     font-family: var(--font-mono);
     font-size: var(--text-small);
     padding: 11px 18px;
@@ -138,20 +140,20 @@ const socials = [
     border-radius: var(--radius-btn);
   }
   .more:hover { border-color: var(--border3); }
-  /* square siblings of .more: same height, border and radius */
+  /* small square buttons at the end of the legal row */
   .social {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
+    width: 34px;
+    height: 34px;
     color: var(--muted);
     border: 1px solid var(--border2);
     border-radius: var(--radius-btn);
     transition: color var(--hover-duration) var(--hover-ease), border-color var(--hover-duration) var(--hover-ease);
   }
   .social:hover { color: var(--accent); border-color: var(--accent); }
-  .social svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .social svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .col-title {
     font-family: var(--font-mono);
     font-size: var(--text-caption);
@@ -170,9 +172,12 @@ const socials = [
     border-top: 1px solid var(--line);
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 16px;
     flex-wrap: wrap;
   }
+  .legal-end { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+  .socials { display: flex; gap: 8px; }
   /* design: --faint — raised to --muted2 for WCAG contrast (N5 a11y gate) */
   .legal span { font-family: var(--font-mono); font-size: var(--text-caption); color: var(--muted2); }
 </style>
