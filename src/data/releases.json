@@ -15,14 +15,14 @@
         "name": "LoveFlix-1.0.0.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
         "size": 101216735,
-        "downloads": 54,
+        "downloads": 55,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 46,
+        "downloads": 47,
         "platform": "macOS"
       },
       {
@@ -43,7 +43,7 @@
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
-        "downloads": 46,
+        "downloads": 47,
         "platform": "Windows"
       },
       {
@@ -84,35 +84,35 @@
         "name": "pibeat_0.3.1_amd64.deb",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
         "size": 7104614,
-        "downloads": 8,
+        "downloads": 9,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
-        "downloads": 6,
+        "downloads": 7,
         "platform": "Windows"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
-        "downloads": 6,
+        "downloads": 7,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_amd64.AppImage",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
         "size": 84371960,
-        "downloads": 6,
+        "downloads": 7,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_universal.dmg",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
         "size": 11551883,
-        "downloads": 5,
+        "downloads": 6,
         "platform": "macOS"
       },
       {
@@ -139,14 +139,14 @@
         "name": "GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "size": 134457962,
-        "downloads": 3,
+        "downloads": 4,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "size": 136227729,
-        "downloads": 2,
+        "downloads": 3,
         "platform": "macOS"
       },
       {
@@ -195,16 +195,16 @@
     "changelog": "# AURA v2.0.216\n\n_Your own robot colleague — he knows your household, joins the conversation, and keeps quiet when that serves you better._\n\nThis release brings **one improvement**, from something that went wrong or was missing in real use.\n\n## What's new and better\n\n- The Mac app could not be opened\n\n## What it looks like\n\n![01-console.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/01-console.png)\n\n![02-brain-person.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/02-brain-person.png)\n\n![03-knowledge-graph.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/03-knowledge-graph.png)\n\n![04-skills.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/04-skills.png)\n\n![05-settings.png](https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/05-settings.png)\n\n_Captured on a fresh demo install: the fictional demo profile only, never real personal data._\n\n## Getting started\n\n| Your system | Download |\n|---|---|\n| Windows | `AURA-*-windows-setup.exe` |\n| macOS (Apple Silicon, M1–M4) | `AURA-*-mac-arm64.dmg` |\n| macOS (Intel) | `AURA-*-mac-x64.dmg` |\n| Linux | `AURA-*-linux-x86_64.AppImage` or `.deb` |\n\n**First time?** Download, install, and start it. On first launch AURA sets itself up (a few minutes) and a short wizard walks you through your robot, your voice and your language.\n\n**Already on an older version?** Install straight over it — your people, your memories and your settings stay exactly as they are.\n\n<details><summary>macOS and Linux: one extra click the first time</summary>\n\nThe macOS builds are not notarised: open them the first time via right-click → Open. On macOS and Linux the first launch installs the Python runtime (uv) by itself.\n</details>\n\n## Why AURA\n\nAURA turns a Reachy Mini into a housemate rather than a device: he recognises who is in front of him, remembers what you tell him, co-presents with you and can watch your screen — **and all of it stays on y",
     "assets": [
       {
-        "name": "AURA-2.0.216-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/AURA-2.0.216-windows-setup.exe",
-        "size": 83171255,
-        "downloads": 0,
-        "platform": "Windows"
-      },
-      {
         "name": "AURA-2.0.216-windows.msi",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/AURA-2.0.216-windows.msi",
         "size": 93561083,
+        "downloads": 1,
+        "platform": "Windows"
+      },
+      {
+        "name": "AURA-2.0.216-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.216/AURA-2.0.216-windows-setup.exe",
+        "size": 83171255,
         "downloads": 0,
         "platform": "Windows"
       },
