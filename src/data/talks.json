@@ -32,6 +32,14 @@
   },
   {
     "year": 2026,
+    "date": "23 September 2026",
+    "event": "Ahead of the Curve",
+    "location": "Diegem, Belgium",
+    "kind": "Keynote",
+    "title": "See what's next. Press Start"
+  },
+  {
+    "year": 2026,
     "event": "The Future Of the SDLC",
     "location": "Munich, Germany",
     "title": "Rethinking the SDLC in an AI-first world",
