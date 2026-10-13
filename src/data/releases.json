@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 81,
+        "downloads": 85,
         "platform": "Windows"
       }
     ]
@@ -202,18 +202,18 @@
         "platform": "Windows"
       },
       {
+        "name": "AURA-2.0.217-windows.msi",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-windows.msi",
+        "size": 93561083,
+        "downloads": 1,
+        "platform": "Windows"
+      },
+      {
         "name": "AURA-2.0.217-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-mac-arm64.dmg",
         "size": 98901338,
         "downloads": 1,
         "platform": "macOS"
-      },
-      {
-        "name": "AURA-2.0.217-windows.msi",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-windows.msi",
-        "size": 93561083,
-        "downloads": 0,
-        "platform": "Windows"
       },
       {
         "name": "AURA-2.0.217-mac-x64.dmg",
