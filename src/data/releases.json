@@ -15,14 +15,14 @@
         "name": "LoveFlix-1.0.0.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0.dmg",
         "size": 101216735,
-        "downloads": 55,
+        "downloads": 56,
         "platform": "macOS"
       },
       {
         "name": "LoveFlix-1.0.0-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-1.0.0-arm64.dmg",
         "size": 96163331,
-        "downloads": 47,
+        "downloads": 48,
         "platform": "macOS"
       },
       {
@@ -43,7 +43,7 @@
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
-        "downloads": 47,
+        "downloads": 48,
         "platform": "Windows"
       },
       {
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 89,
+        "downloads": 90,
         "platform": "Windows"
       }
     ]
@@ -84,35 +84,35 @@
         "name": "pibeat_0.3.1_amd64.deb",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
         "size": 7104614,
-        "downloads": 9,
+        "downloads": 10,
         "platform": "Linux"
       },
       {
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
-        "downloads": 8,
+        "downloads": 9,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
-        "downloads": 7,
+        "downloads": 8,
         "platform": "Windows"
       },
       {
         "name": "pibeat_0.3.1_amd64.AppImage",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
         "size": 84371960,
-        "downloads": 7,
+        "downloads": 8,
         "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_universal.dmg",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_universal.dmg",
         "size": 11551883,
-        "downloads": 6,
+        "downloads": 7,
         "platform": "macOS"
       },
       {
@@ -139,14 +139,14 @@
         "name": "GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-arm64.dmg",
         "size": 134457962,
-        "downloads": 4,
+        "downloads": 5,
         "platform": "macOS"
       },
       {
         "name": "GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/ghostsinthemachine/releases/download/v1.0.6/GhostsInTheMachine-1.0.6-mac-x64.dmg",
         "size": 136227729,
-        "downloads": 3,
+        "downloads": 4,
         "platform": "macOS"
       },
       {
@@ -198,20 +198,20 @@
         "name": "AURA-2.0.217-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-mac-arm64.dmg",
         "size": 98901338,
-        "downloads": 2,
+        "downloads": 3,
         "platform": "macOS"
-      },
-      {
-        "name": "AURA-2.0.217-windows-setup.exe",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-windows-setup.exe",
-        "size": 83172027,
-        "downloads": 1,
-        "platform": "Windows"
       },
       {
         "name": "AURA-2.0.217-windows.msi",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-windows.msi",
         "size": 93561083,
+        "downloads": 2,
+        "platform": "Windows"
+      },
+      {
+        "name": "AURA-2.0.217-windows-setup.exe",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-windows-setup.exe",
+        "size": 83172027,
         "downloads": 1,
         "platform": "Windows"
       },
