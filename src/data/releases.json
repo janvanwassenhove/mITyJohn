@@ -81,17 +81,17 @@
     "changelog": "## 🎵 PiBeat\n\nDesktop music live-coding — write Sonic Pi code and hear it instantly.\n\n### Screenshots\n\n| Editor & Waveform | Agent Chat |\n|:-:|:-:|\n| ![Editor](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/editor.png) | ![Agent Chat](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/agent-chat.png) |\n\n| Timeline View | Band Visualizer |\n|:-:|:-:|\n| ![Timeline](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/timeline.png) | ![Band Visualizer](https://raw.githubusercontent.com/janvanwassenhove/PiBeat/main/screenshots/band-visualizer.png) |\n\n### 📥 Downloads\n\n| Platform | File | Notes |\n|----------|------|-------|\n| 🪟 Windows | `.msi` / `.exe` | Windows 10+ |\n| 🍎 macOS | `.dmg` (Universal) | Intel + Apple Silicon |\n| 🐧 Linux | `.deb` / `.AppImage` | Ubuntu 22.04+ |\n\n### ✨ Highlights\n- Sonic Pi-compatible live coding editor with Monaco\n- Real-time waveform visualization (wave, bars, lissajous)\n- 42 synth types, 13 effects, built-in sample library\n- AI assistant (OpenAI / Anthropic / Gemini) for code generation\n- Detachable panels, timeline view, band visualizer\n- SuperCollider integration for professional sound quality\n\n### 🚀 First-time Setup\n1. Download and install for your platform\n2. Open the editor and start writing Sonic Pi code\n3. *(Optional)* Open Settings in Agent Chat to configure an AI provider",
     "assets": [
       {
-        "name": "pibeat_0.3.1_amd64.deb",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
-        "size": 7104614,
+        "name": "pibeat-0.3.1-1.x86_64.rpm",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
+        "size": 7104674,
         "downloads": 10,
         "platform": "Linux"
       },
       {
-        "name": "pibeat-0.3.1-1.x86_64.rpm",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
-        "size": 7104674,
-        "downloads": 9,
+        "name": "pibeat_0.3.1_amd64.deb",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.deb",
+        "size": 7104614,
+        "downloads": 10,
         "platform": "Linux"
       },
       {
@@ -198,7 +198,7 @@
         "name": "AURA-2.0.217-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-mac-arm64.dmg",
         "size": 98901338,
-        "downloads": 3,
+        "downloads": 4,
         "platform": "macOS"
       },
       {
