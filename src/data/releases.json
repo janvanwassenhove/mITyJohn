@@ -43,7 +43,7 @@
         "name": "mITyGuitar_0.0.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/mITyGuitar/releases/download/v0.0.1/mITyGuitar_0.0.1_x64_en-US.msi",
         "size": 184893440,
-        "downloads": 49,
+        "downloads": 50,
         "platform": "Windows"
       },
       {
@@ -64,7 +64,7 @@
         "name": "mITyStudio-Setup-1.1.20.exe",
         "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
         "size": 153064141,
-        "downloads": 106,
+        "downloads": 108,
         "platform": "Windows"
       }
     ]
@@ -95,18 +95,18 @@
         "platform": "Linux"
       },
       {
+        "name": "pibeat_0.3.1_amd64.AppImage",
+        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
+        "size": 84371960,
+        "downloads": 10,
+        "platform": "Linux"
+      },
+      {
         "name": "pibeat_0.3.1_x64_en-US.msi",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_x64_en-US.msi",
         "size": 5890048,
         "downloads": 9,
         "platform": "Windows"
-      },
-      {
-        "name": "pibeat_0.3.1_amd64.AppImage",
-        "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat_0.3.1_amd64.AppImage",
-        "size": 84371960,
-        "downloads": 9,
-        "platform": "Linux"
       },
       {
         "name": "pibeat_0.3.1_universal.dmg",
