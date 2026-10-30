@@ -84,7 +84,7 @@
         "name": "pibeat-0.3.1-1.x86_64.rpm",
         "url": "https://github.com/janvanwassenhove/PiBeat/releases/download/v0.3.1/pibeat-0.3.1-1.x86_64.rpm",
         "size": 7104674,
-        "downloads": 11,
+        "downloads": 12,
         "platform": "Linux"
       },
       {
@@ -198,7 +198,7 @@
         "name": "AURA-2.0.217-mac-arm64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-mac-arm64.dmg",
         "size": 98901338,
-        "downloads": 4,
+        "downloads": 5,
         "platform": "macOS"
       },
       {
