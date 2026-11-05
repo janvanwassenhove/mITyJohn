@@ -99,12 +99,12 @@ const CAPTURED = {
   ],
   // HockeyEleven's repo is private, so the raw fetch above cannot reach its
   // screenshots — and the ones in it are in Dutch. Captured from the live build
-  // with the interface set to English instead.
+  // with the interface set to English instead (the Academy from a local build).
   hockeyeleven: [
-    { file: 'hockeyeleven-1.webp', alt: 'An 11v11 match on a blue water pitch: both teams in the middle third, the scoreboard reading BEL 0 - 0 NED, a radar of the whole pitch along the bottom and the keyboard controls bottom right' },
-    { file: 'hockeyeleven-2.webp', alt: 'Indoor hockey: a dark six-a-side rink with white side boards, the ball being carried out of the circle past the goalkeeper' },
-    { file: 'hockeyeleven-3.webp', alt: 'The nation picker: a searchable grid of flags with three-letter codes and ratings, filtered to Europe, over the line "All 133 FIH associations"' },
-    { file: 'hockeyeleven-4.webp', alt: 'The match setup screen: the three formats side by side, the two line-ups with their world ranks, and pickers for formation, venue, weather, squad, length and level' },
+    { file: 'hockeyeleven-1.webp', alt: 'The home screen: a quick match of Belgium against the Netherlands over a live match playing behind the menu, with pickers for ground, format, length and weather, and a Take the field button' },
+    { file: 'hockeyeleven-2.webp', alt: 'An 11v11 match on a blue water pitch: both teams spread over the pitch, the scoreboard reading BEL 0 - 0 NED, a radar of the whole pitch along the bottom and the keyboard controls bottom right' },
+    { file: 'hockeyeleven-3.webp', alt: 'The Academy page for the hit: a 3D film of a player in a red kit with camera and speed buttons, four stills from start to follow-through, and beside it key points, common faults and linked drills' },
+    { file: 'hockeyeleven-4.webp', alt: 'An Academy tactics lesson on the flat triangle: the game’s own players on a match pitch with the lesson’s phases along the top, a dashed triangle on the pitch, and the explanation of each phase alongside' },
   ],
 };
 
