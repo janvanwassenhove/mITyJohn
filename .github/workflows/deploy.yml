@@ -36,3 +36,7 @@ jobs:
     environment: github-pages
     steps:
       - uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+        # Pages sometimes spends well over the default 10 minutes in updating_pages
+        # with a site this size; give it room instead of cancelling a deploy that
+        # would have landed.
+        with: { timeout: 1800000 }
