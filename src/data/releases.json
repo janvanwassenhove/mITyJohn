@@ -216,6 +216,13 @@
         "platform": "Windows"
       },
       {
+        "name": "AURA-2.0.217-linux-x86_64.AppImage",
+        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-linux-x86_64.AppImage",
+        "size": 109491493,
+        "downloads": 1,
+        "platform": "Linux"
+      },
+      {
         "name": "AURA-2.0.217-mac-x64.dmg",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-mac-x64.dmg",
         "size": 105759062,
@@ -226,13 +233,6 @@
         "name": "AURA-2.0.217-linux-amd64.deb",
         "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-linux-amd64.deb",
         "size": 76081022,
-        "downloads": 0,
-        "platform": "Linux"
-      },
-      {
-        "name": "AURA-2.0.217-linux-x86_64.AppImage",
-        "url": "https://github.com/janvanwassenhove/aura/releases/download/v2.0.217/AURA-2.0.217-linux-x86_64.AppImage",
-        "size": 109491493,
         "downloads": 0,
         "platform": "Linux"
       },
