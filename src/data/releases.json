@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 82,
+        "downloads": 83,
         "platform": "Windows"
       },
       {
@@ -56,15 +56,15 @@
     ]
   },
   "mITyStudio": {
-    "tag": "v1.1.20",
-    "date": "2026-08-10T13:01:21Z",
-    "changelog": "## mITyStudio v1.1.20\n\nAutomated Windows build of `master` @ 6c8646c.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/6c8646ce30be78634252768fec77c5954470c489/docs/screenshots/voices.png)\n\n### Changes\nNav: icons instead of labels, so Assets/Voices/Settings stay reachable\n\nReported: could no longer navigate to Assets, Voices or Settings.\n\nCause: .topnav is a single flex row with no wrap and no overflow handling.\nBrand + four translated labels + three panel toggles + theme + about +\nlanguage select + a status label (\"backend verbonden\") exceed the width of a\nnarrower window — and on desktop the title-bar overlay eats the right side\ntoo — so the last items were pushed out of reach with no way to scroll to\nthem. Dutch and German labels are the longest, which is why it showed up\nhere first.\n\nThe four destinations are now icons (audio lines / library / mic / sliders)\nwith their translated names as tooltip + aria-label, which is both what was\nasked for and ~200px narrower. Made the bar structurally overflow-proof\nrather than just smaller: brand, buttons, toggles and the language select\nare flex:none, and the status label is the only element allowed to collapse\n(its text hides under 900px, leaving the coloured dot). The active route now\nreads as an accent-tinted pill instead of bold text.\n\nAlso stop swallowing stem load failures in playback: a stem that 404s or\nfails to decode meant a track you silently could not hear, which is a\nmiserable thing to report (\"the vocal is missing\"). Failures n",
+    "tag": "v1.1.22",
+    "date": "2026-11-11T20:18:13Z",
+    "changelog": "## mITyStudio v1.1.22\n\nAutomated Windows build of `master` @ 547982f.\n\n**Installing over a previous version updates in place** — your\nworkspace (projects, soundfonts, samples, voices) lives outside the\ninstall directory and is preserved.\n\n![Studio](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/547982ff913f41809c9902e1242cb4ea1020a710/docs/screenshots/studio.png)\n![First-start guide](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/547982ff913f41809c9902e1242cb4ea1020a710/docs/screenshots/onboarding.png)\n![Voices](https://raw.githubusercontent.com/janvanwassenhove/mITyStudio/547982ff913f41809c9902e1242cb4ea1020a710/docs/screenshots/voices.png)\n\n### Changes\nDesktop: self-heal the Python venv when the install location moves\n\nReported: \"backend failed to start\" right after updating. backend.log ended\nwith `No Python at 'C:\\Users\\...\\AppData\\Local\\Programs\\mITyStudio\\resources\\\npython\\python.exe'`.\n\nCause: the installer put this build in C:\\Program Files while the previous one\nlived in %LOCALAPPDATA%\\Programs. A venv stores an ABSOLUTE path to the Python\nit was built from, so %APPDATA%\\mITyStudio\\venv\\pyvenv.cfg still pointed at an\ninterpreter that no longer exists. Nothing about the venv looks wrong — it is\nfully populated and the .mity-core-ok marker says \"set up\" — and bootstrap\ntrusted that marker alone, so it never looked. The launcher then exits with a\nmessage the app could only surface as \"backend exited early\".\n\nbootstrap now verifies the venv before trusting the marker: if pyvenv.cfg's\nbase interpreter is gone but the bundled runtime is the same major.minor, it\nrewrites home/executable/command in place. That matters because rebuilding\nwould re-download several GB (torch, TTS) and take many minutes — repairing\nkeeps the installed packages. A genuine version change still forces a rebuild,\nsince site-packages are only portable within one minor version, and a corrupt\nor unreadable config asks for a rebuild rather than throwing.\n\nAdded ap",
     "assets": [
       {
-        "name": "mITyStudio-Setup-1.1.20.exe",
-        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.20/mITyStudio-Setup-1.1.20.exe",
-        "size": 153064141,
-        "downloads": 119,
+        "name": "mITyStudio-Setup-1.1.22.exe",
+        "url": "https://github.com/janvanwassenhove/mITyStudio/releases/download/v1.1.22/mITyStudio-Setup-1.1.22.exe",
+        "size": 153068603,
+        "downloads": 3,
         "platform": "Windows"
       }
     ]
