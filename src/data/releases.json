@@ -8,7 +8,7 @@
         "name": "LoveFlix-Setup-1.0.0.exe",
         "url": "https://github.com/janvanwassenhove/LoveFlix/releases/download/v1.0.0/LoveFlix-Setup-1.0.0.exe",
         "size": 77399924,
-        "downloads": 83,
+        "downloads": 84,
         "platform": "Windows"
       },
       {
@@ -179,13 +179,13 @@
         "name": "scrum-language-2.0.0-sdk.zip",
         "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.zip",
         "size": 1082091,
-        "downloads": 45
+        "downloads": 46
       },
       {
         "name": "scrum-language-2.0.0-sdk.tar.gz",
         "url": "https://github.com/janvanwassenhove/scrum/releases/download/v2.0.0/scrum-language-2.0.0-sdk.tar.gz",
         "size": 1069463,
-        "downloads": 41
+        "downloads": 42
       }
     ]
   },
